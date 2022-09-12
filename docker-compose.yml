@@ -1,0 +1,72 @@
+services:
+  mysqldb:
+    image: mysql:8.0
+    container_name: mysqlerp
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    volumes:
+      - ./dbinit/init.sql:/docker-entrypoint-initdb.d/0_init.sql
+      - db-data:/var/lib/mysql        
+    ports:
+      - 3306:3306
+    expose:
+      - 3306
+    environment:
+      MYSQL_USER: root
+      MYSQL_ROOT_PASSWORD: Sucesso!
+      MYSQL_DATABASE: db_erp      
+      MYSQL_PASSWORD: letmein
+      SERVICE_TAGS: prod
+      SERVICE_NAME: mysqldb
+    networks:      
+      - internalnet
+
+  phpmyadmin:
+    image: phpmyadmin
+    container_name: phpmyerp
+    restart: always
+    ports:
+      - 8080:80
+    expose:
+      - 8080
+    environment:
+      - MYSQL_ROOT_PASSWORD: Sucesso!      
+      - PMA_USER:root
+      - PMA_PASSWORD:Sucesso!
+      - PMA_HOSTS:
+      - PMA_HOST
+      - PMA_CONTROLHOST
+      - PMA_CONTROLUSER
+      - PMA_CONTROLPASS    
+      - PMA_ARBITRARY=1
+    networks:      
+      - internalnet
+
+  nodeapp:
+    container_name: nodeapierp
+    build: .
+    image: nodeapp:v1
+    ports:
+      - 3000:3000
+    expose:
+      - 3000
+    environment:
+      DB_HOST: mysqldb
+      DB_PORT: 3306
+      DB_USER: 'admin'
+      DB_PASSWORD: 'letmein'
+      DB_NAME: db_erp
+      DB_CONNECTION_LIMIT: 20
+      SERVICE_TAGS: prod
+      SERVICE_NAME: nodeappservice
+      SERVER_PORT: 3000
+    depends_on:
+      - mysqldb
+    networks:
+      - internalnet
+
+networks:
+  internalnet:
+    driver: bridge
+volumes:
+  db-data:
