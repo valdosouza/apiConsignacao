@@ -19,7 +19,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // simple route
 app.get("/", (req, res) => {
-  res.json({ message: "Bem vindo a API do Delivery." });
+  res.json({ message: "Bem vindo a API do Sistema de Consignação." });
 });
 
 const userRouter = require("./app/routes/user.routes");
