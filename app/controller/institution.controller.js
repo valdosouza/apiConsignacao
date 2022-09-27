@@ -121,9 +121,8 @@ class InstitutionController extends Base {
   }
 
   static async update(institution) {
-    
     const promise = new Promise((resolve, reject) => {
-          //Salva a entidad
+        try{  //Salva a entidad
           const dataEntity = {
             id:institution.id,
             name_company: institution.name_company,
@@ -134,10 +133,7 @@ class InstitutionController extends Base {
           };       
           TbEntity.update(dataEntity, {
             where: { id: dataEntity.id }
-          })
-            .catch(err => {
-              reject("Erro:"+ err);
-            });          
+           });
           //Salva a pessoa Juridica              
           const dataCompany = {
             id:institution.id,
@@ -156,10 +152,7 @@ class InstitutionController extends Base {
           };
           TbCompany.update(dataCompany, {
             where: { id: dataCompany.id }
-          })
-          .catch(err => {
-            reject("Erro:"+ err);
-          });          
+          });
           //Salva o endereço          
           const dataAddress = {            
             id:institution.id,
@@ -179,10 +172,7 @@ class InstitutionController extends Base {
           };          
           TbAddress.update(dataAddress, {
             where: { id: dataAddress.id, kind:dataAddress.kind }
-          })
-          .catch(err => {
-            reject("Erro:"+ err);
-          });          
+           });
           //Salva o Phone
           const dataPhone = {
             id:institution.id,
@@ -193,9 +183,6 @@ class InstitutionController extends Base {
           };
           TbPhone.update(dataPhone, {
             where: { id: dataPhone.id, kind:dataPhone.kind }
-          })
-          .catch(err => {
-            reject("Erro:"+ err);
           });          
           //Grava o institution
           const dataInstitution = {
@@ -203,16 +190,12 @@ class InstitutionController extends Base {
             active:institution.active
           }
           TbInstitution.update(dataInstitution, {
-            where: { id: dataInstitution.id }
-          })
-          .then(() => {                    
-            //REtornogeral
-            resolve("The Institution was updated");   
-          })
-          .catch(err => {
-            reject("Erro:"+ err);
-          });          
-      
+            where: { id: dataInstitution.id }            
+          });
+          resolve("The Institution was updated");   
+        } catch {            
+            reject("Erro Found");
+        }  
     });
     return promise;        
   }        

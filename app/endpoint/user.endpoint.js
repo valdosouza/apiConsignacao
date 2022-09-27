@@ -42,9 +42,10 @@ class UserEndPoint {
 
   static findAll = (req, res) => {
 
-    UserController.findAll().then(data => {
-      res.send(data);
-    })
+    UserController.findAll()
+      .then(data => {
+        res.send(data);
+      })
   }
 
   // Find a single user with an id
@@ -81,7 +82,6 @@ class UserEndPoint {
           id: 0,
           institution : 0,
           username : "",
-          password: "",
           jwt: "" });    
 
         UserController.generateJWT(data)
@@ -98,9 +98,11 @@ class UserEndPoint {
   };
   
   static authorization = (req, res) => {
-    const token = req.headers['x-access-token'];   
+    return res.json("entrei");          
+    const token = req.headers['x-access-token'];  
+    
     if (!token) return res.status(401).json({ auth: false, message: 'No token provided.' });
-      
+    
       UserController.authorization(token)
       .then(data=>{          
           return res.json(data);          

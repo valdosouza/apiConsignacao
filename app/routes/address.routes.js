@@ -104,7 +104,6 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *               items:
  *                 $ref: '#/components/schemas/Address'
  */
-
 router.get("/", address.getList);
   
  /**

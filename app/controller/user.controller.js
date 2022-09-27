@@ -62,7 +62,7 @@ class UserController extends Base {
   static findAll = () => {
     const promise = new Promise((resolve, reject) => {
       Tb.sequelize.query(
-        'Select id  ' +
+        'Select *  ' +
         'from tb_user  ',
         {
           type: Tb.sequelize.QueryTypes.SELECT
