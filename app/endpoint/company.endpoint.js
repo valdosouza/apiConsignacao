@@ -1,33 +1,45 @@
-const { company } = require("../model");
-const db = require("../model");
-const Query = db.company;
+const CompanyController = require("../controller/company.controller.js");
 
-exports.save = (req, res) => {
+class CompanyEndPoint {
 
-};
-
-exports.create = (req, res) => {
-  // Validate request
-  if (!req.body.id) {
-    res.status(400).send({
-      message: "Conteudo não pode ser em branco!"
-    });
-    return;
-  }
-
-  // Create a Tutorial
-  const obj = req.body;
-
-  // Save Tutorial in the database
-  Query.create(obj)
-    .then(data => {
+  static create = (req, res) => {
+    const company = req.body;
+    CompanyController.insert(company).then(data => {
       res.send(data);
     })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Algum Erro aconteceu!!"
-      });
-    });
-};
+  }
 
+  static getList(req, res) {
+
+    CompanyController.getList(req.body).then(data => {
+      res.send(data);
+    })
+  }
+  static update = (req, res) => {
+    const id = req.params.id;
+    const company = req.body;
+    CompanyController.update(company).then(data => {
+      res.send(data);
+    })
+  }
+
+  static delete(req, res) {
+
+    CompanyController.delete(req.body).then(data => {
+      res.send(data);
+    })
+  }
+  
+  static getbycnpj(req, res) {    
+    console.log(req.params);
+    //const cnpj = req.body.cnpj;
+    const cnpj = req.params.cnpj;
+    
+    CompanyController.getByCNPJ(cnpj).then(data => {
+      res.send(data);
+    })
+    
+  }  
+}
+
+module.exports = CompanyEndPoint; 

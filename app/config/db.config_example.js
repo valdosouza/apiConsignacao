@@ -1,7 +1,7 @@
 module.exports = {
-  HOST: "177.70.22.118",   
+  HOST: "127.0.0.1",   
   USER: "db_erp",
-  PASSWORD: "83Pg^g37h",
+  PASSWORD: "",
   DB: "db_erp",
   dialect: "mysql",
   PORT: "3306",

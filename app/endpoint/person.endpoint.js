@@ -3,25 +3,41 @@ const PersonController = require("../controller/person.controller.js");
 class PersonEndPoint {
 
   static create = (req, res) => {
-
-    PersonController.create(req.body).then(data => {
+    const person = req.body;
+    PersonController.insert(person).then(data => {
       res.send(data);
     })
   }
 
+  static getList(req, res) {
+
+    PersonController.getList(req.body).then(data => {
+      res.send(data);
+    })
+  }
   static update = (req, res) => {
     const id = req.params.id;
-
-    PersonController.update(req.body).then(data => {
+    const person = req.body;
+    PersonController.update(person).then(data => {
       res.send(data);
     })
   }
 
-  static getByCPF(req, res) {
+  static delete(req, res) {
 
-    PersonController.getByCPF(req.body.cpf).then(data => {
+    PersonController.delete(req.body).then(data => {
       res.send(data);
     })
   }
+  
+  static getbycpf(req, res) {       
+    const cpf = req.params.cpf;
+    
+    PersonController.getByCPF(cpf).then(data => {
+      res.send(data);
+    })
+    
+  }  
 }
-module.exports =  PersonEndPoint; 
+
+module.exports = PersonEndPoint; 

@@ -1,7 +1,28 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-var cors = require('cors')
-var cookieParser = require('cookie-parser');
+const cors = require('cors')
+const cookieParser = require('cookie-parser');
+const swaggerUI = require("swagger-ui-express");
+const swaggerJsDoc = require("swagger-jsdoc");
+
+const options = {
+	definition: {
+		openapi: "3.0.0",
+		info: {
+			title: "API - Consignação",
+			version: "1.0.0",
+			description: "API para sistema de Consignação",
+		},
+		servers: [
+			{
+				url: "http://localhost:3000",
+			},
+		],
+	},
+	apis: ["./app/routes/*.js"],
+};
+
+const specs = swaggerJsDoc(options);
 
 const app = express();
 
@@ -25,64 +46,28 @@ app.get("/", (req, res) => {
 const userRouter = require("./app/routes/user.routes");
 app.use("/users", userRouter);
 
-const delivery = require("./app/routes/delivery.routes");
-app.use("/delivery", delivery);
-
-const personRouter = require("./app/routes/person.routes");
-app.use("/person", personRouter);
-
-const payment = require("./app/routes/paymentTypes.routes");
-app.use("/payment", payment);
-
-const restGroup = require("./app/routes/restGroup.routes");
-app.use("/RestGroup", restGroup);
-
-const restSubgroup = require("./app/routes/restSubgroup.routes");
-app.use("/RestSubgroup", restSubgroup);
-
-const restButton = require("./app/routes/restButton.routes");
-app.use("/RestButton", restButton);
-
-const restPizza = require("./app/routes/restPizza.routes");
-app.use("/RestPizza", restPizza);
-
-const restEdge = require("./app/routes/RestEdge.routes");
-app.use("/RestEdge", restEdge);
-
-const restDough = require("./app/routes/RestDough.routes");
-app.use("/RestDough", restDough);
-
-const restCalzone = require("./app/routes/restCalzone.routes");
-app.use("/RestCalzone", restCalzone);
-
-const customer = require("./app/routes/customer.routes");
-app.use("/customer", customer);
-
 const entity = require("./app/routes/entity.routes");
 app.use("/entity", entity);
+
+const company = require("./app/routes/company.routes");
+app.use("/company", company);
+
+const person = require("./app/routes/person.routes");
+app.use("/person", person);
+
+const address = require("./app/routes/address.routes");
+app.use("/address", address);
+
+const phone = require("./app/routes/phone.routes");
+app.use("/phone", phone);
 
 const institution = require("./app/routes/institution.routes");
 app.use("/institution", institution);
 
-const services = require("./app/routes/service.routes");
-app.use("/services", services);
-
-const ordersale = require("./app/routes/orderSale.routes");
-app.use("/ordersale", ordersale);
-
-const product = require("./app/routes/product.routes");
-app.use("/product", product);
-
-const financial = require("./app/routes/financial.routes");
-app.use("/financial", financial);
-
-require("./app/routes/restGroupHasMeasure.routes")(app);
-require("./app/routes/resMenuHasIngredient.routes")(app);
-require("./app/routes/resGroupHasOptional.routes")(app);
-require("./app/routes/restGroupHasAttribute.routes")(app);
-
-
 const PORT = process.env.PORT || 3000;
+
+app.use("/doc", swaggerUI.serve, swaggerUI.setup(specs));
+
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}.`);
-});
+  console.log(`Server is running on port ${PORT}. \nAPI documentation: http://localhost:3000/doc`)
+})

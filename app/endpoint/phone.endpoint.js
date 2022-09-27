@@ -1,32 +1,34 @@
-const db = require("../model");
-const Query = db.phone;
+const PhoneController = require("../controller/address.controller.js");
 
-exports.save = (req, res) => {
+class PhoneEndPoint {
 
-};
-
-exports.create = (req, res) => {
-  // Validate request
-  if (!req.body.id) {
-    res.status(400).send({
-      message: "Conteudo não pode ser em branco!"
-    });
-    return;
-  }
-
-  // Create a Tutorial
-  const obj = req.body;
-
-  // Save Tutorial in the database
-  Query.create(obj)
-    .then(data => {
+  static create = (req, res) => {
+    const phone = req.body;
+    PhoneController.insert(phone).then(data => {
       res.send(data);
     })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Algum erro aconteceu!!"
-      });
-    });
-};
+  }
 
+  static getList(req, res) {
+
+    PhoneController.getList(req.body).then(data => {
+      res.send(data);
+    })
+  }
+  static update = (req, res) => {
+    const id = req.params.id;
+    const phone = req.body;
+    PhoneController.update(phone).then(data => {
+      res.send(data);
+    })
+  }
+
+  static delete(req, res) {
+
+    PhoneController.delete(req.body).then(data => {
+      res.send(data);
+    })
+  }   
+}
+
+module.exports = PhoneEndPoint; 

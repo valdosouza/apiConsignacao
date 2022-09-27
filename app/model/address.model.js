@@ -124,29 +124,29 @@ module.exports = sequelize => {
       comment: null,
       field: "main"
     },
-    created_at: {
+    createdAt: {
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "created_at"
+      field: "createdAt"
     },
-    updated_at: {
+    updatedAt: {
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "updated_at"
+      field: "updatedAt"
     }
   };
   const options = {
     tableName: "tb_address",
     comment: "",
-    timestamps: false,
+    timestamps: true,
     indexes: [{
       name: "fk_country_to_address",
       unique: false,

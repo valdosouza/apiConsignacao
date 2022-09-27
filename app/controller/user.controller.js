@@ -1,6 +1,5 @@
 const Base = require('../controller/base.controller.js')
 const db = require("../model");
-const Op = db.Sequelize.Op;
 const Tb = db.users;
 var md5 = require('md5');
 require("dotenv-safe").config();

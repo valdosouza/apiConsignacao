@@ -1,4 +1,3 @@
-const moment = require('moment');
 const Base = require('./base.controller.js')
 const db = require("../model");
 const Op = db.Sequelize.Op;
@@ -47,9 +46,7 @@ class OrderItemDetailController extends Base {
                     description: item.description,
                     unit_value: item.priceTag,
                     kind: item.kind,
-                    note: item.note,
-                    created_at: moment(),
-                    updated_at: moment()
+                    note: item.note
                 };                 
                  Tb.create(data);
                 idNext++;

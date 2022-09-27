@@ -1,6 +1,6 @@
 const { Router } = require("express");
   
-const entity =  require("../endpoint/entity.endpoint.js");
+const phone =  require("../endpoint/phone.endpoint.js");
 
 const { withJWTAuthMiddleware } = require("express-kun");
 const router = Router();
@@ -10,131 +10,131 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  * @swagger
  * components:
  *   schemas:
- *     Entity:
+ *     Phone:
  *       type: object
  *       required:
  *         - id
- *         - name_company
- *         - nick_trade
+ *         - kind
+ *         - contact
+ *         - number
+ *         - address_kind
  *       properties:
  *         id:
  *           type: string
- *         name_company:
+ *         kind:
  *           type: string
- *         nick_trade:
+ *         contact:
  *           type: string
- *         aniversary:
+ *         number:
  *           type: string
- *         tb_line_buiness_id:
- *           type: string
- *         note:
+ *         address_kind:
  *           type: string
  */
 
  /**
   * @swagger
   * tags:
-  *   name: Entity
-  *   description: The Entity managing API
+  *   name: Phone
+  *   description: The Phone managing API
   */
 
 /**
  * @swagger
- * /Entity:
+ * /Phone:
  *   post:
- *     summary: Create a new entity
- *     tags: [Entity]
+ *     summary: Create a new phone
+ *     tags: [Phone]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Entity'
+ *             $ref: '#/components/schemas/Phone'
  *     responses:
  *       200:
- *         description: The Entity was successfully created
+ *         description: The Phone was successfully created
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Entity'
+ *               $ref: '#/components/schemas/Phone'
  *       500:
  *         description: Some server error
  */
- router.post("/", entity.create);
+ router.post("/", phone.create);
 
  /**
  * @swagger
- * /Entity:
+ * /Phone:
  *   get:
- *     summary: Returns the list of all the Entities
- *     tags: [Entity]
+ *     summary: Returns the list of all the phone
+ *     tags: [Phone]
  *     responses:
  *       200:
- *         description: The list of the entities
+ *         description: The list of the phone
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/Entity'
+ *                 $ref: '#/components/schemas/Phone'
  */
 
-router.get("/", entity.getList);
+router.get("/", phone.getList);
   
  /**
  * @swagger
- * /entity/{id}:
+ * /Phone/{id}:
  *  put:
- *    summary: Update the entity by the id
- *    tags: [Entity]
+ *    summary: Update the phone by the id
+ *    tags: [Phone]
  *    parameters:
  *      - in: path
  *        name: id
  *        schema:
  *          type: string
  *        required: true
- *        description: The entity id
+ *        description: The phone id
  *    requestBody:
  *      required: true
  *      content:
  *        application/json:
  *          schema:
- *            $ref: '#/components/schemas/Entity'
+ *            $ref: '#/components/schemas/Phone'
  *    responses:
  *      200:
- *        description: The Entity was updated
+ *        description: The Phone was updated
  *        content:
  *          application/json:
  *            schema:
- *              $ref: '#/components/schemas/Entity'
+ *              $ref: '#/components/schemas/Phone'
  *      404:
- *        description: The entity was not found
+ *        description: The phone was not found
  *      500:
  *        description: Some error happened
  */
- router.put("/", entity.update);
+ router.put("/", phone.update);
 
 /**
  * @swagger
- * /entity/{id}:
+ * /Phone/{id}:
  *  delete:
- *    summary: Delete the entity by the id
- *    tags: [Entity]
+ *    summary: Delete the phone by the id
+ *    tags: [Phone]
  *    parameters:
  *      - in: path
  *        name: id
  *        schema:
  *          type: string
  *        required: true
- *        description: The entity id
+ *        description: The phone id
  *    responses:
  *      200:
- *        description: The Entity was deleted
+ *        description: The phone was deleted
  *      404:
- *        description: The entity was not found
+ *        description: The phone was not found
  *      500:
  *        description: Some error happened
  */
-router.delete("/", entity.delete);
+router.delete("/", phone.delete);
 
 module.exports = router;  

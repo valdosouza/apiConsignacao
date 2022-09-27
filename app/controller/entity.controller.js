@@ -1,7 +1,6 @@
-const moment = require('moment');
+
 const Base = require('../controller/base.controller.js')
 const db = require("../model");
-const Op = db.Sequelize.Op;
 const Tb = db.entity;
 
 class EntityController extends Base {
@@ -23,12 +22,11 @@ class EntityController extends Base {
         return promise;
     }
 
+    
     static async insert(entity) {
         
-        const idSeq = await this.getIdNext();        
-        entity.id = idSeq;     
-        
         const promise = new Promise((resolve, reject) => {
+            console.log(entity);
             Tb.create(entity)
                 .then((data) => {
                     resolve(data);
@@ -37,8 +35,7 @@ class EntityController extends Base {
                     reject("Erro:"+ err);
                 });
         });
-        return promise;
-        
+        return promise;        
     }    
 
     static getList(body) {
@@ -58,6 +55,35 @@ class EntityController extends Base {
             });
         });
         return promise;
-      }    
+    }
+
+    static async update(entity) {
+        
+        const promise = new Promise((resolve, reject) => {
+            Tb.update(entity)
+                .then((data) => {
+                    resolve(data);
+                })
+                .catch(err => {
+                    reject("Erro:"+ err);
+                });
+        });
+        return promise;        
+    }        
+
+    static async delete(entity) {
+        
+        const promise = new Promise((resolve, reject) => {
+            Tb.delete(entity)
+                .then((data) => {
+                    resolve(data);
+                })
+                .catch(err => {
+                    reject("Erro:"+ err);
+                });
+        });
+        return promise;        
+    }        
+    
 }
 module.exports = EntityController;

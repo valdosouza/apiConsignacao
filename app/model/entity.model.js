@@ -1,5 +1,5 @@
 const {
-  DataTypes, BLOB
+  DataTypes
 } = require('sequelize');
 
 module.exports = sequelize => {
@@ -9,7 +9,7 @@ module.exports = sequelize => {
       allowNull: false,
       defaultValue: null,
       primaryKey: true,
-      autoIncrement: false,
+      autoIncrement: true,
       comment: null,
       field: "id"
     },
@@ -40,23 +40,23 @@ module.exports = sequelize => {
       comment: null,
       field: "aniversary"
     },
-    created_at: {
+    createdAt: {
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "created_at"
+      field: "createdAt"
     },
-    updated_at: {
+    updatedAt: {
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "updated_at"
+      field: "updatedAt"
     },
     tb_line_business_id: {
       type: DataTypes.INTEGER(11),
@@ -80,7 +80,7 @@ module.exports = sequelize => {
   const options = {
     tableName: "tb_entity",
     comment: "",
-    timestamps: false,
+    timestamps: true,
     indexes: []
   };
   const EntityModel = sequelize.define("tb_entity_model", attributes, options);

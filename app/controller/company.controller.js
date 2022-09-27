@@ -1,7 +1,5 @@
-
 const Base = require('../controller/base.controller.js')  
 const db = require("../model");
-const Op = db.Sequelize.Op;
 const Tb = db.company;
 class CompanyController extends Base {
 
@@ -19,19 +17,66 @@ class CompanyController extends Base {
     return promise;
   }  
 
-  static getByCNPJ(cnpj) {
+  static getList(body) {
+    const promise = new Promise((resolve, reject) => {
+      Tb.sequelize.query(
+        'select  * ' +
+        'from tb_company '+
+        'where id is not null',
+        {
+          //replacements: [body.tb_institution_id ],
+          type: Tb.sequelize.QueryTypes.SELECT
+        }).then(data => {
+          resolve(data);
+        })
+        .catch(err => {
+          reject(new Error("Entity:" + err));
+        });
+    });
+    return promise;
+  }
+
+  static async update(company) {
     
     const promise = new Promise((resolve, reject) => {
-      Oper.sequelize.query(
-        'Select co.* ' +        
-        'from tb_company co   ' +
-        'where ( co.cnpj = ?) ', 
+        Tb.update(company)
+            .then((data) => {
+                resolve(data);
+            })
+            .catch(err => {
+                reject("Erro:"+ err);
+            });
+    });
+    return promise;        
+  }        
+
+  static async delete(company) {
+    
+    const promise = new Promise((resolve, reject) => {
+        Tb.delete(company)
+            .then((data) => {
+                resolve(data);
+            })
+            .catch(err => {
+                reject("Erro:"+ err);
+            });
+    });
+    return promise;        
+  }  
+
+  static async getByCNPJ(cnpj) {
+    
+    const promise = new Promise((resolve, reject) => {
+      Tb.sequelize.query(
+        'Select * ' +        
+        'from tb_company    ' +
+        'where ( cnpj = ?) ', 
         {
-          replacements: [ cnpj],
-          type: Oper.sequelize.QueryTypes.SELECT
+          replacements: [cnpj],
+          type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           if (data[0] != null)
-            resolve(data);
+            resolve(data[0]);
           else
             resolve('0');
         })

@@ -1,33 +1,34 @@
-const { address } = require("../model");
-const db = require("../model");
-const Query = db.address;
+const AddressController = require("../controller/address.controller.js");
 
-exports.save = (req, res) => {
+class AddressEndPoint {
 
-};
-
-exports.create = (req, res) => {
-  // Validate request
-  if (!req.body.id) {
-    res.status(400).send({
-      message: "Conteudo não pode ser em branco!"
-    });
-    return;
-  }
-
-  // Create a Tutorial
-  const obj = req.body;
-
-  // Save Tutorial in the database
-  Query.create(obj)
-    .then(data => {
+  static create = (req, res) => {
+    const address = req.body;
+    AddressController.insert(address).then(data => {
       res.send(data);
     })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Algum Erro aconteceu!!"
-      });
-    });
-};
+  }
 
+  static getList(req, res) {
+
+    AddressController.getList(req.body).then(data => {
+      res.send(data);
+    })
+  }
+  static update = (req, res) => {
+    const id = req.params.id;
+    const address = req.body;
+    AddressController.update(address).then(data => {
+      res.send(data);
+    })
+  }
+
+  static delete(req, res) {
+
+    AddressController.delete(req.body).then(data => {
+      res.send(data);
+    })
+  }   
+}
+
+module.exports = AddressEndPoint; 

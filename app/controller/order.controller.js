@@ -2,7 +2,6 @@
 const Base = require('../controller/base.controller.js')
 const db = require("../model");
 const Tb = db.order;
-const moment = require('moment');
 class OrderController extends Base {
 
     static async getIdNext(institutionID) {
@@ -37,14 +36,11 @@ class OrderController extends Base {
                 id: idSeq,
                 tb_institution_id: order.institutionID,
                 terminal: 0,
-                tb_user_id: order.institutionID,
-                dt_record: moment(),//.format('YYYY-MM-DD'),
+                tb_user_id: order.institutionID,                
                 origin: "W",
                 status: 'P',
                 being_used: '',
-                obj_json: order,
-                created_at: moment(),
-                updated_at: moment(),
+                obj_json: order
             };
             
             Tb.create(data)

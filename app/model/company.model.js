@@ -86,23 +86,23 @@ module.exports = sequelize => {
       comment: null,
       field: "ind_ie_destinatario"
     },
-    created_at: {
+    createdAt: {
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "created_at"
+      field: "createdAt"
     },
-    updated_at: {
+    updatedAt: {
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "updated_at"
+      field: "updatedAt"
     },
     iss_ind_exig: {
       type: DataTypes.CHAR(2),
@@ -153,7 +153,7 @@ module.exports = sequelize => {
   const options = {
     tableName: "tb_company",
     comment: "",    
-    timestamps: false,
+    timestamps: true,
     indexes: []
   };
   const CompanyModel = sequelize.define("tb_company_model", attributes, options);

@@ -1,4 +1,3 @@
-const moment = require('moment');
 db = require("../model");
 Oper = db.customer;
 const EntityController = require("../controller/entity.controller.js");
@@ -185,8 +184,6 @@ class CustomerController {
         id: 0,
         name_company: customer.name,
         nick_trade: customer.name,
-        created_at: moment(),
-        updated_at: moment(),
         note: "",
       }
       EntityController.insert(entity)
@@ -204,9 +201,7 @@ class CustomerController {
   static savePerson(customer) {
     const person = {
       id: customer.id,
-      cpf: customer.docFiscal,
-      created_at: moment(),
-      updated_at: moment()
+      cpf: customer.docFiscal
     }
     PersonController.insert(person);
   }
@@ -214,9 +209,7 @@ class CustomerController {
   static saveCompany(customer) {
     const Company = {
       id: customer.id,
-      cpf: customer.docFiscal,
-      created_at: moment(),
-      updated_at: moment()
+      cpf: customer.docFiscal
     }
     CompanyController.insert(Company);
   }
@@ -233,9 +226,7 @@ class CustomerController {
       tb_country_id: "1058",
       tb_state_id: "41",
       tb_city_id: "4004",
-      main: "S",
-      created_at: moment(),
-      updated_at: moment()
+      main: "S"
     };
     AddressController.insert(address);
   };
@@ -246,9 +237,7 @@ class CustomerController {
       kind: "Celular",
       contact: customer.name,
       number: customer.phone,
-      address_kind: "delivery",
-      created_at: moment(),
-      updated_at: moment()
+      address_kind: "delivery"
     };
     PhoneController.insert(phone);
   }

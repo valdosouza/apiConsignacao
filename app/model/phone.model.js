@@ -49,29 +49,29 @@ module.exports = sequelize => {
       comment: null,
       field: "address_kind"
     },
-    created_at: {
+    createdAt: {
       type: DataTypes.DATE,
       allowNull: true,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "created_at"
+      field: "createdAt"
     },
-    updated_at: {
+    updatedAt: {
       type: DataTypes.DATE,
       allowNull: true,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "updated_at"
+      field: "updatedAt"
     }
   };
   const options = {
     tableName: "tb_phone",
     comment: "",
-    timestamps: false,
+    timestamps: true,
     indexes: [{
       name: "id",
       unique: false,
