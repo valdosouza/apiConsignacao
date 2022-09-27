@@ -123,13 +123,96 @@ class InstitutionController extends Base {
   static async update(institution) {
     
     const promise = new Promise((resolve, reject) => {
-        Tb.update(institution)
-            .then((data) => {
-                resolve(data);
-            })
+          //Salva a entidad
+          const dataEntity = {
+            id:institution.id,
+            name_company: institution.name_company,
+            nick_trade:institution.nick_trade,
+            aniversary:institution.dt_foundation,
+            tb_institution_id:institution.tb_institution_id,
+            note:institution.note                        
+          };       
+          TbEntity.update(dataEntity, {
+            where: { id: dataEntity.id }
+          })
             .catch(err => {
-                reject("Erro:"+ err);
-            });
+              reject("Erro:"+ err);
+            });          
+          //Salva a pessoa Juridica              
+          const dataCompany = {
+            id:institution.id,
+            cnpj:institution.cnpj,
+            ie:institution.ie,
+            im:institution.im,
+            iest:institution.iest,
+            crt:institution.crt,
+            crt_modal:institution.crt_modal,
+            ind_ie_destinatario:institution.ind_ie_destinatario,
+            iss_ind_exig:institution.iss_ind_exig,
+            iss_retencao:institution.iss_retencao,
+            iss_inc_fiscal:institution.iss_inc_fiscal,
+            iss_process_number:institution.iss_process_number,
+            send_xml_nfe_only:institution.send_xml_nfe_only
+          };
+          TbCompany.update(dataCompany, {
+            where: { id: dataCompany.id }
+          })
+          .catch(err => {
+            reject("Erro:"+ err);
+          });          
+          //Salva o endereço          
+          const dataAddress = {            
+            id:institution.id,
+            street:institution.street,
+            nmbr:institution.nmbr,
+            complement:institution.complement,
+            neighborhood:institution.neighborhood,
+            region:institution.region,
+            kind:institution.address_kind,
+            zip_code:institution.zip_code,
+            tb_country_id:institution.tb_country_id,
+            tb_state_id:institution.tb_state_id,
+            tb_city_id:institution.tb_city_id,
+            main:institution.main,
+            longitude:institution.longitude,
+            latitude:institution.latitude
+          };          
+          TbAddress.update(dataAddress, {
+            where: { id: dataAddress.id, kind:dataAddress.kind }
+          })
+          .catch(err => {
+            reject("Erro:"+ err);
+          });          
+          //Salva o Phone
+          const dataPhone = {
+            id:institution.id,
+            kind:institution.phone_kind,
+            address_kind:institution.address_kind,
+            number:institution.phone_number,
+            contact:institution.contact
+          };
+          TbPhone.update(dataPhone, {
+            where: { id: dataPhone.id, kind:dataPhone.kind }
+          })
+          .catch(err => {
+            reject("Erro:"+ err);
+          });          
+          //Grava o institution
+          const dataInstitution = {
+            id:institution.id,
+            active:institution.active
+          }
+          TbInstitution.update(dataInstitution, {
+            where: { id: dataInstitution.id }
+          })
+          .then(() => {                    
+            //REtornogeral
+            resolve("The Institution was updated");   
+          })
+          .catch(err => {
+            reject("Erro:"+ err);
+          });          
+      
     });
     return promise;        
   }        

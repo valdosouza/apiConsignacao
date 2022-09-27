@@ -174,12 +174,7 @@ router.get("/", institution.getList);
  *              - $ref: '#/components/schemas/Institution'
  *    responses:
  *      200:
- *        description: The Institution was updated
- *        content:
- *          application/json:
- *            schema:
- *              allOf:
- *                - $ref: '#/components/schemas/Institution'
+ *        description: The Institution was updated       
  *      404:
  *        description: The institution was not found
  *      500:

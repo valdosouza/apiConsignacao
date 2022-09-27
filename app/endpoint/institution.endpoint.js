@@ -17,12 +17,12 @@ class InstitutionEndPoint {
       res.send(data);
     })
   }
-  static update = (req, res) => {
-    const id = req.params.id;
+  static update = (req, res) => {    
     const institution = req.body;
-    InstitutionController.update(institution).then(data => {
-      res.send(data);
-    })
+    InstitutionController.update(institution)
+      .then((data) => {
+        res.send(data);
+      })
   }
 
   static delete(req, res) {
