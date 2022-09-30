@@ -43,9 +43,11 @@ db.restGhAtt = require("./restGroupHasAttribute.model.js")(sequelize, Sequelize)
 db.paymentType = require("./payment_types.model.js")(sequelize, Sequelize);
 
 db.entity = require("./entity.model.js")(sequelize, Sequelize);
+db.entityHasMailing = require("./entityHasMailing.model.js")(sequelize, Sequelize);
 db.address = require("./address.model.js")(sequelize, Sequelize);
 db.phone = require("./phone.model.js")(sequelize, Sequelize);
 db.mailing = require("./mailing.model.js")(sequelize, Sequelize);
+db.mailingGroup = require("./mailingGroupModel.js")(sequelize, Sequelize);
 db.socialMedia = require("./socialMedia.model.js")(sequelize, Sequelize);
 db.person = require("./person.model.js")(sequelize, Sequelize);
 db.company = require("./company.model.js")(sequelize, Sequelize);
@@ -60,7 +62,7 @@ db.restDough = require("./restMenu.model.js")(sequelize, Sequelize);
 db.restBeverage = require("./restMenu.model.js")(sequelize, Sequelize);
 
 db.institution = require("./institution.model.js")(sequelize, Sequelize);
-db.customer = require("./customer.model.js")(sequelize, Sequelize);
+db.TbInstitutionHasUser = require("./institutionHasUser.model.js")(sequelize, Sequelize);
 db.order = require("./order.model.js")(sequelize, Sequelize);
 db.orderSale = require("./orderSale.model.js")(sequelize, Sequelize);
 db.financial = require("./financial.model.js")(sequelize, Sequelize);

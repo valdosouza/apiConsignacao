@@ -202,3 +202,20 @@ ALTER TABLE tb_phone
   ADD PRIMARY KEY (id,kind),
   ADD KEY id (id,kind);
 COMMIT;
+CREATE TABLE tb_mailing_group (
+  id int(11) NOT NULL,
+  description varchar(100) DEFAULT NULL,
+  createdAt datetime NOT NULL,
+  updatedAt datetime NOT NULL,
+  PRIMARY KEY (id)
+);
+create TABLE tb_entity_has_mailing (
+  tb_entity_id int(11) NOT NULL,
+  tb_mailing_id int(11) NOT NULL,
+  tb_mailing_group_id int(11) NOT NULL,
+  createdAt datetime NOT NULL,
+  updatedAt datetime NOT NULL,
+  PRIMARY KEY (tb_entity_id,tb_mailing_id,tb_mailing_group_id),
+  KEY tb_mailing_id (tb_mailing_id),
+  KEY tb_mailing_group_id (tb_mailing_group_id)
+);

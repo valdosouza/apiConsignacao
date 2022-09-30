@@ -45,7 +45,10 @@ app.get("/", (req, res) => {
 });
 
 const userRouter = require("./app/routes/user.routes");
-app.use("/users", userRouter);
+app.use("/user", userRouter);
+
+const mailingRouter = require("./app/routes/mailing.routes");
+app.use("/mailing", mailingRouter);
 
 const entity = require("./app/routes/entity.routes");
 app.use("/entity", entity);

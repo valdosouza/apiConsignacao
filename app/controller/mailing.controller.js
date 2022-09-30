@@ -1,36 +1,36 @@
 const Base = require('../controller/base.controller.js')
 const db = require("../model");
-const Op = db.Sequelize.Op;
 const Tb = db.mailing;
+
 class MailingController extends Base {
 
   // Save USer in the database
-  static create = (user) => {
+  static create = (mailing) => {
     const promise = new Promise((resolve, reject) => {
 
-      Tb.create(user)
+      Tb.create(mailing)
         .then(data => {
           resolve(data);
         })
         .catch(err => {
-          reject(new Error("Algum erro aconteceu ao criar o Usuário."));
+          reject(new Error("Algum erro aconteceu ao criar o Email. "+ err));
 
         });
     });
     return promise;
   }
 
-  static update = (id,user) => {
+  static update = (id,mailing) => {
     const promise = new Promise((resolve, reject) => {
 
-      Tb.update(user, {
+      Tb.update(mailing, {
         where: { id: id }
       })
         .then(data => {
           resolve(data);
         })
         .catch(err => {
-          reject(new Error("Algum erro aconteceu ao atualizar o Usuário."));
+          reject(new Error("Algum erro aconteceu ao atualizar o Email."));
 
         });
     });
@@ -40,14 +40,14 @@ class MailingController extends Base {
   static delete = (id) => {
     const promise = new Promise((resolve, reject) => {
 
-      Tb.destroy({
+      Tb.delete({
         where: { id: id }
       })
         .then(data => {
           resolve(data);
         })
         .catch(err => {
-          reject(new Error("Algum erro aconteceu ao Deletar o Usuário."));
+          reject(new Error("Algum erro aconteceu ao Deletar o Email."));
 
         });
     });
@@ -59,8 +59,8 @@ class MailingController extends Base {
   static findAll = () => {
     const promise = new Promise((resolve, reject) => {
       Tb.sequelize.query(
-        'Select id  ' +
-        'from tb_user  ',
+        'Select * ' +
+        'from tb_mailing  ',
         {
           type: Tb.sequelize.QueryTypes.SELECT
         }
@@ -68,41 +68,47 @@ class MailingController extends Base {
         resolve(data);
       })
         .catch(err => {
-          reject(new Error("Algum erro aconteceu ao buscar Usuário"));
+          reject(new Error("Algum erro aconteceu ao buscar Email"));
         });
     });
     return promise;
   }
 
-  // Find a single user with an id
+  // Find a single mailing with an id
   static findOne = (email) => {
     const promise = new Promise((resolve, reject) => {      
-      Tb.findOne({ where: { email: email } })
+      console.log(email);
+      Tb.findOne(
+          { where: { email: email } 
+      })
       .then(data => {
-        if (data) {resolve(data)} else {resolve(null)};
+        if (data) {
+          resolve(data)
+        } else {
+          resolve(null)
+        };
       })
       .catch(err => {
-        reject(new Error("Algum erro aconteceu ao buscar email"));
+        reject(new Error("Algum erro aconteceu ao buscar email" + err));
       });
-
     });
     return promise;
   }
 
-  static getlist(tb_institution_id) {
+  static getlist() {
     const promise = new Promise((resolve, reject) => {
       Tb.sequelize.query(
         'Select u.id  ' +
         'from tb_mailing m ' ,        
         {
-          replacements: [tb_institution_id],//*depois fazer certo
+          //replacements: [tb_institution_id],//*depois fazer certo
           type: Tb.sequelize.QueryTypes.SELECT
         }
       ).then(data => {
         resolve(data);
       })
         .catch(err => {
-          reject(new Error("Algum erro aconteceu ao buscar Forma de Pagamento"));
+          reject(new Error("Algum erro aconteceu ao buscar Email"));
         });
     });
     return promise;

@@ -31,28 +31,29 @@ module.exports = sequelize => {
       comment: null,
       field: "tb_mailing_group_id"
     },
-    created_at: {
+    createdAt: {
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "created_at"
+      field: "createdAt"
     },
-    updated_at: {
+    updatedAt: {
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "updated_at"
+      field: "updatedAt"
     }
   };
   const options = {
     tableName: "tb_entity_has_mailing",
     comment: "",
+    timestamps: true,
     indexes: [{
       name: "tb_mailing_id",
       unique: false,

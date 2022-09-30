@@ -1,4 +1,4 @@
-const Base = require('../controller/base.controller.js')
+const Base = require('../controller/base.controller.js');
 const db = require("../model");
 const Op = db.Sequelize.Op;
 const TbInstitution = db.institution;
@@ -26,7 +26,7 @@ class InstitutionController extends Base {
             name_company: institution.name_company,
             nick_trade:institution.nick_trade,
             aniversary:institution.dt_foundation,
-            tb_institution_id:institution.tb_institution_id,
+            tb_line_buiness_id:institution.tb_line_buiness_id,
             note:institution.note                        
           };                    
           

@@ -12,15 +12,18 @@
  * @swagger
  * components:
  *   schemas:
- *     Users:
+ *     User:
  *       type: object
  *       required:
+ *         - Institution
  *         - id
  *         - nick
  *         - email
  *         - password
  *         - kind
-  *       properties:
+ *       properties:
+ *         Institution:
+ *           type: string
  *         id:
  *           type: string
  *         nick:
@@ -31,8 +34,6 @@
  *           type: string
  *         kind:
  *           type: string
- *         cpf:
- *           type: string  
  *     Auth:
  *       type: object
  *       required:
@@ -62,29 +63,29 @@
  /**
   * @swagger
   * tags:
-  *   name: Users
-  *   description: The Users managing API
+  *   name: User
+  *   description: The User managing API
   */
 
 /**
  * @swagger
- * /Users:
+ * /User:
  *   post:
  *     summary: Create a new user
- *     tags: [Users]
+ *     tags: [User]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Users'
+ *             $ref: '#/components/schemas/User'
  *     responses:
  *       200:
- *         description: The Users was successfully created
+ *         description: The User was successfully created
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Users'
+ *               $ref: '#/components/schemas/User'
  *       500:
  *         description: Some server error
  */
@@ -92,10 +93,10 @@
 
   /**
  * @swagger
- * /Users:
+ * /User:
  *   get:
  *     summary: Returns the list of all the users
- *     tags: [Users]
+ *     tags: [User]
  *     responses:
  *       200:
  *         description: The list of the users
@@ -104,17 +105,17 @@
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/Users'
+ *                 $ref: '#/components/schemas/User'
  */
   //protectedRouter.get("/", users.findAll);
   router.get("/", users.findAll);
 
  /**
  * @swagger
- * /Users/{id}:
+ * /User/{id}:
  *  get:
  *    summary: Return user by the id
- *    tags: [Users]
+ *    tags: [User]
  *    parameters:
  *      - in: path
  *        name: id
@@ -128,7 +129,7 @@
  *        content:
  *          application/json:
  *            schema:
- *              $ref: '#/components/schemas/Users'
+ *              $ref: '#/components/schemas/User'
  *      404:
  *        description: The user was not found
  *      500:
@@ -139,7 +140,7 @@
 
   /**
  * @swagger
- * /Users/{id}:
+ * /User/{id}:
  *  put:
  *    summary: Update the users by the id
  *    tags: [Address]
@@ -155,14 +156,14 @@
  *      content:
  *        application/json:
  *          schema:
- *            $ref: '#/components/schemas/Users'
+ *            $ref: '#/components/schemas/User'
  *    responses:
  *      200:
  *        description: The user was updated
  *        content:
  *          application/json:
  *            schema:
- *              $ref: '#/components/schemas/Users'
+ *              $ref: '#/components/schemas/User'
  *      404:
  *        description: The user was not found
  *      500:
@@ -173,10 +174,10 @@
 
 /**
  * @swagger
- * /Users/{id}:
+ * /User/{id}:
  *  delete:
  *    summary: Delete the user by the id
- *    tags: [Users]
+ *    tags: [User]
  *    parameters:
  *      - in: path
  *        name: id
@@ -197,10 +198,10 @@
 
  /** 
  * @swagger
- * /users/authenticate:
+ * /user/authenticate:
  *   post:
  *     summary: Create a new user
- *     tags: [Users]
+ *     tags: [User]
  *     requestBody:
  *       required: true
  *       content:
@@ -209,7 +210,7 @@
  *             $ref: '#/components/schemas/Auth'
  *     responses:
  *       200:
- *         description: The Users was authenticate
+ *         description: The User was authenticate
  *         content:
  *           application/json:
  *             schema:

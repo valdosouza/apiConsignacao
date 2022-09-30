@@ -16,7 +16,8 @@ class UserEndPoint {
 
     // Create a User
     const user = req.body;
-    UserController.create(user).then(data => {
+    UserController.create(user)
+      .then(data => {
       res.send(data);
     })
   };
@@ -25,7 +26,8 @@ class UserEndPoint {
   static update = (req, res) => {
     const id = req.params.id;
 
-    UserController.update(id, user).then(data => {
+    UserController.update(id, user)
+      .then(data => {
       res.send(data);
     })
   };
