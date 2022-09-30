@@ -57,6 +57,27 @@
  *           type: string
  *         jwt:
  *           type: string
+ *     RecoveryPassword:
+ *       type: object
+ *       properties:
+ *         email:
+ *           type: string
+ *     ChangePassword:
+ *       type: object
+ *       required:
+ *         - user
+ *         - email
+ *         - salt
+ *         - newPassword
+ *       properties:
+ *         user:
+ *           type: string
+ *         email: 
+ *           type: string
+ *         salt: 
+ *           type: string
+ *         newPassword: 
+ *           type: string
  */
   
 
@@ -220,7 +241,58 @@
  */
   router.post("/authenticate", users.authenticate);
   
-  router.get("/authorization", users.authorization);
+/** 
+ * @swagger
+ * /user/recoverypassword:
+ *   post:
+ *     summary: gera uma chave de controle, cria link para a troca da senha
+ *     tags: [User]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/RecoveryPassword'
+ *     responses:
+ *       200:
+ *         description: Utilize a Chave para enviar a troca de senha
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/RecoveryPassword'
+ *       500:
+ *         description: Some server error
+ */
+ router.post("/recoverypassword", users.recoveryPassword);
+
+/** 
+ * @swagger
+ * /user/changepassword:
+ *   post:
+ *     summary: Recebe um hash e um id para trocar a senha
+ *     tags: [User]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/ChangePassword'
+ *     responses:
+ *       200:
+ *         description: Utilize a Chave para enviar a troca de senha
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ChangePassword'
+ *       500:
+ *         description: Some server error
+ */
+ router.post("/changepassword", users.changePassword);
+
+/**
+ * 
+ */
+router.get("/authorization", users.authorization);
 
   module.exports = router;  
 

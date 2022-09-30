@@ -226,6 +226,63 @@ class UserController extends Base {
     return promise;
   }
 
+  static async  getIdUserByEmail(email) {
+    
+    const promise = new Promise((resolve, reject) => {
+      TbUser.sequelize.query(
+        'Select u.id '+
+        'from tb_entity e '+
+        '  inner join tb_entity_has_mailing ehm '+
+        '  on (ehm.tb_entity_id = e.id) '+
+        '  inner join tb_mailing m  '+
+        '  on (ehm.tb_mailing_id = m.id)  '+
+        '  inner join tb_user u  '+
+        '  on (u.id = e.id) '+
+        '  inner join tb_institution_has_user ihu  '+
+        '  on (ihu.tb_user_id = u.id)  '+
+        'where ( m.email=? ) ' ,
+        {
+          replacements: [email],
+          type: TbUser.sequelize.QueryTypes.SELECT
+        }).then(data => {                
+          if (data[0]){
+            resolve(data[0].id)
+          }else{
+            resolve(0)
+          } ;
+        })
+        .catch(err => {
+          reject(new Error(err+ " |"+ "Algum erro aconteceu ao buscar o Usuário"));
+        });
+    });
+    return promise;
+  }
+
+  static async  getSalt(body) {
+    
+    const promise = new Promise((resolve, reject) => {
+      TbUser.sequelize.query(
+        'Select u.salt '+
+        'from tb_user u '+
+        'where ( u.id=? ) '+
+        ' and u.salt=?' ,
+        {
+          replacements: [body.user,body.salt],
+          type: TbUser.sequelize.QueryTypes.SELECT
+        }).then(data => {                
+          if (data[0]){
+            resolve(data[0].salt)
+          }else{
+            resolve(0)
+          } ;
+        })
+        .catch(err => {
+          reject(new Error(err+ " |"+ "Algum erro aconteceu ao buscar o salt"));
+        });
+    });
+    return promise;
+  };
+
   static generateJWT(data) {
     const promise = new Promise((resolve) => {
 
@@ -275,6 +332,87 @@ class UserController extends Base {
     return promise;
   }
 
+  static async recoveryPassword(email){
+    const promise = new Promise(async (resolve,reject) => {    
+      try {        
+        const userId = await  this.getIdUserByEmail(email) ;
+        if (userId > 0){
+          const saltcode = {
+            id: userId,
+            email: email
+          };
+          var token =jwt.sign({ saltcode }, process.env.SECRET, {expiresIn: "15d",algorithm: 'HS256' });        
+          var hashSalt = md5(token);
+          
+          TbUser.sequelize.query(
+            'update tb_user set ' +
+            ' salt=? ' +
+            'where id=? ' ,        
+            {
+              replacements: [hashSalt,userId],
+              type: TbUser.sequelize.QueryTypes.UPDATE
+            }
+          )
+            .then(() => {
+              const dataResult ={
+                user:userId,
+                salt:hashSalt
+              }
+              resolve(dataResult);
+          })
+            .catch(err => {
+              reject(new Error("Algum erro aconteceu ao gerar o código Salt."));
+          });  
+        }else{          
+            reject("este email não tem usuário vinculado.");                  
+        };     
+      } catch (err) {
+        // ... handle it locally
+        throw new Error(err.message);
+      }                      
+    });
+    return promise;
+  }  
+
+  static async changePassword(body){
+    const promise = new Promise(async (resolve,reject) => {    
+      try {        
+        const hashSalt = await  this.getSalt(body) ;
+        if (hashSalt != ''){
+          TbUser.sequelize.query(
+            'update tb_user set ' +
+            ' password=? ' +
+            'where id=? '+
+            ' and salt=? ',
+            {
+              replacements: [body.newPassword,body.user,body.salt],
+              type: TbUser.sequelize.QueryTypes.UPDATE
+            }
+          )
+            .then(() => {
+              const dataResult ={
+                result:"true",
+                message:"Senha alterada com Sucesso"
+              }
+              resolve(dataResult);
+          })
+            .catch(err => {
+              reject(new Error("Erro ao alterar senha - " + err));
+          });  
+        }else{      
+          const dataResult ={
+            result:"false",
+            message:"Salt Informado não encontrado"
+          }
+          resolve(dataResult);              
+        };     
+      } catch (err) {
+        // ... handle it locally
+        throw new Error(err.message);
+      }                      
+    });
+    return promise;
+  }    
 }
 
 module.exports = UserController; 

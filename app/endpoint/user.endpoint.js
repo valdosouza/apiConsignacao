@@ -48,7 +48,7 @@ class UserEndPoint {
       .then(data => {
         res.send(data);
       })
-  }
+  };
 
   // Find a single user with an id
   static findOne = (req, res) => {
@@ -64,7 +64,7 @@ class UserEndPoint {
     UserController.getlist(tb_institution_id).then(data => {
       res.send(data);
     })
-  }
+  };
 
   static authenticate = (req, res) => {
 
@@ -109,7 +109,42 @@ class UserEndPoint {
       .then(data=>{          
           return res.json(data);          
       });      
+    };
+
+  static recoveryPassword = (req, res) => {
+    // Validate request
+    if (!req.body.email) {
+      res.status(400).send({
+        message: "Conteúdo não pode ser Vazio!"
+      });
+      return;
     }
+    UserController.recoveryPassword(req.body.email)
+      .then(data=>{          
+          return res.json(data);          
+      });      
+    };
+
+    static changePassword = (req, res) => {
+      // Validate request
+      if (!req.body.salt) {
+        res.status(400).send({
+          message: "Codidgo Salt não pode ser Vazio!"
+        });
+        return;
+      }
+      if (!req.body.user) {
+        res.status(400).send({
+          message: "Codidgo usuário não pode ser Vazio!"
+        });
+        return;
+      }
+
+      UserController.changePassword(req.body)
+        .then(data=>{          
+            return res.json(data);          
+        });      
+      }    
 }
 module.exports = UserEndPoint;
 

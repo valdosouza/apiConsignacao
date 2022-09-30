@@ -113,7 +113,10 @@ class MailingController extends Base {
     });
     return promise;
   }
+
+  
 }
+
 
 module.exports = MailingController; 
 
