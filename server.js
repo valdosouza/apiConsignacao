@@ -15,8 +15,8 @@ const options = {
 		},
 		servers: [
 			{
-				//url: "http://localhost:3000"
-				url: "https://api.industriadechocolatesamor.com.br"
+				url: "http://localhost:3000"
+				//url: "https://api.industriadechocolatesamor.com.br"
 			},
 		],
 	},
@@ -67,6 +67,9 @@ app.use("/phone", phone);
 
 const institution = require("./app/routes/institution.routes");
 app.use("/institution", institution);
+
+const stockList = require("./app/routes/stock_list.routes");
+app.use("/stocklist", stockList);
 
 const PORT = process.env.PORT || 3000;
 

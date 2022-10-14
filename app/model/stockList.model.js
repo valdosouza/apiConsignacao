@@ -31,52 +31,48 @@ module.exports = sequelize => {
       comment: null,
       field: "description"
     },
-    kind: {
+    main: {
       type: DataTypes.CHAR(1),
       allowNull: true,
-      defaultValue: null,
+      defaultValue: 'N',
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "kind"
+      field: "main"
     },
-    created_at: {
+    active: {
+      type: DataTypes.CHAR(1),
+      allowNull: true,
+      defaultValue: 'S',
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "active"
+    },
+    createdAt: {
       type: DataTypes.DATE,
       allowNull: true,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "created_at"
+      field: "createdAt"
     },
-    updated_at: {
+    updatedAt: {
       type: DataTypes.DATE,
       allowNull: true,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "updated_at"
+      field: "updatedAt"
     },
-    terminal: {
-      type: DataTypes.INTEGER(11),
-      allowNull: true,
-      defaultValue: "0",
-      primaryKey: false,
-      autoIncrement: false,
-      comment: null,
-      field: "terminal"
-    }
   };
   const options = {
     tableName: "tb_stock_list",
     comment: "",
-    indexes: [{
-      name: "updated_at",
-      unique: false,
-      type: "BTREE",
-      fields: ["updated_at"]
-    }]
+    timestamps: true,
+    indexes: []
   };
   const StockListModel = sequelize.define("tb_stock_list_model", attributes, options);
   return StockListModel;

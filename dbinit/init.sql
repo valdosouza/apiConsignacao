@@ -219,3 +219,13 @@ create TABLE tb_entity_has_mailing (
   KEY tb_mailing_id (tb_mailing_id),
   KEY tb_mailing_group_id (tb_mailing_group_id)
 );
+CREATE TABLE tb_stock_list (
+  id int(11) NOT NULL,
+  tb_institution_id int(11) NOT NULL,  
+  description varchar(45) DEFAULT NULL,
+  main char(1) DEFAULT 'N',
+  active char(1) DEFAULT 'S',
+  createdAt datetime DEFAULT NULL,
+  updatedAt datetime DEFAULT NULL,  
+  PRIMARY KEY (id,tb_institution_id)
+)

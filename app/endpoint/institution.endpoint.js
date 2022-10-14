@@ -34,7 +34,3 @@ class InstitutionEndPoint {
 }
 
 module.exports = InstitutionEndPoint;
-
-
-
-

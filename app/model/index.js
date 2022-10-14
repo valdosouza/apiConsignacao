@@ -51,6 +51,11 @@ db.mailingGroup = require("./mailingGroupModel.js")(sequelize, Sequelize);
 db.socialMedia = require("./socialMedia.model.js")(sequelize, Sequelize);
 db.person = require("./person.model.js")(sequelize, Sequelize);
 db.company = require("./company.model.js")(sequelize, Sequelize);
+db.institution = require("./institution.model.js")(sequelize, Sequelize);
+db.stockList = require("./stockList.model.js")(sequelize, Sequelize);
+
+
+
 db.restSubgroup = require("./restSubgroup.model.js")(sequelize, Sequelize);
 db.restGroup = require("./restGroup.model.js")(sequelize, Sequelize);
 db.restButton = require("./Buttton.model.js")(sequelize, Sequelize);//Manter os nomes assim por questão de organização
@@ -61,7 +66,7 @@ db.restEdge = require("./restMenu.model.js")(sequelize, Sequelize);
 db.restDough = require("./restMenu.model.js")(sequelize, Sequelize);
 db.restBeverage = require("./restMenu.model.js")(sequelize, Sequelize);
 
-db.institution = require("./institution.model.js")(sequelize, Sequelize);
+
 db.TbInstitutionHasUser = require("./institutionHasUser.model.js")(sequelize, Sequelize);
 db.order = require("./order.model.js")(sequelize, Sequelize);
 db.orderSale = require("./orderSale.model.js")(sequelize, Sequelize);
