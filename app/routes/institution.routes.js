@@ -135,13 +135,20 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
 
  /**
  * @swagger
- * /Institution:
+ * /Institution/{id}:
  *   get:
  *     summary: Returns the list of all the institution
  *     tags: [Institution]
+ *     parameters:
+ *      - in: path
+ *        name: id
+ *        schema:
+ *          type: string
+ *        required: true
+ *        description: The id institution
  *     responses:
  *       200:
- *         description: The list of the institution
+ *         description: The  institution
  *         content:
  *           application/json:
  *             schema:
@@ -150,7 +157,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *                 allOf:
  *                   - $ref: '#/components/schemas/Institution'
  */
-router.get("/", institution.getList);
+router.get("/:id", institution.getInstitution);
   
  /**
  * @swagger

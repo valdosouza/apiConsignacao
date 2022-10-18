@@ -214,33 +214,62 @@ class InstitutionController extends Base {
       });
   };
 
-  static getDelivery = (body) => {
+  static getInstitution = (id) => {
 
     const promise = new Promise((resolve, reject) => {
-      Oper.sequelize.query(
-        'Select et.id,et.nick_trade, co.cnpj, a.zip_code, a.street,  ' +
-        'a.nmbr, a.complement, a.neighborhood, c.name locality,   ' +
-        's.abbreviation state, a.longitude ,  a.latitude, '+
-        ' iv.km_value, iv.kind_calc_size, wp.id phone,co.cnpj   ' +
-        'from tb_institution it  ' +
-        '  inner join tb_entity et  ' +
-        '  on (it.id = et.id)  ' +
-        '  inner join tb_company co  ' +
-        '  on (co.id = et.id)  ' +
-        '  inner join tb_address a  ' +
-        '  on (a.id =et.id)  ' +
-        '  inner join tb_city c  ' +
-        '  on (c.id = a.tb_city_id)  ' +
-        '  inner join tb_state s  ' +
-        '  on (s.id = a.tb_state_id)  ' +
-        '  inner join tb_whatsapp wp  ' +
-        '  on (wp.tb_institution_id = it.id) ' +
-        '  inner join tb_institution_delivery iv  ' +
-        '  on (iv.id = et.id)  ' +
+      TbInstitution.sequelize.query(
+        'Select '+
+        '  it.id, '+
+        '  et.name_company, '+
+        '  et.nick_trade, '+
+        '  et.tb_line_business_id, '+
+        '  et.note, '+
+        '  it.active, '+
+        '  co.cnpj, '+
+        '  co.ie, '+
+        '  co.im, '+
+        '  co.iest, '+
+        '  co.dt_foundation, '+
+        '  co.crt, '+
+        '  co.crt_modal, '+
+        '  ind_ie_destinatario, '+
+        '  iss_ind_exig, '+
+        '  iss_retencao, '+
+        '  iss_inc_fiscal, '+
+        '  iss_process_number, '+
+        '  send_xml_nfe_only, '+
+        '  a.street, '+
+        '  a.nmbr, '+
+        '  a.complement, '+
+        '  a.neighborhood, '+
+        '  a.region, '+
+        '  a.kind address_kind, '+
+        '  a.zip_code, '+ 
+        '  a.tb_country_id, '+
+        '  a.tb_state_id, '+
+        '  a.tb_city_id, '+
+        '  a.main, '+
+        '  a.longitude, '+
+        '  a.latitude, '+ 
+        '  ph.kind phone_kind, '+
+        '  ph.number phone_number   '+
+        '  from tb_institution it  '+ 
+        '    inner join tb_entity et  '+ 
+        '    on (it.id = et.id)   '+
+        '    inner join tb_company co   '+
+        '    on (co.id = et.id)   '+
+        '    inner join tb_address a   '+
+        '    on (a.id =et.id)   '+
+        '    left outer join tb_phone ph '+
+        '    on (ph.id = a.id ) and (ph.address_kind = a.kind) '+
+        '    inner join tb_city c   '+
+        '    on (c.id = a.tb_city_id)   '+
+        '    inner join tb_state s   '+
+        '    on (s.id = a.tb_state_id)   '+
         'where it.id =? ',
         {
-          replacements: [body.tb_institution_id],
-          type: Oper.sequelize.QueryTypes.SELECT
+          replacements: [id],
+          type: TbInstitution.sequelize.QueryTypes.SELECT
         }).then(data => {
           if (data[0] != null)
             resolve(data);
