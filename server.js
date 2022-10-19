@@ -19,8 +19,8 @@ const options = {
 		},
 		servers: [
 			{
-				url: "http://localhost:3000"
-				//url: "https://api.industriadechocolatesamor.com.br"
+				//url: "http://localhost:3000"
+				url: "https://api.industriadechocolatesamor.com.br"
 			},
 		],
 	},
