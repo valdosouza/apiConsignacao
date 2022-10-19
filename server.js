@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const cors = require('cors')
 const corsOptions ={
    origin:'*',    
+   methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH'],
 }
 const cookieParser = require('cookie-parser');
 const swaggerUI = require("swagger-ui-express");
