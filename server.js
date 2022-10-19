@@ -2,9 +2,11 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require('cors')
 const corsOptions ={
-   origin:'*',    
-   methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH'],
-}
+	"origin": "*",
+	"methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+	"preflightContinue": false,
+	"optionsSuccessStatus": 200
+  }
 const cookieParser = require('cookie-parser');
 const swaggerUI = require("swagger-ui-express");
 const swaggerJsDoc = require("swagger-jsdoc");
@@ -37,8 +39,8 @@ app.use(cookieParser());
 
 
 
-app.use(cors());
-//app.use(cors(corsOptions)) 
+//app.use(cors());
+app.use(cors(corsOptions)) 
 
 // parse requests of content-type - application/json
 app.use(bodyParser.json());
