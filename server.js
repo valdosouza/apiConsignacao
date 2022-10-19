@@ -1,6 +1,13 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require('cors')
+const corsOptions ={
+   origin:'*', 
+   credentials:true,            //   access-control-allow-credentials:true,
+   optionSuccessStatus:200,
+}
+app.use(cors(corsOptions)) 
+
 const cookieParser = require('cookie-parser');
 const swaggerUI = require("swagger-ui-express");
 const swaggerJsDoc = require("swagger-jsdoc");
