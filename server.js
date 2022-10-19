@@ -4,13 +4,6 @@ const cors = require('cors')
 const corsOptions ={
    origin:'*',    
 }
-
-app.setHeader('Access-Control-Allow-Origin', 'http://localhost');
-
-app.setHeader('Access-Control-Allow-Headers', 'Content-Type, Accept');
-
-app.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-
 const cookieParser = require('cookie-parser');
 const swaggerUI = require("swagger-ui-express");
 const swaggerJsDoc = require("swagger-jsdoc");
