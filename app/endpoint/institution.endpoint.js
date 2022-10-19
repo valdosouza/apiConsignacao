@@ -29,9 +29,7 @@ class InstitutionEndPoint {
     const institution = req.body;
     InstitutionController.update(institution)
       .then((data) => {
-        res.setHeader("Access-Control-Allow-Origin", "*");
-        res.setHeader('Access-Control-Allow-Methods', '*');
-        res.setHeader("Access-Control-Allow-Headers", "*");        
+      
         res.send(data);
       })
   }
