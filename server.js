@@ -39,9 +39,12 @@ app.use(cookieParser());
 
 
 
-//app.use(cors());
+app.use(cors());
 //app.use(cors(corsOptions)) 
 //app.options('*', cors()) 
+//const cors = require("./middleware/auth-cors");
+//const cors = require("auth-cors");
+
 
 // parse requests of content-type - application/json
 app.use(bodyParser.json());
