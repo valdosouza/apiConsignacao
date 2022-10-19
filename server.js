@@ -41,6 +41,7 @@ app.use(cookieParser());
 
 //app.use(cors());
 app.use(cors(corsOptions)) 
+app.options('*', cors()) 
 
 // parse requests of content-type - application/json
 app.use(bodyParser.json());
@@ -76,6 +77,8 @@ app.use("/phone", phone);
 
 const institution = require("./app/routes/institution.routes");
 app.use("/institution", institution);
+
+
 
 const stockList = require("./app/routes/stock_list.routes");
 app.use("/stocklist", stockList);
