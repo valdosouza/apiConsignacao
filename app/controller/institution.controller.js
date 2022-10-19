@@ -19,7 +19,7 @@ class InstitutionController extends Base {
     const promise = new Promise(async (resolve, reject) => {
       const dataCompany  = await company.getByCNPJ(institution.cnpj);    
       if (dataCompany != '0'){
-        update(institution); 
+        this.update(institution); 
       }else{
           //Salva a entidad
           const dataEntity = {
