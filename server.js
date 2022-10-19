@@ -19,8 +19,8 @@ const options = {
 		},
 		servers: [
 			{
-				//url: "http://localhost:3000"
-				url: "https://api.industriadechocolatesamor.com.br"
+				url: "http://localhost:3000"
+				//url: "https://api.industriadechocolatesamor.com.br"
 			},
 		],
 	},
@@ -39,6 +39,7 @@ app.use(cookieParser());
 
 //app.use(cors());
 app.use(cors(corsOptions)) 
+
 // parse requests of content-type - application/json
 app.use(bodyParser.json());
 

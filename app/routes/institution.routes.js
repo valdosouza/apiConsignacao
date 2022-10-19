@@ -187,7 +187,7 @@ router.get("/:id", institution.getInstitution);
  *      500:
  *        description: Some error happened
  */
- router.put("/", institution.update);
+ router.put("/:id", institution.update);
 
 /**
  * @swagger
