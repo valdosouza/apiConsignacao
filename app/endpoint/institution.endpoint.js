@@ -26,15 +26,14 @@ class InstitutionEndPoint {
       res.send(data);
     })
   }
-  static update = (req, res,next) => {    
+  static update = (req, res) => {    
     const institution = req.body;
     InstitutionController.update(institution)
       .then((data) => {
         res.header("Access-Control-Allow-Origin", "*"),
         res.header("Access-Control-Allow-Methods", "GET,PUT,PATCH,POST,DELETE"),
-        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept"),
-        res.send(data);
-        next();              
+        res.header("Access-Control-Allow-Headers", "Content-Type,Content-Length, Authorization, Accept,X-Requested-With");        
+        res.send(data);                           
       })
   }
 
