@@ -14,9 +14,10 @@ class InstitutionEndPoint {
   // Find a single user with an id
   static getInstitution = (req, res) => {
     const id = req.params.id;
-    InstitutionController.getInstitution(id).then(data => {
-      res.send(data);
-    })
+    InstitutionController.getInstitution(id)
+      .then(data => {
+        res.send(data);
+      })
   };
 
   static getList(req, res) {

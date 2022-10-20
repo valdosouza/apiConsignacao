@@ -38,7 +38,6 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 
-
 app.use(cors());
 //app.use(cors(corsOptions)) 
 //app.options('*', cors()) 
@@ -88,12 +87,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use("/doc", swaggerUI.serve, swaggerUI.setup(specs));
 
-app.all('*', function (req, res) {
-	res.header("Access-Control-Allow-Origin", "*");
-	res.header("Access-Control-Allow-Headers", "Content-Type,Content-Length, Authorization, Accept,X-Requested-With");
-	res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
-	//...
-});
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}. \nAPI documentation: http://localhost:3000/doc`)
 })
