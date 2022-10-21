@@ -84,6 +84,37 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
 
 router.get("/getlist/:tb_institution_id", paymentType.getList);
   
+/**
+ * @swagger
+ * /paymenttype/get/{tb_institution_id}/{id}:
+ *   get:
+ *     summary: Returns the PaymentType
+ *     tags: [PaymentType]
+ *     parameters:
+ *      - in: path
+ *        name: tb_institution_id
+ *        schema:
+ *          type: string
+ *        required: true
+ *        description: The paymentType by tb_institution_id and....
+ *      - in: path
+ *        name: id
+ *        schema:
+ *          type: string
+ *        required: true
+ *        description: The paymentType by id
+ *     responses:
+ *       200:
+ *         description: The PaymentType
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/PaymentType'
+ */
+
+ router.get("/get/:tb_institution_id/:id", paymentType.get);
  /**
  * @swagger
  * /paymentType:

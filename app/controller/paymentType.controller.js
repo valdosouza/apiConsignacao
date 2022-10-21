@@ -29,20 +29,6 @@ class PaymentTypeController extends Base {
       return promise;
     }
     
-    static async _insert(paymentType) {
-        
-        const promise = new Promise((resolve, reject) => {            
-            Tb.create(paymentType)
-                .then((data) => {
-                    resolve(data);
-                })
-                .catch(err => {
-                    reject("Erro:"+ err);
-                });
-        });
-        return promise;        
-    }    
-
     static async insert(paymentType) {
       
       const promise = new Promise(async (resolve, reject) => {
@@ -96,6 +82,28 @@ class PaymentTypeController extends Base {
         });
         return promise;
     }
+
+    static get(institutionId,id) {
+      const promise = new Promise((resolve, reject) => {
+        Tb.sequelize.query(
+          'select  pt.id, ihp.tb_institution_id, pt.description, ihp.active ' +
+          'from tb_payment_types pt '+
+          '  inner join tb_institution_has_payment_types ihp '+
+          '  on (pt.id = ihp.tb_payment_types_id) '+
+          'where (ihp.tb_institution_id =? ) '+
+          ' and (ihp.tb_payment_types_id =? )',
+          {
+            replacements: [institutionId,id],
+            type: Tb.sequelize.QueryTypes.SELECT
+          }).then(data => {
+            resolve(data);
+          })
+          .catch(err => {
+            reject(new Error("PaymentType:" + err));
+          });
+      });
+      return promise;
+  }
 
     static async update(paymentType) {
         
