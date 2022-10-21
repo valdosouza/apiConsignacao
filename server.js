@@ -16,8 +16,8 @@ const options = {
 		},
 		servers: [
 			{
-				//url: "http://localhost:3000"
-				url: "https://api.industriadechocolatesamor.com.br"
+				url: "http://localhost:3000"
+				//url: "https://api.industriadechocolatesamor.com.br"
 			},
 		],
 	},
@@ -59,6 +59,12 @@ app.get("/", (req, res) => {
   res.json({ message: "Bem vindo a API do Sistema de Consignação." });
 });
 
+const stateRouter = require("./app/routes/state.routes");
+app.use("/state", stateRouter);
+
+const cityRouter = require("./app/routes/city.routes");
+app.use("/city", cityRouter);
+
 const userRouter = require("./app/routes/user.routes");
 app.use("/user", userRouter);
 
@@ -85,6 +91,9 @@ app.use("/institution", institution);
 
 const stockList = require("./app/routes/stock_list.routes");
 app.use("/stocklist", stockList);
+
+const paymentType = require("./app/routes/paymentTypes.routes");
+app.use("/paymenttype", paymentType);
 
 const PORT = process.env.PORT || 3000;
 

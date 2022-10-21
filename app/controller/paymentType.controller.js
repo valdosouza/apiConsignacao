@@ -1,50 +1,133 @@
-
-const Base = require('../controller/base.controller.js')
+const Base = require('../controller/base.controller.js');
+const ihPaymentType = require('../controller/InstitutionHasPaymentType.controller.js');
 const db = require("../model");
-const Op = db.Sequelize.Op;
-const Tb = db.paymentType;
-class PaymentController extends Base {
+const Tb = db.paymentTypes;
 
-  // Retrieve all from the database.
-  static findAll = () => {
-    const promise = new Promise((resolve, reject) => {
-      Tb.sequelize.query(
-        'Select *  ' +
-        'from tb_payment_types  ',
-        {
-          type: Tb.sequelize.QueryTypes.SELECT
-        }
-      ).then(data => {
-        resolve(data);
-      })
-        .catch(err => {
-          reject(new Error("Algum erro aconteceu ao buscar Forma de Pagamento"));
+class PaymentTypeController extends Base {
+ 
+    
+    static async getbyDescription (descripton) {
+      
+      const promise = new Promise((resolve, reject) => {        
+        Tb.sequelize.query(
+          'Select id ' +
+          'from tb_payment_types '+
+          'WHERE ( description =? ) ',
+          {
+            replacements: [descripton],
+            type: Tb.sequelize.QueryTypes.SELECT
+          }).then(data => {    
+            if (data[0] != null)
+            resolve(data);
+          else
+            resolve('0');
+          })
+          .catch(err => {
+            reject(new Error(err));
+          });           
+      });
+      return promise;
+    }
+    
+    static async _insert(paymentType) {
+        
+        const promise = new Promise((resolve, reject) => {            
+            Tb.create(paymentType)
+                .then((data) => {
+                    resolve(data);
+                })
+                .catch(err => {
+                    reject("Erro:"+ err);
+                });
         });
-    });
-    return promise;
-  }
-  static getlist(tb_institution_id) {
-    const promise = new Promise((resolve, reject) => {
-      Tb.sequelize.query(
-        'Select pt.id, pt.description  ' +
-        'from tb_payment_types pt ' +
-        '  inner join tb_institution_has_payment_types ihpt ' +
-        '  on (pt.id = ihpt.tb_payment_types_id) ' +
-        'where (app_delivery="S") '+
-        ' and ihpt.tb_institution_id =? ',
-        {
-          replacements: [tb_institution_id],
-          type: Tb.sequelize.QueryTypes.SELECT
+        return promise;        
+    }    
+
+    static async insert(paymentType) {
+      
+      const promise = new Promise(async (resolve, reject) => {
+        const exist  = await this.getbyDescription(paymentType.description);   
+        
+        if (exist === '0'){        
+          //Se não encontrou grava a Forma de pagamento
+          Tb.create(paymentType)
+            .then((data) => {
+              //com este retorno gravo a forma de pagamento no Institution
+              const dataihpayment = {
+                 tb_institution_id: paymentType.tb_institution_id,
+                 tb_payment_types_id: data.id,
+                 active: paymentType.active,
+              };               
+              ihPaymentType.insert (dataihpayment)
+              .then((_) =>{
+                paymentType.id = data.id;
+                resolve(paymentType);
+              });              
+            })
+            .catch(err => {
+              reject("Erro:"+ err);
+            });
+        }else{
+          //Se a forma de pagamento já existe fazer outro tratamento
+          //Finalizado 20/10/2022
+          resolve(paymentType);
         }
-      ).then(data => {
-        resolve(data);
-      })
-        .catch(err => {
-          reject(new Error("Algum erro aconteceu ao buscar Forma de Pagamento"));
+      });
+      return promise;        
+    }    
+
+    static getList(institutionId) {
+        const promise = new Promise((resolve, reject) => {
+          Tb.sequelize.query(
+            'select  pt.id, ihp.tb_institution_id, pt.description, ihp.active ' +
+            'from tb_payment_types pt '+
+            '  inner join tb_institution_has_payment_types ihp '+
+            '  on (pt.id = ihp.tb_payment_types_id) '+
+            'where (ihp.tb_institution_id =? ) ',
+            {
+              replacements: [institutionId],
+              type: Tb.sequelize.QueryTypes.SELECT
+            }).then(data => {
+              resolve(data);
+            })
+            .catch(err => {
+              reject(new Error("PaymentType:" + err));
+            });
         });
-    });
-    return promise;
-  }
+        return promise;
+    }
+
+    static async update(paymentType) {
+        
+        const promise = new Promise((resolve, reject) => {
+            Tb.update(paymentType,{
+              where: { id: paymentType.id }
+             })
+                .then(() => {
+                    resolve(paymentType);
+                })
+                .catch(err => {
+                    reject("Erro:"+ err);
+                });
+        });
+        return promise;        
+    }        
+
+    static async delete(paymentType) {      
+        const promise = new Promise((resolve, reject) => {
+          resolve("Em Desenvolvimento");
+            /*
+            Tb.delete(paymentType)
+                .then((data) => {
+                    resolve(data);
+                })
+                .catch(err => {
+                    reject("Erro:"+ err);
+                });
+            */
+        });
+        return promise;        
+    }        
+    
 }
-
-module.exports = PaymentController; 
+module.exports = PaymentTypeController;

@@ -51,8 +51,9 @@ class PersonController extends Base {
   }        
 
   static async delete(person) {
-    
     const promise = new Promise((resolve, reject) => {
+      resolve("Em Desenvolvimento");
+      /*
         Tb.delete(person)
             .then((data) => {
                 resolve(data);
@@ -60,7 +61,8 @@ class PersonController extends Base {
             .catch(err => {
                 reject("Erro:"+ err);
             });
-    });
+      */
+    });    
     return promise;        
   }  
 

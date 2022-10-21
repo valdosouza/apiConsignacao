@@ -53,6 +53,8 @@ class AddressController extends Base {
   static async delete(address) {
     
     const promise = new Promise((resolve, reject) => {
+        resolve("Em Desenvolvimento");
+        /*
         Tb.delete(address)
             .then((data) => {
                 resolve(data);
@@ -60,6 +62,7 @@ class AddressController extends Base {
             .catch(err => {
                 reject("Erro:"+ err);
             });
+        */
     });
     return promise;        
   }  

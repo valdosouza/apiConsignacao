@@ -33,14 +33,16 @@ const db = {};
 
 db.Sequelize = Sequelize;
 
-db.tutorials = require("./tutorial.model.js")(sequelize, Sequelize);
+db.state = require("./state.model.js")(sequelize, Sequelize);
+db.city = require("./city.model.js")(sequelize, Sequelize);
 db.users = require("./user.model.js")(sequelize, Sequelize);
 db.restGhMea = require("./restGroupHasMeasure.model.js")(sequelize, Sequelize);
 db.restMenu = require("./restMenu.model.js")(sequelize, Sequelize);
 db.restMenuHasIngredient = require("./restMenuHasIngredient.model.js")(sequelize, Sequelize);
 db.restGroupHasOptional = require("./restGroupHasOptional.model.js")(sequelize, Sequelize);
 db.restGhAtt = require("./restGroupHasAttribute.model.js")(sequelize, Sequelize);
-db.paymentType = require("./payment_types.model.js")(sequelize, Sequelize);
+db.paymentTypes = require("./payment_types.model.js")(sequelize, Sequelize);
+db.institutionHasPaymentType = require("./institutionHasPaymentTypes.model.js")(sequelize, Sequelize);
 
 db.entity = require("./entity.model.js")(sequelize, Sequelize);
 db.entityHasMailing = require("./entityHasMailing.model.js")(sequelize, Sequelize);

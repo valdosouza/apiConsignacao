@@ -51,8 +51,9 @@ class CompanyController extends Base {
   }        
 
   static async delete(company) {
-    
     const promise = new Promise((resolve, reject) => {
+      resolve("Em Desenvolvimento");
+      /*
         Tb.delete(company)
             .then((data) => {
                 resolve(data);
@@ -60,6 +61,7 @@ class CompanyController extends Base {
             .catch(err => {
                 reject("Erro:"+ err);
             });
+      */
     });
     return promise;        
   }  

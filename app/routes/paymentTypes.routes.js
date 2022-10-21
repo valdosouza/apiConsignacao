@@ -1,14 +1,136 @@
 const { Router } = require("express");
   
-const payment =  require("../endpoint/paymentType.endpoint.js");
+const paymentType =  require("../endpoint/paymentType.endpoint.js");
 
 const { withJWTAuthMiddleware } = require("express-kun");
 const router = Router();
 
 const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     PaymentType:
+ *       type: object
+ *       required:
+ *         - id
+ *         - name_company
+ *         - nick_trade
+ *       properties:
+ *         id:
+ *           type: string
+ *         tb_institution_id:
+ *           type: string
+ *         description:
+ *           type: string
+ *         active:
+ *           type: string
+ */
 
-router.get("/findAll", payment.findAll);
+ /**
+  * @swagger
+  * tags:
+  *   name: PaymentType
+  *   description: The PaymentType managing API
+  */
 
-router.post("/getlist", payment.getlist);
+/**
+ * @swagger
+ * /paymenttype:
+ *   post:
+ *     summary: Create a new paymentType
+ *     tags: [PaymentType]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/PaymentType'
+ *     responses:
+ *       200:
+ *         description: The PaymentType was successfully created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/PaymentType'
+ *       500:
+ *         description: Some server error
+ */
+ router.post("/", paymentType.create);
+
+ /**
+ * @swagger
+ * /paymenttype/getlist/{tb_institution_id}:
+ *   get:
+ *     summary: Returns the list of all the PaymentTypes
+ *     tags: [PaymentType]
+ *     parameters:
+ *      - in: path
+ *        name: tb_institution_id
+ *        schema:
+ *          type: string
+ *        required: true
+ *        description: The paymentType tb_institution_id
+ *     responses:
+ *       200:
+ *         description: The list of the payment types
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/PaymentType'
+ */
+
+router.get("/getlist/:tb_institution_id", paymentType.getList);
   
-module.exports = router;  
+ /**
+ * @swagger
+ * /paymentType:
+ *  put:
+ *    summary: Update the paymentType by the id
+ *    tags: [PaymentType]
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            $ref: '#/components/schemas/PaymentType'
+ *    responses:
+ *      200:
+ *        description: The PaymentType was updated
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/PaymentType'
+ *      404:
+ *        description: The paymentType was not found
+ *      500:
+ *        description: Some error happened
+ */
+ router.put("/", paymentType.update);
+
+/**
+ * @swagger
+ * /paymentType/{id}:
+ *  delete:
+ *    summary: Delete the paymentType by the id
+ *    tags: [PaymentType]
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        schema:
+ *          type: string
+ *        required: true
+ *        description: The paymentType id
+ *    responses:
+ *      200:
+ *        description: The PaymentType was deleted
+ *      404:
+ *        description: The paymentType was not found
+ *      500:
+ *        description: Some error happened
+ */
+router.delete("/", paymentType.delete);
+
+module.exports = router;

@@ -1,14 +1,14 @@
-
-const Base = require('./base.controller.js')
+const Base = require('../controller/base.controller.js')
 const db = require("../model");
-const Tb = db.entityHasMailing;
+const Tb = db.institutionHasPaymentType;
 
-class EntityHasMailingController extends Base {
-
-    static async insert(entityHM) {
+class InstitutionHasPaymentTypeController extends Base {
+    
+    static async insert(ihPaymentType) {
         
-        const promise = new Promise((resolve, reject) => {            
-            Tb.create(entityHM)
+        const promise = new Promise((resolve, reject) => {
+            console.log(ihPaymentType);
+            Tb.create(ihPaymentType)
                 .then((data) => {
                     resolve(data);
                 })
@@ -19,13 +19,9 @@ class EntityHasMailingController extends Base {
         return promise;        
     }    
 
-    static async update(entityHM) {
-        
+    static async update(ihPaymentType) {        
         const promise = new Promise((resolve, reject) => {
-
-            Tb.update(entityHM, {
-                where: { tb_entity_id: tb_entity_id, tb_mailing_id:tb_mailing_id, tb_mailing_group_id:tb_mailing_group_id }
-              })                        
+            Tb.update(ihPaymentType)
                 .then((data) => {
                     resolve(data);
                 })
@@ -36,13 +32,13 @@ class EntityHasMailingController extends Base {
         return promise;        
     }        
 
-    static async delete(entityHM) {
+    static async delete(ihPaymentType) {
+        
+        
         const promise = new Promise((resolve, reject) => {
             resolve("Em Desenvolvimento");
-            /*
-            Tb.delete(entityHM, {
-                where: { tb_entity_id: tb_entity_id, tb_mailing_id:tb_mailing_id, tb_mailing_group_id:tb_mailing_group_id }
-              })
+            /*    
+            Tb.delete(ihPaymentType)
                 .then((data) => {
                     resolve(data);
                 })
@@ -51,8 +47,9 @@ class EntityHasMailingController extends Base {
                 });
             */
         });
+        */
         return promise;        
     }        
     
 }
-module.exports = EntityHasMailingController;
+module.exports = InstitutionHasPaymentTypeController;

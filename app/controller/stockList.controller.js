@@ -75,9 +75,10 @@ class StockListController extends Base {
         return promise;        
     }        
 
-    static async delete(stocklist) {
-        
+    static async delete(stocklist) {        
         const promise = new Promise((resolve, reject) => {
+            resolve("Em Desenvolvimento");
+            /*
             Tb.delete(stocklist)
                 .then((data) => {
                     resolve(data);
@@ -85,6 +86,7 @@ class StockListController extends Base {
                 .catch(err => {
                     reject("Erro:"+ err);
                 });
+            */
         });
         return promise;        
     }        

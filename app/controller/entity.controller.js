@@ -1,4 +1,3 @@
-
 const Base = require('../controller/base.controller.js')
 const db = require("../model");
 const Tb = db.entity;
@@ -72,8 +71,9 @@ class EntityController extends Base {
     }        
 
     static async delete(entity) {
-        
         const promise = new Promise((resolve, reject) => {
+            resolve("Em Desenvolvimento");
+            /*
             Tb.delete(entity)
                 .then((data) => {
                     resolve(data);
@@ -81,7 +81,8 @@ class EntityController extends Base {
                 .catch(err => {
                     reject("Erro:"+ err);
                 });
-        });
+            */
+        });        
         return promise;        
     }        
     
