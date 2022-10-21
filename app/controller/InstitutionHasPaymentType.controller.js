@@ -47,7 +47,6 @@ class InstitutionHasPaymentTypeController extends Base {
                 });
             */
         });
-        */
         return promise;        
     }        
     
