@@ -90,7 +90,7 @@
 
 /**
  * @swagger
- * /User:
+ * /user:
  *   post:
  *     summary: Create a new user
  *     tags: [User]
@@ -112,15 +112,53 @@
  */
   router.post("/", users.create);
 
-  /**
+ /**
  * @swagger
- * /User:
+ * /user/{id}:
+ *   put:
+ *     summary: Update then user
+ *     tags: [User]
+ *     parameters:
+ *      - in: path
+ *        name: id
+ *        schema:
+ *          type: string
+ *        required: true
+ *        description: The id user 
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
+ *     responses:
+ *       200:
+ *         description: The User was successfully updated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       500:
+ *         description: Some server error
+ */
+ router.put("/:id", users.update);
+
+/**
+ * @swagger
+ * /user/getlist/{tb_institution_id}:
  *   get:
  *     summary: Returns the list of all the users
  *     tags: [User]
+ *     parameters:
+ *      - in: path
+ *        name: tb_institution_id
+ *        schema:
+ *          type: string
+ *        required: true
+ *        description: The tb_institution_id 
  *     responses:
  *       200:
- *         description: The list of the users
+ *         description: The list of the users by institution
  *         content:
  *           application/json:
  *             schema:
@@ -129,24 +167,24 @@
  *                 $ref: '#/components/schemas/User'
  */
   //protectedRouter.get("/", users.findAll);
-  router.get("/", users.findAll);
+  router.get("/getlist/:tb_institution_id", users.getlist);
 
  /**
  * @swagger
- * /User/{id}:
+ * /user/get/{email}:
  *  get:
- *    summary: Return user by the id
+ *    summary: Return user by the email
  *    tags: [User]
  *    parameters:
  *      - in: path
- *        name: id
+ *        name: email
  *        schema:
  *          type: string
  *        required: true
- *        description: The id user
+ *        description: The email user sistema
  *    responses:
  *      200:
- *        description: The USer was Listed
+ *        description: The user was Listed
  *        content:
  *          application/json:
  *            schema:
@@ -157,7 +195,7 @@
  *        description: Some error happened
  */
   //protectedRouter.get("/:id", users.findOne);
-  router.get("/:id", users.findOne);
+  router.get("/get/:email", users.get);
 
   /**
  * @swagger

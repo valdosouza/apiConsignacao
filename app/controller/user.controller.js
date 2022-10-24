@@ -82,40 +82,42 @@ class UserController extends Base {
     return promise;
   }
 
-  static update = (user) => {
+  static update = (id,user) => {
     const promise = new Promise((resolve, reject) => {
       try{
         //Salva a entidade
         const dataEntity = {
-          name_company: user.nick_trade,
-          nick_trade:user.nick_trade
-        };              
+          name_company: user.nick,
+          nick_trade:user.nick
+        };     
+        console.log(dataEntity);
         TbEntity.update(dataEntity,{
-          where: { id: user.id }
-        });
-        const dataUser = {           
-          id:entityId,
-          password:user.password
-        };
-        TbUser.update(dataUser);
+          where: { id: id }
+        })
+        .catch(err => {
+          reject(new Error("Update Usuário." + err));
+        });        
+        
         //Atualiza a institution
         const dataInstitutionHU = {
           tb_institution_id:user.tb_institution_id,
-          tb_user_id:entityId,
+          tb_user_id: id,
           kind:user.kind,
           active:user.active
-        };
-        //Atualiza o USer do institution
-        TbInstitutionHasUser.update(dataInstitutionHU);
+        };        
+        TbInstitutionHasUser.update(dataInstitutionHU,{
+          where: { tb_institution_id:user.tb_institution_id, tb_user_id:user.id }
+        });
+        
         const dataResolve = {              
-          "id":entityId,
+          "id": user.id,
           "nick":user.nick,
           "email": user.email,
           "kind":user.kind
         };
         resolve(dataResolve); 
-      } catch {            
-        reject("Erro Found");
+      } catch (e) {            
+        reject("Erro Found:" + e);
       }  
     });
     return promise;
@@ -131,44 +133,39 @@ class UserController extends Base {
           resolve(data);
         })
         .catch(err => {
-          reject(new Error("Algum erro aconteceu ao Deletar o Usuário."));
-
+          reject(new Error("Deletar Usuário." + err));
         });
     });
     return promise;
   }
 
 
-  // Retrieve all from the database.
-  static findAll = () => {
+  // Find a single user with an id
+  static get = (email) => {
     const promise = new Promise((resolve, reject) => {
       TbUser.sequelize.query(
-        'Select *  ' +
-        'from tb_user  ',
+        'Select u.id, ihu.tb_institution_id, et.nick_trade nick, ma.email, u.kind '+
+        'from tb_user u  '+
+        '  inner join tb_institution_has_user ihu  '+
+        '  on (u.id = ihu.tb_user_id)  '+
+        '  inner join tb_entity et '+
+        '  on (et.id = u.id) '+
+        '  inner join tb_entity_has_mailing ehm '+
+        '  on (ehm.tb_entity_id = et.id) '+
+        '  inner join tb_mailing ma '+
+        '  on (ehm.tb_mailing_id = ma.id) '+
+        'where (u.kind="sistema") ' + 
+        ' and ( ma.email =?) ',
         {
+          replacements: [email],
           type: TbUser.sequelize.QueryTypes.SELECT
         }
       ).then(data => {
         resolve(data);
       })
         .catch(err => {
-          reject(new Error("Algum erro aconteceu ao buscar Usuário"));
+          reject(new Error("Usuário: "+ err));
         });
-    });
-    return promise;
-  }
-
-  // Find a single user with an id
-  static findOne = (id) => {
-    const promise = new Promise((resolve, reject) => {
-      TbUser.findByPk(id)
-        .then(data => {
-          resolve(data);
-        })
-        .catch(err => {
-          reject(new Error("Algum erro aconteceu ao buscar este Usuário"));
-        });
-
     });
     return promise;
   }
@@ -176,12 +173,18 @@ class UserController extends Base {
   static getlist(tb_institution_id) {
     const promise = new Promise((resolve, reject) => {
       TbUser.sequelize.query(
-        'Select u.id  ' +
-        'from tb_user u ' +
-        '  inner join tb_institution_has_user ihu ' +
-        '  on (u.id = ihu.tb_user_id) ' +
-        'where (u.active="S") ' +
-        ' and ihu.tb_institution_id =? ',
+        'Select u.id, ihu.tb_institution_id, et.nick_trade nick, ma.email, u.kind '+
+        'from tb_user u  '+
+        '  inner join tb_institution_has_user ihu  '+
+        '  on (u.id = ihu.tb_user_id)  '+
+        '  inner join tb_entity et '+
+        '  on (et.id = u.id) '+
+        '  inner join tb_entity_has_mailing ehm '+
+        '  on (ehm.tb_entity_id = et.id) '+
+        '  inner join tb_mailing ma '+
+        '  on (ehm.tb_mailing_id = ma.id) '+
+        'where (u.active="S") ' + 
+        ' and ( ihu.tb_institution_id =?) ',
         {
           replacements: [tb_institution_id],
           type: TbUser.sequelize.QueryTypes.SELECT
@@ -190,7 +193,7 @@ class UserController extends Base {
         resolve(data);
       })
         .catch(err => {
-          reject(new Error("Algum erro aconteceu ao buscar o Usuário"));
+          reject(new Error("Usuário: "+ err));
         });
     });
     return promise;

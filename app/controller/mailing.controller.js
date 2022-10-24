@@ -76,8 +76,7 @@ class MailingController extends Base {
 
   // Find a single mailing with an id
   static findOne = (email) => {
-    const promise = new Promise((resolve, reject) => {      
-      console.log(email);
+    const promise = new Promise((resolve, reject) => {            
       Tb.findOne(
           { where: { email: email } 
       })
