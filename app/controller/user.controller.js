@@ -54,7 +54,7 @@ class UserController extends Base {
             };
             TbUser.create(dataUser);
             const dataInstitutionHU = {
-              tb_institution_id:user.Institution,
+              tb_institution_id:user.tb_institution_id,
               tb_user_id:entityId,
               kind:user.kind,
               active:"S"
@@ -62,8 +62,9 @@ class UserController extends Base {
             TbInstitutionHasUser.create(dataInstitutionHU)
             //REtornogeral
             user.id = entityId;
-            const dataResolve = {              
+            const dataResolve = {                            
                 "id":entityId,
+                "tb_institution_id":user.tb_institution_id,
                 "nick":user.nick,
                 "email": user.email,
                 "kind":user.kind

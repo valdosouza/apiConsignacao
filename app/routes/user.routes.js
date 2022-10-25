@@ -15,17 +15,17 @@
  *     User:
  *       type: object
  *       required:
- *         - Institution
+ *         - tb_institution_id
  *         - id
  *         - nick
  *         - email
  *         - password
  *         - kind
  *       properties:
- *         Institution:
- *           type: string
+ *         tb_institution_id:
+ *           type: integer
  *         id:
- *           type: string
+ *           type: integer
  *         nick:
  *           type: string
  *         email:
@@ -50,9 +50,9 @@
  *         auth:
  *           type: string
  *         id:
- *           type: string
- *         institution:
- *           type: string
+ *           type: integer
+ *         tb_institution_id:
+ *           type: integer
  *         email:
  *           type: string
  *         jwt:
@@ -188,7 +188,7 @@
  *        content:
  *          application/json:
  *            schema:
- *              $ref: '#/components/schemas/User'
+ *              $ref: '#/components/schemas/user'
  *      404:
  *        description: The user was not found
  *      500:
@@ -199,7 +199,7 @@
 
   /**
  * @swagger
- * /User/{id}:
+ * /user/{id}:
  *  put:
  *    summary: Update the users by the id
  *    tags: [Address]
@@ -233,7 +233,7 @@
 
 /**
  * @swagger
- * /User/{id}:
+ * /user/{id}:
  *  delete:
  *    summary: Delete the user by the id
  *    tags: [User]

@@ -109,7 +109,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
 
 /**
  * @swagger
- * /Institution:
+ * /institution::
  *   post:
  *     summary: Create a new institution
  *     tags: [Institution]
@@ -135,7 +135,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
 
  /**
  * @swagger
- * /Institution/{id}:
+ * /institution:/{id}:
  *   get:
  *     summary: Returns the list of all the institution
  *     tags: [Institution]
@@ -161,7 +161,7 @@ router.get("/:id", institution.getInstitution);
   
  /**
  * @swagger
- * /Institution/{id}:
+ * /institution:/{id}:
  *  put:
  *    summary: Update the institution by the id
  *    tags: [Institution]
@@ -191,7 +191,7 @@ router.get("/:id", institution.getInstitution);
 
 /**
  * @swagger
- * /Institution/{id}:
+ * /institution:/{id}:
  *  delete:
  *    summary: Delete the institution by the id
  *    tags: [Institution]
