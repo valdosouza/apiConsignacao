@@ -3,7 +3,7 @@ const nodemailer = require('nodemailer');
 const transporter = nodemailer.createTransport({
     host: "mail.industriadechocolatesamor.com.br",
     port: 587,
-    secure: true, // true for 465, false for other ports
+    secure: false, // true for 465, false for other ports
     auth: {
         user: "webmaster@industriadechocolatesamor.com.br",
         pass: "Sucessoem2022!"
@@ -28,7 +28,7 @@ class SendMailController  {
               
               const mailOptions = {
                   from: 'webmaster@industriadechocolatesamor.com.br',
-                  to: body.email,
+                  to: body,
                   subject: 'Solicitação recuperação de senha',
                   html : htmlText,
                   text: 'Solicitação de troca de senha'

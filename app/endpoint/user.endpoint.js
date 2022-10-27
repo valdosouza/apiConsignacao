@@ -122,7 +122,7 @@ class UserEndPoint {
     }
     UserController.recoveryPassword(req.body.email)
       .then(data=>{          
-        SendMailController.recoveryPassword(data)
+        SendMailController.recoveryPassword(req.body.email)
         .then(data=>{          
           res.json(data);
           });        
