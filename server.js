@@ -95,6 +95,9 @@ app.use("/stocklist", stockList);
 const paymentType = require("./app/routes/paymentTypes.routes");
 app.use("/paymenttype", paymentType);
 
+const lineBusinesse = require("./app/routes/lineBusiness.routes");
+app.use("/linebusiness", lineBusinesse);
+
 const PORT = process.env.PORT || 3000;
 
 app.use("/doc", swaggerUI.serve, swaggerUI.setup(specs));

@@ -222,7 +222,7 @@ class InstitutionController extends Base {
         '  it.id, '+
         '  et.name_company, '+
         '  et.nick_trade, '+
-        '  et.tb_line_business_id, '+
+        '  et.tb_linebusiness_id, '+
         '  et.note, '+
         '  it.active, '+
         '  co.cnpj, '+

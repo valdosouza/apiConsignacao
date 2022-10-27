@@ -120,13 +120,15 @@ class UserEndPoint {
       });
       return;
     }
-    UserController.recoveryPassword(req.body.email)
-      .then(data=>{          
-        SendMailController.recoveryPassword(req.body.email)
+    SendMailController.recoveryPassword(req.body.email)
         .then(data=>{          
           res.json(data);
-          });        
+        });        
+    /*
+    UserController.recoveryPassword(req.body.email)
+      .then(data=>{                  
         });                       
+    */
     };
 
     static changePassword = (req, res) => {

@@ -1,17 +1,14 @@
-const Base = require('../controller/base.controller.js');
-const ihPaymentType = require('../controller/institutionHasPaymentType.controller.js');
+const Base = require('./base.controller.js');
+const ihLineBusiness = require('./institutionHasLineBusines.controller.js');
 const db = require("../model");
-const Tb = db.paymentTypes;
+const Tb = db.lineBusiness;
 
-class PaymentTypeController extends Base {
- 
-    
-    static async getbyDescription (descripton) {
-      
+class LineBusinessController extends Base {     
+    static async getbyDescription (descripton) {      
       const promise = new Promise((resolve, reject) => {        
         Tb.sequelize.query(
           'Select id ' +
-          'from tb_payment_types '+
+          'from tb_linebusiness '+
           'WHERE ( description =? ) ',
           {
             replacements: [descripton],
@@ -29,34 +26,35 @@ class PaymentTypeController extends Base {
       return promise;
     }
     
-    static async insert(paymentType) {
+    static async insert(lineBusiness) {
       
       const promise = new Promise(async (resolve, reject) => {
-        const exist  = await this.getbyDescription(paymentType.description);   
+        const exist  = await this.getbyDescription(lineBusiness.description);   
         
         if (exist === '0'){        
-          //Se não encontrou grava a Forma de pagamento
-          Tb.create(paymentType)
+          //Se não encontrou grava o Cargo
+          
+          Tb.create(lineBusiness)
             .then((data) => {
-              //com este retorno gravo a forma de pagamento no Institution
-              const dataihpayment = {
-                 tb_institution_id: paymentType.tb_institution_id,
-                 tb_payment_types_id: data.id,
-                 active: paymentType.active,
+              //com este retorno gravo a Cargo no Institution
+              const dataihlineBusiness = {
+                 tb_institution_id: lineBusiness.tb_institution_id,
+                 tb_linebusiness_id: data.id,
+                 active: lineBusiness.active,
               };               
-              ihPaymentType.insert (dataihpayment)
+              ihLineBusiness.insert (dataihlineBusiness)
               .then((_) =>{
-                paymentType.id = data.id;
-                resolve(paymentType);
+                lineBusiness.id = data.id;
+                resolve(lineBusiness);
               });              
             })
             .catch(err => {
               reject("Erro:"+ err);
             });
         }else{
-          //Se a forma de pagamento já existe fazer outro tratamento
+          //Se o Cargo já existe fazer outro tratamento
           //Finalizado 20/10/2022
-          resolve(paymentType);
+          resolve(lineBusiness);
         }
       });
       return promise;        
@@ -65,11 +63,11 @@ class PaymentTypeController extends Base {
     static getList(institutionId) {
         const promise = new Promise((resolve, reject) => {
           Tb.sequelize.query(
-            'select  pt.id, ihp.tb_institution_id, pt.description, ihp.active ' +
-            'from tb_payment_types pt '+
-            '  inner join tb_institution_has_payment_types ihp '+
-            '  on (pt.id = ihp.tb_payment_types_id) '+
-            'where (ihp.tb_institution_id =? ) ',
+            'select  lb.id, ihl.tb_institution_id, lb.description, ihl.active ' +
+            'from tb_linebusiness lb '+
+            '  inner join tb_institution_has_linebusiness ihl '+
+            '  on (lb.id = ihl.tb_linebusiness_id) '+
+            'where (ihl.tb_institution_id =? ) ',
             {
               replacements: [institutionId],
               type: Tb.sequelize.QueryTypes.SELECT
@@ -77,7 +75,7 @@ class PaymentTypeController extends Base {
               resolve(data);
             })
             .catch(err => {
-              reject(new Error("PaymentType:" + err));
+              reject(new Error("LineBusiness:" + err));
             });
         });
         return promise;
@@ -86,12 +84,12 @@ class PaymentTypeController extends Base {
     static get(institutionId,id) {
       const promise = new Promise((resolve, reject) => {
         Tb.sequelize.query(
-          'select  pt.id, ihp.tb_institution_id, pt.description, ihp.active ' +
-          'from tb_payment_types pt '+
-          '  inner join tb_institution_has_payment_types ihp '+
-          '  on (pt.id = ihp.tb_payment_types_id) '+
-          'where (ihp.tb_institution_id =? ) '+
-          ' and (ihp.tb_payment_types_id =? )',
+          'select  lb.id, ihl.tb_institution_id, lb.description, ihl.active ' +
+          'from tb_linebusiness lb '+
+          '  inner join tb_institution_has_linebusiness ihl '+
+          '  on (lb.id = ihl.tb_linebusiness_id) '+
+          'where (ihl.tb_institution_id =? ) '+
+          ' and (ihl.tb_linebusiness_id =? )',
           {
             replacements: [institutionId,id],
             type: Tb.sequelize.QueryTypes.SELECT
@@ -99,20 +97,20 @@ class PaymentTypeController extends Base {
             resolve(data);
           })
           .catch(err => {
-            reject(new Error("PaymentType:" + err));
+            reject(new Error("LineBusiness:" + err));
           });
       });
       return promise;
   }
 
-    static async update(paymentType) {
+    static async update(lineBusiness) {
         
         const promise = new Promise((resolve, reject) => {
-            Tb.update(paymentType,{
-              where: { id: paymentType.id }
+            Tb.update(lineBusiness,{
+              where: { id: lineBusiness.id }
              })
                 .then(() => {
-                    resolve(paymentType);
+                    resolve(lineBusiness);
                 })
                 .catch(err => {
                     reject("Erro:"+ err);
@@ -121,11 +119,11 @@ class PaymentTypeController extends Base {
         return promise;        
     }        
 
-    static async delete(paymentType) {      
+    static async delete(lineBusiness) {      
         const promise = new Promise((resolve, reject) => {
           resolve("Em Desenvolvimento");
             /*
-            Tb.delete(paymentType)
+            Tb.delete(lineBusiness)
                 .then((data) => {
                     resolve(data);
                 })
@@ -138,4 +136,4 @@ class PaymentTypeController extends Base {
     }        
     
 }
-module.exports = PaymentTypeController;
+module.exports = LineBusinessController;

@@ -25,7 +25,7 @@ class UserController extends Base {
           const dataEntity = {
             name_company: user.nick,
             nick_trade:user.nick,
-            tb_line_business_id:0
+            tb_linebusiness_id:0
           };              
           TbEntity.create(dataEntity)
           .then(data => {

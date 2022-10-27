@@ -37,11 +37,10 @@ class SendMailController  {
                 transporter.sendMail(mailOptions, function(error, info){
                   if (error) {
                     console.log(error);
-                  } else {
-                    console.log('Email enviado: ' + info.response);
+                  } else {                    
+                    resolve('Email enviado: ' + info.response);
                   }
-                });
-                resolve(info);
+                });                
             } catch (e) {            
               reject("Erro Found:" + e);
             }  

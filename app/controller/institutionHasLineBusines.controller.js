@@ -1,14 +1,14 @@
 const Base = require('./base.controller.js')
 const db = require("../model");
-const Tb = db.institutionHasPaymentType;
+const Tb = db.institutionHasLineBusiness;
 
-class InstitutionHasPaymentTypeController extends Base {
+class InstitutionHasLineBusinesController extends Base {
     
-    static async insert(ihPaymentType) {
+    static async insert(ihLineBusiness) {
         
         const promise = new Promise((resolve, reject) => {
-            console.log(ihPaymentType);
-            Tb.create(ihPaymentType)
+            console.log(ihLineBusiness);
+            Tb.create(ihLineBusiness)
                 .then((data) => {
                     resolve(data);
                 })
@@ -19,9 +19,9 @@ class InstitutionHasPaymentTypeController extends Base {
         return promise;        
     }    
 
-    static async update(ihPaymentType) {        
+    static async update(ihLineBusiness) {        
         const promise = new Promise((resolve, reject) => {
-            Tb.update(ihPaymentType)
+            Tb.update(ihLineBusiness)
                 .then((data) => {
                     resolve(data);
                 })
@@ -32,11 +32,11 @@ class InstitutionHasPaymentTypeController extends Base {
         return promise;        
     }        
 
-    static async delete(ihPaymentType) {              
+    static async delete(ihLineBusiness) {              
         const promise = new Promise((resolve, reject) => {
             resolve("Em Desenvolvimento");
             /*    
-            Tb.delete(ihPaymentType)
+            Tb.delete(ihLineBusiness)
                 .then((data) => {
                     resolve(data);
                 })
@@ -49,4 +49,4 @@ class InstitutionHasPaymentTypeController extends Base {
     }        
     
 }
-module.exports = InstitutionHasPaymentTypeController;
+module.exports = InstitutionHasLineBusinesController;

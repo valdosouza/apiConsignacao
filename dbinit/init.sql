@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS tb_entity (
   aniversary date DEFAULT NULL,
   createdAt datetime NOT NULL,
   updatedAt datetime NOT NULL,
-  tb_line_business_id int(11) DEFAULT NULL,
+  tb_linebusiness_id int(11) DEFAULT NULL,
   note blob,
   PRIMARY KEY (id)
 );

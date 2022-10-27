@@ -58,14 +58,14 @@ module.exports = sequelize => {
       comment: null,
       field: "updatedAt"
     },
-    tb_line_business_id: {
+    tb_linebusiness_id: {
       type: DataTypes.INTEGER(11),
       allowNull: true,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "tb_line_business_id"
+      field: "tb_linebusiness_id"
     },
     note: {
       type: DataTypes.BLOB,

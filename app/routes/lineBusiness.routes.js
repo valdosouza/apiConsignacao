@@ -1,6 +1,6 @@
 const { Router } = require("express");
   
-const paymentType =  require("../endpoint/paymentType.endpoint.js");
+const lineBusiness =  require("../endpoint/lineBusiness.endpoint.js");
 
 const { withJWTAuthMiddleware } = require("express-kun");
 const router = Router();
@@ -10,7 +10,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  * @swagger
  * components:
  *   schemas:
- *     PaymentType:
+ *     LineBusiness:
  *       type: object
  *       required:
  *         - id
@@ -31,47 +31,47 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  /**
   * @swagger
   * tags:
-  *   name: PaymentType
-  *   description: The PaymentType managing API
+  *   name: LineBusiness
+  *   description: The LineBusiness managing API
   */
 
 /**
  * @swagger
- * /paymenttype:
+ * /linebusiness:
  *   post:
- *     summary: Create a new paymentType
- *     tags: [PaymentType]
+ *     summary: Create a new lineBusiness
+ *     tags: [LineBusiness]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/PaymentType'
+ *             $ref: '#/components/schemas/LineBusiness'
  *     responses:
  *       200:
- *         description: The PaymentType was successfully created
+ *         description: The LineBusiness was successfully created
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/PaymentType'
+ *               $ref: '#/components/schemas/LineBusiness'
  *       500:
  *         description: Some server error
  */
- router.post("/", paymentType.create);
+ router.post("/", lineBusiness.create);
 
  /**
  * @swagger
- * /paymenttype/getlist/{tb_institution_id}:
+ * /linebusiness/getlist/{tb_institution_id}:
  *   get:
- *     summary: Returns the list of all the PaymentTypes
- *     tags: [PaymentType]
+ *     summary: Returns the list of all the LineBusinesss
+ *     tags: [LineBusiness]
  *     parameters:
  *      - in: path
  *        name: tb_institution_id
  *        schema:
  *          type: string
  *        required: true
- *        description: The paymentType tb_institution_id
+ *        description: The lineBusiness tb_institution_id
  *     responses:
  *       200:
  *         description: The list of the payment types
@@ -80,89 +80,89 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/PaymentType'
+ *                 $ref: '#/components/schemas/LineBusiness'
  */
 
-router.get("/getlist/:tb_institution_id", paymentType.getList);
+router.get("/getlist/:tb_institution_id", lineBusiness.getList);
   
 /**
  * @swagger
- * /paymenttype/get/{tb_institution_id}/{id}:
+ * /linebusiness/get/{tb_institution_id}/{id}:
  *   get:
- *     summary: Returns the PaymentType
- *     tags: [PaymentType]
+ *     summary: Returns the LineBusiness
+ *     tags: [LineBusiness]
  *     parameters:
  *      - in: path
  *        name: tb_institution_id
  *        schema:
  *          type: string
  *        required: true
- *        description: The paymentType by tb_institution_id and....
+ *        description: The lineBusiness by tb_institution_id and....
  *      - in: path
  *        name: id
  *        schema:
  *          type: string
  *        required: true
- *        description: The paymentType by id
+ *        description: The lineBusiness by id
  *     responses:
  *       200:
- *         description: The PaymentType
+ *         description: The LineBusiness
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/PaymentType'
+ *                 $ref: '#/components/schemas/LineBusiness'
  */
 
- router.get("/get/:tb_institution_id/:id", paymentType.get);
+ router.get("/get/:tb_institution_id/:id", lineBusiness.get);
  /**
  * @swagger
- * /paymentType:
+ * /lineBusiness:
  *  put:
- *    summary: Update the paymentType by the id
- *    tags: [PaymentType]
+ *    summary: Update the lineBusiness by the id
+ *    tags: [LineBusiness]
  *    requestBody:
  *      required: true
  *      content:
  *        application/json:
  *          schema:
- *            $ref: '#/components/schemas/PaymentType'
+ *            $ref: '#/components/schemas/LineBusiness'
  *    responses:
  *      200:
- *        description: The PaymentType was updated
+ *        description: The LineBusiness was updated
  *        content:
  *          application/json:
  *            schema:
- *              $ref: '#/components/schemas/PaymentType'
+ *              $ref: '#/components/schemas/LineBusiness'
  *      404:
- *        description: The paymentType was not found
+ *        description: The lineBusiness was not found
  *      500:
  *        description: Some error happened
  */
- router.put("/", paymentType.update);
+ router.put("/", lineBusiness.update);
 
 /**
  * @swagger
- * /paymentType/{id}:
+ * /lineBusiness/{id}:
  *  delete:
- *    summary: Delete the paymentType by the id
- *    tags: [PaymentType]
+ *    summary: Delete the lineBusiness by the id
+ *    tags: [LineBusiness]
  *    parameters:
  *      - in: path
  *        name: id
  *        schema:
  *          type: string
  *        required: true
- *        description: The paymentType id
+ *        description: The lineBusiness id
  *    responses:
  *      200:
- *        description: The PaymentType was deleted
+ *        description: The LineBusiness was deleted
  *      404:
- *        description: The paymentType was not found
+ *        description: The lineBusiness was not found
  *      500:
  *        description: Some error happened
  */
-router.delete("/", paymentType.delete);
+router.delete("/", lineBusiness.delete);
 
 module.exports = router;

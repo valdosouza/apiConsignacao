@@ -41,8 +41,13 @@ db.restMenu = require("./restMenu.model.js")(sequelize, Sequelize);
 db.restMenuHasIngredient = require("./restMenuHasIngredient.model.js")(sequelize, Sequelize);
 db.restGroupHasOptional = require("./restGroupHasOptional.model.js")(sequelize, Sequelize);
 db.restGhAtt = require("./restGroupHasAttribute.model.js")(sequelize, Sequelize);
+
 db.paymentTypes = require("./payment_types.model.js")(sequelize, Sequelize);
 db.institutionHasPaymentType = require("./institutionHasPaymentTypes.model.js")(sequelize, Sequelize);
+
+db.lineBusiness = require("./linebusiness.model.js")(sequelize, Sequelize);
+db.institutionHasLineBusiness = require("./institutionHasLinebusiness.model.js")(sequelize, Sequelize);
+
 
 db.entity = require("./entity.model.js")(sequelize, Sequelize);
 db.entityHasMailing = require("./entityHasMailing.model.js")(sequelize, Sequelize);

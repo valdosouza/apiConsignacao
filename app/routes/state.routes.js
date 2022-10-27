@@ -28,7 +28,7 @@
  /**
   * @swagger
   * tags:
-  *   name: Sate
+  *   name: State
   *   description: The State managing API
   */
 
