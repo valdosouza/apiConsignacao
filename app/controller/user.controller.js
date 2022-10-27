@@ -336,17 +336,17 @@ class UserController extends Base {
     return promise;
   }
 
+   
+
   static async recoveryPassword(email){
     const promise = new Promise(async (resolve,reject) => {    
       try {        
         const userId = await  this.getIdUserByEmail(email) ;
-        if (userId > 0){
-          const saltcode = {
-            id: userId,
-            email: email
-          };
-          var token =jwt.sign({ saltcode }, process.env.SECRET, {expiresIn: "15d",algorithm: 'HS256' });        
-          var hashSalt = md5(token);
+        if (userId > 0){        
+          
+          var hashSalt = Math.random() * (100000 - 999999) + 100000;          
+          hashSalt = Math.abs(hashSalt);          
+          hashSalt = Math.trunc(hashSalt);
           
           TbUser.sequelize.query(
             'update tb_user set ' +
@@ -360,12 +360,13 @@ class UserController extends Base {
             .then(() => {
               const dataResult ={
                 user:userId,
+                email: email,
                 salt:hashSalt
-              }
+              }              
               resolve(dataResult);
           })
             .catch(err => {
-              reject(new Error("Algum erro aconteceu ao gerar o código Salt."));
+              reject(new Error('Salt : '+err));
           });  
         }else{          
             reject("este email não tem usuário vinculado.");                  

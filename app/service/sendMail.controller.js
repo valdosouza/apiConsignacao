@@ -21,14 +21,14 @@ class SendMailController  {
               'Ol&aacute;</p> '+
               '<p>Voc&ecirc; requisitou uma troca de senha.</p> '+
               '<p>SE n&atilde;o foi voc&ecirc; quem requisitou por favor igonore este email</p> '+
-              '<p>Caso contr&aacute;rio clique no link abaixo para prosseguir com a altera&ccedil;&atilde;o da senha</p> '+
-              '<p><a href="https://app.industriadechocolatesamor.com.br/changepasswword/">https://app.industriadechocolatesamor.com.br/changepasswword/</a></p> '+
+              '<p>Caso contr&aacute;rio utilize o codigo [' + body.salt + '] para confirmar a alteração de senha</p> '+              
               '<p>at</p> '+
               '<p>WebMaster</p>';
-              
+              //Apaga item para dar o retorno sem o code que deve ser revisado pelo email
+              delete body["salt"];
               const mailOptions = {
                   from: 'webmaster@industriadechocolatesamor.com.br',
-                  to: body,
+                  to: body.email,
                   subject: 'Solicitação recuperação de senha',
                   html : htmlText,
                   text: 'Solicitação de troca de senha'
@@ -38,7 +38,7 @@ class SendMailController  {
                   if (error) {
                     console.log(error);
                   } else {                    
-                    resolve('Email enviado: ' + info.response);
+                    resolve(body);
                   }
                 });                
             } catch (e) {            

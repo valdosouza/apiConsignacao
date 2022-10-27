@@ -72,7 +72,7 @@
  *         - newPassword
  *       properties:
  *         userId:
- *           type: string
+ *           type: integer
  *         salt: 
  *           type: string
  *         newPassword: 
