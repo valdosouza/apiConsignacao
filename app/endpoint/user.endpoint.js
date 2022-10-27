@@ -1,6 +1,7 @@
+
 const UserController = require("../controller/user.controller.js");
 const MailingController = require("../controller/mailing.controller.js");
-
+const SendMailController = require("../service/sendMail.controller.js");
 
 class UserEndPoint {
 
@@ -121,10 +122,11 @@ class UserEndPoint {
     }
     UserController.recoveryPassword(req.body.email)
       .then(data=>{          
-        res.status(200).send({
-          message: 'email enviado para '+req.body.email + ' com instruções'
-        });
-      });      
+        SendMailController.recoveryPassword(data)
+        .then(data=>{          
+          res.json(data);
+          });        
+        });                       
     };
 
     static changePassword = (req, res) => {
