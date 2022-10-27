@@ -121,7 +121,9 @@ class UserEndPoint {
     }
     UserController.recoveryPassword(req.body.email)
       .then(data=>{          
-          return res.json(data);          
+        res.status(200).send({
+          message: 'email enviado para '+req.body.email + ' com instruções'
+        });
       });      
     };
 

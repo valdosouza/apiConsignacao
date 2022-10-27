@@ -59,26 +59,31 @@
  *           type: string
  *     RecoveryPassword:
  *       type: object
+ *       required:
+ *         - email    
  *       properties:
  *         email:
  *           type: string
  *     ChangePassword:
  *       type: object
  *       required:
- *         - user
- *         - email
+ *         - userId
  *         - salt
  *         - newPassword
  *       properties:
- *         user:
- *           type: string
- *         email: 
+ *         userId:
  *           type: string
  *         salt: 
  *           type: string
  *         newPassword: 
  *           type: string
+ *     RespostaMensagem:
+ *       type: object
+ *       properties:
+ *         message:
+ *           type: string
  */
+ 
   
 
  /**
@@ -293,11 +298,11 @@
  *             $ref: '#/components/schemas/RecoveryPassword'
  *     responses:
  *       200:
- *         description: Utilize a Chave para enviar a troca de senha
+ *         description: Um e-mail será enviado com link para efetuar a troca
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/RecoveryPassword'
+ *               $ref: '#/components/schemas/RespostaMensagem'
  *       500:
  *         description: Some server error
  */
