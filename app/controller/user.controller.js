@@ -65,9 +65,12 @@ class UserController extends Base {
             const dataResolve = {                            
                 "id":entityId,
                 "tb_institution_id":user.tb_institution_id,
-                "nick":user.nick,
+                "password":'',
+                "kind":user.kind,
+                "tb_device_id":0,
+                "active":user.active,
                 "email": user.email,
-                "kind":user.kind
+                "nick":user.nick                
             }            
             resolve(dataResolve); 
             
@@ -111,10 +114,14 @@ class UserController extends Base {
         });
         
         const dataResolve = {              
-          "id": user.id,
-          "nick":user.nick,
+          "id":user.id,
+          "tb_institution_id":user.tb_institution_id,
+          "password":'',
+          "kind":user.kind,
+          "tb_device_id":0,
+          "active":user.active,
           "email": user.email,
-          "kind":user.kind
+          "nick":user.nick  
         };
         resolve(dataResolve); 
       } catch (e) {            
