@@ -34,6 +34,10 @@
  *           type: string
  *         kind:
  *           type: string
+ *         tb_device_id:
+ *           type: string  
+ *         active:
+ *           type: string
  *     Auth:
  *       type: object
  *       required:
