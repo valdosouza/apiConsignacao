@@ -80,13 +80,17 @@ class UserEndPoint {
 
     UserController.getUserAuth(req.body.email, req.body.password)
       .then(data => {  
-        if ((!data) || (!data[0])) return res.json({ 
-          auth: false, 
-          id: 0,
-          institution : 0,
-          username : "",
-          jwt: "" });    
-
+        
+        if ( data.length == 0) {
+          const dataReturn = {          
+          "auth": false, 
+          "id": 0,
+          "institution" : 0,
+          "username" : '',
+          "password": '',
+          "jwt": '' };              
+          return res.json(dataReturn);
+        }
         UserController.generateJWT(data)
           .then(data => {
             return res.json(data);
@@ -133,25 +137,38 @@ class UserEndPoint {
     };
 
     static changePassword = (req, res) => {
-      // Validate request
+      // Validate request      
       if (!req.body.salt) {
         res.status(400).send({
-          message: "Codidgo Salt não pode ser Vazio!"
+          message: "Codigo Salt não pode ser Vazio!"
         });
         return;
       }
-      if (!req.body.user) {
+      if (!req.body.userId) {
         res.status(400).send({
           message: "Codidgo usuário não pode ser Vazio!"
         });
         return;
       }
+      if (!req.body.newPassword) {
+        res.status(400).send({
+          message: "A Nova senha não pode ser vazia!"
+        });
+        return;
+      }
 
-      UserController.changePassword(req.body)
-        .then(data=>{          
-            return res.json(data);          
-        });      
-      }    
+      UserController.getSalt(req.body)
+      .then(data => {                
+        if (data[0]){
+          UserController.changePassword(req.body)
+          .then(data=>{          
+              return res.json(data); 
+          }); 
+        }else{
+          return res.json("Codigo Verificador não encontrado"); 
+        } ;
+      });
+    }    
 }
 module.exports = UserEndPoint;
 

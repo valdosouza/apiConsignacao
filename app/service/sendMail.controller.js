@@ -21,7 +21,7 @@ class SendMailController  {
               'Ol&aacute;</p> '+
               '<p>Voc&ecirc; requisitou uma troca de senha.</p> '+
               '<p>SE n&atilde;o foi voc&ecirc; quem requisitou por favor igonore este email</p> '+
-              '<p>Caso contr&aacute;rio utilize o codigo [' + body.salt + '] para confirmar a alteração de senha</p> '+              
+              '<p>Caso contr&aacute;rio utilize o codigo [ ' + body.salt + ' ] para confirmar a alteração de senha</p> '+              
               '<p>at</p> '+
               '<p>WebMaster</p>';
               //Apaga item para dar o retorno sem o code que deve ser revisado pelo email

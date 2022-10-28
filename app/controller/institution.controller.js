@@ -246,8 +246,11 @@ class InstitutionController extends Base {
         '  a.kind address_kind, '+
         '  a.zip_code, '+ 
         '  a.tb_country_id, '+
+        '  cy.name name_country, '+
         '  a.tb_state_id, '+
+        '  s.name name_state, '+
         '  a.tb_city_id, '+
+        '  c.name name_city, '+
         '  a.main, '+
         '  a.longitude, '+
         '  a.latitude, '+ 
@@ -266,13 +269,15 @@ class InstitutionController extends Base {
         '    on (c.id = a.tb_city_id)   '+
         '    inner join tb_state s   '+
         '    on (s.id = a.tb_state_id)   '+
+        '    inner join tb_country cy  '+
+        '    on (cy.id = a.tb_country_id)  '+            
         'where it.id =? ',
         {
           replacements: [id],
           type: TbInstitution.sequelize.QueryTypes.SELECT
         }).then(data => {
           if (data[0] != null)
-            resolve(data);
+            resolve(data[0]);
           else
             resolve('0');
         })

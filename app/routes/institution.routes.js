@@ -84,10 +84,16 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *           type: string
  *         tb_country_id:
  *           type: string
+ *         name_country:
+ *           type: string
  *         tb_state_id:
  *           type: string
+ *         name_state:
+ *           type: string 
  *         tb_city_id:
  *           type: string
+ *         name_city:
+ *           type: string 
  *         main:
  *           type: string
  *         longitude:
@@ -135,7 +141,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
 
  /**
  * @swagger
- * /institution:/{id}:
+ * /institution/{id}:
  *   get:
  *     summary: Returns the list of all the institution
  *     tags: [Institution]
@@ -161,7 +167,7 @@ router.get("/:id", institution.getInstitution);
   
  /**
  * @swagger
- * /institution:/{id}:
+ * /institution/{id}:
  *  put:
  *    summary: Update the institution by the id
  *    tags: [Institution]
@@ -191,7 +197,7 @@ router.get("/:id", institution.getInstitution);
 
 /**
  * @swagger
- * /institution:/{id}:
+ * /institution/{id}:
  *  delete:
  *    summary: Delete the institution by the id
  *    tags: [Institution]

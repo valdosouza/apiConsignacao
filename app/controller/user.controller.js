@@ -219,9 +219,8 @@ class UserController extends Base {
         {
           replacements: [email, password.toUpperCase()],
           type: TbUser.sequelize.QueryTypes.SELECT
-        }).then(data => {
-          
-          if (data) { resolve(data) } else { resolve(Null) };
+        }).then(data => {         
+            resolve(data);
         })
         .catch(err => {
           reject(new Error(err+ " |"+ "Algum erro aconteceu ao buscar o Usuário"));
@@ -271,9 +270,10 @@ class UserController extends Base {
         'where ( u.id=? ) '+
         ' and u.salt=?' ,
         {
-          replacements: [body.user,body.salt],
+          replacements: [body.userId,body.salt],
           type: TbUser.sequelize.QueryTypes.SELECT
-        }).then(data => {                
+        })
+        .then(data => {                
           if (data[0]){
             resolve(data[0].salt)
           }else{
@@ -281,7 +281,7 @@ class UserController extends Base {
           } ;
         })
         .catch(err => {
-          reject(new Error(err+ " |"+ "Algum erro aconteceu ao buscar o salt"));
+          reject(new Error('Salt: '+err));
         });
     });
     return promise;
@@ -382,37 +382,29 @@ class UserController extends Base {
   static async changePassword(body){
     const promise = new Promise(async (resolve,reject) => {    
       try {        
-        const hashSalt = await  this.getSalt(body) ;
-        if (hashSalt != ''){
-          TbUser.sequelize.query(
-            'update tb_user set ' +
-            ' password=? ' +
-            'where id=? '+
-            ' and salt=? ',
-            {
-              replacements: [body.newPassword,body.user,body.salt],
-              type: TbUser.sequelize.QueryTypes.UPDATE
-            }
-          )
-            .then(() => {
-              const dataResult ={
-                result:"true",
-                message:"Senha alterada com Sucesso"
-              }
-              resolve(dataResult);
-          })
-            .catch(err => {
-              reject(new Error("Erro ao alterar senha - " + err));
-          });  
-        }else{      
-          const dataResult ={
-            result:"false",
-            message:"Salt Informado não encontrado"
+        TbUser.sequelize.query(
+          'update tb_user set ' +
+          ' password=?, ' +
+          'salt = NULL '+
+          'where id=? '+
+          ' and salt=? '+
+          ' and salt is not NULL ',
+          {
+            replacements: [body.newPassword,body.userId,body.salt],
+            type: TbUser.sequelize.QueryTypes.UPDATE
           }
-          resolve(dataResult);              
-        };     
+        )
+        .then(() => {
+          const dataResult ={
+              result:"true",
+              message:"Senha alterada com Sucesso"
+          }
+          resolve(dataResult);
+        })
+        .catch(err => {
+          reject(new Error("Erro ao alterar senha - " + err));
+        });  
       } catch (err) {
-        // ... handle it locally
         throw new Error(err.message);
       }                      
     });
