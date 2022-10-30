@@ -17,7 +17,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         - cpf
  *       properties:
  *         id:
- *           type: string
+ *           type: integer
  *         cpf:
  *           type: string 
  *         rg:
@@ -27,11 +27,11 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         rg_organ_issuer:
  *           type: string
  *         rg_state_issuer:
- *           type: string
+ *           type: integer
  *         birthday:
  *           type: string
  *         tb_profession_id:
- *           type: string
+ *           type: integer
  */
 
  /**

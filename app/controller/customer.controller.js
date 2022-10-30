@@ -1,277 +1,237 @@
-db = require("../model");
-Oper = db.customer;
-const EntityController = require("../controller/entity.controller.js");
-const PersonController = require("../controller/person.controller.js");
-const CompanyController = require("../controller/company.controller.js");
-const AddressController = require("../controller/address.controller.js");
-const PhoneController = require("../controller/phone.controller.js");
+const Base = require('./base.controller.js');
+const db = require("../model");
+const Tb = db.customer;
+const entity = require('./entity.controller.js');
+const company = require('./company.controller.js') ;
+const person = require('./person.controller.js') ;
+const address = require('./address.controller.js');
+const phone = require('./phone.controller.js');
 
-class CustomerController {
+class CustomerController extends Base {
+  static async getById(id) {    
+    const promise = new Promise((resolve, reject) => {
+      Tb.sequelize.query(
+        'Select * ' +        
+        'from tb_customer    ' +
+        'where ( id =?) ', 
+        {
+          replacements: [id],
+          type: Tb.sequelize.QueryTypes.SELECT
+        }).then(data => {
+            resolve(data);
+        })
+        .catch(err => {
+          reject('getById: ' + err);
+        });
+    });
+    return promise;
+  };
+
+  static async save(customer) {
+    const promise = new Promise(async (resolve, reject) => {
+      try{
+        var resultCustomer  = [];                
+        if (customer.customer.id > 0)
+          resultCustomer  = await this.getById(customer.customer.id);        
+        if (resultCustomer.length == 0){
+          this.insert(customer);  
+        }else{
+          this.update(customer);
+        }
+        resolve(customer);
+      } catch(err) {            
+        reject('Customer sabe: '+err);
+      }                  
+    });
+    return promise;
+  }
 
   static async insert(customer) {
-    const promise = new Promise((resolve, reject) => {
-      Tb.create(customer)
-        .then(data => {
-          resolve(data);
-        })
-        .catch(err => {
-          reject("Erro:" + err);
-        });
-    });
-    return promise;
-  }
-
-  static getByKey(data) {
-    Oper.sequelize.query(
-      'Select c.* ' +
-      'from tb_customer c ' +
-      'where ( c.tb_institution_id =? ) ' +
-      ' and ( c.id =? ) ',
-      {
-        replacements: [data.tb_customer_id, data.tb_institution_id],
-        type: Oper.sequelize.QueryTypes.SELECT
-      })
-      .then(data => {
-        if (!data) {
-          return false;
-        } else {
-          return data;
-        };
-      })
-  }
-
-
-  static getByPhone(phone) {
-
-    switch ((phone.length)) {
-      case 13:
-        phone = phone.substr(5, 8);
-        break;
-      case 12:
-        phone = phone.substr(4, 8);
-        break;
-      case 11:
-        phone = phone.substr(3, 8);
-        break;
-      case 10:
-        phone = phone.substr(2, 8);
-        break;
-    }
-
-    const promise = new Promise((resolve, reject) => {
-      Oper.sequelize.query(
-        'Select et.id, et.nick_trade, ad.zip_code, ad.street, ' +
-        'ad.nmbr, ad.complement, ad.neighborhood, c.name locality, ' +
-        's.abbreviation state, ad.longitude ,  ad.latitude, ph.address_kind, ph.number ' +
-        'from tb_entity et   ' +
-        '  inner join tb_address ad ' +
-        '  on (ad.id =et.id) ' +
-        '  left join tb_city c ' +
-        '  on (c.id = ad.tb_city_id) ' +
-        '  inner join tb_state s ' +
-        '  on (s.id = ad.tb_state_id) ' +
-        '  inner join tb_phone ph ' +
-        '  on (ph.id = ad.id) ' +
-        'where ( ph.number like ?) ' +
-        'limit 0,1 ',
-        {
-          replacements: ["%" + phone],
-          type: Oper.sequelize.QueryTypes.SELECT
-        }).then(data => {
-          if (data[0] != null)
-            resolve(data);
-          else
-            resolve(null);
-        })
-        .catch(err => {
-          reject(new Error("Algum erro aconteceu ao buscar o telefone"));
-        });
-    });
-    return promise;
-  };
-
-  static getByDocFiscal(docFiscal) {
-
-    const promise = new Promise((resolve, reject) => {
-      (async () => {
-        let result = "";
-        if (docFiscal.length > 0) {
-          if (docFiscal.length == 11) {
-            await PersonController.getByCPF(docFiscal)
-              .then(data => {
-                result = data;
-              })
-          } else {
-            await CompanyController.getByCNPJ(docFiscal)
-              .then(data => {
-                result = data;
-              })
-          }
+    const promise = new Promise(async (resolve, reject) => {
+      try{
+        var resultDoc = [];
+        if (customer.person){
+          resultDoc  = await person.getByCPF(customer.person.cpf);
+        }else{
+          resultDoc  = await company.getByCNPJ(customer.company.cnpj);
+        }                
+        if (resultDoc.length == 0){          
+          this.insertComplete(customer) ;
+        } else{
+          customer.customer.id = resultDoc[0].id;
+          this.insertParcial(customer) ;
         }
-        return result;
-      })()
-        .then(data => {
-          resolve(data);
-        })
-        .catch(err => {
-          reject(new Error("Erro: " + err));
-        });
+        resolve(customer);
+      } catch(err) {            
+        reject('Customer Insert: '+err);
+      }                  
     });
     return promise;
-  };
+  }
 
-  static saveObject(customer) {
-
-    const promise = new Promise((resolve, reject) => {
-      (async () => {
-        let result = 'não';
-
-        //Verifica se o fone existe
-        await this.getByPhone(customer.phone)
-          .then(data => {
-            result = data;
-          })
-
-        if (!result) {
-          //Verifica se existe CPF ou CNPJ          
-          await this.getByDocFiscal(customer.docFiscal)
-            .then(data => {
-              if (data.id > 0) {
-                //se encontrou por algum docFiscal só registrar o Telefone 
-                customer.id = data.id;
-                this.saveAddress(customer);
-                this.savePhone(customer);
-              } else {
-                //Se não encontrou faz o registro completo.
-                this.saveEntity(customer)
-                  .then((data) => {
-                    customer.id = data.id;
-                    if (customer.docFiscal.length > 0) {
-                      if (customer.docFiscal.length == 11) {
-                        this.savePerson(customer);
-                      } else {
-                        this.saveCompany(customer);
-                      }
-                    }
-                    this.saveAddress(customer);
-                    this.savePhone(customer);
-                  })
-              }
-
+  static async insertComplete(customer) {
+    const promise = new Promise(async (resolve, reject) => {
+      try{        
+        entity.insert(customer.entity)
+        .then(data => {
+          const entityId =  data.id;
+          customer.entity.id =  entityId;          
+          //Salva a pessoa Juridica                        
+          if (customer.company){
+            customer.company.id = entityId; 
+            company.insert(customer.company)
+              .then((data) => {
+                resolve(data);
+              })
+              .catch(err => {
+                reject("Erro:"+ err);
+              });            
+          }else{
+            customer.person.id = entityId; 
+            person.insert(customer.person)
+             .then((data) => {
+               resolve(data);
+             })
+             .catch(err => {
+               reject("Erro:"+ err);
+             });
+          }       
+             
+          //Salva o endereço  
+          customer.address.id = entityId;                                    
+          address.insert(customer.address)
+            .then((data) => {
+              resolve(data);
+            })
+            .catch(err => {
+              reject("Erro:"+ err);
             });
-        } else {
-          customer.id = resul.id;
-          this.saveAddress(customer);
-        }
-        return result;
 
-      })()
-        .then(data => {
-          resolve(data);
-        })
-        .catch(err => {
-          reject(new Error("Erro: " + err));
-        });
+          //Salva o Phone
+          customer.phone.id = entityId;              
+          phone.insert(customer.phone)
+            .then((data) => {
+              resolve(data);
+            })
+            .catch(err => {
+              reject("Erro:"+ err);
+            });
 
-
-    });
-    return promise;
-  }
-  static async saveEntity(customer) {
-
-    const promise = new Promise((resolve, reject) => {
-      const entity = {
-        id: 0,
-        name_company: customer.name,
-        nick_trade: customer.name,
-        note: "",
-      }
-      EntityController.insert(entity)
-        .then((data) => {
-          customer.id = data.id;
+          //Grava o customer
+          customer.customer.id = entityId;                                         
+          Tb.create(customer.customer)
+            .then(data => {
+              resolve(data);
+            })
+            .catch(err => {
+              reject("Erro:" + err);
+            });
+          
+          //REtornogeral              
           resolve(customer);
         })
         .catch(err => {
-          reject(new Error("Erro: " + err));
+          reject('Customer InsertComplete: '+err);
         });
+      } catch(err) {            
+        reject('Customer InsertComplete: '+err);
+      }                  
     });
     return promise;
   }
 
-  static savePerson(customer) {
-    const person = {
-      id: customer.id,
-      cpf: customer.docFiscal
-    }
-    PersonController.insert(person);
-  }
-
-  static saveCompany(customer) {
-    const Company = {
-      id: customer.id,
-      cpf: customer.docFiscal
-    }
-    CompanyController.insert(Company);
-  }
-
-  static saveAddress(customer) {
-    const address = {
-      id: customer.id,
-      street: customer.street,
-      nmbr: customer.number,
-      complement: customer.complement,
-      neighborhood: customer.neighborhood,
-      kind: "RESIDENCIAL",
-      zip_code: customer.zipCode,
-      tb_country_id: "1058",
-      tb_state_id: "41",
-      tb_city_id: "4004",
-      main: "S"
-    };
-    AddressController.insert(address);
-  };
-
-  static savePhone(customer) {
-    const phone = {
-      id: customer.id,
-      kind: "Celular",
-      contact: customer.name,
-      number: customer.phone,
-      address_kind: "delivery"
-    };
-    PhoneController.insert(phone);
+  static async insertParcial(customer) {
+    const promise = new Promise(async (resolve, reject) => {
+      try{        
+        //Insere o customer
+        const existCustomer = await this.getById(customer.customer.id);
+        if (existCustomer.length == 0){
+          Tb.create(customer.customer);
+        }else{
+          Tb.update(customer.customer,{
+            where:{ id: customer.customer.id}
+          });
+        }
+        //Atualiza Entidade    
+        customer.entity.id = customer.customer.id;
+        entity.update(customer.entity)
+        //Atualiza  Person ou Company
+        if (customer.person){
+          customer.person.id = customer.customer.id;
+          company.update(customer.person);
+        }else{
+          customer.company.id = customer.customer.id;
+          person.update(customer.company);
+        }          
+        //Atualiza o endereço  
+        customer.address.id = customer.customer.id;
+        address.save(customer.address);
+        //Salva o Phone
+        customer.phone.id = customer.customer.id;
+        phone.save(customer.phone);
+        //REtornogeral              
+        resolve(customer);        
+      } catch(err) {            
+        reject('Customer InsertParcsabe: '+err);
+      }                  
+    });
+    return promise;
   }
 
 
-
-  static getList(parameter) {
-
+  static async update(customer) {
     const promise = new Promise((resolve, reject) => {
-      Oper.sequelize.query(
-        'SELECT distinct ct.id, et.name_company,et.nick_trade, ' +
-        'ad.street, ad.nmbr, ad.neighborhood, ad.kind  ' +
-        'FROM tb_customer ct  ' +
-        '  INNER JOIN tb_entity et  ' +
-        '  on (ct.id = et.id)  ' +
-        '  inner join tb_address ad  ' +
-        '  on (ad.id = et.id)  ' +
-        'where (ct.tb_institution_id =?) ',
-        {
-          replacements: [6825],
-          type: Oper.sequelize.QueryTypes.SELECT
-        }).then(data => {
-          resolve(data);
-        })
-        .catch(err => {
-          reject(new Error("Algum erro aconteceu ao buscar o cliente"));
-        });
+        try{ 
+          entity.update(customer.entity);
+          
+          if (customer.person){
+            person.update(customer.person);
+          }else{
+            company.update(customer.company);
+          }
+          address.save(customer.address);
+          phone.save(customer.phone);
+          Tb.update(customer.customer,{
+            where: { id: customer.customer.id }
+          });          
+          resolve("The Customer was updated");   
+        } catch(err) {            
+            reject('Customer.update: '+err);
+        }  
+    });
+    return promise;        
+  }        
+
+  static getCustomer = (id) => {
+    const promise = new Promise(async (resolve, reject) => {
+      try{
+        var result = {};
+        const dataCustomer = await this.getById(id);
+        result.custommer = dataCustomer[0];
+        const dataEntity = await entity.getById(id);
+        result.entity = dataEntity[0]; 
+
+        const dataPerson = await person.getById(id);
+        if (dataPerson.length > 0){            
+            result.person = dataPerson[0]; 
+        }
+        const dataCompany = await company.getById(id);
+        if (dataCompany.length > 0){            
+          result.company = dataCompany[0]; 
+        }
+        const dataAddress = await address.getById(id);
+        result.address = dataAddress[0]; 
+
+        const dataPhone = await phone.getById(id,'');
+        result.phone = dataPhone[0]; 
+        
+        resolve(result);
+      } 
+      catch(err){
+        reject('getCustomer: ' + err);
+      } 
     });
     return promise;
-  };
-
-
-
-
-
+  }
 }
 module.exports = CustomerController; 

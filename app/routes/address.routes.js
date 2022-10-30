@@ -28,7 +28,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         - main
  *       properties:
  *         id:
- *           type: string
+ *           type: integer
  *         street:
  *           type: string
  *         nmbr:
@@ -44,11 +44,17 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         zip_code:
  *           type: string
  *         tb_country_id:
+ *           type: integer
+ *         name_country:
  *           type: string
  *         tb_state_id:
- *           type: string
+ *           type: integer
+ *         name_state:
+ *           type: string 
  *         tb_city_id:
- *           type: string
+ *           type: integer
+ *         name_city:
+ *           type: string 
  *         main:
  *           type: string
  *         longitude:

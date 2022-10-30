@@ -18,7 +18,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         - nick_trade
  *       properties:
  *         id:
- *           type: string
+ *           type: integer
  *         name_company:
  *           type: string
  *         nick_trade:
@@ -26,7 +26,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         aniversary:
  *           type: string
  *         tb_line_buiness_id:
- *           type: string
+ *           type: integer
  *         note:
  *           type: string
  */

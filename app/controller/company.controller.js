@@ -3,8 +3,26 @@ const db = require("../model");
 const Tb = db.company;
 class CompanyController extends Base {
 
-  static async insert(company) {
+  static async getById(id) {    
+    const promise = new Promise((resolve, reject) => {
+      Tb.sequelize.query(
+        'Select * ' +        
+        'from tb_company ' +
+        'where ( id =?) ', 
+        {
+          replacements: [id],
+          type: Tb.sequelize.QueryTypes.SELECT
+        }).then(data => {
+            resolve(data);
+        })
+        .catch(err => {
+          reject('Company.getById: ' + err);
+        });
+    });
+    return promise;
+  };
 
+  static async insert(company) {
     const promise = new Promise((resolve, reject) => {
         Tb.create(company)
             .then(data => {
@@ -36,16 +54,17 @@ class CompanyController extends Base {
     return promise;
   }
 
-  static async update(company) {
-    
+  static async update(company) {    
     const promise = new Promise((resolve, reject) => {
-        Tb.update(company)
-            .then((data) => {
-                resolve(data);
-            })
-            .catch(err => {
-                reject("Erro:"+ err);
-            });
+      Tb.update(company,{
+        where: { id: company.id }
+      })
+      .then((data) => {
+        resolve(data);
+      })
+      .catch(err => {
+        reject("Erro:"+ err);
+      });
     });
     return promise;        
   }        
@@ -76,14 +95,12 @@ class CompanyController extends Base {
         {
           replacements: [cnpj],
           type: Tb.sequelize.QueryTypes.SELECT
-        }).then(data => {
-          if (data[0] != null)
-            resolve(data[0]);
-          else
-            resolve('0');
+        })
+        .then(data => {
+          resolve(data);
         })
         .catch(err => {
-          reject(new Error("Algum erro aconteceu ao buscar o CNPJ"));
+          reject('Company.getByCNPJ:'+err);
         });
     });
     return promise;

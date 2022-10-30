@@ -15,7 +15,7 @@ class UserController extends Base {
   // Save USer in the database
   static create = (user) => {
     const promise = new Promise((resolve, reject) => {
-
+      const user = user;
       MailingController.findOne(user.email)
       .then(data => {
         if (data){
@@ -86,9 +86,10 @@ class UserController extends Base {
     return promise;
   }
 
-  static update = (id,user) => {
+  static update = (user) => {
     const promise = new Promise((resolve, reject) => {
       try{
+        console.log(user);
         //Salva a entidade
         const dataEntity = {
           name_company: user.nick,
@@ -96,7 +97,7 @@ class UserController extends Base {
         };     
         console.log(dataEntity);
         TbEntity.update(dataEntity,{
-          where: { id: id }
+          where: { id: user.id }
         })
         .catch(err => {
           reject(new Error("Update Usuário." + err));

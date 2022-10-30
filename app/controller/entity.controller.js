@@ -4,6 +4,33 @@ const Tb = db.entity;
 
 class EntityController extends Base {
 
+  static async getById(id) {    
+    const promise = new Promise((resolve, reject) => {
+      Tb.sequelize.query(
+        'Select ' +        
+        'id, '+
+        'name_company, '+
+        'nick_trade, '+
+        'aniversary, '+
+        'tb_linebusiness_id, '+
+        'CAST(note AS CHAR(1000) CHARACTER SET utf8) note,'+
+        'createdAt, '+
+        'updatedAt '+
+        'from tb_entity    ' +
+        'where ( id =?) ', 
+        {
+          replacements: [id],
+          type: Tb.sequelize.QueryTypes.SELECT
+        }).then(data => {
+            resolve(data);
+        })
+        .catch(err => {
+          reject('Entity.getById: ' + err);
+        });
+      });
+      return promise;
+    };
+
     static async getIdNext() {
         const promise = new Promise((resolve, reject) => {
             Tb.sequelize.query(
@@ -20,12 +47,12 @@ class EntityController extends Base {
         });
         return promise;
     }
-
     
-    static async insert(entity) {
-        
-        const promise = new Promise((resolve, reject) => {
-            console.log(entity);
+    static async insert(entity) {            
+        const promise = new Promise((resolve, reject) => {            
+            delete entity.name_line_business;
+            if (entity.aniversary == '')
+                delete entity.aniversary;
             Tb.create(entity)
                 .then((data) => {
                     resolve(data);
@@ -56,18 +83,19 @@ class EntityController extends Base {
         return promise;
     }
 
-    static async update(entity) {
-        
-        const promise = new Promise((resolve, reject) => {
-            Tb.update(entity)
-                .then((data) => {
-                    resolve(data);
-                })
-                .catch(err => {
-                    reject("Erro:"+ err);
-                });
+    static async update(entity) {        
+      const promise = new Promise((resolve, reject) => {
+        Tb.update(entity,{
+          where: { id: entity.id }
+        })
+        .then((data) => {
+          resolve(data);
+        })
+        .catch(err => {
+          reject("Erro:"+ err);
         });
-        return promise;        
+      });
+      return promise;        
     }        
 
     static async delete(entity) {

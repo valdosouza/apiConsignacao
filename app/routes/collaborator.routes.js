@@ -1,6 +1,6 @@
 const { Router } = require("express");
   
-const customer =  require("../endpoint/customer.endpoint.js");
+const collaborator =  require("../endpoint/collaborator.endpoint.js");
 
 const { withJWTAuthMiddleware } = require("express-kun");
 const router = Router();
@@ -10,43 +10,45 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  * @swagger
  * components:
  *   schemas:
- *     Customer:
+ *     Collaborator:
  *       type: object
  *       properties:
  *         id:
  *           type: integer
  *         tb_institution_id:
  *           type: integer 
- *         tb_salesman_id:
- *           type: integer
- *         tb_carrier_id:
- *           type: integer  
- *         credit_status:
+ *         dt_admission:
  *           type: string
- *         credit_value:
+ *         dt_resignation:
+ *           type: string  
+ *         salary:
  *           type: number
- *         Wallet:
+ *         pis:
  *           type: string
- *         consumer:
+ *         fahters_name:
  *           type: string
- *         multiplier:
- *           type: number
- *         by_pass_st:
+ *         mothers_name:
+ *           type: string
+ *         vote_number:
+ *           type: string
+ *         vote_zone:
+ *           type: string
+ *         vote_section:
+ *           type: string
+ *         military_certificate:
  *           type: string
  *         active:
  *           type: string 
  * 
- *     ObjCustomer:
+ *     ObjCollaborator:
  *       type: object
  *       properties:
- *         customer:
- *           $ref: '#/components/schemas/Customer'
+ *         collaborator:
+ *           $ref: '#/components/schemas/Collaborator'
  *         entity:
  *           $ref: '#/components/schemas/Entity' 
  *         person:
  *           $ref: '#/components/schemas/Person'  
- *         company:
- *           $ref: '#/components/schemas/Company'
  *         address:
  *           $ref: '#/components/schemas/Address' 
  *         phone:
@@ -57,80 +59,78 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  /**
   * @swagger
   * tags:
-  *   name: Customer
-  *   description: The Customer managing API
+  *   name: Collaborator
+  *   description: The Collaborator managing API
   */
 
 /**
  * @swagger
- * /customer:
+ * /collaborator:
  *   post:
- *     summary: Create a new customer
- *     tags: [Customer]
+ *     summary: Create a new collaborator
+ *     tags: [Collaborator]
  *     requestBody:
  *       required: true
  *       content:
  *        application/json:
  *          schema:
- *            $ref: '#/components/schemas/ObjCustomer'
+ *            $ref: '#/components/schemas/ObjCollaborator'
  *     responses:
  *       200:
- *         description: The Customer was successfully created
+ *         description: The Collaborator was successfully created
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/ObjCustomer'
+ *               $ref: '#/components/schemas/ObjCollaborator'
  *       500:
  *         description: Some server error
  */
- router.post("/", customer.create);
+ router.post("/", collaborator.create);
 
  /**
  * @swagger
- * /customer/{id}:
+ * /collaborator/{id}:
  *   get:
- *     summary: Returns the list of all the customer
- *     tags: [Customer]
+ *     summary: Returns the list of all the collaborator
+ *     tags: [Collaborator]
  *     parameters:
  *      - in: path
  *        name: id
  *        schema:
  *          type: string
  *        required: true
- *        description: The id customer
+ *        description: The id collaborator
  *     responses:
  *       200:
- *         description: The  customer
+ *         description: The  collaborator
  *         content:
  *           application/json:
  *             schema: 
- *               $ref: '#/components/schemas/ObjCustomer'
+ *               $ref: '#/components/schemas/ObjCollaborator'
  */
- router.get("/:id", customer.getCustomer);
+ router.get("/:id", collaborator.getCollaborator);
   
- 
 /**
  * @swagger
- * /customer/{id}:
+ * /collaborator/{id}:
  *  delete:
- *    summary: Delete the customer by the id
- *    tags: [Customer]
+ *    summary: Delete the collaborator by the id
+ *    tags: [Collaborator]
  *    parameters:
  *      - in: path
  *        name: id
  *        schema:
  *          type: string
  *        required: true
- *        description: The customer id
+ *        description: The collaborator id
  *    responses:
  *      200:
- *        description: The customer was deleted
+ *        description: The collaborator was deleted
  *      404:
  *        description: The institution was not found
  *      500:
  *        description: Some error happened
  */
-router.delete("/", customer.delete);
+router.delete("/", collaborator.delete);
 
 module.exports = router;  
-

@@ -31,15 +31,6 @@ module.exports = sequelize => {
       comment: null,
       field: "tb_salesman_id"
     },
-    tb_vendor_id: {
-      type: DataTypes.INTEGER(11),
-      allowNull: true,
-      defaultValue: null,
-      primaryKey: false,
-      autoIncrement: false,
-      comment: null,
-      field: "tb_vendor_id"
-    },
     tb_carrier_id: {
       type: DataTypes.INTEGER(11),
       allowNull: true,
@@ -112,40 +103,30 @@ module.exports = sequelize => {
       comment: null,
       field: "active"
     },
-    created_at: {
+    createdAt: {
       type: DataTypes.DATE,
       allowNull: true,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "created_at"
+      field: "createdAt"
     },
-    updated_at: {
+    updatedAt: {
       type: DataTypes.DATE,
       allowNull: true,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "updated_at"
+      field: "updatedAt"
     }
   };
   const options = {
     tableName: "tb_customer",
     comment: "",
-    timestamps: false,
-    indexes: [{
-      name: "tb_institution_id",
-      unique: false,
-      type: "BTREE",
-      fields: ["tb_institution_id"]
-    }, {
-      name: "updated_at",
-      unique: false,
-      type: "BTREE",
-      fields: ["updated_at"]
-    }]
+    timestamps: true,
+    indexes: []
   };
   const CustomerModel = sequelize.define("tb_customer_model", attributes, options);
   return CustomerModel;

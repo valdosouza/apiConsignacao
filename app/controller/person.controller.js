@@ -3,9 +3,33 @@ const db = require("../model");
 const Tb = db.person;
 class PersonController extends Base {
 
+  static async getById(id) {    
+    const promise = new Promise((resolve, reject) => {
+      Tb.sequelize.query(
+        'Select * ' +        
+        'from tb_person ' +
+        'where ( id =?) ', 
+        {
+          replacements: [id],
+          type: Tb.sequelize.QueryTypes.SELECT
+        }).then(data => {
+            resolve(data);
+        })
+        .catch(err => {
+          reject('Person.getById: ' + err);
+        });
+    });
+    return promise;
+  };
+
   static async insert(person) {
 
     const promise = new Promise((resolve, reject) => {
+        if (person.rg_dt_emission == '')
+          delete person.rg_dt_emission;
+        if (person.birthday == '')
+          delete person.birthday;
+
         Tb.create(person)
             .then(data => {
                 resolve(data);
@@ -39,13 +63,15 @@ class PersonController extends Base {
   static async update(person) {
     
     const promise = new Promise((resolve, reject) => {
-        Tb.update(person)
-            .then((data) => {
-                resolve(data);
-            })
-            .catch(err => {
-                reject("Erro:"+ err);
-            });
+      Tb.update(person,{
+        where: { id: person.id }
+      })
+      .then((data) => {
+        resolve(data);
+      })
+      .catch(err => {
+        reject("Erro:"+ err);
+      });
     });
     return promise;        
   }        
@@ -76,11 +102,8 @@ class PersonController extends Base {
         {
           replacements: [cpf],
           type: Tb.sequelize.QueryTypes.SELECT
-        }).then(data => {
-          if (data[0] != null)
-            resolve(data[0]);
-          else
-            resolve('0');
+        }).then(data => {          
+            resolve(data);          
         })
         .catch(err => {
           reject(new Error("Algum erro aconteceu ao buscar o CNPJ"));
