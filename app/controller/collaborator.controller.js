@@ -241,6 +241,36 @@ class CollaboratorController extends Base {
     });
     return promise;
   }
+
+  static getList = (tb_institution_id) => {
+
+    const promise = new Promise((resolve, reject) => {
+      Tb.sequelize.query(
+        'Select '+
+        'et.id, '+
+        'et.name_company, '+
+        'et.nick_trade, '+
+        'et.tb_linebusiness_id, '+
+        'lb.description desc_linebusiness '+
+        'from tb_collaborator co '+
+        '  inner join tb_entity et '+  
+        '  on (co.id = et.id) '+
+        '  inner join tb_linebusiness lb '+
+        '  on (lb.id =et.tb_linebusiness_id) '+
+        'where co.tb_institution_id =? ',
+        {
+          replacements: [tb_institution_id],
+          type: Tb.sequelize.QueryTypes.SELECT
+        }).then(data => {          
+          resolve(data);
+        })
+        .catch(err => {
+          reject('Colaborador: '+err);
+        });
+    });
+    return promise;
+  }
+
 }
 
 module.exports = CollaboratorController; 

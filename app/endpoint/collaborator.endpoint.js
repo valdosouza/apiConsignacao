@@ -21,6 +21,14 @@ class CollaboratorEndPoint {
       })
   };
 
+  static getList = (req, res) => {
+    const tb_institution_id = req.params.tb_institution_id;
+    CollaboratorController.getList(tb_institution_id)
+      .then(data => {
+        res.send(data);
+      })
+  };
+
   static delete(req, res) {
 
     CollaboratorController.delete(req.body).then(data => {

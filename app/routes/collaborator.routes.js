@@ -54,6 +54,20 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         phone:
  *           $ref: '#/components/schemas/Phone'  
  *             
+ *     ListCollaborator:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *         name:
+ *           type: string
+ *         apelido:
+ *           type: string
+ *         tb_linebusiness_id:
+ *           type: integer
+ *         desc_linebusiness:
+ *           type: string  
+ *  
  */
 
  /**
@@ -110,6 +124,33 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  */
  router.get("/:id", collaborator.getCollaborator);
   
+ /**
+ * @swagger
+ * /collaborator/getlist/{tb_institution_id}:
+ *   get:
+ *     summary: Returns the list of all the Collaborator
+ *     tags: [Collaborator]
+ *     parameters:
+ *      - in: path
+ *        name: tb_institution_id
+ *        schema:
+ *          type: integer  
+ *        required: true
+ *        description: The Collaborator tb_institution_id
+ *     responses:
+ *       200:
+ *         description: The list of collaborator
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/ListCollaborator'
+ *       500:
+ *         description: Some server error 
+ */
+router.get("/getlist/:tb_institution_id", collaborator.getList);
+
 /**
  * @swagger
  * /collaborator/{id}:

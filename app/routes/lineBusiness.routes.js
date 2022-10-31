@@ -69,7 +69,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *      - in: path
  *        name: tb_institution_id
  *        schema:
- *          type: string
+ *          type: integer
  *        required: true
  *        description: The lineBusiness tb_institution_id
  *     responses:
