@@ -233,5 +233,48 @@ class CustomerController extends Base {
     });
     return promise;
   }
+
+  static getList = (tb_institution_id) => {
+
+    const promise = new Promise((resolve, reject) => {
+      Tb.sequelize.query(
+        'Select '+
+        'et.id,  '+
+        'et.name_company,  '+
+        'et.nick_trade, '+
+        ' "F" docType, '+
+        'pe.cpf documento '+
+        'from tb_customer ct  '+
+        '  inner join tb_entity et  '+
+        '  on (ct.id = et.id)  '+
+        '  inner join tb_person pe '+
+        '  on (pe.id = et.id) '+
+        'where ct.tb_institution_id =? '+
+        'union '+
+        'Select  '+
+        'et.id,  '+
+        'et.name_company,  '+
+        'et.nick_trade, '+
+        ' "J" docType, '+
+        'co.cnpj documento '+
+        'from tb_customer ct  '+
+        '  inner join tb_entity et  '+
+        '  on (ct.id = et.id)  '+
+        '  inner join tb_company co '+
+        '  on (co.id = et.id) '+
+        'where ct.tb_institution_id =? ',
+        {
+          replacements: [tb_institution_id,tb_institution_id],
+          type: Tb.sequelize.QueryTypes.SELECT
+        }).then(data => {          
+          resolve(data);
+        })
+        .catch(err => {
+          reject('Customer: '+err);
+        });
+    });
+    return promise;
+  }
+
 }
 module.exports = CustomerController; 

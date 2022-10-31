@@ -21,6 +21,14 @@ class CustomerEndPoint {
       })
   };
 
+  static getList = (req, res) => {
+    const tb_institution_id = req.params.tb_institution_id;
+    CustomerController.getList(tb_institution_id)
+      .then(data => {
+        res.send(data);
+      })
+  };
+
   static delete(req, res) {
     CustomerController.delete(req.body).then(data => {
       res.send(data);
