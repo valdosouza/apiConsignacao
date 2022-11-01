@@ -104,6 +104,9 @@ app.use("/collaborator", collaborator);
 const customer = require("./app/routes/customer.routes");
 app.use("/customer", customer);
 
+const priceList = require("./app/routes/priceList.routes");
+app.use("/pricelist", priceList);
+
 const PORT = process.env.PORT || 3000;
 
 app.use("/doc", swaggerUI.serve, swaggerUI.setup(specs));

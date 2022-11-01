@@ -58,34 +58,38 @@ module.exports = sequelize => {
       comment: null,
       field: "aliq_profit"
     },
-    created_at: {
+    active: {
+      type: DataTypes.CHAR(1),
+      allowNull: true,
+      defaultValue: null,
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "active"
+    },    
+    createdAt: {
       type: DataTypes.DATE,
       allowNull: true,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "created_at"
+      field: "createdAt"
     },
-    updated_at: {
+    updatedAt: {
       type: DataTypes.DATE,
       allowNull: true,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "updated_at"
+      field: "updatedAt"
     }
   };
   const options = {
     tableName: "tb_price_list",
     comment: "",
-    indexes: [{
-      name: "updated_at",
-      unique: false,
-      type: "BTREE",
-      fields: ["updated_at"]
-    }]
+    timestamps: true    
   };
   const PriceListModel = sequelize.define("tb_price_list_model", attributes, options);
   return PriceListModel;
