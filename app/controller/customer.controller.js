@@ -11,9 +11,22 @@ class CustomerController extends Base {
   static async getById(id) {    
     const promise = new Promise((resolve, reject) => {
       Tb.sequelize.query(
-        'Select * ' +        
-        'from tb_customer    ' +
-        'where ( id =?) ', 
+        'Select '+
+        'ct.id, '+
+        'ct.tb_institution_id, '+
+        'ct.tb_salesman_id, '+
+        'slm.nick_trade salesman_name, '+
+        'ct.tb_carrier_id, '+
+        'ct.credit_status, '+
+        'ct.credit_value, '+
+        'ct.wallet, '+
+        'ct.consumer, '+
+        'ct.multiplier, '+
+        'ct.active '+
+        'from tb_customer  ct '+
+        '  left outer join tb_entity slm '+
+        '  on (slm.id = ct.tb_salesman_id) '+
+        'where ( ct.id =?) ', 
         {
           replacements: [id],
           type: Tb.sequelize.QueryTypes.SELECT
@@ -29,7 +42,7 @@ class CustomerController extends Base {
 
   static async save(customer) {
     const promise = new Promise(async (resolve, reject) => {
-      try{
+      try{        
         var resultCustomer  = [];                
         if (customer.customer.id > 0)
           resultCustomer  = await this.getById(customer.customer.id);        
@@ -40,7 +53,7 @@ class CustomerController extends Base {
         }
         resolve(customer);
       } catch(err) {            
-        reject('Customer sabe: '+err);
+        reject('Customer.save: '+err);
       }                  
     });
     return promise;
