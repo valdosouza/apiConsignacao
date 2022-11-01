@@ -220,7 +220,7 @@ class CustomerController extends Base {
       try{
         var result = {};
         const dataCustomer = await this.getById(id);
-        result.custommer = dataCustomer[0];
+        result.customer = dataCustomer[0];
         const dataEntity = await entity.getById(id);
         result.entity = dataEntity[0]; 
 
