@@ -42,11 +42,17 @@ class CollaboratorController extends Base {
         if (collaborator.collaborator.id > 0)
           resultCollaborator  = await this.getById(collaborator.collaborator.id);        
         if (resultCollaborator.length == 0){
-          this.insert(collaborator);  
+          this.insert(collaborator)
+          .then((data) => {
+            resolve(data);
+          })
         }else{
-          this.update(collaborator);
+          this.update(collaborator)
+          .then((data) => {
+            resolve(data);
+          })
         }
-        resolve(collaborator);
+        
       } catch(err) {            
         reject('Collaborator.save: '+err);
       }                  
@@ -65,12 +71,17 @@ class CollaboratorController extends Base {
         }        
         
         if (resultDoc.length == 0){          
-          this.insertComplete(collaborator) ;
+          this.insertComplete(collaborator)
+          .then((data) => {
+            resolve(data);
+          })
         } else{
           collaborator.collaborator.id = resultDoc[0].id;
-          this.insertParcial(collaborator) ;
-        }
-        resolve(collaborator);
+          this.insertParcial(collaborator) 
+          .then((data) => {
+            resolve(data);
+          })
+        }                
       } catch(err) {            
         reject('Collaborator Insert: '+err);
       }                  
@@ -89,18 +100,12 @@ class CollaboratorController extends Base {
           if (collaborator.company){
             collaborator.company.id = entityId; 
             company.insert(collaborator.company)
-              .then((data) => {
-                resolve(data);
-              })
               .catch(err => {
                 reject("company.insert:"+ err);
               });            
           }else{
             collaborator.person.id = entityId; 
             person.insert(collaborator.person)
-             .then((data) => {
-               resolve(data);
-             })
              .catch(err => {
                reject("person.insert:"+ err);
              });
@@ -109,9 +114,6 @@ class CollaboratorController extends Base {
           //Salva o endereço  
           collaborator.address.id = entityId;                                    
           address.insert(collaborator.address)
-            .then((data) => {
-              resolve(data);
-            })
             .catch(err => {
               reject("address.insert"+ err);
             });
@@ -119,9 +121,6 @@ class CollaboratorController extends Base {
           //Salva o Phone
           collaborator.phone.id = entityId;              
           phone.insert(collaborator.phone)
-            .then((data) => {
-              resolve(data);
-            })
             .catch(err => {
               reject("phone.insert:"+ err);
             });
@@ -129,13 +128,9 @@ class CollaboratorController extends Base {
           //Grava o collaborator
           collaborator.collaborator.id = entityId;                                         
           Tb.create(collaborator.collaborator)
-            .then(data => {
-              resolve(data);
-            })
             .catch(err => {
               reject("Tb.create.collaborator:" + err);
-            });
-          
+            });            
           //REtornogeral              
           resolve(collaborator);
         })

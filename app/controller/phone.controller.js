@@ -68,19 +68,12 @@ class PhoneController extends Base {
 
     static async update(phone) {            
       const promise = new Promise((resolve, reject) => {
-        try{
-          Tb.update(phone,{
-            where: { id: phone.id,kind:phone.kind }
-          })
-          .then(data => {
-            resolve(data);
-          })
-          .catch(err => {
-            reject("Phone.update:"+ err);
-          });
-        } catch(err) {            
-          reject('Phone.update: '+err);
-        }                    
+        Tb.update(phone,{
+          where: { id: phone.id,kind:phone.kind }
+        })
+        .catch(err => {
+          reject("Phone.update:"+ err);
+        });
       });
       return promise;
     }    

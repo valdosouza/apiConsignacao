@@ -59,20 +59,16 @@ class StockListController extends Base {
         return promise;
     }
 
-    static async update(stocklist) {
-        
-        const promise = new Promise((resolve, reject) => {
-            Tb.update(stocklist,{
-                where: { tb_institution_id: stocklist.tb_institution_id, id: stocklist.id }
-                })               
-                .then((data) => {
-                    resolve(data);
-                })
-                .catch(err => {
-                    reject("Erro:"+ err);
-                });
+    static async update(stocklist) {        
+      const promise = new Promise((resolve, reject) => {
+        Tb.update(stocklist,{
+          where: { tb_institution_id: stocklist.tb_institution_id, id: stocklist.id }
+        })               
+        .catch(err => {
+          reject("Erro:"+ err);
         });
-        return promise;        
+      });
+      return promise;        
     }        
 
     static async delete(stocklist) {        

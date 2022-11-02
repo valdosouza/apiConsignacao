@@ -48,7 +48,8 @@ db.institutionHasPaymentType = require("./institutionHasPaymentTypes.model.js")(
 db.lineBusiness = require("./linebusiness.model.js")(sequelize, Sequelize);
 db.institutionHasLineBusiness = require("./institutionHasLinebusiness.model.js")(sequelize, Sequelize);
 
-db.pricelist = require("./price_list.model.js")(sequelize, Sequelize);
+db.pricelist = require("./priceList.model.js")(sequelize, Sequelize);
+db.salesroute = require("./salesRoute.model.js")(sequelize, Sequelize);
 
 db.entity = require("./entity.model.js")(sequelize, Sequelize);
 db.entityHasMailing = require("./entityHasMailing.model.js")(sequelize, Sequelize);

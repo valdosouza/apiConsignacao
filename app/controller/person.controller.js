@@ -60,14 +60,12 @@ class PersonController extends Base {
     return promise;
   }
 
-  static async update(person) {
-    
+  static async update(person) {    
     const promise = new Promise((resolve, reject) => {
+      if (person.rg_dt_emission == '') delete person.rg_dt_emission;
+      if (person.birthday == '')  delete person.birthday;
       Tb.update(person,{
         where: { id: person.id }
-      })
-      .then((data) => {
-        resolve(data);
       })
       .catch(err => {
         reject("Erro:"+ err);

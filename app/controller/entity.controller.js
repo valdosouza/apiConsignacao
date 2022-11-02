@@ -88,9 +88,6 @@ class EntityController extends Base {
         Tb.update(entity,{
           where: { id: entity.id }
         })
-        .then((data) => {
-          resolve(data);
-        })
         .catch(err => {
           reject("Erro:"+ err);
         });

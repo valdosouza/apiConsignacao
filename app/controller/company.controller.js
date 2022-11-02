@@ -59,9 +59,6 @@ class CompanyController extends Base {
       Tb.update(company,{
         where: { id: company.id }
       })
-      .then((data) => {
-        resolve(data);
-      })
       .catch(err => {
         reject("Erro:"+ err);
       });

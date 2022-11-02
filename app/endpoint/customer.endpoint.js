@@ -3,8 +3,7 @@ const CustomerController = require("../controller/customer.controller.js");
 class CustomerEndPoint {
 
   static create = (req, res) => {
-    try{
-      console.log(req.body);
+    try{      
       CustomerController.save(req.body)
         .then(data => {        
           res.send(data);

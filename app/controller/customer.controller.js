@@ -47,9 +47,15 @@ class CustomerController extends Base {
         if (customer.customer.id > 0)
           resultCustomer  = await this.getById(customer.customer.id);        
         if (resultCustomer.length == 0){
-          this.insert(customer);  
+          this.insert(customer)
+          .then(data => {
+            resolve(data);
+          })
         }else{
-          this.update(customer);
+          this.update(customer)
+          .then(data => {
+            resolve(data);
+          })
         }
         resolve(customer);
       } catch(err) {            
@@ -69,10 +75,16 @@ class CustomerController extends Base {
           resultDoc  = await company.getByCNPJ(customer.company.cnpj);
         }                
         if (resultDoc.length == 0){          
-          this.insertComplete(customer) ;
+          this.insertComplete(customer)
+          .then(data => {
+            resolve(data);
+          })
         } else{
           customer.customer.id = resultDoc[0].id;
-          this.insertParcial(customer) ;
+          this.insertParcial(customer)
+          .then(data => {
+            resolve(data);
+          })
         }
         resolve(customer);
       } catch(err) {            
@@ -93,18 +105,12 @@ class CustomerController extends Base {
           if (customer.company){
             customer.company.id = entityId; 
             company.insert(customer.company)
-              .then((data) => {
-                resolve(data);
-              })
               .catch(err => {
                 reject("Erro:"+ err);
               });            
           }else{
             customer.person.id = entityId; 
             person.insert(customer.person)
-             .then((data) => {
-               resolve(data);
-             })
              .catch(err => {
                reject("Erro:"+ err);
              });
@@ -113,9 +119,6 @@ class CustomerController extends Base {
           //Salva o endereço  
           customer.address.id = entityId;                                    
           address.insert(customer.address)
-            .then((data) => {
-              resolve(data);
-            })
             .catch(err => {
               reject("Erro:"+ err);
             });
@@ -123,9 +126,6 @@ class CustomerController extends Base {
           //Salva o Phone
           customer.phone.id = entityId;              
           phone.insert(customer.phone)
-            .then((data) => {
-              resolve(data);
-            })
             .catch(err => {
               reject("Erro:"+ err);
             });
@@ -133,9 +133,6 @@ class CustomerController extends Base {
           //Grava o customer
           customer.customer.id = entityId;                                         
           Tb.create(customer.customer)
-            .then(data => {
-              resolve(data);
-            })
             .catch(err => {
               reject("Erro:" + err);
             });

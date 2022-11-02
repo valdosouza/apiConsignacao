@@ -20,16 +20,13 @@ class InstitutionHasLineBusinesController extends Base {
     }    
 
     static async update(ihLineBusiness) {        
-        const promise = new Promise((resolve, reject) => {
-            Tb.update(ihLineBusiness)
-                .then((data) => {
-                    resolve(data);
-                })
-                .catch(err => {
-                    reject("Erro:"+ err);
-                });
+      const promise = new Promise((resolve, reject) => {
+        Tb.update(ihLineBusiness)
+        .catch(err => {
+          reject("Erro:"+ err);
         });
-        return promise;        
+      });
+      return promise;        
     }        
 
     static async delete(ihLineBusiness) {              

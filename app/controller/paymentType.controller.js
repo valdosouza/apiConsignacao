@@ -105,20 +105,16 @@ class PaymentTypeController extends Base {
       return promise;
   }
 
-    static async update(paymentType) {
-        
-        const promise = new Promise((resolve, reject) => {
-            Tb.update(paymentType,{
-              where: { id: paymentType.id }
-             })
-                .then(() => {
-                    resolve(paymentType);
-                })
-                .catch(err => {
-                    reject("Erro:"+ err);
-                });
+    static async update(paymentType) {        
+      const promise = new Promise((resolve, reject) => {
+        Tb.update(paymentType,{
+          where: { id: paymentType.id }
+        })
+        .catch(err => {
+          reject("Erro:"+ err);
         });
-        return promise;        
+      });
+      return promise;        
     }        
 
     static async delete(paymentType) {      

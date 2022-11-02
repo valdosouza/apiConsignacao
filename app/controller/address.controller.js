@@ -104,9 +104,6 @@ class AddressController extends Base {
       Tb.update(address,{
         where: { id: address.id,kind:address.kind }
       })
-      .then((data) => {
-        resolve(data);
-      })
       .catch(err => {
         reject('Address.update:'+ err);
       });

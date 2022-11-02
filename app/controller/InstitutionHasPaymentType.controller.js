@@ -20,16 +20,13 @@ class InstitutionHasPaymentTypeController extends Base {
     }    
 
     static async update(ihPaymentType) {        
-        const promise = new Promise((resolve, reject) => {
-            Tb.update(ihPaymentType)
-                .then((data) => {
-                    resolve(data);
-                })
-                .catch(err => {
-                    reject("Erro:"+ err);
-                });
+      const promise = new Promise((resolve, reject) => {
+        Tb.update(ihPaymentType)
+        .catch(err => {
+          reject("Erro:"+ err);
         });
-        return promise;        
+      });
+      return promise;        
     }        
 
     static async delete(ihPaymentType) {              

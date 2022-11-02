@@ -103,20 +103,16 @@ class LineBusinessController extends Base {
       return promise;
   }
 
-    static async update(lineBusiness) {
-        
-        const promise = new Promise((resolve, reject) => {
-            Tb.update(lineBusiness,{
-              where: { id: lineBusiness.id }
-             })
-                .then(() => {
-                    resolve(lineBusiness);
-                })
-                .catch(err => {
-                    reject("Erro:"+ err);
-                });
+    static async update(lineBusiness) {        
+      const promise = new Promise((resolve, reject) => {
+        Tb.update(lineBusiness,{
+          where: { id: lineBusiness.id }
+        })
+        .catch(err => {
+          reject("Erro:"+ err);
         });
-        return promise;        
+      });
+      return promise;        
     }        
 
     static async delete(lineBusiness) {      

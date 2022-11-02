@@ -1,13 +1,13 @@
 const Base = require('./base.controller.js');
 const db = require("../model");
-const Tb = db.pricelist;
+const Tb = db.salesroute;
 
-class PriceListController extends Base {     
+class SalesRouteController extends Base {     
     static async getNextId(tb_institution_id) {      
       const promise = new Promise((resolve, reject) => {        
         Tb.sequelize.query(
           'Select max(id) lastId ' +
-          'from tb_price_list '+
+          'from tb_sales_route '+
           'WHERE ( tb_institution_id =? ) ',
           {
             replacements: [tb_institution_id],
@@ -21,23 +21,23 @@ class PriceListController extends Base {
             }
           })
           .catch(err => {
-            reject('priceList.getNexId: '+err);
+            reject('salesroute.getNexId: '+err);
           });           
       });
       return promise;
     }
     
-    static async insert(pricelist) {      
+    static async insert(salesroute) {      
       const promise = new Promise(async (resolve, reject) => {
-          const nextId  = await this.getNextId(pricelist.tb_institution_id);             
-          pricelist.id = nextId;
-          if (pricelist.validity == '') delete  pricelist.validity;
-          Tb.create(pricelist)
+          const nextId  = await this.getNextId(salesroute.tb_institution_id);             
+          salesroute.id = nextId;
+          if (salesroute.validity == '') delete  salesroute.validity;
+          Tb.create(salesroute)
             .then((data) => {             
               resolve(data);
             })
             .catch(err => {
-              reject("priceList.insert:"+ err);
+              reject("salesroute.insert:"+ err);
             });        
       });
       return promise;        
@@ -47,7 +47,7 @@ class PriceListController extends Base {
         const promise = new Promise((resolve, reject) => {
           Tb.sequelize.query(
             'select  * ' +
-            'from tb_price_list pl '+
+            'from tb_sales_route pl '+
             'where (pl.tb_institution_id =? ) ',
             {
               replacements: [tb_institution_id],
@@ -56,7 +56,7 @@ class PriceListController extends Base {
               resolve(data);
             })
             .catch(err => {
-              reject("pricelist.getlist: " + err);
+              reject("salesroute.getlist: " + err);
             });
         });
         return promise;
@@ -66,7 +66,7 @@ class PriceListController extends Base {
       const promise = new Promise((resolve, reject) => {
         Tb.sequelize.query(
           'select * ' +
-          'from tb_price_list pl '+
+          'from tb_sales_route pl '+
           'where (pl.tb_institution_id =? ) '+
           ' and (pl.id =? )',
           {
@@ -76,30 +76,33 @@ class PriceListController extends Base {
             resolve(data);
           })
           .catch(err => {
-            reject('pricelist.get: '+err);
+            reject('salesroute.get: '+err);
           });
       });
       return promise;
   }
 
-    static async update(pricelist) {        
+    static async update(salesroute) {        
       const promise = new Promise((resolve, reject) => {
-        if (pricelist.validity == '') delete  pricelist.validity;
-          Tb.update(pricelist,{
-            where: { id: pricelist.id,tb_institution_id: pricelist.tb_institution_id }
+        if (salesroute.validity == '') delete  salesroute.validity;
+          Tb.update(salesroute,{
+            where: { id: salesroute.id,tb_institution_id: salesroute.tb_institution_id }
           })
+          .then(data => {
+            resolve("The Sales Route was Updated");
+          })          
           .catch(err => {
-           reject("pricelist.update:"+ err);
+           reject("salesroute.update:"+ err);
           });
         });
       return promise;        
     }        
 
-    static async delete(pricelist) {      
+    static async delete(salesroute) {      
         const promise = new Promise((resolve, reject) => {
           resolve("Em Desenvolvimento");
             /*
-            Tb.delete(pricelist)
+            Tb.delete(salesroute)
                 .then((data) => {
                     resolve(data);
                 })
@@ -112,4 +115,4 @@ class PriceListController extends Base {
     }        
     
 }
-module.exports = PriceListController;
+module.exports = SalesRouteController;
