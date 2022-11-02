@@ -43,6 +43,7 @@ class CustomerController extends Base {
   static async save(customer) {
     const promise = new Promise(async (resolve, reject) => {
       try{        
+        
         var resultCustomer  = [];                
         if (customer.customer.id > 0)
           resultCustomer  = await this.getById(customer.customer.id);        
@@ -192,14 +193,19 @@ class CustomerController extends Base {
   static async update(customer) {
     const promise = new Promise((resolve, reject) => {
         try{ 
+          customer.entity.id = customer.customer.id
           entity.update(customer.entity);
           
           if (customer.person){
+            customer.person.id = customer.customer.id
             person.update(customer.person);
           }else{
+            customer.company.id = customer.customer.id  
             company.update(customer.company);
           }
+          customer.address.id = customer.customer.id
           address.save(customer.address);
+          customer.phone.id = customer.customer.id
           phone.save(customer.phone);
           Tb.update(customer.customer,{
             where: { id: customer.customer.id }

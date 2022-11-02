@@ -25,12 +25,14 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *           type: string
  *         credit_value:
  *           type: number
+ *           format: double
  *         Wallet:
  *           type: string
  *         consumer:
  *           type: string
  *         multiplier:
  *           type: number
+ *           format: double
  *         by_pass_st:
  *           type: string
  *         active:
