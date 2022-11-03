@@ -1,21 +1,31 @@
 const nodemailer = require('nodemailer');
+const config = require("../config/db.config.js");
 
 const transporter = nodemailer.createTransport({
-    host: "mail.industriadechocolatesamor.com.br",
-    port: 587,
+    secure:false,
+    pool: true,
+    host: config.HOSTSENDER,
+    port: config.PORTSENDER,
     secure: false, // true for 465, false for other ports
     auth: {
-        user: "webmaster@industriadechocolatesamor.com.br",
-        pass: "Sucessoem2022!"
+        user: config.EMAILSENDER,
+        pass: config.PASSWORDSENDER
     },
-    tls: { rejectUnauthorized: false }
+    tls: { rejectUnauthorized: true },
+    dkim: {
+      domainName: config.DOMAINSENDER,
+      keySelector: 'mail',
+      //privateKey: require('fs').readFileSync('data/mail.private', {
+      //    encoding: 'utf8'
+      //})
+    }    
   });
 
 class SendMailController  {   
 
     static async recoveryPassword(body) {
         const promise = new Promise((resolve, reject) => {
-            try{
+            try{              
               var htmlText = 
               '<p><br /> '+
               'Ol&aacute;</p> '+

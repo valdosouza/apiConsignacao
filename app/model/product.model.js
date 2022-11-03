@@ -13,15 +13,6 @@ module.exports = sequelize => {
       comment: null,
       field: "id"
     },
-    identifier: {
-      type: DataTypes.STRING(50),
-      allowNull: false,
-      defaultValue: "0",
-      primaryKey: false,
-      autoIncrement: false,
-      comment: null,
-      field: "identifier"
-    },
     tb_institution_id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
@@ -34,6 +25,15 @@ module.exports = sequelize => {
         key: "id",
         model: "tb_institution_model"
       }
+    },
+    identifier: {
+      type: DataTypes.STRING(50),
+      allowNull: false,
+      defaultValue: "0",
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "identifier"
     },
     description: {
       type: DataTypes.STRING(100),
@@ -107,54 +107,30 @@ module.exports = sequelize => {
       comment: null,
       field: "note"
     },
-    created_at: {
+    createdAt: {
       type: DataTypes.DATE,
       allowNull: true,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "created_at"
+      field: "createdAt"
     },
-    updated_at: {
+    updatedAt: {
       type: DataTypes.DATE,
       allowNull: true,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "updated_at"
+      field: "updatedAt"
     }
   };
   const options = {
     tableName: "tb_product",
     comment: "",
-    indexes: [{
-      name: "tb_category_id",
-      unique: false,
-      type: "BTREE",
-      fields: ["tb_category_id"]
-    }, {
-      name: "tb_institution_id",
-      unique: false,
-      type: "BTREE",
-      fields: ["tb_institution_id"]
-    }, {
-      name: "tb_product_ibfk_1",
-      unique: false,
-      type: "BTREE",
-      fields: ["tb_category_id", "tb_institution_id"]
-    }, {
-      name: "active",
-      unique: false,
-      type: "BTREE",
-      fields: ["active"]
-    }, {
-      name: "description",
-      unique: false,
-      type: "BTREE",
-      fields: ["description"]
-    }]
+    timestamps: true,
+    indexes: []
   };
   const ProductModel = sequelize.define("tb_product_model", attributes, options);
   return ProductModel;

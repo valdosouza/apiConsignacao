@@ -24,7 +24,11 @@ module.exports = sequelize => {
       primaryKey: true,
       autoIncrement: false,
       comment: null,
-      field: "tb_price_list_id"
+      field: "tb_price_list_id",
+      references: {
+        key: "id",
+        model: "tb_price_list_model"
+      }      
     },
     tb_product_id: {
       type: DataTypes.INTEGER(11),
@@ -75,23 +79,23 @@ module.exports = sequelize => {
       comment: null,
       field: "quantity"
     },
-    created_at: {
+    createdAt: {
       type: DataTypes.DATE,
       allowNull: true,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "created_at"
+      field: "createdAt"
     },
-    updated_at: {
+    updatedAt: {
       type: DataTypes.DATE,
       allowNull: true,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "updated_at"
+      field: "updatedAt"
     }
   };
   const options = {
@@ -102,11 +106,6 @@ module.exports = sequelize => {
       unique: false,
       type: "BTREE",
       fields: ["tb_institution_id", "tb_product_id"]
-    }, {
-      name: "updated_at",
-      unique: false,
-      type: "BTREE",
-      fields: ["updated_at"]
     }]
   };
   const PriceModel = sequelize.define("tb_price_model", attributes, options);
