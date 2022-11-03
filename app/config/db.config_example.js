@@ -1,8 +1,8 @@
 module.exports = {
   HOST: "127.0.0.1",   
-  USER: "db_erp",
+  USER: "",
   PASSWORD: "",
-  DB: "db_erp",
+  DB: "",
   dialect: "mysql",
   PORT: "3306",
   pool: {
