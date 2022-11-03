@@ -29,7 +29,10 @@ class PriceListEndPoint {
   static update = (req, res) => {
     PriceListController.update(req.body)
       .then(data => {
-        res.send(data);
+        if (data)
+          res.send(req.body)
+        else
+          res.send(data);
       })
   }
 

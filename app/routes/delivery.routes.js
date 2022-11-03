@@ -9,7 +9,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
 
 router.post("/save", delivery.save);
 
-// Retrieve a single Tutorial with id
+// Retrieve a single  with id
 router.get("/:orderID/:institutionID", delivery.findOne);
 
 router.get("/syncronize/:institutionID/:updatedAT", delivery.syncronize);

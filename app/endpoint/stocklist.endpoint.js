@@ -20,9 +20,12 @@ class StockListEndPoint {
   static update = (req, res) => {    
     const stockList = req.body;
     StockListController.update(stockList)
-      .then((data) => {
+    .then(data => {
+      if (data)
+        res.send(req.body)
+      else
         res.send(data);
-      })
+    })
   }
 
   static delete(req, res) {

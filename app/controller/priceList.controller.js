@@ -88,6 +88,9 @@ class PriceListController extends Base {
           Tb.update(pricelist,{
             where: { id: pricelist.id,tb_institution_id: pricelist.tb_institution_id }
           })
+          .then(data => {
+            resolve(data);
+          })          
           .catch(err => {
            reject("pricelist.update:"+ err);
           });

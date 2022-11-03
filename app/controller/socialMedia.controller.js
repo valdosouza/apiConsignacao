@@ -15,10 +15,10 @@ exports.create = (req, res) => {
     return;
   }
 
-  // Create a Tutorial
+  // Create a 
   const obj = req.body;
 
-  // Save Tutorial in the database
+  // Save  in the database
   Query.create(obj)
     .then(data => {
       res.send(data);
