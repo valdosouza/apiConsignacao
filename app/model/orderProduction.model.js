@@ -20,11 +20,7 @@ module.exports = sequelize => {
       primaryKey: true,
       autoIncrement: false,
       comment: null,
-      field: "tb_institution_id",
-      references: {
-        key: "id",
-        model: "tb_institution_model"
-      }
+      field: "tb_institution_id"
     },
     terminal: {
       type: DataTypes.INTEGER(11),
@@ -35,63 +31,77 @@ module.exports = sequelize => {
       comment: null,
       field: "terminal"
     },
-    tb_user_id: {
+    number: {
+      type: DataTypes.INTEGER(11),
+      allowNull: true,
+      defaultValue: null,
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "number"
+    },
+    dt_start: {
+      type: DataTypes.DATEONLY,
+      allowNull: true,
+      defaultValue: null,
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "dt_start"
+    },
+    dt_end: {
+      type: DataTypes.DATEONLY,
+      allowNull: true,
+      defaultValue: null,
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "dt_end"
+    },
+    tb_merchandise_id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "tb_user_id",
-      references: {
-        key: "id",
-        model: "tb_user_model"
-      }
+      field: "tb_merchandise_id"
     },
-    dt_record: {
-      type: DataTypes.DATE,
-      allowNull: true,
+    tb_situation_id: {
+      type: DataTypes.INTEGER(11),
+      allowNull: false,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "dt_record"
+      field: "tb_situation_id"
     },
-    note: {
-      type: DataTypes.BLOB,      
-      allowNull: true,
+    qtty_forecast: {
+      type: DataTypes.DECIMAL,
+      allowNull: false,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "note"
+      field: "qtty_forecast"
     },
-    origin: {
-      type: DataTypes.CHAR(1),
-      allowNull: true,
+    tb_stock_list_id_ori: {
+      type: DataTypes.INTEGER(11),
+      allowNull: false,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "origin"
+      field: "tb_stock_list_id_ori"
     },
-    status: {
-      type: DataTypes.STRING(1),
-      allowNull: true,
+    tb_stock_list_id_des: {
+      type: DataTypes.INTEGER(11),
+      allowNull: false,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "status"
-    },
-    being_used: {
-      type: DataTypes.STRING(50),
-      allowNull: true,
-      defaultValue: null,
-      primaryKey: false,
-      autoIncrement: false,
-      comment: null,
-      field: "being_used"
+      field: "tb_stock_list_id_des"
     },
     createdAt: {
       type: DataTypes.DATE,
@@ -113,21 +123,11 @@ module.exports = sequelize => {
     }
   };
   const options = {
-    tableName: "tb_order",
+    tableName: "tb_order_production",
     comment: "",
-    timestamps: true,
-    indexes: [{
-      name: "tb_user_id",
-      unique: false,
-      type: "BTREE",
-      fields: ["tb_user_id"]
-    }, {
-      name: "tb_institution_id",
-      unique: false,
-      type: "BTREE",
-      fields: ["tb_institution_id"]
-    }]
+    timestamps : true,
+    indexes: []
   };
-  const OrderModel = sequelize.define("tb_order_model", attributes, options);
-  return OrderModel;
+  const TbOrderProductionModel = sequelize.define("tb_order_production_model", attributes, options);
+  return TbOrderProductionModel;
 };

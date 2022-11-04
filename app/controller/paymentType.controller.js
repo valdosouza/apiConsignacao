@@ -96,7 +96,7 @@ class PaymentTypeController extends Base {
             replacements: [institutionId,id],
             type: Tb.sequelize.QueryTypes.SELECT
           }).then(data => {
-            resolve(data);
+            resolve(data[0]);
           })
           .catch(err => {
             reject(new Error("PaymentType:" + err));

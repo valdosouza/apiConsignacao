@@ -17,6 +17,13 @@ class StockListEndPoint {
       res.send(data);
     })
   }
+
+  static get(req, res) {      
+    StockListController.get(req.params.tb_institution_id,req.params.id).then(data => {
+      res.send(data);
+    })
+  }
+
   static update = (req, res) => {    
     const stockList = req.body;
     StockListController.update(stockList)

@@ -114,9 +114,7 @@ router.get("/getlist/:tb_institution_id", pricelist.getList);
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/PriceList'
+ *               $ref: '#/components/schemas/PriceList'
  */
 
  router.get("/get/:tb_institution_id/:id", pricelist.get);

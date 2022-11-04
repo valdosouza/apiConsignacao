@@ -170,7 +170,7 @@ class UserController extends Base {
           type: TbUser.sequelize.QueryTypes.SELECT
         }
       ).then(data => {
-        resolve(data);
+        resolve(data[0]);
       })
         .catch(err => {
           reject(new Error("Usuário: "+ err));

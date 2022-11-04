@@ -53,7 +53,27 @@ class StockListController extends Base {
               resolve(data);
             })
             .catch(err => {
-              reject(new Error("stocklist:" + err));
+              reject(new Error("stocklist.gelist:" + err));
+            });
+        });
+        return promise;
+    }
+
+    static get(tb_institution_id,id) {
+        const promise = new Promise((resolve, reject) => {
+          Tb.sequelize.query(
+            'select  * ' +
+            'from tb_stock_list '+
+            'where ( tb_institution_id =? ) '+
+            ' and ( id =? )',
+            {
+              replacements: [tb_institution_id,id ],
+              type: Tb.sequelize.QueryTypes.SELECT
+            }).then(data => {
+              resolve(data[0]);
+            })
+            .catch(err => {
+              reject('stocklist.get: ' + err);
             });
         });
         return promise;

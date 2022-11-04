@@ -68,7 +68,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  * @swagger
  * /stocklist/getlist/{tb_institution_id}:
  *  get:
- *    summary: Return user by the id
+ *    summary: Return stocklist by the id
  *    tags: [StockList]
  *    parameters:
  *      - in: path
@@ -89,10 +89,41 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *      500:
  *        description: Some error happened
  */
-  //protectedRouter.get("/:id", users.findOne);
-//router.get("/:id", users.findOne);
 router.get("/getlist/:tb_institution_id", stocklist.getList);
   
+/**
+ * @swagger
+ * /stocklist/get/{tb_institution_id}/{id}:
+ *  get:
+ *    summary: Return stocklist by the id
+ *    tags: [StockList]
+ *    parameters:
+ *      - in: path
+ *        name: tb_institution_id
+ *        schema:
+ *          type: string
+ *        required: true
+ *        description: The stocklist by tb_institution_id 
+ *      - in: path
+ *        name: id
+ *        schema:
+ *          type: string
+ *        required: true
+ *        description: The stocklist by id
+ *    responses:
+ *      200:
+ *        description: The Stock was Listed
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/StockList'
+ *      404:
+ *        description: The stock was not found
+ *      500:
+ *        description: Some error happened
+ */
+router.get("/get/:tb_institution_id/:id", stocklist.get);
+
  /**
  * @swagger
  * /stockList:

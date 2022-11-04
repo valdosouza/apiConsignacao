@@ -110,9 +110,7 @@ router.get("/getlist/:tb_institution_id", paymentType.getList);
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/PaymentType'
+ *               $ref: '#/components/schemas/PaymentType'
  */
 
  router.get("/get/:tb_institution_id/:id", paymentType.get);
