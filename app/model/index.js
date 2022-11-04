@@ -49,6 +49,8 @@ db.lineBusiness = require("./linebusiness.model.js")(sequelize, Sequelize);
 db.institutionHasLineBusiness = require("./institutionHasLinebusiness.model.js")(sequelize, Sequelize);
 
 db.pricelist = require("./priceList.model.js")(sequelize, Sequelize);
+db.price = require("./price.model.js")(sequelize, Sequelize);
+
 db.salesroute = require("./salesRoute.model.js")(sequelize, Sequelize);
 
 db.entity = require("./entity.model.js")(sequelize, Sequelize);
@@ -67,6 +69,7 @@ db.collaborator = require("./collaborator.model.js")(sequelize, Sequelize);
 
 db.customer = require("./customer.model.js")(sequelize, Sequelize);
 
+db.product = require("./product.model.js")(sequelize, Sequelize);
 
 db.restSubgroup = require("./restSubgroup.model.js")(sequelize, Sequelize);
 db.restGroup = require("./restGroup.model.js")(sequelize, Sequelize);
@@ -86,7 +89,7 @@ db.financial = require("./financial.model.js")(sequelize, Sequelize);
 db.financialBills = require("./financial_bills.model.js")(sequelize, Sequelize);
 db.financialPAyment = require("./financial_payment.model.js")(sequelize, Sequelize);
 db.orderConsignment = require("./orderConsignment.model.js")(sequelize, Sequelize);
-db.product = require("./product.model.js")(sequelize, Sequelize);
+
 db.orderItemDetached = require("./orderItemDetached.model.js")(sequelize, Sequelize);
 db.orderItemDetail = require("./orderItemDetail.model.js")(sequelize, Sequelize);
 db.deliveryRange = require("./deliveryRange.model.js")(sequelize, Sequelize);

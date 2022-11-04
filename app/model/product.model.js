@@ -56,7 +56,7 @@ module.exports = sequelize => {
     tb_financial_plans_id: {
       type: DataTypes.INTEGER(11),
       allowNull: true,
-      defaultValue: null,
+      defaultValue: "0",
       primaryKey: false,
       autoIncrement: false,
       comment: null,
@@ -65,7 +65,7 @@ module.exports = sequelize => {
     promotion: {
       type: DataTypes.CHAR(1),
       allowNull: true,
-      defaultValue: null,
+      defaultValue: "N",
       primaryKey: false,
       autoIncrement: false,
       comment: null,
@@ -74,7 +74,7 @@ module.exports = sequelize => {
     highlights: {
       type: DataTypes.CHAR(1),
       allowNull: true,
-      defaultValue: null,
+      defaultValue: "N",
       primaryKey: false,
       autoIncrement: false,
       comment: null,
@@ -92,7 +92,7 @@ module.exports = sequelize => {
     published: {
       type: DataTypes.CHAR(1),
       allowNull: true,
-      defaultValue: null,
+      defaultValue: "S",
       primaryKey: false,
       autoIncrement: false,
       comment: null,

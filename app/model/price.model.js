@@ -100,6 +100,7 @@ module.exports = sequelize => {
   };
   const options = {
     tableName: "tb_price",
+    timestamps: true,
     comment: "",
     indexes: [{
       name: "tb_institution_id",

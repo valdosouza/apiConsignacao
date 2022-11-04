@@ -1,43 +1,164 @@
-const Base = require('../controller/base.controller.js')
+const Base = require('./base.controller.js');
 const db = require("../model");
-const Op = db.Sequelize.Op;
-const Tb = db.orderSale;
+const Tb = db.product;
+const price = require('./price.controller.js');
 
+class ProdcutController extends Base {     
+    static async getNextId(tb_institution_id) {      
+      const promise = new Promise((resolve, reject) => {        
+        Tb.sequelize.query(
+          'Select max(id) lastId ' +
+          'from tb_product '+
+          'WHERE ( tb_institution_id =? ) ',
+          {
+            replacements: [tb_institution_id],
+            type: Tb.sequelize.QueryTypes.SELECT
+          }).then(data => {   
+            if (data){
+              const NextId = data[0].lastId + 1;
+              resolve(NextId);
+            }else{
+              resolve(1);
+            }
+          })
+          .catch(err => {
+            reject('product.getNexId: '+err);
+          });           
+      });
+      return promise;
+    }
+    
+    static async insert(product) {      
+      const promise = new Promise(async (resolve, reject) => {        
+          const nextId  = await this.getNextId(product.product.tb_institution_id);             
+          product.product.id = nextId;
+          if (product.validity == '') delete  product.product.validity;
+          Tb.create(product.product)
+            .then((data) => {    
+              //grava o preço
+              var pricelist = product.pricelist;
+              var dataPrice = {};
+              for(var item of pricelist) {              
+                dataPrice = {
+                  tb_institution_id : product.product.tb_institution_id,
+                  tb_price_list_id : item.tb_price_list_id,
+                  tb_product_id : product.product.id,
+                  price_tag : item.price_tag
+                }                                
+                price.insert(dataPrice);
+              };
+              resolve(product);     
+            })
+            .catch(err => {
+              reject("product.insert:"+ err);
+            });        
+      });
+      return promise;        
+    }    
 
-class ProductController extends Base {
-
-     static async geList(institutionID) {
+    static getList(tb_institution_id) {
         const promise = new Promise((resolve, reject) => {
-            Tb.sequelize.query(
-                'select pr.id, pr.description product, pk.description package, stb.quantity  '+
-                'from tb_product pr  '+
-                '  inner join tb_merchandise me  '+
-                '  on (me.id = pr.id)  '+
-                '      and (me.tb_institution_id = pr.tb_institution_id)  '+
-                '  inner  join tb_stock st  '+
-                '  on (st.tb_merchandise_id = me.id)  '+
-                '      and (st.tb_institution_id = me.tb_institution_id)  '+
-                '  inner join tb_stock_balance stb  '+
-                '  on (stb.tb_merchandise_id = me.id)  '+
-                '      and  (stb.tb_institution_id = me.tb_institution_id)  '+
-                '  inner join tb_package pk  '+
-                '  on (pk.id = st.tb_package_id)  '+
-                'where ( pr.id > 0 ) and ( pr.active = "S" )  '+
-                ' and (tb_stock_list_id =1)  '+
-                ' and ( me.tb_institution_id =? )  '+
-                ' order by pr.description  ',
-                {
-                    replacements: [6825],
-                    type: Tb.sequelize.QueryTypes.SELECT
-                }).then(data => {
-                    resolve(data);
-                })
-                .catch(err => {
-                    reject(1);
-                });
+          Tb.sequelize.query(
+            'select '+
+            'id, '+
+            'tb_institution_id, '+
+            'description, '+
+            'active '+
+            'from tb_product p '+
+            'where (p.tb_institution_id =? ) ',
+            {
+              replacements: [tb_institution_id],
+              type: Tb.sequelize.QueryTypes.SELECT
+            }).then(data => {
+              resolve(data);
+            })
+            .catch(err => {
+              reject("product.getlist: " + err);
+            });
         });
         return promise;
     }
 
+    static async getById(tb_instituion_id,id) {    
+      const promise = new Promise((resolve, reject) => {
+        Tb.sequelize.query(
+          'select '+
+          'id, '+
+          'tb_institution_id, '+
+          'description, '+
+          'active '+
+          'from tb_product '+
+          'where ( tb_institution_id =? ) '+
+          ' and ( id=? )',
+          {
+            replacements: [tb_instituion_id,id],
+            type: Tb.sequelize.QueryTypes.SELECT
+          }).then(data => {
+              resolve(data);
+          })
+          .catch(err => {
+            reject('getById: ' + err);
+          });
+      });
+      return promise;
+    };
+
+    static get(tb_institution_id,id) {
+      const promise = new Promise(async (resolve, reject) => {
+        try{
+          var result = {};
+          const dataProduct = await this.getById(tb_institution_id,id);
+          result.product = dataProduct[0];
+          const dataPrice = await price.getList(tb_institution_id,id);
+          result.pricelist = dataPrice; 
+          
+          resolve(result);
+        } 
+        catch(err){
+          reject('get: ' + err);
+        } 
+      });
+      return promise;
+  }
+
+    static async update(product) {        
+      const promise = new Promise((resolve, reject) => {       
+        if (product.validity == '') delete  product.product.validity;
+        Tb.update(product.product,{
+          where:{id:product.product.id}
+        })       
+        //grava o preço
+        var pricelist = product.pricelist;
+        var dataPrice = {};
+        for(var item of pricelist) {              
+          dataPrice = {
+            tb_institution_id : product.product.tb_institution_id,
+            tb_price_list_id : item.tb_price_list_id,
+            tb_product_id : product.product.id,
+            price_tag : item.price_tag
+          }                                
+          price.update(dataPrice);            
+        }
+        resolve(product);     
+      });
+      return promise;        
+    }        
+
+    static async delete(product) {      
+        const promise = new Promise((resolve, reject) => {
+          resolve("Em Desenvolvimento");
+            /*
+            Tb.delete(product)
+                .then((data) => {
+                    resolve(data);
+                })
+                .catch(err => {
+                    reject("Erro:"+ err);
+                });
+            */
+        });
+        return promise;        
+    }        
+    
 }
-module.exports =ProductController;
+module.exports = ProdcutController;

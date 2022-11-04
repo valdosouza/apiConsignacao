@@ -110,6 +110,10 @@ app.use("/pricelist", priceList);
 const salesroute = require("./app/routes/salesRoute.routes");
 app.use("/salesroute", salesroute);
 
+const product = require("./app/routes/product.routes");
+app.use("/product", product);
+
+
 const PORT = process.env.PORT || 3000;
 
 app.use("/doc", swaggerUI.serve, swaggerUI.setup(specs));
