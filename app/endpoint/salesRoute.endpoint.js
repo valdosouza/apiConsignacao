@@ -13,7 +13,9 @@ class SalesRouteEndPoint {
     
     SalesRouteController.getList(req.params.tb_institution_id )
       .then(data => {
+        
         res.send(data);
+        
       })
   }
 
@@ -27,8 +29,8 @@ class SalesRouteEndPoint {
 
   static update = (req, res) => {
     SalesRouteController.update(req.body)
-      .then(data => {
-        res.send(data);
+      .then(() => {        
+        res.send(req.body);
       })
   }
 

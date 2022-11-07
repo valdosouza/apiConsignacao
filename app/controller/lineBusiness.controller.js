@@ -108,6 +108,21 @@ class LineBusinessController extends Base {
         Tb.update(lineBusiness,{
           where: { id: lineBusiness.id }
         })
+        .then(data => {
+          const dataihlineBusiness = {
+            tb_institution_id: lineBusiness.tb_institution_id,
+            tb_linebusiness_id: lineBusiness.id,
+            active: lineBusiness.active,
+         };              
+          ihLineBusiness.update (dataihlineBusiness)
+          .then((_) =>{
+            lineBusiness.id = data.id;
+            resolve(lineBusiness);
+          });      
+
+
+          resolve(data);
+        })        
         .catch(err => {
           reject("Erro:"+ err);
         });

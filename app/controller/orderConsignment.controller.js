@@ -48,9 +48,8 @@ class OrderConsigmentController extends Base {
                 .then(data => {
                     resolve(data);
                 })
-                .catch(err => {
-                    console.log(err);
-                    reject("Erro:" + err);
+                .catch(err => {                    
+                  reject("Erro:" + err);
                 });
         });
         return promise;

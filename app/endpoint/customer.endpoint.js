@@ -4,7 +4,6 @@ class CustomerEndPoint {
 
   static create = (req, res) => {
     try{      
-      console.log(req.body);
       CustomerController.save(req.body)
         .then(data => {        
           res.send(data);

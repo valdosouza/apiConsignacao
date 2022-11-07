@@ -88,14 +88,12 @@ class UserController extends Base {
 
   static update = (user) => {
     const promise = new Promise((resolve, reject) => {
-      try{
-        console.log(user);
+      try{        
         //Salva a entidade
         const dataEntity = {
           name_company: user.nick,
           nick_trade:user.nick
-        };     
-        console.log(dataEntity);
+        };             
         TbEntity.update(dataEntity,{
           where: { id: user.id }
         })

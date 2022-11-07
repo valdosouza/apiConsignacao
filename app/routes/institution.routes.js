@@ -31,13 +31,13 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         - phone_number  
  *       properties:
  *         id:
- *           type: string
+ *           type: integer
  *         name_company:
  *           type: string
  *         nick_trade:
  *           type: string
  *         tb_line_buiness_id:
- *           type: string
+ *           type: integer
  *         note:
  *           type: string
  *         active:
@@ -83,15 +83,15 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         zip_code:
  *           type: string
  *         tb_country_id:
- *           type: string
+ *           type: integer
  *         name_country:
  *           type: string
  *         tb_state_id:
- *           type: string
+ *           type: integer
  *         name_state:
  *           type: string 
  *         tb_city_id:
- *           type: string
+ *           type: integer
  *         name_city:
  *           type: string 
  *         main:

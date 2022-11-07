@@ -11,7 +11,6 @@ class StateEndPoint {
   
   static get = (req, res) => {
     const abbreviation = req.params.abbreviation;
-    console.log(abbreviation);
     
     StateController.get(abbreviation)
       .then(data => {

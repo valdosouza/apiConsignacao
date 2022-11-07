@@ -30,11 +30,8 @@ class CompanyEndPoint {
     })
   }
   
-  static getbycnpj(req, res) {    
-    console.log(req.params);
-    //const cnpj = req.body.cnpj;
-    const cnpj = req.params.cnpj;
-    
+  static getbycnpj(req, res) {            
+    const cnpj = req.params.cnpj;  
     CompanyController.getByCNPJ(cnpj).then(data => {
       res.send(data);
     })

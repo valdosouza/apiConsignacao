@@ -6,8 +6,7 @@ class InstitutionHasPaymentTypeController extends Base {
     
     static async insert(ihPaymentType) {
         
-        const promise = new Promise((resolve, reject) => {
-            console.log(ihPaymentType);
+        const promise = new Promise((resolve, reject) => {            
             Tb.create(ihPaymentType)
                 .then((data) => {
                     resolve(data);
@@ -21,7 +20,10 @@ class InstitutionHasPaymentTypeController extends Base {
 
     static async update(ihPaymentType) {        
       const promise = new Promise((resolve, reject) => {
-        Tb.update(ihPaymentType)
+        Tb.update(ihPaymentType,{
+            where: { tb_institution_id: ihPaymentType.tb_institution_id,
+                tb_payment_types_id : ihPaymentType.tb_payment_types_id }
+          })
         .catch(err => {
           reject("Erro:"+ err);
         });

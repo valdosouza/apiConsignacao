@@ -46,7 +46,7 @@ class SendMailController  {
 
                 transporter.sendMail(mailOptions, function(error, info){
                   if (error) {
-                    console.log(error);
+                    reject(error);
                   } else {                    
                     resolve(body);
                   }

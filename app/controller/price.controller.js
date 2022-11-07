@@ -21,16 +21,29 @@ class PriceController extends Base {
 
     static getList(tb_institution_id,tb_product_id) {
         const promise = new Promise((resolve, reject) => {
-          Tb.sequelize.query(
-            'select '+
-            ' p.tb_price_list_id,'+
-            ' pl.description name_price_list, '+
-            ' p.price_tag '+
-            'from tb_price p '+
-            '  inner join tb_price_list pl '+
+          var sqltxt = '';
+          if (tb_product_id > 0 ){
+            sqltxt = 'select '+
+            'pl.id tb_price_list_id, '+
+            'pl.description name_price_list, '+
+            'coalesce(p.price_tag,0) '+
+            'from tb_price_list pl '+
+            '  left outer join tb_price p '+
             '  on (pl.id = p.tb_price_list_id) '+
-            'where (p.tb_institution_id =? ) '+
-            ' and (p.tb_product_id=? )',
+            'where (pl.tb_institution_id =? )  '+
+            ' and ((p.tb_product_id=? ) or (p.tb_product_id is null)) ';
+          }else{
+            sqltxt = 'select '+
+            '  pl.id tb_price_list_id, '+
+            '  pl.description name_price_list, '+
+            '  0 price_tag '+
+            'from tb_price_list pl  '+
+            '  left outer join tb_price p '+
+            '  on (pl.id = p.tb_price_list_id)  '+
+            'where (pl.tb_institution_id =? )  ';  
+          }
+
+          Tb.sequelize.query(sqltxt,
             {
               replacements: [tb_institution_id,tb_product_id],
               type: Tb.sequelize.QueryTypes.SELECT

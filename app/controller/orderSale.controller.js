@@ -48,8 +48,7 @@ class OrderSaleController extends Base {
                 .then(data => {
                     resolve(data);
                 })
-                .catch(err => {
-                    console.log(err);
+                .catch(err => {                    
                     reject("Erro:" + err);
                 });
         });

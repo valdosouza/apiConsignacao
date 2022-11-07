@@ -16,7 +16,7 @@ class DeliveryController {
                 
                 //let ordersale = await OrderSale.insert(data.order);                
                 //let items = await orderItemDetached.insertList(data.order);
-                //console.log(items);
+                s
 
                  return order.id;
              })()

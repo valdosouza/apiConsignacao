@@ -59,13 +59,9 @@ class OrderItemDetachedController extends Base {
 
     static async insertList(order) {
         const promise = new Promise((resolve, reject) => {
-
-            var items = JSON.parse(order.items);
-            
-            for (var item of items) {
-                console.log("entrei loop");
-                var res = this.insert(item, order);
-                console.log(res);
+            var items = JSON.parse(order.items);            
+            for (var item of items) {                
+                var res = this.insert(item, order);                
             }
             resolve("ok");
         });

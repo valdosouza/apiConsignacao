@@ -28,10 +28,10 @@ class CityController extends Base {
         const promise = new Promise((resolve, reject) => {
         Tb.sequelize.query(
             'Select *  ' +
-            'from tb_city  '+
-            'where ( ibge=? ) ',
+            'from tb_city  '+            
+            'where ( ibge like ? ) ',
             {
-            replacements: [ibge],
+            replacements: [ibge.substring(0,5)+'%'],
             type: Tb.sequelize.QueryTypes.SELECT
             }).then(data => {          
             if (data) { resolve(data[0]) } else { resolve(Null) };

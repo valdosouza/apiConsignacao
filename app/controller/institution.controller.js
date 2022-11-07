@@ -113,7 +113,7 @@ class InstitutionController extends Base {
 
             })
             .catch(err => {
-              console.log("Erro:"+ err);
+              reject("Erro:" + err);
           });
       }
     });
@@ -192,7 +192,7 @@ class InstitutionController extends Base {
           TbInstitution.update(dataInstitution, {
             where: { id: dataInstitution.id }            
           });
-          resolve("The Institution was updated");   
+          resolve(institution);   
         } catch {            
             reject("Erro Found");
         }  

@@ -52,7 +52,7 @@ class CollaboratorController extends Base {
             resolve(data);
           })
         }
-        
+        resolve(collaborator);
       } catch(err) {            
         reject('Collaborator.save: '+err);
       }                  
@@ -194,6 +194,7 @@ class CollaboratorController extends Base {
           }
           address.save(collaborator.address);
           phone.save(collaborator.phone);
+          console.log(collaborator.collaborator);
           Tb.update(collaborator.collaborator,{
             where: { id: collaborator.collaborator.id }
           });          
@@ -242,19 +243,40 @@ class CollaboratorController extends Base {
     const promise = new Promise((resolve, reject) => {
       Tb.sequelize.query(
         'Select '+
-        'et.id, '+
-        'et.name_company, '+
+        'et.id,  '+
+        'et.name_company,  '+
         'et.nick_trade, '+
-        'et.tb_linebusiness_id, '+
-        'lb.description desc_linebusiness '+
-        'from tb_collaborator co '+
-        '  inner join tb_entity et '+  
+        ' "F" docType, '+
+        'pe.cpf documento, '+
+        ' et.tb_linebusiness_id, '+
+        ' ln.description desc_linebusiness '+
+        'from tb_collaborator cl  '+
+        '  inner join tb_entity et  '+
+        '  on (cl.id = et.id)  '+
+        '  inner join tb_person pe '+
+        '  on (pe.id = et.id) '+
+        '  left outer join tb_linebusiness ln '+
+        '  on (ln.id = et.tb_linebusiness_id) '+
+        'where cl.tb_institution_id =? '+
+        'union '+
+        'Select  '+
+        'et.id,  '+
+        'et.name_company,  '+
+        'et.nick_trade, '+
+        ' "J" docType, '+
+        'co.cnpj documento, '+
+        ' et.tb_linebusiness_id, '+
+        ' ln.description desc_linebusiness '+
+        'from tb_collaborator cl  '+
+        '  inner join tb_entity et  '+
+        '  on (cl.id = et.id)  '+
+        '  inner join tb_company co '+
         '  on (co.id = et.id) '+
-        '  inner join tb_linebusiness lb '+
-        '  on (lb.id =et.tb_linebusiness_id) '+
-        'where co.tb_institution_id =? ',
+        '  left outer join tb_linebusiness ln '+
+        '  on (ln.id = et.tb_linebusiness_id) '+
+        'where cl.tb_institution_id =? ',
         {
-          replacements: [tb_institution_id],
+          replacements: [tb_institution_id,tb_institution_id],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {          
           resolve(data);

@@ -47,8 +47,8 @@ class SalesRouteController extends Base {
         const promise = new Promise((resolve, reject) => {
           Tb.sequelize.query(
             'select  * ' +
-            'from tb_sales_route pl '+
-            'where (pl.tb_institution_id =? ) ',
+            'from tb_sales_route '+
+            'where (tb_institution_id =? ) ',
             {
               replacements: [tb_institution_id],
               type: Tb.sequelize.QueryTypes.SELECT
@@ -89,7 +89,7 @@ class SalesRouteController extends Base {
             where: { id: salesroute.id,tb_institution_id: salesroute.tb_institution_id }
           })
           .then(data => {
-            resolve("The Sales Route was Updated");
+            resolve(data);
           })          
           .catch(err => {
            reject("salesroute.update:"+ err);

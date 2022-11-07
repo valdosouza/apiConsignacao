@@ -107,8 +107,19 @@ class ProdcutController extends Base {
       const promise = new Promise(async (resolve, reject) => {
         try{
           var result = {};
-          const dataProduct = await this.getById(tb_institution_id,id);
-          result.product = dataProduct[0];
+          
+          if (id > 0){
+            const dataProduct = await this.getById(tb_institution_id,id);            
+            result.product = dataProduct[0];
+          }else{
+            result.product = {              
+              id: 0,
+              tb_institution_id: 1,
+              description: "",
+              active: "N"
+            }
+          }
+          
           const dataPrice = await price.getList(tb_institution_id,id);
           result.pricelist = dataPrice; 
           

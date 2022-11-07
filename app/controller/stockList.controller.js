@@ -83,7 +83,10 @@ class StockListController extends Base {
       const promise = new Promise((resolve, reject) => {
         Tb.update(stocklist,{
           where: { tb_institution_id: stocklist.tb_institution_id, id: stocklist.id }
-        })               
+        })
+        .then(data => {
+          resolve(data[0]);
+        })                       
         .catch(err => {
           reject("Erro:"+ err);
         });

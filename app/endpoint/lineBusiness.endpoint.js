@@ -28,12 +28,13 @@ class LineBusinessEndPoint {
 
   static update = (req, res) => {
     LineBusinessController.update(req.body)
-    .then(data => {
-      if (data)
+    .then((data) => {
+      if ( data[0] == 1 )
         res.send(req.body)
-      else
-        res.send(data);
     })
+    .catch(err => {
+      res.send("Erro:"+ err);
+    });
   }
 
   static delete(req, res) {

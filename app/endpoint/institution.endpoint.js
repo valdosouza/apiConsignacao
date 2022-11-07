@@ -29,10 +29,8 @@ class InstitutionEndPoint {
   static update = (req, res) => {    
     const institution = req.body;
     InstitutionController.update(institution)
-      .then((data) => {
-        res.header("Access-Control-Allow-Origin", "*"),
-        res.header("Access-Control-Allow-Methods", "GET,PUT,PATCH,POST,DELETE"),
-        res.header("Access-Control-Allow-Headers", "Content-Type,Content-Length, Authorization, Accept,X-Requested-With");        
+      .then((data) => {    
+        console.log(data)  ;
         res.send(data);                           
       })
   }
