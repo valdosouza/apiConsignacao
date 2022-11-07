@@ -26,7 +26,7 @@ class PriceController extends Base {
             sqltxt = 'select '+
             'pl.id tb_price_list_id, '+
             'pl.description name_price_list, '+
-            'coalesce(p.price_tag,0) '+
+            'coalesce(p.price_tag,0) as  price_tag '+
             'from tb_price_list pl '+
             '  left outer join tb_price p '+
             '  on (pl.id = p.tb_price_list_id) '+
@@ -47,7 +47,7 @@ class PriceController extends Base {
             {
               replacements: [tb_institution_id,tb_product_id],
               type: Tb.sequelize.QueryTypes.SELECT
-            }).then(data => {
+            }).then(data => {              
               resolve(data);
             })
             .catch(err => {
