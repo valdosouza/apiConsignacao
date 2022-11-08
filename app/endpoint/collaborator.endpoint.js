@@ -3,7 +3,7 @@ const CollaboratorController = require("../controller/collaborator.controller.js
 class CollaboratorEndPoint {
 
   static create = (req, res) => {
-    try{
+    try{      
       CollaboratorController.save(req.body)
         .then(data => {        
           res.send(data);
