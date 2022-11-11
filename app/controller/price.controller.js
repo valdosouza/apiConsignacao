@@ -24,14 +24,16 @@ class PriceController extends Base {
           var sqltxt = '';
           if (tb_product_id > 0 ){
             sqltxt = 'select '+
-            'pl.id tb_price_list_id, '+
-            'pl.description name_price_list, '+
-            'coalesce(p.price_tag,0) as  price_tag '+
-            'from tb_price_list pl '+
-            '  left outer join tb_price p '+
-            '  on (pl.id = p.tb_price_list_id) '+
-            'where (pl.tb_institution_id =? )  '+
-            ' and ((p.tb_product_id=? ) or (p.tb_product_id is null)) ';
+            'pl.id tb_price_list_id,  '+
+            'pl.description name_price_list,  '+
+            'coalesce(p.price_tag,0) as  price_tag  '+
+            'from tb_price_list pl  '+
+            '  left outer join tb_price p  '+
+            '  on (pl.id = p.tb_price_list_id)  '+
+            '  and (pl.tb_institution_id = p.tb_institution_id) '+
+            '  and (p.tb_product_id = '+ tb_product_id + ') '+
+            'where  (pl.tb_institution_id =? )  AND  '+
+            '       ((p.tb_product_id = '+ tb_product_id + ') or  (p.tb_product_id is null) )';
           }else{
             sqltxt = 'select '+
             '  pl.id tb_price_list_id, '+
