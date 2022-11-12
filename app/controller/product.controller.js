@@ -133,7 +133,8 @@ class ProdcutController extends Base {
   }
 
     static async update(product) {        
-      const promise = new Promise((resolve, reject) => {       
+      const promise = new Promise((resolve, reject) => {    
+
         if (product.validity == '') delete  product.product.validity;
         Tb.update(product.product,{
           where:{id:product.product.id}
@@ -142,9 +143,10 @@ class ProdcutController extends Base {
         var pricelist = product.pricelist;
         var dataPrice = {};
         for(var item of pricelist) {              
+          console.log(item);
           dataPrice = {
             tb_institution_id : product.product.tb_institution_id,
-            tb_price_list_id : item.tb_price_list_id,
+            tb_price_list_id : item.id,
             tb_product_id : product.product.id,
             price_tag : item.price_tag
           }                                

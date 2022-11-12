@@ -80,17 +80,29 @@ class PriceController extends Base {
   }
 
     static async update(price) {        
+      
       const promise = new Promise((resolve, reject) => {
         if (price.validity == '') delete  price.validity;
-          Tb.update(price,{
-            where: { 
-              tb_institution_id: price.tb_institution_id,
-              tb_price_list_id: price.tb_price_list_id,
-              tb_product_id: price.tb_product_id
-            }
-          })
+          Tb.findOne( { 
+            where: {tb_institution_id: price.tb_institution_id,
+            tb_price_list_id: price.tb_price_list_id,
+            tb_product_id: price.tb_product_id}
+          })          
           .then(data => {
-            resolve(data);
+            if (data){
+              Tb.update(price,{
+                where: {tb_institution_id: price.tb_institution_id,
+                tb_price_list_id: price.tb_price_list_id,
+                tb_product_id: price.tb_product_id}
+              })
+              resolve(data);
+            }
+            else{
+              Tb.create(price)
+              .then(data =>{
+                resolve(data);
+              })
+            }            
           })          
           .catch(err => {
            reject("price.update:"+ err);
