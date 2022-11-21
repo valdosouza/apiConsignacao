@@ -20,9 +20,9 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         - active
  *       properties:
  *         id:
- *           type: int
+ *           type: integer
  *         tb_institution_id:
- *           type: int
+ *           type: integer
  *         description:
  *           type: string
  *         main:

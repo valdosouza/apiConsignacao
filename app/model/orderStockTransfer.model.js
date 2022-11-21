@@ -31,107 +31,67 @@ module.exports = sequelize => {
       comment: null,
       field: "terminal"
     },
-    items_qtde: {
+    tb_entity_id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "items_qtde"
-    },
-    product_qtde: {
-      type: DataTypes.DECIMAL,
+      field: "tb_entity_id"
+    },        
+    number: {
+      type: DataTypes.INTEGER(11),
       allowNull: true,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "product_qtde"
-    },
-    product_value: {
-      type: DataTypes.DECIMAL,
-      allowNull: true,
+      field: "number"
+    },    
+    tb_stock_list_id_ori: {
+      type: DataTypes.INTEGER(11),
+      allowNull: false,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "product_value"
+      field: "tb_stock_list_id_ori"
     },
-    IPI_value: {
-      type: DataTypes.DECIMAL,
-      allowNull: true,
+    tb_stock_list_id_des: {
+      type: DataTypes.INTEGER(11),
+      allowNull: false,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "IPI_value"
+      field: "tb_stock_list_id_des"
     },
-    discount_aliqu: {
-      type: DataTypes.DECIMAL,
-      allowNull: true,
-      defaultValue: null,
-      primaryKey: false,
-      autoIncrement: false,
-      comment: null,
-      field: "discount_aliqu"
-    },
-    discount_value: {
-      type: DataTypes.DECIMAL,
-      allowNull: true,
-      defaultValue: null,
-      primaryKey: false,
-      autoIncrement: false,
-      comment: null,
-      field: "discount_value"
-    },
-    expenses_value: {
-      type: DataTypes.DECIMAL,
-      allowNull: true,
-      defaultValue: null,
-      primaryKey: false,
-      autoIncrement: false,
-      comment: null,
-      field: "expenses_value"
-    },
-    total_value: {
-      type: DataTypes.DECIMAL,
-      allowNull: true,
-      defaultValue: null,
-      primaryKey: false,
-      autoIncrement: false,
-      comment: null,
-      field: "total_value"
-    },
-    created_at: {
+    createdAt: {
       type: DataTypes.DATE,
       allowNull: true,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "created_at"
+      field: "createdAt"
     },
-    updated_at: {
+    updatedAt: {
       type: DataTypes.DATE,
       allowNull: true,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "updated_at"
+      field: "updatedAt"
     }
   };
   const options = {
-    tableName: "tb_order_totalizer",
+    tableName: "tb_order_stock_transfer",
     comment: "",
-    indexes: [{
-      name: "tb_institution_id",
-      unique: false,
-      type: "BTREE",
-      fields: ["tb_institution_id"]
-    }]
+    timestamps : true,
+    indexes: []
   };
-  const OrderTotalizerModel = sequelize.define("tb_order_totalizer_model", attributes, options);
-  return OrderTotalizerModel;
+  const TbOrderStockTransferModel = sequelize.define("tb_order_stock_transfer_model", attributes, options);
+  return TbOrderStockTransferModel;
 };

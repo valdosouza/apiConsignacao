@@ -1,6 +1,6 @@
 const { Router } = require("express");
   
-const ordersale =  require("../endpoint/orderBonus.endpoint.js");
+const orderbonus =  require("../endpoint/orderBonus.endpoint.js");
 
 const { withJWTAuthMiddleware } = require("express-kun");
 const router = Router();
@@ -10,7 +10,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  * @swagger
  * components:
  *   schemas:
- *     OrderSale:
+ *     OrderBonus:
  *       type: object
  *       required:
  *         - id
@@ -19,8 +19,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         - tb_user_id
  *         - dt_record
  *         - tb_customer_id
- *         - tb_salesman_id
- *         - status 
+ *         - tb_salesman_id 
  *       properties:
  *         id:
  *           type: integer
@@ -37,11 +36,11 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         dt_record:
  *           type: string
  *         note:
- *           type: string  
+ *           type: string 
  *         status:
  *           type: string
- * 
- *     OrderSaleItem:
+ *  
+ *     OrderBonusItem:
  *       type: object
  *       required:
  *         - tb_product_id
@@ -55,55 +54,55 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         quantity:
  *           type: number
  * 
- *     OrderSaleMain:
+ *     OrderBonusMain:
  *       type: object
  *       properties:
  *         Order:
- *           $ref: '#/components/schemas/OrderSale'
+ *           $ref: '#/components/schemas/OrderBonus'
  *         Items:
  *            type: array
  *            items:
- *              $ref: '#/components/schemas/OrderSaleItem'
+ *              $ref: '#/components/schemas/OrderBonusItem'
  */
  
  
  /**
   * @swagger
   * tags:
-  *   name: OrderSale
-  *   description: The OrderSale managing API
+  *   name: OrderBonus
+  *   description: The OrderBonus managing API
   */
 
 /**
  * @swagger
- * /ordersale:
+ * /orderbonus:
  *   post:
- *     summary: Create a new ordersale
- *     tags: [OrderSale]
+ *     summary: Create a new orderbonus
+ *     tags: [OrderBonus]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/OrderSaleMain'
+ *             $ref: '#/components/schemas/OrderBonusMain'
  *     responses:
  *       200:
- *         description: The OrderSale was successfully created
+ *         description: The OrderBonus was successfully created
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/OrderSale'
+ *               $ref: '#/components/schemas/OrderBonus'
  *       500:
  *         description: Some server error
  */
- router.post("/", ordersale.create);
+ router.post("/", orderbonus.create);
 
  /**
  * @swagger
- * /ordersale/getlist/{tb_institution_id}/{tb_order_id}:
+ * /orderbonus/getlist/{tb_institution_id}/{tb_order_id}:
  *   get:
- *     summary: Returns the list of all the OrderSales
- *     tags: [OrderSale]
+ *     summary: Returns the list of all the OrderBonuss
+ *     tags: [OrderBonus]
  *     parameters:
  *      - in: path
  *        name: tb_institution_id
@@ -112,7 +111,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *        schema:
  *          type: string
  *        required: true
- *        description: The ordersale tb_institution_id
+ *        description: The orderbonus tb_institution_id
  *     responses:
  *       200:
  *         description: The list of the payment types
@@ -121,17 +120,17 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/OrderSaleMain'
+ *                 $ref: '#/components/schemas/OrderBonusMain'
  */
 
-router.get("/getlist/:tb_institution_id/:tb_order_id", ordersale.getList);
+router.get("/getlist/:tb_institution_id/:tb_order_id", orderbonus.getList);
   
 /**
  * @swagger
- * /ordersale/get/{tb_institution_id}/{tb_order_id}/{id}:
+ * /orderbonus/get/{tb_institution_id}/{tb_order_id}/{id}:
  *   get:
- *     summary: Returns the OrderSale
- *     tags: [OrderSale]
+ *     summary: Returns the OrderBonus
+ *     tags: [OrderBonus]
  *     parameters:
  *      - in: path
  *        name: tb_institution_id
@@ -142,49 +141,49 @@ router.get("/getlist/:tb_institution_id/:tb_order_id", ordersale.getList);
  *        schema:
  *          type: string
  *        required: true
- *        description: The ordersale by tb_institution_id and....
+ *        description: The orderbonus by tb_institution_id and....
  *     responses:
  *       200:
- *         description: The OrderSale
+ *         description: The OrderBonus
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/OrderSaleMain'
+ *               $ref: '#/components/schemas/OrderBonusMain'
  */
 
- router.get("/get/:tb_institution_id/:tb_order_id/:id", ordersale.get);
+ router.get("/get/:tb_institution_id/:tb_order_id/:id", orderbonus.get);
  /**
  * @swagger
- * /ordersale:
+ * /orderbonus:
  *  put:
- *    summary: Update the ordersale by the id
- *    tags: [OrderSale]
+ *    summary: Update the orderbonus by the id
+ *    tags: [OrderBonus]
  *    requestBody:
  *      required: true
  *      content:
  *        application/json:
  *          schema:
- *            $ref: '#/components/schemas/OrderSaleMain'
+ *            $ref: '#/components/schemas/OrderBonusMain'
  *    responses:
  *      200:
- *        description: The OrderSale was updated
+ *        description: The OrderBonus was updated
  *        content:
  *          application/json:
  *            schema:
- *              $ref: '#/components/schemas/OrderSale'
+ *              $ref: '#/components/schemas/OrderBonus'
  *      404:
- *        description: The ordersale was not found
+ *        description: The orderbonus was not found
  *      500:
  *        description: Some error happened
  */
- router.put("/", ordersale.update);
+ router.put("/", orderbonus.update);
 
 /**
  * @swagger
- * /ordersale/{tb_institution_id}/{tb_order_id}/{id}:
+ * /orderbonus/{tb_institution_id}/{tb_order_id}/{id}:
  *  delete:
- *    summary: Delete the ordersale by the id
- *    tags: [OrderSale]
+ *    summary: Delete the orderbonus by the id
+ *    tags: [OrderBonus]
  *    parameters:
  *      - in: path
  *        name: tb_institution_id
@@ -195,15 +194,15 @@ router.get("/getlist/:tb_institution_id/:tb_order_id", ordersale.getList);
  *        schema:
  *          type: string
  *        required: true
- *        description: The ordersale id
+ *        description: The orderbonus id
  *    responses:
  *      200:
- *        description: The OrderSale was deleted
+ *        description: The OrderBonus was deleted
  *      404:
- *        description: The ordersale was not found
+ *        description: The orderbonus was not found
  *      500:
  *        description: Some error happened
  */
-router.delete("/:tb_institution_id/:tb_order_id/:id", ordersale.delete);
+router.delete("/:tb_institution_id/:tb_order_id/:id", orderbonus.delete);
 
 module.exports = router;

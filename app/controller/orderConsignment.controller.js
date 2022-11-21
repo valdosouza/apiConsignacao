@@ -7,56 +7,30 @@ const Tb = db.orderSale;
 const Customer = require("../controller/customer.controller.js");
 
 class OrderConsigmentController extends Base {
-
-    static async getNumberNext(institutionID) {
-        const promise = new Promise((resolve, reject) => {
-            Tb.sequelize.query(
-                'Select max(number) maxNumber ' +
-                'from tb_order_sale s ' +
-                'where ( s.tb_institution_id=? ) ',
-                {
-                    replacements: [institutionID],
-                    type: Tb.sequelize.QueryTypes.SELECT
-                }).then(data => {
-                    if (data[0].maxNumber == null)
-                        data[0].maxNumber = 0;
-                    resolve(data[0].maxNumber + 1);
-                })
-                .catch(err => {
-                    reject(1);
-                });
+  
+  static async insert(order) {
+    const promise = new Promise((resolve, reject) => {
+      const customer = JSON.parse(order.customer);
+      const data = {
+        id: order.id,
+        tb_institution_id: order.institutionID,
+        terminal: 0,
+        tb_salesman_id: order.institutionID,
+        tb_customer_id: customer.id
+        };
+        Tb.create(data)
+        .then(data => {
+          resolve(data);
+        })
+        .catch(err => {                    
+          reject("Erro:" + err);
         });
-        return promise;
-    }
+    });
+    return promise;
+  }
 
-    static async insert(order) {
-
-        const numberNext = await this.getNumberNext(order.institutionID);
-
-        const promise = new Promise((resolve, reject) => {
-
-            const customer = JSON.parse(order.customer);
-            const data = {
-                id: order.id,
-                tb_institution_id: order.institutionID,
-                terminal: 0,
-                tb_salesman_id: order.institutionID,
-                number: numberNext,
-                tb_customer_id: customer.id
-            };
-            Tb.create(data)
-                .then(data => {
-                    resolve(data);
-                })
-                .catch(err => {                    
-                  reject("Erro:" + err);
-                });
-        });
-        return promise;
-    }
-
-    static async geList(institutionID) {
-        const promise = new Promise((resolve, reject) => {
+  static async geList(institutionID) {
+    const promise = new Promise((resolve, reject) => {
             Tb.sequelize.query(
                 'select od.id, ods.number, od.dt_record, et.name_company, et.nick_trade, sum((odi.quantity * odi.unit_value)-odi.discount_value) order_value '+
                 'from tb_order od '+

@@ -58,29 +58,29 @@ module.exports = sequelize => {
       comment: null,
       field: "tb_customer_id"
     },
-    created_at: {
+    createdAt: {
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "created_at"
+      field: "createdAt"
     },
-    updated_at: {
+    updatedAt: {
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "updated_at"
+      field: "updatedAt"
     }
   };
   const options = {
     tableName: "tb_order_sale",
     comment: "",
-    timestamps: false,
+    timestamps: true,
     indexes: [{
       name: "tb_customer_id",
       unique: false,

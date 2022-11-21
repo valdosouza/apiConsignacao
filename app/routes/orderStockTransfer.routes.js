@@ -1,6 +1,6 @@
 const { Router } = require("express");
   
-const ordersale =  require("../endpoint/orderBonus.endpoint.js");
+const orderstocktransfer =  require("../endpoint/orderItemTtransfer.endpoint.js");
 
 const { withJWTAuthMiddleware } = require("express-kun");
 const router = Router();
@@ -10,38 +10,42 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  * @swagger
  * components:
  *   schemas:
- *     OrderSale:
+ *     OrderStockTransfer:
  *       type: object
  *       required:
- *         - id
+*         - id
  *         - tb_institution_id
- *         - tb_order_id
  *         - tb_user_id
+ *         - tb_entity_id
  *         - dt_record
- *         - tb_customer_id
- *         - tb_salesman_id
- *         - status 
+ *         - status
+ *         - tb_stock_list_id_ori
+ *         - tb_stock_list_id_des
  *       properties:
  *         id:
  *           type: integer
  *         tb_institution_id:
  *           type: integer
- *         tb_order_id:
- *           type: integer
  *         tb_user_id:
- *           type: integer
- *         tb_customer_id:
- *           type: integer
- *         tb_salesman_id:
  *           type: integer
  *         dt_record:
  *           type: string
- *         note:
+ *         number:
+ *           type: integer
+ *         tb_stock_list_id_ori:
+ *           type: integer
+ *         name_stock_list_ori:
  *           type: string  
+ *         tb_stock_list_id_des:
+ *           type: integer
+ *         name_stock_list_des:
+ *           type: string
+ *         note:
+ *           type: string 
  *         status:
  *           type: string
- * 
- *     OrderSaleItem:
+ *  
+ *     OrderStockTransferItem:
  *       type: object
  *       required:
  *         - tb_product_id
@@ -55,55 +59,55 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         quantity:
  *           type: number
  * 
- *     OrderSaleMain:
+ *     OrderStockTransferMain:
  *       type: object
  *       properties:
  *         Order:
- *           $ref: '#/components/schemas/OrderSale'
+ *           $ref: '#/components/schemas/OrderStockTransfer'
  *         Items:
  *            type: array
  *            items:
- *              $ref: '#/components/schemas/OrderSaleItem'
+ *              $ref: '#/components/schemas/OrderStockTransferItem'
  */
  
  
  /**
   * @swagger
   * tags:
-  *   name: OrderSale
-  *   description: The OrderSale managing API
+  *   name: OrderStockTransfer
+  *   description: The OrderStockTransfer managing API
   */
 
 /**
  * @swagger
- * /ordersale:
+ * /orderstocktransfer:
  *   post:
- *     summary: Create a new ordersale
- *     tags: [OrderSale]
+ *     summary: Create a new orderstocktransfer
+ *     tags: [OrderStockTransfer]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/OrderSaleMain'
+ *             $ref: '#/components/schemas/OrderStockTransferMain'
  *     responses:
  *       200:
- *         description: The OrderSale was successfully created
+ *         description: The OrderStockTransfer was successfully created
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/OrderSale'
+ *               $ref: '#/components/schemas/OrderStockTransferMain'
  *       500:
  *         description: Some server error
  */
- router.post("/", ordersale.create);
+ router.post("/", orderstocktransfer.create);
 
  /**
  * @swagger
- * /ordersale/getlist/{tb_institution_id}/{tb_order_id}:
+ * /orderstocktransfer/getlist/{tb_institution_id}/{tb_order_id}:
  *   get:
- *     summary: Returns the list of all the OrderSales
- *     tags: [OrderSale]
+ *     summary: Returns the list of all the OrderStockTransfers
+ *     tags: [OrderStockTransfer]
  *     parameters:
  *      - in: path
  *        name: tb_institution_id
@@ -112,7 +116,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *        schema:
  *          type: string
  *        required: true
- *        description: The ordersale tb_institution_id
+ *        description: The orderstocktransfer tb_institution_id
  *     responses:
  *       200:
  *         description: The list of the payment types
@@ -121,17 +125,17 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/OrderSaleMain'
+ *                 $ref: '#/components/schemas/OrderStockTransferMain'
  */
 
-router.get("/getlist/:tb_institution_id/:tb_order_id", ordersale.getList);
+router.get("/getlist/:tb_institution_id/:tb_order_id", orderstocktransfer.getList);
   
 /**
  * @swagger
- * /ordersale/get/{tb_institution_id}/{tb_order_id}/{id}:
+ * /orderstocktransfer/get/{tb_institution_id}/{tb_order_id}/{id}:
  *   get:
- *     summary: Returns the OrderSale
- *     tags: [OrderSale]
+ *     summary: Returns the OrderStockTransfer
+ *     tags: [OrderStockTransfer]
  *     parameters:
  *      - in: path
  *        name: tb_institution_id
@@ -142,49 +146,49 @@ router.get("/getlist/:tb_institution_id/:tb_order_id", ordersale.getList);
  *        schema:
  *          type: string
  *        required: true
- *        description: The ordersale by tb_institution_id and....
+ *        description: The orderstocktransfer by tb_institution_id and....
  *     responses:
  *       200:
- *         description: The OrderSale
+ *         description: The OrderStockTransfer
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/OrderSaleMain'
+ *               $ref: '#/components/schemas/OrderStockTransferMain'
  */
 
- router.get("/get/:tb_institution_id/:tb_order_id/:id", ordersale.get);
+ router.get("/get/:tb_institution_id/:tb_order_id/:id", orderstocktransfer.get);
  /**
  * @swagger
- * /ordersale:
+ * /orderstocktransfer:
  *  put:
- *    summary: Update the ordersale by the id
- *    tags: [OrderSale]
+ *    summary: Update the orderstocktransfer by the id
+ *    tags: [OrderStockTransfer]
  *    requestBody:
  *      required: true
  *      content:
  *        application/json:
  *          schema:
- *            $ref: '#/components/schemas/OrderSaleMain'
+ *            $ref: '#/components/schemas/OrderStockTransferMain'
  *    responses:
  *      200:
- *        description: The OrderSale was updated
+ *        description: The OrderStockTransfer was updated
  *        content:
  *          application/json:
  *            schema:
- *              $ref: '#/components/schemas/OrderSale'
+ *              $ref: '#/components/schemas/OrderStockTransferMain'
  *      404:
- *        description: The ordersale was not found
+ *        description: The orderstocktransfer was not found
  *      500:
  *        description: Some error happened
  */
- router.put("/", ordersale.update);
+ router.put("/", orderstocktransfer.update);
 
 /**
  * @swagger
- * /ordersale/{tb_institution_id}/{tb_order_id}/{id}:
+ * /orderstocktransfer/{tb_institution_id}/{tb_order_id}/{id}:
  *  delete:
- *    summary: Delete the ordersale by the id
- *    tags: [OrderSale]
+ *    summary: Delete the orderstocktransfer by the id
+ *    tags: [OrderStockTransfer]
  *    parameters:
  *      - in: path
  *        name: tb_institution_id
@@ -195,15 +199,15 @@ router.get("/getlist/:tb_institution_id/:tb_order_id", ordersale.getList);
  *        schema:
  *          type: string
  *        required: true
- *        description: The ordersale id
+ *        description: The orderstocktransfer id
  *    responses:
  *      200:
- *        description: The OrderSale was deleted
+ *        description: The OrderStockTransfer was deleted
  *      404:
- *        description: The ordersale was not found
+ *        description: The orderstocktransfer was not found
  *      500:
  *        description: Some error happened
  */
-router.delete("/:tb_institution_id/:tb_order_id/:id", ordersale.delete);
+router.delete("/:tb_institution_id/:tb_order_id/:id", orderstocktransfer.delete);
 
 module.exports = router;

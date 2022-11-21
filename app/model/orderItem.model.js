@@ -25,7 +25,7 @@ module.exports = sequelize => {
     tb_order_id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
-      defaultValue: null,
+      defaultValue: 0,
       primaryKey: true,
       autoIncrement: false,
       comment: null,
@@ -40,24 +40,34 @@ module.exports = sequelize => {
       comment: null,
       field: "terminal"
     },
-    tb_product_id: {
-      type: DataTypes.INTEGER(11),
-      allowNull: false,
-      defaultValue: null,
-      primaryKey: false,
-      autoIncrement: false,
-      comment: null,
-      field: "tb_product_id"
-    },
     tb_stock_list_id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
-      defaultValue: null,
+      defaultValue: 0,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
       field: "tb_stock_list_id"
     },
+    tb_price_list_id: {
+      type: DataTypes.INTEGER(11),
+      allowNull: false,
+      defaultValue: 0,
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "tb_price_list_id"
+    },
+    tb_product_id: {
+      type: DataTypes.INTEGER(11),
+      allowNull: false,
+      defaultValue: 0,
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "tb_product_id"
+    },
+    
     quantity: {
       type: DataTypes.DECIMAL,
       allowNull: true,
@@ -76,14 +86,14 @@ module.exports = sequelize => {
       comment: null,
       field: "unit_value"
     },
-    discount_aliquot: {
+    discount_aliqu: {
       type: DataTypes.DECIMAL,
       allowNull: true,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "discount_aliquot"
+      field: "discount_aliqu"
     },
     discount_value: {
       type: DataTypes.DECIMAL,
@@ -94,36 +104,28 @@ module.exports = sequelize => {
       comment: null,
       field: "discount_value"
     },
-    created_at: {
+    createdAt: {
       type: DataTypes.DATE,
       allowNull: true,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "created_at"
+      field: "createdAt"
     },
-    updated_at: {
+    updatedAt: {
       type: DataTypes.DATE,
       allowNull: true,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "updated_at"
-    },
-    tb_price_list_id: {
-      type: DataTypes.INTEGER(11),
-      allowNull: true,
-      defaultValue: null,
-      primaryKey: false,
-      autoIncrement: false,
-      comment: null,
-      field: "tb_price_list_id"
-    }
+      field: "updatedAt"
+    }    
   };
   const options = {
     tableName: "tb_order_item",
+    timestamps: true,
     comment: "",
     indexes: [{
       name: "tb_product_id",

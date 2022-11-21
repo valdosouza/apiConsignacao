@@ -9,7 +9,7 @@ module.exports = sequelize => {
       allowNull: false,
       defaultValue: "0",
       primaryKey: true,
-      autoIncrement: false,
+      autoIncrement: true,
       comment: null,
       field: "id"
     },
@@ -78,7 +78,7 @@ module.exports = sequelize => {
     },
     dt_record: {
       type: DataTypes.DATEONLY,
-      allowNull: true,
+      allowNull: false,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
@@ -87,8 +87,8 @@ module.exports = sequelize => {
     },
     direction: {
       type: DataTypes.STRING(1),
-      allowNull: true,
-      defaultValue: null,
+      allowNull: false,
+      defaultValue: "S",
       primaryKey: false,
       autoIncrement: false,
       comment: null,
@@ -96,8 +96,8 @@ module.exports = sequelize => {
     },
     tb_merchandise_id: {
       type: DataTypes.INTEGER(11),
-      allowNull: true,
-      defaultValue: null,
+      allowNull: false,
+      defaultValue: 0,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
@@ -105,8 +105,8 @@ module.exports = sequelize => {
     },
     quantity: {
       type: DataTypes.DECIMAL,
-      allowNull: true,
-      defaultValue: null,
+      allowNull: false,
+      defaultValue: 0,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
@@ -121,28 +121,29 @@ module.exports = sequelize => {
       comment: null,
       field: "operation"
     },
-    created_at: {
+    createdAt: {
       type: DataTypes.DATE,
       allowNull: true,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "created_at"
+      field: "createdAt"
     },
-    updated_at: {
+    updatedAt: {
       type: DataTypes.DATE,
       allowNull: true,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "updated_at"
+      field: "updatedAt"
     }
   };
   const options = {
     tableName: "tb_stock_statement",
     comment: "",
+    timestamps: true,
     indexes: []
   };
   const StockStatementModel = sequelize.define("tb_stock_statement_model", attributes, options);

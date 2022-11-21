@@ -64,6 +64,7 @@ db.person = require("./person.model.js")(sequelize, Sequelize);
 db.company = require("./company.model.js")(sequelize, Sequelize);
 db.institution = require("./institution.model.js")(sequelize, Sequelize);
 db.stockList = require("./stockList.model.js")(sequelize, Sequelize);
+db.stockStatement = require("./stockStatement.model.js")(sequelize, Sequelize);
 
 db.collaborator = require("./collaborator.model.js")(sequelize, Sequelize);
 
@@ -71,7 +72,13 @@ db.customer = require("./customer.model.js")(sequelize, Sequelize);
 
 db.product = require("./product.model.js")(sequelize, Sequelize);
 db.order = require("./order.model.js")(sequelize, Sequelize);
+db.orderitem = require("./orderItem.model.js")(sequelize, Sequelize);
 db.orderproduction = require("./orderProduction.model.js")(sequelize, Sequelize);
+db.orderbonus = require("./orderBonus.model.js")(sequelize, Sequelize);
+db.ordersale = require("./orderSale.model.js")(sequelize, Sequelize);
+db.orderstocktransfer = require("./orderStockTransfer.model.js")(sequelize, Sequelize);
+db.orderconsignment = require("./orderConsignment.model.js")(sequelize, Sequelize);
+
 
 db.restSubgroup = require("./restSubgroup.model.js")(sequelize, Sequelize);
 db.restGroup = require("./restGroup.model.js")(sequelize, Sequelize);

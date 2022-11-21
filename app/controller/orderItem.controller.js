@@ -1,16 +1,17 @@
 const Base = require('./base.controller.js');
 const db = require("../model");
-const Tb = db.order;
+const Tb = db.orderitem;
 
-class OrderController extends Base {     
-    static async getNextId(tb_institution_id) {      
+class OrderItemController extends Base {     
+    static async getNextId(tb_institution_id,tb_order_id) {      
       const promise = new Promise((resolve, reject) => {        
         Tb.sequelize.query(
           'Select max(id) lastId ' +
-          'from tb_order '+
-          'WHERE ( tb_institution_id =? ) ',
+          'from tb_order_item '+
+          'WHERE ( tb_institution_id =? ) '+
+          ' and (tb_order_id =?)',
           {
-            replacements: [tb_institution_id],
+            replacements: [tb_institution_id,tb_order_id],
             type: Tb.sequelize.QueryTypes.SELECT
           }).then(data => {   
             if (data){
@@ -27,73 +28,74 @@ class OrderController extends Base {
       return promise;
     }
     
-    static async insert(order) {      
+    static async insert(item) {      
       const promise = new Promise(async (resolve, reject) => {
-          const nextId  = await this.getNextId(order.tb_institution_id);             
-          order.id = nextId;          
-          Tb.create(order)
+          const nextId  = await this.getNextId(item.tb_institution_id,item.tb_order_id);             
+          item.id = nextId;          
+          Tb.create(item)
             .then((data) => {             
               resolve(data);
             })
             .catch(err => {
-              reject("order.insert:"+ err);
+              reject("item.insert:"+ err);
             });        
       });
       return promise;        
     }    
 
-    static getList(tb_institution_id) {
+    static getList(tb_institution_id,tb_order_id) {
         const promise = new Promise((resolve, reject) => {
           Tb.sequelize.query(
             'select  * ' +
-            'from tb_order '+
-            'where (tb_institution_id =? ) ',
+            'from tb_order_item '+
+            'where (tb_institution_id =? ) '+
+            ' and (tb_order_id =?) ',
             {
-              replacements: [tb_institution_id],
+              replacements: [tb_institution_id,tb_order_id],
               type: Tb.sequelize.QueryTypes.SELECT
             }).then(data => {
               resolve(data);
             })
             .catch(err => {
-              reject("order.getlist: " + err);
+              reject("item.getlist: " + err);
             });
         });
         return promise;
     }
 
-    static get(tb_institution_id,id) {
+    static get(tb_institution_id,tb_order_id,id) {
       const promise = new Promise((resolve, reject) => {
         Tb.sequelize.query(
           'select * ' +
-          'from tb_order '+
+          'from tb_order_item '+
           'where (tb_institution_id =? ) '+
+          ' and (tb_order_id =?) '+
           ' and (id =? )',
           {
-            replacements: [tb_institution_id,id],
+            replacements: [tb_institution_id,tb_order_id,id],
             type: Tb.sequelize.QueryTypes.SELECT
           }).then(data => {
             resolve(data);
           })
           .catch(err => {
-            reject('order.get: '+err);
+            reject('item.get: '+err);
           });
       });
       return promise;
   }
 
-    static async update(order) {        
+    static async update(item) {        
       const promise = new Promise((resolve, reject) => {
-        if (order.validity == '') delete  order.validity;
-          Tb.update(order,{
-            where: { id: order.id,tb_institution_id: order.tb_institution_id, terminal:order.terminal }
-          })
-          .then(data => {
-            resolve(data);
-          })          
-          .catch(err => {
-           reject("order.update:"+ err);
-          });
+        Tb.update(item,{
+          where: { id: item.id,tb_institution_id: item.tb_institution_id, tb_order_id :item.tb_order_id }
+        })
+        .then(data => {
+          resolve(data);
+        })          
+        .catch(err => {
+          reject("item.update:"+ err);
         });
+      });
       return promise;        
     }        
 
@@ -114,4 +116,4 @@ class OrderController extends Base {
     }        
     
 }
-module.exports = OrderController;
+module.exports = OrderItemController;

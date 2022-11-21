@@ -67,14 +67,14 @@ module.exports = sequelize => {
       comment: null,
       field: "late_value"
     },
-    discount_aliquot: {
+    discount_aliqu: {
       type: DataTypes.DECIMAL,
       allowNull: true,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "discount_aliquot"
+      field: "discount_aliqu"
     },
     paid_value: {
       type: DataTypes.DECIMAL,

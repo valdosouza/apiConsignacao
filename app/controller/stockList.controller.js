@@ -1,4 +1,3 @@
-
 const Base = require('./base.controller.js')
 const db = require("../model");
 const Tb = db.stockList;
