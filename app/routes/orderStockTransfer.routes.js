@@ -13,7 +13,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *     OrderStockTransfer:
  *       type: object
  *       required:
-*         - id
+ *         - id
  *         - tb_institution_id
  *         - tb_user_id
  *         - tb_entity_id
@@ -32,6 +32,10 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *           type: string
  *         number:
  *           type: integer
+ *         tb_entity_id:
+ *           type: integer
+ *         name_entity:
+ *           type: string 
  *         tb_stock_list_id_ori:
  *           type: integer
  *         name_stock_list_ori:

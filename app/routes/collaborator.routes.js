@@ -122,7 +122,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *             schema: 
  *               $ref: '#/components/schemas/ObjCollaborator'
  */
- router.get("/:id", collaborator.getCollaborator);
+ router.get("/:id", collaborator.get);
   
  /**
  * @swagger

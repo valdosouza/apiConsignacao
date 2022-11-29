@@ -143,7 +143,7 @@ class ProdcutController extends Base {
         var pricelist = product.pricelist;
         var dataPrice = {};
         for(var item of pricelist) {              
-          console.log(item);
+         
           dataPrice = {
             tb_institution_id : product.product.tb_institution_id,
             tb_price_list_id : item.id,

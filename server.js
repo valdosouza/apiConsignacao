@@ -131,6 +131,9 @@ app.use("/ordersale", ordersale);
 const orderconsignment = require("./app/routes/orderConsignment.routes");
 app.use("/orderconsignment", orderconsignment);
 
+const orderstockadjustment = require("./app/routes/orderStockAdjustment.routes");
+app.use("/orderstockadjustment", orderstockadjustment);
+
 const PORT = process.env.PORT || 3000;
 
 app.use("/doc", swaggerUI.serve, swaggerUI.setup(specs));

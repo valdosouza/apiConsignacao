@@ -13,9 +13,9 @@ class CollaboratorEndPoint {
     }
   }
 
-  static getCollaborator = (req, res) => {
+  static get = (req, res) => {
     const id = req.params.id;
-    CollaboratorController.getCollaborator(id)
+    CollaboratorController.get(id)
       .then(data => {
         res.send(data);
       })

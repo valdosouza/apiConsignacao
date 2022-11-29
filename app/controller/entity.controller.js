@@ -7,17 +7,20 @@ class EntityController extends Base {
   static async getById(id) {    
     const promise = new Promise((resolve, reject) => {
       Tb.sequelize.query(
-        'Select ' +        
-        'id, '+
-        'name_company, '+
-        'nick_trade, '+
-        'aniversary, '+
-        'tb_linebusiness_id, '+
-        'CAST(note AS CHAR(1000) CHARACTER SET utf8) note,'+
-        'createdAt, '+
-        'updatedAt '+
-        'from tb_entity    ' +
-        'where ( id =?) ', 
+        'Select '+
+        'e.id,  '+
+        'e.name_company,  '+
+        'e.nick_trade,  '+
+        'e.aniversary,  '+
+        'e.tb_linebusiness_id,  '+
+        'l.description name_linebusiness, '+
+        'CAST(e.note AS CHAR(1000) CHARACTER SET utf8) note, '+
+        'e.createdAt,  '+
+        'e.updatedAt  '+
+        'from tb_entity  e '+
+        '   left outer join tb_linebusiness l '+
+        '   on (l.id = e.tb_linebusiness_id) '+
+        'where ( e.id =?) ', 
         {
           replacements: [id],
           type: Tb.sequelize.QueryTypes.SELECT
@@ -50,7 +53,7 @@ class EntityController extends Base {
     
     static async insert(entity) {            
         const promise = new Promise((resolve, reject) => {            
-            delete entity.name_line_business;
+            delete entity.name_linebusiness;
             if (entity.aniversary == '')
                 delete entity.aniversary;
             Tb.create(entity)
@@ -85,8 +88,13 @@ class EntityController extends Base {
 
     static async update(entity) {        
       const promise = new Promise((resolve, reject) => {
+        delete entity.name_linebusiness;
+        console.log(entity);
         Tb.update(entity,{
           where: { id: entity.id }
+        })
+        .then(data =>{
+          resolve(data);
         })
         .catch(err => {
           reject("Erro:"+ err);

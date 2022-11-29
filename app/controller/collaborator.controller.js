@@ -194,7 +194,7 @@ class CollaboratorController extends Base {
           }
           address.save(collaborator.address);
           phone.save(collaborator.phone);
-          console.log(collaborator.collaborator);
+          
           Tb.update(collaborator.collaborator,{
             where: { id: collaborator.collaborator.id }
           });          
@@ -206,7 +206,7 @@ class CollaboratorController extends Base {
     return promise;        
   }              
 
-  static getCollaborator = (id) => {
+  static get = (id) => {
     const promise = new Promise(async (resolve, reject) => {
       try{
         var result = {};
@@ -232,7 +232,7 @@ class CollaboratorController extends Base {
         resolve(result);
       } 
       catch(err){
-        reject('getCollaborator: ' + err);
+        reject('collaborator.get: ' + err);
       } 
     });
     return promise;

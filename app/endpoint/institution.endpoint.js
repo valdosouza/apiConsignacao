@@ -29,8 +29,7 @@ class InstitutionEndPoint {
   static update = (req, res) => {    
     const institution = req.body;
     InstitutionController.update(institution)
-      .then((data) => {    
-        console.log(data)  ;
+      .then((data) => {            
         res.send(data);                           
       })
   }

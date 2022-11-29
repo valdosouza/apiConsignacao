@@ -32,8 +32,12 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *           type: integer
  *         tb_customer_id:
  *           type: integer
+ *         name_customer:
+ *           type: string
  *         tb_salesman_id:
  *           type: integer
+ *         name_salesman:
+ *           type: string 
  *         dt_record:
  *           type: string
  *         note:
@@ -41,7 +45,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         status:
  *           type: string
  * 
- *     OrderSaleItem:
+ *     OrderStockAdjustment:
  *       type: object
  *       required:
  *         - tb_product_id
@@ -55,7 +59,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         quantity:
  *           type: number
  * 
- *     OrderSaleMain:
+ *     OrderStockAdjustmentMain:
  *       type: object
  *       properties:
  *         Order:
@@ -153,6 +157,7 @@ router.get("/getlist/:tb_institution_id/:tb_order_id", ordersale.getList);
  */
 
  router.get("/get/:tb_institution_id/:tb_order_id/:id", ordersale.get);
+ 
  /**
  * @swagger
  * /ordersale:
