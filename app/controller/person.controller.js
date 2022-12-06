@@ -13,7 +13,7 @@ class PersonController extends Base {
           replacements: [id],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
-            resolve(data);
+            resolve(data[0]);
         })
         .catch(err => {
           reject('Person.getById: ' + err);

@@ -35,8 +35,7 @@ class OrderProductionController extends Base {
             terminal:0,
             tb_user_id: orderproduction.tb_user_id,
             dt_record: orderproduction.dt_record,
-            note: orderproduction.note,
-            status: orderproduction.status
+            note: orderproduction.note
           }
           order.insert(dataOrder)
           .then(async (data)=>{
@@ -44,9 +43,7 @@ class OrderProductionController extends Base {
             if (orderproduction.number == 0)
               nextNumber = await this.getNextNumber(orderproduction.tb_institution_id)
             else  
-              nextNumber = orderproduction.number;
-            var situationId = 0;
-            if (order.status = 'A'){ situationId = 1} else{  situationId = 2};
+              nextNumber = orderproduction.number;            
             const dataOrderProduction = {
               id : data.id,
               tb_institution_id : data.tb_institution_id,
@@ -163,12 +160,9 @@ class OrderProductionController extends Base {
           terminal:0,
           tb_user_id: orderproduction.tb_user_id,
           dt_record: orderproduction.dt_record,
-          note: orderproduction.note,
-          status: orderproduction.status
+          note: orderproduction.note
         }
-        order.update(dataOrder);
-        var situationId = 0;
-        if (order.status = 'A'){ situationId = 1} else{  situationId = 2};
+        order.update(dataOrder);        
         const dataOrderProduction = {
           id : orderproduction.id,
           tb_institution_id : orderproduction.tb_institution_id,

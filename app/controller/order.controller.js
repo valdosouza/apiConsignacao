@@ -97,6 +97,23 @@ class OrderController extends Base {
       return promise;        
     }        
 
+    static async updateStatus(tb_institution_id,id,status) {      
+      const promise = new Promise(async (resolve, reject) => {      
+        Tb.update({status: status},{
+          where: {id: id,              
+                  tb_institution_id: tb_institution_id, 
+                  terminal: 0 }
+        })
+        .then((data)=>{          
+          resolve(data);
+        })
+        .catch(err => {
+          reject("orderStockAdjust.updateOrder:"+ err);
+        });        
+      });
+      return promise;        
+    } 
+
     static async delete(order) {      
         const promise = new Promise((resolve, reject) => {
           resolve("Em Desenvolvimento");

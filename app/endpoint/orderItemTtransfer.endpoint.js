@@ -1,4 +1,4 @@
-const OrderITemTransferController = require("../controller/orderItemTransfer.controller.js");
+const OrderITemTransferController = require("../controller/orderItemStockTransfer.controller.js");
 
 class OrderItemTransferEndPoint {
 

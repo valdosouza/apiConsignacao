@@ -1,9 +1,9 @@
 const Base = require('./base.controller.js');
 const db = require("../model");
 const Tb = db.orderitem;
-const orderitem = require("../controller/orderItem.controller.js");
+const orderitem = require("./orderItem.controller.js");
 
-class OrderItemTransferController extends Base {     
+class OrderItemStockTransferController extends Base {     
        
     static async insert(item) {      
       const promise = new Promise(async (resolve, reject) => {
@@ -12,7 +12,7 @@ class OrderItemTransferController extends Base {
           resolve(data);
         })          
         .catch(err => {
-          reject("itemTransfer.insert:"+ err);
+          reject("itemStockTransfer.insert:"+ err);
         });
       });
       return promise;        
@@ -37,7 +37,7 @@ class OrderItemTransferController extends Base {
               resolve(data);
             })
             .catch(err => {
-              reject("itemTransfer.getlist: " + err);
+              reject("itemStockTransfer.getlist: " + err);
             });
         });
         return promise;
@@ -63,7 +63,7 @@ class OrderItemTransferController extends Base {
             resolve(data);
           })
           .catch(err => {
-            reject('itemTransfer.get: '+err);
+            reject('itemStockTransfer.get: '+err);
           });
       });
       return promise;
@@ -76,7 +76,7 @@ class OrderItemTransferController extends Base {
           resolve(data);
         })          
         .catch(err => {
-          reject("itemTransfer.update:"+ err);
+          reject("itemStockTransfer.update:"+ err);
         });
       });
       return promise;        
@@ -89,11 +89,11 @@ class OrderItemTransferController extends Base {
             resolve(data);
           })          
           .catch(err => {
-            reject("itemTransfer.delete:"+ err);
+            reject("itemStockTransfer.delete:"+ err);
           });
         });
         return promise;        
     }        
     
 }
-module.exports = OrderItemTransferController;
+module.exports = OrderItemStockTransferController;

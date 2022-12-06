@@ -20,7 +20,7 @@ class CollaboratorController extends Base {
           replacements: [id],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
-            resolve(data);
+            resolve(data[0]);
         })
         .catch(err => {
           reject('Collaborator.getById: ' + err);
@@ -211,23 +211,23 @@ class CollaboratorController extends Base {
       try{
         var result = {};
         const dataCollaborator = await this.getById(id);
-        result.collaborator = dataCollaborator[0];
+        result.collaborator = dataCollaborator;
         const dataEntity = await entity.getById(id);
-        result.entity = dataEntity[0]; 
+        result.entity = dataEntity; 
 
         const dataPerson = await person.getById(id);
         if (dataPerson.length > 0){            
-            result.person = dataPerson[0]; 
+            result.person = dataPerson;
         }
         const dataCompany = await company.getById(id);
         if (dataCompany.length > 0){            
-          result.company = dataCompany[0]; 
+          result.company = dataCompany; 
         }
         const dataAddress = await address.getById(id);
-        result.address = dataAddress[0]; 
+        result.address = dataAddress; 
 
         const dataPhone = await phone.getById(id,'');
-        result.phone = dataPhone[0]; 
+        result.phone = dataPhone; 
         
         resolve(result);
       } 

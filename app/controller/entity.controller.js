@@ -25,7 +25,7 @@ class EntityController extends Base {
           replacements: [id],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
-            resolve(data);
+            resolve(data[0]);
         })
         .catch(err => {
           reject('Entity.getById: ' + err);
@@ -88,8 +88,7 @@ class EntityController extends Base {
 
     static async update(entity) {        
       const promise = new Promise((resolve, reject) => {
-        delete entity.name_linebusiness;
-        console.log(entity);
+        delete entity.name_linebusiness;        
         Tb.update(entity,{
           where: { id: entity.id }
         })

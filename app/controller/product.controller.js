@@ -44,7 +44,8 @@ class ProdcutController extends Base {
                   tb_price_list_id : item.tb_price_list_id,
                   tb_product_id : product.product.id,
                   price_tag : item.price_tag
-                }                                
+                }           
+                //Quanto o insert é menos complexo insert direto não precisa do await no loop                     
                 price.insert(dataPrice);
               };
               resolve(product);     
@@ -94,7 +95,7 @@ class ProdcutController extends Base {
             replacements: [tb_instituion_id,id],
             type: Tb.sequelize.QueryTypes.SELECT
           }).then(data => {
-              resolve(data);
+              resolve(data[0]);
           })
           .catch(err => {
             reject('getById: ' + err);
@@ -110,7 +111,7 @@ class ProdcutController extends Base {
           
           if (id > 0){
             const dataProduct = await this.getById(tb_institution_id,id);            
-            result.product = dataProduct[0];
+            result.product = dataProduct;
           }else{
             result.product = {              
               id: 0,

@@ -22,7 +22,7 @@ class OrderItemController extends Base {
             }
           })
           .catch(err => {
-            reject('order.getNexId: '+err);
+            reject('orderItem.getNexId: '+err);
           });           
       });
       return promise;

@@ -75,6 +75,7 @@ db.order = require("./order.model.js")(sequelize, Sequelize);
 db.orderitem = require("./orderItem.model.js")(sequelize, Sequelize);
 db.orderproduction = require("./orderProduction.model.js")(sequelize, Sequelize);
 db.orderbonus = require("./orderBonus.model.js")(sequelize, Sequelize);
+db.orderstockadjust = require("./orderStockAdjust.model.js")(sequelize, Sequelize);
 db.ordersale = require("./orderSale.model.js")(sequelize, Sequelize);
 db.orderstocktransfer = require("./orderStockTransfer.model.js")(sequelize, Sequelize);
 db.orderconsignment = require("./orderConsignment.model.js")(sequelize, Sequelize);

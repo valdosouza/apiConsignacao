@@ -77,8 +77,8 @@ module.exports = sequelize => {
     },
     status: {
       type: DataTypes.STRING(1),
-      allowNull: true,
-      defaultValue: null,
+      allowNull: false,
+      defaultValue: "A",
       primaryKey: false,
       autoIncrement: false,
       comment: null,
