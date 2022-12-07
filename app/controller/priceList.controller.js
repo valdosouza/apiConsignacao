@@ -1,6 +1,7 @@
 const Base = require('./base.controller.js');
 const db = require("../model");
 const Tb = db.pricelist;
+const price = require('./price.controller.js');
 
 class PriceListController extends Base {     
     static async getNextId(tb_institution_id) {      
@@ -33,7 +34,8 @@ class PriceListController extends Base {
           pricelist.id = nextId;
           if (pricelist.validity == '') delete  pricelist.validity;
           Tb.create(pricelist)
-            .then((data) => {             
+            .then((data) => {  
+              price.autoInsertByPriceList(pricelist.tb_institution_id,data.id);
               resolve(data);
             })
             .catch(err => {

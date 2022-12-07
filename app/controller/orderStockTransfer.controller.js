@@ -368,14 +368,9 @@ class OrderStockTransferController extends Base {
   static async reopen(body) {      
     const promise = new Promise(async (resolve, reject) => {
       try {          
-        var status = await this.getStatus(body.tb_institution_id,body.id);        
-        if (status == 'F'){
+        var dataOrder = await this.getOrder(body.tb_institution_id,body.id);        
+        if (dataOrder.status == 'F'){
           var items = await orderItem.getList(body.tb_institution_id,body.id);          
-          var direction = 'S';
-          if (body.direction == 'S'){
-            direction = 'E'} 
-          else { 
-            direction = 'E'};
           var dataItem = {};
           for(var item of items) {              
             dataItem = {
@@ -384,30 +379,34 @@ class OrderStockTransferController extends Base {
               tb_order_id: body.id,
               terminal: 0,              
               tb_order_item_id: item.id,
-              tb_stock_list_id: item.tb_stock_list_id,
+              tb_stock_list_id: 0,
               local: "web",
-              kind: "Reabertura",
+              kind: "Fechamento",
               dt_record: body.dt_record,
-              direction: direction,
+              direction: "S",
               tb_merchandise_id: item.tb_product_id,
               quantity: item.quantity,
-              operation: "Ajuste"
+              operation: "Tranferência"
             } ;
-            //Quanto o insert é mais complexo como create precisa do await no loop          
+            //Origen - Inverte direção ao reabrir
+            dataItem['tb_stock_list_id'] = dataOrder.tb_stock_list_id_ori;
+            dataItem['direction'] = 'E';            
+            await stockStatement.insert(dataItem);            
+            //Destiny - Inverte direção ao reabrir
+            dataItem['tb_stock_list_id'] = dataOrder.tb_stock_list_id_des;
+            dataItem['direction'] = 'S';            
             await stockStatement.insert(dataItem);            
           };          
           await order.updateStatus(body.tb_institution_id,body.id,'A');      
           resolve("200");  
         }else{
           resolve("201");  
-        }
-        
+        }        
       } catch (err) {
         reject(err);
-      }
-                
+      }                
     });
-    return promise;        
+    return promise;   
   }       
 }
 module.exports = OrderStockTransferController;
