@@ -46,6 +46,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *           type: number 
  *         operation:
  *           type: string 
+ * 
  *     ParamsStockStatement:
  *       type: object
  *       required:

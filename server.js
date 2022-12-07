@@ -113,6 +113,9 @@ app.use("/salesroute", salesroute);
 const product = require("./app/routes/product.routes");
 app.use("/product", product);
 
+const stockbalance = require("./app/routes/stockBalance.routes");
+app.use("/stockbalance", stockbalance);
+
 const stockstatement = require("./app/routes/stockStatement.routes");
 app.use("/stockstatement", stockstatement);
 

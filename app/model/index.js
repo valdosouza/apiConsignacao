@@ -64,6 +64,7 @@ db.person = require("./person.model.js")(sequelize, Sequelize);
 db.company = require("./company.model.js")(sequelize, Sequelize);
 db.institution = require("./institution.model.js")(sequelize, Sequelize);
 db.stockList = require("./stockList.model.js")(sequelize, Sequelize);
+db.stockBalance = require("./stockBalance.model.js")(sequelize, Sequelize);
 db.stockStatement = require("./stockStatement.model.js")(sequelize, Sequelize);
 
 db.collaborator = require("./collaborator.model.js")(sequelize, Sequelize);

@@ -49,28 +49,29 @@ module.exports = sequelize => {
       comment: null,
       field: "minimum"
     },
-    created_at: {
+    createdAt: {
       type: DataTypes.DATE,
       allowNull: true,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "created_at"
+      field: "createdAt"
     },
-    updated_at: {
+    updatedAt: {
       type: DataTypes.DATE,
       allowNull: true,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "updated_at"
+      field: "updatedAt"
     }
   };
   const options = {
     tableName: "tb_stock_balance",
     comment: "",
+    timestamps: true,
     indexes: []
   };
   const StockBalanceModel = sequelize.define("tb_stock_balance_model", attributes, options);

@@ -80,26 +80,7 @@ class ProdcutController extends Base {
     return promise;
   }
 
-  static autoInsertByPriceList(tb_institution_id,tb_price_list_id) {
-    const promise = new Promise(async (resolve, reject) => {
-      try {
-        dataProduct = await this.getList(tb_institution_id);
-        dataPrice = {};
-        for (var item of dataProduct){
-          dataPrice ={
-            tb_institution_id: item.tb_instituion_id,
-            tb_price_list_id: tb_price_list_id,
-            tb_product_id: item.id,
-            price_tag : 0
-          }
-          await price.insert(dataPrice);
-        }
-      } catch (err) {
-        reject('autoInsertByPriceList: ' + err)
-      }
-    });
-    return promise;
-  }
+
 
   static async getById(tb_instituion_id,id) {    
     const promise = new Promise((resolve, reject) => {
