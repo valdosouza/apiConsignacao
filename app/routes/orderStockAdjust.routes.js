@@ -269,5 +269,6 @@ router.delete("/:tb_institution_id/:tb_order_id", orderstockadjust.delete);
  *       500:
  *         description: Some error happened
  */
-  router.post("/reopen/", orderstockadjust.reopen);     
+router.post("/reopen/", orderstockadjust.reopen);     
+
 module.exports = router;  

@@ -39,8 +39,7 @@ class OrderItemTransferEndPoint {
       .then(data => {
         res.send(data);
       })
-  }
-  
+  }  
 }
 
 module.exports = OrderItemTransferEndPoint; 

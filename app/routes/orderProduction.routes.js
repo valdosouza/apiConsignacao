@@ -49,6 +49,22 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         note:
  *           type: string
  *       
+ *     OrderProductionOperation:
+ *       type: object
+ *       required:
+ *         - tb_institution_id
+ *         - tb_order_id 
+ *         - dt_record
+ *         - direction 
+ *       properties:
+ *         tb_institution_id:
+ *           type: integer
+ *         id:
+ *           type: integer
+ *         dt_record:
+ *           type: string 
+ *         direction:
+ *           type: string   
  */
 
  /**
@@ -185,5 +201,53 @@ router.get("/getlist/:tb_institution_id", orderproduction.getList);
  *        description: Some error happened
  */
 router.delete("/", orderproduction.delete);
+
+/**
+ * @swagger
+ * /orderproduction/close:
+ *   post:
+ *     summary: Close status Order Production
+ *     tags: [OrderProduction]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/OrderStockAdOperation'
+ *     responses:
+ *       200:
+ *         description: The OrderProduction was closed
+ *       201:
+ *         description: The OrderProduction is already closed
+ *       404:
+ *         description: The Order Production was not found
+ *       500:
+ *         description: Some error happened
+ */
+ router.post("/close/", orderproduction.close);
+
+ /**
+  * @swagger
+  * /orderproduction/reopen:
+  *   post:
+  *     summary: Reopen Status Order Production
+  *     tags: [OrderProduction]
+  *     requestBody:
+  *       required: true
+  *       content:
+  *         application/json:
+  *           schema:
+  *             $ref: '#/components/schemas/OrderStockAdOperation'
+  *     responses:
+  *       200:
+  *         description: The OrderProduction was open
+  *       201:
+  *         description: The OrderProduction is already open
+  *       404:
+  *         description: The Order Production was not found
+  *       500:
+  *         description: Some error happened
+  */
+ router.post("/reopen/", orderproduction.reopen);     
 
 module.exports = router;

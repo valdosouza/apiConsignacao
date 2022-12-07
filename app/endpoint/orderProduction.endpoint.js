@@ -44,6 +44,33 @@ class OrderProductionEndPoint {
       })
   }
   
+  static close(req, res) {
+    
+    OrderProductionController.close(req.body)
+      .then(data => {        
+        if (data == 200){
+          res.status(200).send('The OrderProduction was closed');
+        }else{
+          if (data == 201){
+            res.status(201).send('The OrderProduction is already closed');
+          }  
+        }
+      })
+  }
+   
+  static reopen(req, res) {
+    
+    OrderProductionController.reopen(req.body)
+      .then(data => {        
+        if (data == 200){
+          res.status(200).send('The OrderProduction was open');
+        }else{
+          if (data == 201){
+            res.status(201).send('The OrderProduction is already open');
+          }  
+        }
+      })
+  }  
 }
 
 module.exports = OrderProductionEndPoint; 

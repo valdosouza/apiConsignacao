@@ -1,16 +1,16 @@
 const Base = require('./base.controller.js');
 const db = require("../model");
-const Tb = db.orderstockadjust;
+const Tb = db.orderstocktransfer;
 const order = require('./order.controller.js');
-const orderItem =require('./orderItemStockAdjust.controller.js');
+const orderItem =require('./orderItemStockTransfer.controller.js');
 const stockStatement =require('./stockStatement.controller.js');
 
-class OrderStockAdjustController extends Base {     
+class OrderStockTransferController extends Base {     
   static async getNextNumber(tb_institution_id) {      
     const promise = new Promise((resolve, reject) => {        
       Tb.sequelize.query(
         'Select max(number) lastNumber ' +
-        'from tb_order_stock_adjust '+
+        'from tb_order_stock_transfer '+
         'WHERE ( tb_institution_id =? ) ',
         {
           replacements: [tb_institution_id],
@@ -24,7 +24,7 @@ class OrderStockAdjustController extends Base {
           }
         })
         .catch(err => {
-          reject('orderStockAdjust.getNexNumber: '+err);
+          reject('orderStockTransfer.getNexNumber: '+err);
         });           
     });
     return promise;
@@ -42,14 +42,16 @@ class OrderStockAdjustController extends Base {
         terminal : 0,
         number : body.Order.number,
         tb_entity_id : body.Order.tb_entity_id,
-        direction : body.Order.direction              
+        direction : body.Order.direction,
+        tb_stock_list_id_ori : body.Order.tb_stock_list_id_ori,
+        tb_stock_list_id_des : body.Order.tb_stock_list_id_des,
       }
       Tb.create(dataOrder)
       .then(() => {          
         resolve(body);
       })
       .catch(err => {
-        reject("orderStockAdjust.insertOrder:"+ err);
+        reject("orderStockTransfer.insertOrder:"+ err);
       });        
     });
     return promise;        
@@ -75,7 +77,7 @@ class OrderStockAdjustController extends Base {
         };
         resolve("Items Adicionaos");       
       } catch(err) {            
-        reject("orderStockAdjust.insertOrderItem:"+ err);
+        reject("orderStockTransfer.insertOrderItem:"+ err);
       }          
       
     });
@@ -103,7 +105,7 @@ class OrderStockAdjustController extends Base {
             })                                    
           })            
           .catch(err => {
-            reject("orderStockAdjust.insert:"+ err);
+            reject("orderStockTransfer.insert:"+ err);
           });        
         })
     });
@@ -124,7 +126,7 @@ class OrderStockAdjustController extends Base {
           '  ord.status, '+          
           ' CAST(ord.note AS CHAR(1000) CHARACTER SET utf8) note '+
           'from tb_order ord  '+
-          '   inner join tb_order_stock_adjust ora '+
+          '   inner join tb_order_stock_transfer ora '+
           '   on (ora.id = ord.id)  '+
           '     and (ora.tb_institution_id = ord.tb_institution_id) '+
           '     and (ora.terminal = ord.terminal) '+
@@ -138,7 +140,7 @@ class OrderStockAdjustController extends Base {
               resolve(data);
             })
             .catch(err => {
-              reject("orderstockadjust.getlist: " + err);
+              reject("orderstocktransfer.getlist: " + err);
             });
         });
         return promise;
@@ -158,7 +160,7 @@ class OrderStockAdjustController extends Base {
           '  ord.status, '+          
           ' CAST(ord.note AS CHAR(1000) CHARACTER SET utf8) note '+
           'from tb_order ord  '+
-          '   inner join tb_order_stock_adjust ora '+
+          '   inner join tb_order_stock_transfer ora '+
           '   on (ora.id = ord.id)  '+
           '     and (ora.tb_institution_id = ord.tb_institution_id) '+
           '     and (ora.terminal = ord.terminal) '+
@@ -173,7 +175,7 @@ class OrderStockAdjustController extends Base {
             resolve(data[0]);
           })
           .catch(err => {
-            reject('orderstockadjust.get: '+err);
+            reject('orderstocktransfer.get: '+err);
           });
       });
       return promise;
@@ -185,7 +187,7 @@ class OrderStockAdjustController extends Base {
         '  select '+        
         '  ord.status '+                  
         'from tb_order ord  '+
-        '   inner join tb_order_stock_adjust ora '+
+        '   inner join tb_order_stock_transfer ora '+
         '   on (ora.id = ord.id)  '+
         '     and (ora.tb_institution_id = ord.tb_institution_id) '+
         '     and (ora.terminal = ord.terminal) '+
@@ -200,7 +202,7 @@ class OrderStockAdjustController extends Base {
           resolve(data[0].status);
         })
         .catch(err => {
-          reject('orderstockadjust.getStatus: '+err);
+          reject('orderstocktransfer.getStatus: '+err);
         });
     });
     return promise;
@@ -241,7 +243,7 @@ class OrderStockAdjustController extends Base {
                 terminal: dataOrderStockAdjust.terminal }
       })
       .catch(err => {
-        reject("orderStockAdjust.updateOrder:"+ err);
+        reject("orderStockTransfer.updateOrder:"+ err);
       });        
     });
     return promise;        
@@ -267,7 +269,7 @@ class OrderStockAdjustController extends Base {
         };
         resolve("Items Alterados");       
       } catch(err) {            
-        reject("orderStockAdjust.updateOrderItem:"+ err);
+        reject("orderStockTransfer.updateOrderItem:"+ err);
       }          
       
     });
@@ -296,7 +298,7 @@ class OrderStockAdjustController extends Base {
         resolve(body);
       })
       .catch(err => {
-        reject("orderStockAdjust.update:"+ err);
+        reject("orderStockTransfer.update:"+ err);
       });        
     });
     return promise;        
@@ -306,7 +308,7 @@ class OrderStockAdjustController extends Base {
       const promise = new Promise((resolve, reject) => {
         resolve("Em Desenvolvimento");
           /*
-          Tb.delete(orderstockadjust)
+          Tb.delete(orderstocktransfer)
               .then((data) => {
                   resolve(data);
               })
@@ -322,8 +324,8 @@ class OrderStockAdjustController extends Base {
   static async close(body) {      
     const promise = new Promise(async (resolve, reject) => {
       try {          
-        var status = await this.getStatus(body.tb_institution_id,body.id);        
-        if (status == 'A'){
+        var dataOrder = await this.getOrder(body.tb_institution_id,body.id);        
+        if (dataOrder.status == 'A'){
           var items = await orderItem.getList(body.tb_institution_id,body.id);          
           var dataItem = {};
           for(var item of items) {              
@@ -333,16 +335,22 @@ class OrderStockAdjustController extends Base {
               tb_order_id: body.id,
               terminal: 0,              
               tb_order_item_id: item.id,
-              tb_stock_list_id: item.tb_stock_list_id,
+              tb_stock_list_id: 0,
               local: "web",
               kind: "Fechamento",
               dt_record: body.dt_record,
-              direction: body.direction,
+              direction: "S",
               tb_merchandise_id: item.tb_product_id,
               quantity: item.quantity,
-              operation: "Ajuste"
+              operation: "Tranferência"
             } ;
-            //Quanto o insert é mais complexo como create precisa do await no loop          
+            //Origen
+            dataItem['tb_stock_list_id'] = dataOrder.tb_stock_list_id_ori;
+            dataItem['direction'] = 'S';            
+            await stockStatement.insert(dataItem);            
+            //Destiny
+            dataItem['tb_stock_list_id'] = dataOrder.tb_stock_list_id_des;
+            dataItem['direction'] = 'E';            
             await stockStatement.insert(dataItem);            
           };          
           await order.updateStatus(body.tb_institution_id,body.id,'F');      
@@ -402,4 +410,4 @@ class OrderStockAdjustController extends Base {
     return promise;        
   }       
 }
-module.exports = OrderStockAdjustController;
+module.exports = OrderStockTransferController;

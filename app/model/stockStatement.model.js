@@ -113,7 +113,7 @@ module.exports = sequelize => {
       field: "quantity"
     },
     operation: {
-      type: DataTypes.STRING(10),
+      type: DataTypes.STRING(25),
       allowNull: true,
       defaultValue: null,
       primaryKey: false,

@@ -40,24 +40,6 @@ module.exports = sequelize => {
       comment: null,
       field: "number"
     },
-    dt_start: {
-      type: DataTypes.DATEONLY,
-      allowNull: true,
-      defaultValue: null,
-      primaryKey: false,
-      autoIncrement: false,
-      comment: null,
-      field: "dt_start"
-    },
-    dt_end: {
-      type: DataTypes.DATEONLY,
-      allowNull: true,
-      defaultValue: null,
-      primaryKey: false,
-      autoIncrement: false,
-      comment: null,
-      field: "dt_end"
-    },
     tb_merchandise_id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
@@ -66,16 +48,7 @@ module.exports = sequelize => {
       autoIncrement: false,
       comment: null,
       field: "tb_merchandise_id"
-    },
-    tb_situation_id: {
-      type: DataTypes.INTEGER(11),
-      allowNull: false,
-      defaultValue: null,
-      primaryKey: false,
-      autoIncrement: false,
-      comment: null,
-      field: "tb_situation_id"
-    },
+    },    
     qtty_forecast: {
       type: DataTypes.DECIMAL,
       allowNull: false,
