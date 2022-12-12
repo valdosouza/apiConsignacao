@@ -21,9 +21,16 @@ class CustomerEndPoint {
       })
   };
 
-  static getList = (req, res) => {
-    const tb_institution_id = req.params.tb_institution_id;
-    CustomerController.getList(tb_institution_id)
+  static getList = (req, res) => {    
+    CustomerController.getList(req.params.tb_institution_id)
+      .then(data => {
+        res.send(data);
+      })
+  };
+
+  static getListBySalesRoute = (req, res) => {
+    
+    CustomerController.getListBySalesRoute(req.params.tb_institution_id,req.params.tb_sales_route_id)
       .then(data => {
         res.send(data);
       })

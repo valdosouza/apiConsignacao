@@ -292,5 +292,59 @@ class CustomerController extends Base {
     return promise;
   }
 
+  static getListBySalesRoute = (tb_institution_id,tb_sales_route_id) => {
+
+    const promise = new Promise((resolve, reject) => {
+      Tb.sequelize.query(
+        'Select '+
+        'src.tb_sales_route_id, '+
+        'src.sequencia, '+        
+        'et.id,  '+
+        'et.name_company,  '+
+        'et.nick_trade, '+
+        ' "F" docType, '+
+        'pe.cpf documento '+
+        'from tb_customer ct  '+
+        '  inner join tb_entity et  '+
+        '  on (ct.id = et.id)  '+
+        '  inner join tb_person pe '+
+        '  on (pe.id = et.id) '+
+        '  inner join tb_sales_route_customer src '+
+        '  on (src.tb_customer_id = ct.id) '+
+        '   and  (src.tb_institution_id = ct.tb_institution_id) '+
+        'where ct.tb_institution_id =? '+
+        '  and tb_sales_route_id =?'+
+        'union '+
+        'Select  '+
+        'src.tb_sales_route_id, '+
+        'src.sequencia, '+        
+        'et.id,  '+
+        'et.name_company,  '+
+        'et.nick_trade, '+
+        ' "J" docType, '+
+        'co.cnpj documento '+
+        'from tb_customer ct  '+
+        '  inner join tb_entity et  '+
+        '  on (ct.id = et.id)  '+
+        '  inner join tb_company co '+
+        '  on (co.id = et.id) '+
+        '  inner join tb_sales_route_customer src '+
+        '  on (src.tb_customer_id = ct.id) '+
+        '   and  (src.tb_institution_id = ct.tb_institution_id) '+
+        'where ct.tb_institution_id =? '+
+        '  and tb_sales_route_id =?',
+        {
+          replacements: [tb_institution_id,tb_sales_route_id,tb_institution_id,tb_sales_route_id],
+          type: Tb.sequelize.QueryTypes.SELECT
+        }).then(data => {          
+          resolve(data);
+        })
+        .catch(err => {
+          reject('Customer.getListBySalesRoute: '+err);
+        });
+    });
+    return promise;
+  }
+
 }
 module.exports = CustomerController; 

@@ -68,6 +68,24 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         Documento:
  *           type: string
  
+ *     ListCustomerByRoute:
+ *       type: object
+ *       properties:
+ *         tb_sales_route_id:
+ *           type: integer
+ *         sequencia:
+ *           type: integer
+ *         id:
+ *           type: integer
+ *         name:
+ *           type: string
+ *         apelido:
+ *           type: string
+ *         TipoDoc:
+ *           type: string
+ *         Documento:
+ *           type: string
+ * 
  */
 
  /**
@@ -150,7 +168,36 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         description: Some server error 
  */
  router.get("/getlist/:tb_institution_id", customer.getList);
- 
+
+ /**
+ * @swagger
+ * /customer/getlist/{tb_institution_id}/{tb_sales_route_id}:
+ *   get:
+ *     summary: Returns the list of all the Customer
+ *     tags: [Customer]
+ *     parameters:
+ *      - in: path
+ *        name: tb_institution_id
+ *      - in: path
+ *        name: tb_sales_route_id
+ *        schema:
+ *          type: integer  
+ *        required: true
+ *        description: The Customer List by tb_institution_id tb_sales_route
+ *     responses:
+ *       200:
+ *         description: The list of collaborator
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/ListCustomerByRoute'
+ *       500:
+ *         description: Some server error 
+ */
+ router.get("/getlist/:tb_institution_id/:tb_sales_route_id", customer.getListBySalesRoute);
+
 /**
  * @swagger
  * /customer/{id}:
