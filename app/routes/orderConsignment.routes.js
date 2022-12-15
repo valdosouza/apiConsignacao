@@ -10,62 +10,131 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  * @swagger
  * components:
  *   schemas:
- *     OrderConsignment:
+ *     OrderConsignmentCheckPoint:
  *       type: object
  *       required:
  *         - id
  *         - tb_institution_id
- *         - tb_order_id
- *         - tb_user_id
  *         - tb_customer_id
- *         - tb_salesman_id
- *         - dt_record
- *         - direction
- *         - kind
+ *         - total_value
+ *         - change_value
+ *         - debit_balance
  *       properties:
  *         id:
  *           type: integer
  *         tb_institution_id:
  *           type: integer
- *         tb_order_id:
- *           type: integer
- *         tb_user_id:
- *           type: integer
  *         tb_customer_id:
- *           type: integer
- *         tb_salesman_id:
- *           type: integer
- *         dt_record:
+ *           type: integer 
+ *         name_customer:
  *           type: string
- *         direction:
- *           type: string
- *         kind:
- *           type: string
+ *         total_value:
+ *           type: number
+ *         change_value:
+ *           type: number
+ *         debit_balance:
+ *           type: number
  *     
- *     OrderConsignmentItem:
+ *     OrderConsignmentItemCheckPoint:
  *       type: object
  *       required:
  *         - tb_product_id
+ *         - name_product
+ *         - bonus
+ *         - qty_consigned
+ *         - leftover
+ *         - qty_sold
  *         - unit_value
- *         - quantity
  *       properties:
  *         tb_product_id:
  *           type: integer
+ *         bonus:
+ *           type: number
+ *         qty_consigned:
+ *           type: number 
+ *         leftover:
+ *           type: number
+ *         qty_sold:
+ *           type: number
  *         unit_value:
- *           type: number
- *         quantity:
- *           type: number
+ *           type: number 
  * 
- *     OrderConsignmentMain:
+ *     OrderConsignmentItemPayment:
+ *       type: object
+ *       required:
+ *         - tb_payment_type_id
+ *         - description
+ *         - value
+ *       properties:
+ *         tb_payment_type_id:
+ *           type : integer
+ *         name_payment_type:
+ *           type: string
+ *         value:
+ *           type: number
+ *  
+ *     OrderConsignmentCheckPointMain:
  *       type: object
  *       properties:
  *         Order:
- *           $ref: '#/components/schemas/OrderConsignment'
+ *           $ref: '#/components/schemas/OrderConsignmentCheckPoint'
  *         Items:
  *            type: array
  *            items:
- *              $ref: '#/components/schemas/OrderConsignmentItem'
-*/
+ *              $ref: '#/components/schemas/OrderConsignmentItemCheckPoint'
+ *         Payments:
+ *            type: array
+ *            items:
+ *              $ref: '#/components/schemas/OrderConsignmentItemPayment'
+ * 
+ *     OrderConsignmentSupplying:
+ *       type: object
+ *       required:
+ *         - id
+ *         - tb_institution_id
+ *       properties:
+ *         id:
+ *           type: integer
+ *         tb_institution_id:
+ *           type: integer
+ *     
+ *     OrderConsignmentItemSupplying:
+ *       type: object
+ *       required:
+ *         - tb_product_id
+ *         - name_product
+ *         - bonus
+ *         - leftover
+ *         - devolution
+ *         - new_consignment
+ *         - qty_consigned
+ *       properties:
+ *         tb_product_id:
+ *           type: integer
+ *         name_product:
+ *           type: integer  
+ *         bonus:
+ *           type: number
+ *         leftover:
+ *           type: number
+ *         devolution:
+ *           type: number
+ *         new_consignment:
+ *           type: number
+ *         qty_consigned:
+ *           type: number    
+ * 
+ *     OrderConsignmentSupplyingMain:
+ *       type: object
+ *       properties:
+ *         Order:
+ *           $ref: '#/components/schemas/OrderConsignmentSupplying'
+ *         Items:
+ *            type: array
+ *            items:
+ *              $ref: '#/components/schemas/OrderConsignmentItemSupplying' 
+ * 
+ */
  
  
  /**
@@ -77,82 +146,103 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
 
 /**
  * @swagger
- * /orderconsignment:
+ * /orderconsignment/checkpoint:
  *   post:
- *     summary: Create a new orderconsignment
+ *     summary: Create a new Order Consignment - CheckPoint
  *     tags: [OrderConsignment]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/OrderConsignmentMain'
+ *             $ref: '#/components/schemas/OrderConsignmentCheckPointMain'
  *     responses:
  *       200:
  *         description: The OrderConsignment was successfully created
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/OrderConsignmentMain'
+ *               $ref: '#/components/schemas/OrderConsignmentCheckPointMain'
  *       500:
  *         description: Some server error
  */
- router.post("/", orderconsignment.create);
+router.post("/checkpoint", orderconsignment.saveCheckpoint);
 
- /**
+/**
  * @swagger
- * /orderconsignment/getlist/{tb_institution_id}/{tb_order_id}:
- *   get:
- *     summary: Returns the list of all the OrderConsignments
+ * /orderconsignment/supplying:
+ *   post:
+ *     summary: Create a new Order Consignment - Supplying
  *     tags: [OrderConsignment]
- *     parameters:
- *      - in: path
- *        name: tb_institution_id
- *      - in: path
- *        name: tb_order_id
- *        schema:
- *          type: string
- *        required: true
- *        description: The orderconsignment tb_institution_id
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/OrderConsignmentSupplyingMain'
  *     responses:
  *       200:
- *         description: The list of the payment types
+ *         description: The OrderConsignment was successfully created
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/OrderConsignmentMain'
+ *               $ref: '#/components/schemas/OrderConsignmentSupplyingMain'
+ *       500:
+ *         description: Some server error
  */
-
-router.get("/getlist/:tb_institution_id/:tb_order_id", orderconsignment.getList);
+router.post("/supplying", orderconsignment.saveSupplying);
   
 /**
  * @swagger
- * /orderconsignment/get/{tb_institution_id}/{tb_order_id}/{id}:
+ * /orderconsignment/checkpoint/get/{tb_institution_id}/{id}:
  *   get:
- *     summary: Returns the OrderConsignment
+ *     summary: Returns the OrderConsignment CheckPoint
  *     tags: [OrderConsignment]
  *     parameters:
  *      - in: path
  *        name: tb_institution_id
- *      - in: path
- *        name: tb_order_id
  *      - in: path
  *        name: id
  *        schema:
  *          type: string
  *        required: true
- *        description: The orderconsignment by tb_institution_id and....
+ *        description: The orderconsignment CheckPoint by tb_institution_id and id
  *     responses:
  *       200:
- *         description: The OrderConsignment
+ *         description: The OrderConsignment CheckPoint 
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/OrderConsignmentMain'
+ *               $ref: '#/components/schemas/OrderConsignmentCheckPointMain'
  */
 
- router.get("/get/:tb_institution_id/:tb_order_id/:id", orderconsignment.get);
+ router.get("/checkpoint/get/:tb_institution_id/:id", orderconsignment.getcheckpoint);
+
+/**
+ * @swagger
+ * /orderconsignment/supplying/get/{tb_institution_id}/{id}:
+ *   get:
+ *     summary: Returns the OrderConsignment Supplying
+ *     tags: [OrderConsignment]
+ *     parameters:
+ *      - in: path
+ *        name: tb_institution_id
+ *      - in: path
+ *        name: id
+ *        schema:
+ *          type: string
+ *        required: true
+ *        description: The orderconsignment Supplyng by tb_institution_id and id
+ *     responses:
+ *       200:
+ *         description: The OrderConsignment Supplying
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/OrderConsignmentSupplyingMain'
+ */
+
+router.get("/supplying/get/:tb_institution_id/:id", orderconsignment.getsupplying);
+
 
 module.exports = router;

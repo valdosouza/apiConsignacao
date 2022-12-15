@@ -80,7 +80,9 @@ db.orderstockadjust = require("./orderStockAdjust.model.js")(sequelize, Sequeliz
 db.ordersale = require("./orderSale.model.js")(sequelize, Sequelize);
 db.orderstocktransfer = require("./orderStockTransfer.model.js")(sequelize, Sequelize);
 db.orderconsignment = require("./orderConsignment.model.js")(sequelize, Sequelize);
-
+db.orderconsignmentitem = require("./orderConsignmentItem.model.js")(sequelize, Sequelize);
+db.orderconsignmentpaid = require("./orderConsignmentPaid.model.js")(sequelize, Sequelize);
+db.orderattendance = require("./orderAttendance.model.js")(sequelize, Sequelize);
 
 db.restSubgroup = require("./restSubgroup.model.js")(sequelize, Sequelize);
 db.restGroup = require("./restGroup.model.js")(sequelize, Sequelize);

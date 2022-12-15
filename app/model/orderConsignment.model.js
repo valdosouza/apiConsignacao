@@ -40,14 +40,32 @@ module.exports = sequelize => {
       comment: null,
       field: "tb_customer_id"
     },
-    tb_salesman_id: {
-      type: DataTypes.INTEGER(11),
+    total_value: {
+      type: DataTypes.DECIMAL,
       allowNull: true,
       defaultValue: "0",
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "tb_salesman_id"
+      field: "total_value"
+    },
+    change_value: {
+      type: DataTypes.DECIMAL,
+      allowNull: true,
+      defaultValue: "0",
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "change_value"
+    },
+    debit_balance: {
+      type: DataTypes.DECIMAL,
+      allowNull: true,
+      defaultValue: "0",
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "debit_balance"
     },
     createdAt: {
       type: DataTypes.DATE,

@@ -85,7 +85,9 @@ class OrderController extends Base {
       const promise = new Promise((resolve, reject) => {
         if (order.validity == '') delete  order.validity;
           Tb.update(order,{
-            where: { id: order.id,tb_institution_id: order.tb_institution_id, terminal:order.terminal }
+            where: { id: order.id,
+                     tb_institution_id: order.tb_institution_id, 
+                     terminal:order.terminal }
           })
           .then(data => {
             resolve(data);

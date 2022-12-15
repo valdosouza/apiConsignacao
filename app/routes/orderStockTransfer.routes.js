@@ -123,22 +123,20 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
 
  /**
  * @swagger
- * /orderstocktransfer/getlist/{tb_institution_id}/{tb_order_id}:
+ * /orderstocktransfer/getlist/{tb_institution_id}:
  *   get:
  *     summary: Returns the list of all the OrderStockTransfers
  *     tags: [OrderStockTransfer]
  *     parameters:
  *      - in: path
  *        name: tb_institution_id
- *      - in: path
- *        name: tb_order_id
  *        schema:
  *          type: string
  *        required: true
  *        description: The orderstocktransfer tb_institution_id
  *     responses:
  *       200:
- *         description: The list of the payment types
+ *         description: The list of the StockTransfer
  *         content:
  *           application/json:
  *             schema:
@@ -147,11 +145,11 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *                 $ref: '#/components/schemas/OrderStockTransferMain'
  */
 
-router.get("/getlist/:tb_institution_id/:tb_order_id", orderstocktransfer.getList);
+router.get("/getlist/:tb_institution_id", orderstocktransfer.getList);
   
 /**
  * @swagger
- * /orderstocktransfer/get/{tb_institution_id}/{tb_order_id}/{id}:
+ * /orderstocktransfer/get/{tb_institution_id}/{id}:
  *   get:
  *     summary: Returns the OrderStockTransfer
  *     tags: [OrderStockTransfer]
@@ -159,13 +157,11 @@ router.get("/getlist/:tb_institution_id/:tb_order_id", orderstocktransfer.getLis
  *      - in: path
  *        name: tb_institution_id
  *      - in: path
- *        name: tb_order_id
- *      - in: path
  *        name: id
  *        schema:
  *          type: string
  *        required: true
- *        description: The orderstocktransfer by tb_institution_id and....
+ *        description: The Order Stocktransfer by tb_institution_id and id
  *     responses:
  *       200:
  *         description: The OrderStockTransfer
@@ -175,7 +171,7 @@ router.get("/getlist/:tb_institution_id/:tb_order_id", orderstocktransfer.getLis
  *               $ref: '#/components/schemas/OrderStockTransferMain'
  */
 
- router.get("/get/:tb_institution_id/:tb_order_id/:id", orderstocktransfer.get);
+ router.get("/get/:tb_institution_id/:id", orderstocktransfer.get);
  /**
  * @swagger
  * /orderstocktransfer:
@@ -204,15 +200,13 @@ router.get("/getlist/:tb_institution_id/:tb_order_id", orderstocktransfer.getLis
 
 /**
  * @swagger
- * /orderstocktransfer/{tb_institution_id}/{tb_order_id}/{id}:
+ * /orderstocktransfer/{tb_institution_id}/{id}:
  *  delete:
  *    summary: Delete the orderstocktransfer by the id
  *    tags: [OrderStockTransfer]
  *    parameters:
  *      - in: path
  *        name: tb_institution_id
- *      - in: path
- *        name: tb_order_id
  *      - in: path
  *        name: id 
  *        schema:
@@ -227,7 +221,7 @@ router.get("/getlist/:tb_institution_id/:tb_order_id", orderstocktransfer.getLis
  *      500:
  *        description: Some error happened
  */
-router.delete("/:tb_institution_id/:tb_order_id/:id", orderstocktransfer.delete);
+router.delete("/:tb_institution_id/:id", orderstocktransfer.delete);
 
 /**
  * @swagger

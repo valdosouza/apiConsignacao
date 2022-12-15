@@ -2,23 +2,31 @@ const OrderConsignmentController = require("../controller/orderConsignment.contr
 
 class OrderConsignmentEndPoint {
 
-  static create = (req, res) => {
+  static saveCheckpoint = (req, res) => {
     
-    OrderConsignmentController.insert(req.body)
+    OrderConsignmentController.saveCheckpoint(req.body)
       .then(data => {
         res.send(data);
     })
   }
 
-  static getList(req, res) {
+  static saveSupplying = (req, res) => {
     
-    OrderConsignmentController.getList(req.params.tb_institution_id,req.params.tb_order_id )
+    OrderConsignmentController.saveSupplying(req.body)
+      .then(data => {
+        res.send(data);
+    })
+  }
+
+  static getcheckpoint(req, res) {
+    
+    OrderConsignmentController.get(req.params.tb_institution_id,req.params.tb_order_id,req.params.id )
       .then(data => {
         res.send(data);
       })
   }
-
-  static get(req, res) {
+  
+  static getsupplying(req, res) {
     
     OrderConsignmentController.get(req.params.tb_institution_id,req.params.tb_order_id,req.params.id )
       .then(data => {

@@ -211,7 +211,6 @@ class OrderStockAdjustController extends Base {
       try{
         var result = {};
         const dataOrder = await this.getOrder(tb_institution_id,id);
-        console.log(dataOrder);
         result.Order = dataOrder;
         const dataItems = await orderItem.getList(tb_institution_id,id);
         result.Items = dataItems;      

@@ -85,7 +85,7 @@ class OrderStockTransferController extends Base {
   }      
 
   static async insert(body) {      
-    const promise = new Promise(async (resolve, reject) => {         
+    const promise = new Promise(async (resolve, reject) => {       
       const dataOrder = {
         id: 0,
         tb_institution_id: body.Order.tb_institution_id,
@@ -181,39 +181,11 @@ class OrderStockTransferController extends Base {
       return promise;
   }
 
-  static async getStatus(tb_institution_id,id) {
-    const promise = new Promise((resolve, reject) => {
-      Tb.sequelize.query(
-        '  select '+        
-        '  ord.status '+                  
-        'from tb_order ord  '+
-        '   inner join tb_order_stock_transfer ora '+
-        '   on (ora.id = ord.id)  '+
-        '     and (ora.tb_institution_id = ord.tb_institution_id) '+
-        '     and (ora.terminal = ord.terminal) '+
-        '   inner join tb_entity etd '+
-        '   on (etd.id = ora.tb_entity_id)  '+
-        'where (ord.tb_institution_id =? ) '+
-        ' and (ord.id =? )',
-        {
-          replacements: [tb_institution_id,id],
-          type: Tb.sequelize.QueryTypes.SELECT
-        }).then(data => {
-          resolve(data[0].status);
-        })
-        .catch(err => {
-          reject('orderstocktransfer.getStatus: '+err);
-        });
-    });
-    return promise;
-  }
-
   static get = (tb_institution_id,id) => {
     const promise = new Promise(async (resolve, reject) => {
       try{
         var result = {};
         const dataOrder = await this.getOrder(tb_institution_id,id);
-        console.log(dataOrder);
         result.Order = dataOrder;
         const dataItems = await orderItem.getList(tb_institution_id,id);
         result.Items = dataItems;      

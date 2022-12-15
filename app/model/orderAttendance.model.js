@@ -4,14 +4,14 @@ const {
 
 module.exports = sequelize => {
   const attributes = {
-    tb_order_item_id: {
+    id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
       defaultValue: null,
       primaryKey: true,
       autoIncrement: false,
       comment: null,
-      field: "tb_order_item_id"
+      field: "id"
     },
     tb_institution_id: {
       type: DataTypes.INTEGER(11),
@@ -31,33 +31,60 @@ module.exports = sequelize => {
       comment: null,
       field: "terminal"
     },
-    tb_order_id: {
+    tb_salesman_id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
       defaultValue: null,
       primaryKey: true,
       autoIncrement: false,
       comment: null,
-      field: "tb_order_id"
+      field: "tb_salesman_id"
     },
-    dt_record: {
-      type: DataTypes.DATEONLY,
-      allowNull: true,
+    tb_customer_id: {
+      type: DataTypes.INTEGER(11),
+      allowNull: false,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "dt_record"
+      field: "tb_customer_id"
     },
-    kind: {
-      type: DataTypes.STRING(10),
+    visited: {
+      type: DataTypes.STRING(1),
       allowNull: true,
-      defaultValue: null,
+      defaultValue: "N",
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "kind"
+      field: "visited"
+    },    
+    charged: {
+      type: DataTypes.STRING(1),
+      allowNull: true,
+      defaultValue: "N",
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "charged"
     },
+    latitude: {
+      type: DataTypes.STRING(20),
+      allowNull: true,
+      defaultValue: "0",
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "latitude"
+    },
+    longitude: {
+      type: DataTypes.STRING(20),
+      allowNull: true,
+      defaultValue: "0",
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "longitude"
+    },    
     createdAt: {
       type: DataTypes.DATE,
       allowNull: true,
@@ -78,11 +105,11 @@ module.exports = sequelize => {
     }
   };
   const options = {
-    tableName: "tb_order_consignment_operation",
+    tableName: "tb_order_attendance",
     comment: "",
     timestamps: true,
     indexes: []
   };
-  const TbOrderConsignmentOperationModel = sequelize.define("tb_order_consignment_operation_model", attributes, options);
-  return TbOrderConsignmentOperationModel;
+  const TbOrderAttendanceModel = sequelize.define("tb_order_attendance_model", attributes, options);
+  return TbOrderAttendanceModel;
 };

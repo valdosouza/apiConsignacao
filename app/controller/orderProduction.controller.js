@@ -256,7 +256,6 @@ class OrderProductionController extends Base {
             quantity: dataOrder.qtty_forecast,
             operation: "Produção"
           } ;          
-          console.log(dataItem);
           await stockStatement.insert(dataItem);            
           await order.updateStatus(body.tb_institution_id,body.id,'A');      
           resolve("200");  

@@ -1,9 +1,10 @@
-const OrderStockTransferController = require("../controller/orderStockTransfer.controller.js");
+const OrderAttendanceController = require("../controller/orderAttendance.controller.js");
 
-class OrderStockTransferEndPoint {
+class OrderAttendanceEndPoint {
 
-  static create = (req, res) => {    
-    OrderStockTransferController.insert(req.body)
+  static create = (req, res) => {
+    
+    OrderAttendanceController.insert(req.body)
       .then(data => {
         res.send(data);
     })
@@ -11,7 +12,7 @@ class OrderStockTransferEndPoint {
 
   static getList(req, res) {
     
-    OrderStockTransferController.getList(req.params.tb_institution_id )
+    OrderAttendanceController.getList(req.params.tb_institution_id )
       .then(data => {
         res.send(data);
       })
@@ -19,14 +20,14 @@ class OrderStockTransferEndPoint {
 
   static get(req, res) {
     
-    OrderStockTransferController.get(req.params.tb_institution_id,req.params.id )
+    OrderAttendanceController.get(req.params.tb_institution_id,req.params.id )
       .then(data => {
         res.send(data);
       })
   }
 
   static update = (req, res) => {
-    OrderStockTransferController.update(req.body)
+    OrderAttendanceController.update(req.body)
       .then(data => {
         if (data)
           res.send(req.body)
@@ -37,7 +38,7 @@ class OrderStockTransferEndPoint {
 
   static delete(req, res) {
 
-    OrderStockTransferController.delete(req.body)
+    OrderAttendanceController.delete(req.body)
       .then(data => {
         res.send(data);
       })
@@ -45,7 +46,7 @@ class OrderStockTransferEndPoint {
   
   static close(req, res) {
     
-    OrderStockTransferController.close(req.body)
+    OrderAttendanceController.close(req.body)
       .then(data => {        
         if (data == 200){
           res.status(200).send('The OrderStockTransfer was closed');
@@ -59,7 +60,7 @@ class OrderStockTransferEndPoint {
    
   static reopen(req, res) {
     
-    OrderStockTransferController.reopen(req.body)
+    OrderAttendanceController.reopen(req.body)
       .then(data => {        
         if (data == 200){
           res.status(200).send('The OrderStockTransfer was open');
@@ -72,4 +73,4 @@ class OrderStockTransferEndPoint {
   }
 }
 
-module.exports = OrderStockTransferEndPoint; 
+module.exports = OrderAttendanceEndPoint; 
