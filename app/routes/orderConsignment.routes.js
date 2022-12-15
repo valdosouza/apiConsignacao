@@ -92,11 +92,16 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *       required:
  *         - id
  *         - tb_institution_id
+ *         - tb_customer_id
  *       properties:
  *         id:
  *           type: integer
  *         tb_institution_id:
  *           type: integer
+ *         tb_customer_id:
+ *           type: integer 
+ *         name_customer:
+ *           type: string 
  *     
  *     OrderConsignmentItemSupplying:
  *       type: object
@@ -216,7 +221,7 @@ router.post("/supplying", orderconsignment.saveSupplying);
  *               $ref: '#/components/schemas/OrderConsignmentCheckPointMain'
  */
 
- router.get("/checkpoint/get/:tb_institution_id/:id", orderconsignment.getcheckpoint);
+ router.get("/checkpoint/get/:tb_institution_id/:id", orderconsignment.getCheckpoint);
 
 /**
  * @swagger
@@ -242,7 +247,32 @@ router.post("/supplying", orderconsignment.saveSupplying);
  *               $ref: '#/components/schemas/OrderConsignmentSupplyingMain'
  */
 
-router.get("/supplying/get/:tb_institution_id/:id", orderconsignment.getsupplying);
+router.get("/supplying/get/:tb_institution_id/:id", orderconsignment.getSupplying);
 
+/**
+ * @swagger
+ * /orderconsignment/getlast/{tb_institution_id}/{tb_customer_id}:
+ *   get:
+ *     summary: Returns the Last Supplying made at the Order  Consignament 
+ *     tags: [OrderConsignment]
+ *     parameters:
+ *      - in: path
+ *        name: tb_institution_id
+ *      - in: path
+ *        name: tb_customer_id
+ *        schema:
+ *          type: string
+ *        required: true
+ *        description: The orderconsignment Supplyng by tb_institution_id and tb_customer_id
+ *     responses:
+ *       200:
+ *         description: The OrderConsignment Supplying
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/OrderConsignmentSupplyingMain'
+ */
+
+router.get("/getlast/:tb_institution_id/:tb_customer_id", orderconsignment.getLast);
 
 module.exports = router;

@@ -40,40 +40,67 @@ class OrderConsignmentItemController extends Base {
   }    
 
 
-  static getList(tb_institution_id) {
+  static getCheckpointList(tb_institution_id,id) {
       const promise = new Promise((resolve, reject) => {
         Tb.sequelize.query(
-        '  select '+
-        '  ord.id, '+
-        '  ord.tb_institution_id, '+
-        '  ord.tb_user_id, '+
-        '  ora.tb_entity_id,'+
-        '  etd.name_company name_entity,'+
-        '  ord.dt_record, '+
-        '  ora.number, '+
-        '  ord.status, '+          
-        ' CAST(ord.note AS CHAR(1000) CHARACTER SET utf8) note '+
-        'from tb_order ord  '+
-        '   inner join tb_order_consignment ora '+
-        '   on (ora.id = ord.id)  '+
-        '     and (ora.tb_institution_id = ord.tb_institution_id) '+
-        '     and (ora.terminal = ord.terminal) '+
-        '   inner join tb_entity etd '+
-        '   on (etd.id = ora.tb_entity_id)  '+
-        'where (ord.tb_institution_id =? ) ', 
+          '  select '+
+          '  oci.tb_product_id, '+
+          '  pdt.description name_product, '+
+          '  oci.bonus, '+
+          '  oci.qty_consigned, '+
+          '  oci.leftover, '+
+          '  oci.qty_sold, '+
+          '  oci.unit_value '+
+          'from tb_product pdt '+
+          '    left outer join tb_order_consignment_item oci '+
+          '    on (pdt.id = oci.tb_product_id) '+
+          '       and (pdt.tb_institution_id = oci.tb_institution_id) '+
+          'where pdt.tb_institution_id  =? '+
+          ' and oci.id =? '+
+          ' and kind =? ',
           {
-            replacements: [tb_institution_id],
+            replacements: [tb_institution_id,id,'checkpoint'],
             type: Tb.sequelize.QueryTypes.SELECT
           }).then(data => {
             resolve(data);
           })
           .catch(err => {
-            reject("OrderConsignmentItemController.getlist: " + err);
+            reject("OrderConsignmentItem.getCheckpointList: " + err);
           });
       });
       return promise;
   }
   
+  static getSupplyingList(tb_institution_id,id) {
+    const promise = new Promise((resolve, reject) => {
+      Tb.sequelize.query(
+        '  select '+
+        '  oci.tb_product_id, '+
+        '  pdt.description name_product, '+
+        '  oci.bonus, '+
+        '  oci.leftover, '+
+        '  oci.devolution, '+        
+        '  oci.qty_consignment new_consignment,'+
+        '  oci.qty_consigned '+
+        'from tb_product pdt '+
+        '    left outer join tb_order_consignment_item oci '+
+        '    on (pdt.id = oci.tb_product_id) '+
+        '       and (pdt.tb_institution_id = oci.tb_institution_id) '+
+        'where pdt.tb_institution_id  =? '+
+        ' and oci.id =? '+
+        ' and kind =? ',
+        {
+          replacements: [tb_institution_id,id,'supplying'],
+          type: Tb.sequelize.QueryTypes.SELECT
+        }).then(data => {          
+          resolve(data);
+        })
+        .catch(err => {
+          reject("OrderConsignmentItem.getSupplyingList: " + err);
+        });
+    });
+    return promise;
+}
 
   static async delete(body) {      
       const promise = new Promise((resolve, reject) => {

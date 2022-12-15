@@ -39,8 +39,9 @@ class OrderConsignmentController extends Base {
             await this.insertCheckpointPaid(body);            
           })
         }else{
-          this.insertCheckpointItems(body);
-          this.insertCheckpointPaid(body);            
+          await this.update(body)
+          await this.insertCheckpointItems(body);
+          await this.insertCheckpointPaid(body);            
         }
         resolve(body);
       } catch(err) {            
@@ -234,34 +235,7 @@ class OrderConsignmentController extends Base {
     return promise;        
   }      
 
-  static async insertOrderItem(body) {      
-    const promise = new Promise(async (resolve, reject) => {
-      try{
-        var dataItem = {};        
-        for(var item of body.Items) {              
-          dataItem = {
-            id : 0,
-            tb_institution_id: body.Order.tb_institution_id,
-            tb_order_id: body.Order.id,
-            terminal: 0,
-            tb_stock_list_id: item.tb_stock_list_id,
-            tb_product_id: item.tb_product_id,
-            quantity: item.quantity,
-            unit_value: item.unit_value                  
-          } ;
-          //Quanto o insert é mais complexo como getNext precisa do await no loop          
-          await orderItem.insert(dataItem);
-        };
-        resolve("Items Adicionaos");       
-      } catch(err) {            
-        reject("orderConsignment.insertOrderItem:"+ err);
-      }          
-      
-    });
-    return promise;        
-  }      
-
-
+  
     static getList(tb_institution_id) {
         const promise = new Promise((resolve, reject) => {
           Tb.sequelize.query(
@@ -269,19 +243,19 @@ class OrderConsignmentController extends Base {
           '  ord.id, '+
           '  ord.tb_institution_id, '+
           '  ord.tb_user_id, '+
-          '  ora.tb_entity_id,'+
+          '  orc.tb_customer_id,'+
           '  etd.name_company name_entity,'+
           '  ord.dt_record, '+
-          '  ora.number, '+
+          '  orc.number, '+
           '  ord.status, '+          
           ' CAST(ord.note AS CHAR(1000) CHARACTER SET utf8) note '+
           'from tb_order ord  '+
           '   inner join tb_order_consignment ora '+
-          '   on (ora.id = ord.id)  '+
-          '     and (ora.tb_institution_id = ord.tb_institution_id) '+
-          '     and (ora.terminal = ord.terminal) '+
+          '   on (orc.id = ord.id)  '+
+          '     and (orc.tb_institution_id = ord.tb_institution_id) '+
+          '     and (orc.terminal = ord.terminal) '+
           '   inner join tb_entity etd '+
-          '   on (etd.id = ora.tb_entity_id)  '+
+          '   on (etd.id = orc.tb_customer_id)  '+
           'where (ord.tb_institution_id =? ) ', 
             {
               replacements: [tb_institution_id],
@@ -299,36 +273,91 @@ class OrderConsignmentController extends Base {
     static getOrder(tb_institution_id,id) {
       const promise = new Promise((resolve, reject) => {
         Tb.sequelize.query(
-          '  select '+
-          '  ord.id, '+
-          '  ord.tb_institution_id, '+
-          '  ord.tb_user_id, '+
-          '  ora.tb_entity_id,'+
-          '  etd.name_company name_entity,'+
-          '  ord.dt_record, '+
-          '  ora.number, '+
-          '  ord.status, '+          
-          ' CAST(ord.note AS CHAR(1000) CHARACTER SET utf8) note '+
-          'from tb_order ord  '+
-          '   inner join tb_order_consignment ora '+
-          '   on (ora.id = ord.id)  '+
-          '     and (ora.tb_institution_id = ord.tb_institution_id) '+
-          '     and (ora.terminal = ord.terminal) '+
-          '   inner join tb_entity etd '+
-          '   on (etd.id = ora.tb_entity_id)  '+
-          'where (ord.tb_institution_id =? ) '+
-          ' and (ord.id =? )',
-          {
+            'select '+
+            'ord.id,  '+
+            'ord.tb_institution_id,  '+
+            'ord.tb_user_id,  '+
+            'orc.tb_customer_id, '+
+            'etd.name_company name_customer, '+
+            'orc.total_value,'+
+            'orc.change_value,'+            
+            'orc.debit_balance,'+            
+            'ord.dt_record,  '+
+            'orc.number,  '+
+            'ord.status, '+
+            'CAST(ord.note AS CHAR(1000) CHARACTER SET utf8) note  '+
+            'from tb_order ord '+
+            '   inner join tb_order_consignment orc '+
+            '   on (orc.id = ord.id) '+
+            '     and (orc.tb_institution_id = ord.tb_institution_id) '+
+            '     and (orc.terminal = ord.terminal)  '+
+            '   inner join tb_entity etd '+
+            '   on (etd.id = orc.tb_customer_id) '+
+            'where (ord.tb_institution_id =? ) '+
+            ' and (ord.id =? )',
+            {
             replacements: [tb_institution_id,id],
             type: Tb.sequelize.QueryTypes.SELECT
-          }).then(data => {
-            resolve(data[0]);
+          }).then(data => {  
+            if (data.length > 0)          
+              resolve(data[0])
+            else
+              resolve(data);
           })
           .catch(err => {
             reject('orderstockadjust.get: '+err);
           });
       });
       return promise;
+  }
+
+  static getLastOrderByCustomer(tb_institution_id,tb_customer_id) {
+    const promise = new Promise((resolve, reject) => {
+      Tb.sequelize.query(
+        'select '+
+        'ord.id, '+
+        'ord.tb_institution_id, '+
+        'ord.tb_user_id, '+
+        'orc.tb_customer_id, '+
+        'etd.name_company name_customer, '+
+        'orc.total_value, '+
+        'orc.change_value,  '+
+        'orc.debit_balance, '+
+        'ord.dt_record, '+
+        'orc.number, '+
+        'ord.status, '+
+        'CAST(ord.note AS CHAR(1000) CHARACTER SET utf8) note  '+
+        'from tb_order ord '+
+        '   inner join tb_order_consignment orc '+
+        '   on (orc.id = ord.id)  '+
+        '     and (orc.tb_institution_id = ord.tb_institution_id) '+
+        '     and (orc.terminal = ord.terminal)  '+
+        '   inner join tb_entity etd  '+
+        '   on (etd.id = orc.tb_customer_id) '+
+        'where (ord.tb_institution_id =? )  '+
+        ' and (orc.tb_customer_id =? ) '+
+        ' and (ord.dt_record  = ( '+
+        '    select max(ord.dt_record) dt_record '+
+        '    from tb_order ord  '+
+        '       inner join tb_order_consignment orc  '+
+        '       on (orc.id = ord.id)  '+
+        '         and (orc.tb_institution_id = ord.tb_institution_id)  '+
+        '         and (orc.terminal = ord.terminal)   '+
+        '    where (ord.tb_institution_id =? )  '+
+        '     and (orc.tb_customer_id =? ) '+
+        '    )) '+
+        'limit 1 ',        
+        {
+          replacements: [tb_institution_id,tb_customer_id,tb_institution_id,tb_customer_id],
+          type: Tb.sequelize.QueryTypes.SELECT
+        }).then(data => {
+          resolve(data[0]);
+        })
+        .catch(err => {
+          reject('OrderConsignment.getLastOrderByCustomer: '+err);
+        });
+    });
+    return promise;
   }
 
   static async getStatus(tb_institution_id,id) {
@@ -338,11 +367,11 @@ class OrderConsignmentController extends Base {
         '  ord.status '+                  
         'from tb_order ord  '+
         '   inner join tb_order_consignment ora '+
-        '   on (ora.id = ord.id)  '+
-        '     and (ora.tb_institution_id = ord.tb_institution_id) '+
-        '     and (ora.terminal = ord.terminal) '+
+        '   on (orc.id = ord.id)  '+
+        '     and (orc.tb_institution_id = ord.tb_institution_id) '+
+        '     and (orc.terminal = ord.terminal) '+
         '   inner join tb_entity etd '+
-        '   on (etd.id = ora.tb_entity_id)  '+
+        '   on (etd.id = orc.tb_customer_id)  '+
         'where (ord.tb_institution_id =? ) '+
         ' and (ord.id =? )',
         {
@@ -358,24 +387,89 @@ class OrderConsignmentController extends Base {
     return promise;
   }
 
-  static get = (tb_institution_id,id) => {
+  static getCheckpoint (tb_institution_id,id) {
     const promise = new Promise(async (resolve, reject) => {
       try{
         var result = {};
-        const dataOrder = await this.getOrder(tb_institution_id,id);
-        result.Order = dataOrder;
-        const dataItems = await orderItem.getList(tb_institution_id,id);
-        result.Items = dataItems;      
-        
-        resolve(result);
+        this.getOrder(tb_institution_id,id)
+        .then(async data => {
+          var dataOrder ={            
+                id : data.id,
+                tb_institution_id : data.tb_institution_id,
+                tb_customer_id : data.tb_customer_id,
+                name_customer : data.name_customer,
+                total_value : data.total_value,
+                change_value : data.change_value,
+                debit_balance : data.debit_balance,
+              };
+          result.Order = dataOrder;
+          const dataItems = await consignmentItem.getCheckpointList(tb_institution_id,id);
+          result.Items = dataItems;                    
+          resolve(result);      
+        })
       } 
       catch(err){
-        reject('collaborator.get: ' + err);
+        reject('OrderConsignment.getCheckpoint: ' + err);
+      } 
+    });
+    return promise;
+  }
+
+  static getSupplying (tb_institution_id,id) {
+    const promise = new Promise(async (resolve, reject) => {
+      try{
+        var result = {};
+        this.getOrder(tb_institution_id,id)
+        .then(async data => {
+          if (data.length > 0){
+            var dataOrder ={            
+                  id : data.id,
+                  tb_institution_id : data.tb_institution_id,
+                  tb_customer_id : data.tb_customer_id,
+                  name_customer : data.name_customer
+                };
+            result.Order = dataOrder;
+            const dataItems = await consignmentItem.getSupplyingList(tb_institution_id,id);
+            result.Items = dataItems;                    
+            resolve(result);
+          }else{
+            resolve({result: "Ordem não encontrada"});
+          }
+        })
+      } 
+      catch(err){
+        reject('OrderConsignment.getCheckpoint: ' + err);
       } 
     });
     return promise;
   }
    
+  static getLast (tb_institution_id,tb_customer_id) {
+    const promise = new Promise(async (resolve, reject) => {
+      try{
+        var result = {};
+        this.getLastOrderByCustomer (tb_institution_id,tb_customer_id)
+        .then(async data => {
+          var dataOrder ={            
+                id : data.id,
+                tb_institution_id : data.tb_institution_id,
+                tb_customer_id : data.tb_customer_id,
+                name_customer : data.name_customer
+              };
+          result.Order = dataOrder;
+          const dataItems = await consignmentItem.getSupplyingList(tb_institution_id,data.id);
+          if (dataItems.length > 0)
+            result.Items = dataItems;                    
+          resolve(result);      
+        })
+      } 
+      catch(err){
+        reject('OrderConsignment.getLast: ' + err);
+      } 
+    });
+    return promise;
+  }
+
   static async update(body) {        
     const promise = new Promise((resolve, reject) => {
       const dataOrder = {

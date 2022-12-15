@@ -18,20 +18,25 @@ class OrderConsignmentEndPoint {
     })
   }
 
-  static getcheckpoint(req, res) {
-    
-    OrderConsignmentController.get(req.params.tb_institution_id,req.params.tb_order_id,req.params.id )
+  static getCheckpoint  (req, res) {
+    OrderConsignmentController.getCheckpoint(req.params.tb_institution_id,req.params.id )
       .then(data => {
         res.send(data);
       })
   }
   
-  static getsupplying(req, res) {
-    
-    OrderConsignmentController.get(req.params.tb_institution_id,req.params.tb_order_id,req.params.id )
-      .then(data => {
-        res.send(data);
-      })
+  static getSupplying(req, res) {
+    OrderConsignmentController.getSupplying(req.params.tb_institution_id,req.params.id )
+    .then(data => {
+      res.send(data);
+    })
   }  
+  static getLast(req, res) {
+    OrderConsignmentController.getLast(req.params.tb_institution_id,req.params.tb_customer_id )
+    .then(data => {
+      res.send(data);
+    })
+  }  
+
 }
 module.exports = OrderConsignmentEndPoint; 
