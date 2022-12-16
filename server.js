@@ -1,10 +1,12 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require('cors')
-
+require('dotenv').config();
 const cookieParser = require('cookie-parser');
 const swaggerUI = require("swagger-ui-express");
 const swaggerJsDoc = require("swagger-jsdoc");
+
+const PATH_URL_API = process.env.PATH_URL_API;
 
 const options = {
 	definition: {
@@ -16,8 +18,7 @@ const options = {
 		},
 		servers: [
 			{
-				//url: "http://localhost:3000"
-				url: "https://api.industriadechocolatesamor.com.br"
+				url: PATH_URL_API
 			},
 		],
 	},
@@ -25,6 +26,8 @@ const options = {
 };
 
 const specs = swaggerJsDoc(options);
+
+
 
 const app = express();
 
@@ -59,6 +62,7 @@ app.get("/", (req, res) => {
   res.json({ message: "Bem vindo a API do Sistema de Consignação." });
 });
 
+
 const stateRouter = require("./app/routes/state.routes");
 app.use("/state", stateRouter);
 
@@ -70,6 +74,8 @@ app.use("/user", userRouter);
 
 const mailingRouter = require("./app/routes/mailing.routes");
 app.use("/mailing", mailingRouter);
+
+
 
 const entity = require("./app/routes/entity.routes");
 app.use("/entity", entity);
@@ -140,11 +146,14 @@ app.use("/orderstockadjust", orderstockadjust);
 const orderattendance = require("./app/routes/orderAttendance.routes");
 app.use("/orderattendance", orderattendance);
 
+
+
 const PORT = process.env.PORT || 3000;
 
 app.use("/doc", swaggerUI.serve, swaggerUI.setup(specs));
 
 
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}. \nAPI documentation: http://localhost:3000/doc`)
+  console.log(`Server is running on port ${PORT}. \nAPI documentation: ${PATH_URL_API}/doc`);
+  
 })

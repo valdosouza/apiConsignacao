@@ -7,7 +7,7 @@ const TbInstitutionHasUser = db.TbInstitutionHasUser;
 
 const TbUser = db.users;
 var md5 = require('md5');
-require("dotenv-safe").config();
+
 var jwt = require('jsonwebtoken');
 
 class UserController extends Base {
