@@ -147,7 +147,13 @@ class OrderStockTransferController extends Base {
               replacements: [tb_institution_id],
               type: Tb.sequelize.QueryTypes.SELECT
             }).then(data => {
-              resolve(data);
+              var dataReturn = {};    
+              var arrayReturn = [];    
+              for(var item of data) {              
+                dataReturn.Order = item;
+                arrayReturn.push(dataReturn);
+              }
+              resolve(arrayReturn);
             })
             .catch(err => {
               reject("orderstocktransfer.getlist: " + err);
