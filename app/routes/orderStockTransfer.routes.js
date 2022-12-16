@@ -20,7 +20,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         - dt_record
  *         - status
  *         - tb_stock_list_id_ori
- *         - tb_stock_list_id_des
+ *         - name_stock_list_ori 
  *       properties:
  *         id:
  *           type: integer

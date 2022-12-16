@@ -119,19 +119,29 @@ class OrderStockTransferController extends Base {
           '  ord.id, '+
           '  ord.tb_institution_id, '+
           '  ord.tb_user_id, '+
-          '  ora.tb_entity_id,'+
-          '  etd.name_company name_entity,'+
-          '  ord.dt_record, '+
-          '  ora.number, '+
-          '  ord.status, '+          
+          '  ora.tb_entity_id, '+
+          '  etd.name_company name_entity, '+
+          '  tb_stock_list_id_ori, '+
+          '  sto.description name_stock_list_ori, '+
+          '  tb_stock_list_id_des, '+
+          '  std.description name_stock_list_des,   '+
+          '  ord.dt_record,  '+
+          '  ora.number,  '+
+          '  ord.status, '+
           ' CAST(ord.note AS CHAR(1000) CHARACTER SET utf8) note '+
-          'from tb_order ord  '+
+          'from tb_order ord '+
           '   inner join tb_order_stock_transfer ora '+
-          '   on (ora.id = ord.id)  '+
+          '   on (ora.id = ord.id) '+
           '     and (ora.tb_institution_id = ord.tb_institution_id) '+
           '     and (ora.terminal = ord.terminal) '+
           '   inner join tb_entity etd '+
           '   on (etd.id = ora.tb_entity_id)  '+
+          '   inner join tb_stock_list sto '+
+          '   on (sto.id  = ora.tb_stock_list_id_ori) '+
+          '     and (sto.tb_institution_id  = ora.tb_institution_id) '+
+          '   inner join tb_stock_list std '+
+          '   on (std.id  = ora.tb_stock_list_id_des) '+
+          '     and (std.tb_institution_id  = ora.tb_institution_id) '+
           'where (ord.tb_institution_id =? ) ', 
             {
               replacements: [tb_institution_id],
@@ -153,19 +163,29 @@ class OrderStockTransferController extends Base {
           '  ord.id, '+
           '  ord.tb_institution_id, '+
           '  ord.tb_user_id, '+
-          '  ora.tb_entity_id,'+
-          '  etd.name_company name_entity,'+
-          '  ord.dt_record, '+
-          '  ora.number, '+
-          '  ord.status, '+          
+          '  ora.tb_entity_id, '+
+          '  etd.name_company name_entity, '+
+          '  tb_stock_list_id_ori, '+
+          '  sto.description name_stock_list_ori, '+
+          '  tb_stock_list_id_des, '+
+          '  std.description name_stock_list_des,   '+
+          '  ord.dt_record,  '+
+          '  ora.number,  '+
+          '  ord.status, '+
           ' CAST(ord.note AS CHAR(1000) CHARACTER SET utf8) note '+
-          'from tb_order ord  '+
+          'from tb_order ord '+
           '   inner join tb_order_stock_transfer ora '+
-          '   on (ora.id = ord.id)  '+
+          '   on (ora.id = ord.id) '+
           '     and (ora.tb_institution_id = ord.tb_institution_id) '+
           '     and (ora.terminal = ord.terminal) '+
           '   inner join tb_entity etd '+
           '   on (etd.id = ora.tb_entity_id)  '+
+          '   inner join tb_stock_list sto '+
+          '   on (sto.id  = ora.tb_stock_list_id_ori) '+
+          '     and (sto.tb_institution_id  = ora.tb_institution_id) '+
+          '   inner join tb_stock_list std '+
+          '   on (std.id  = ora.tb_stock_list_id_des) '+
+          '     and (std.tb_institution_id  = ora.tb_institution_id) '+
           'where (ord.tb_institution_id =? ) '+
           ' and (ord.id =? )',
           {
