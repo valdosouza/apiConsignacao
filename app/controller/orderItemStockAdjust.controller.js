@@ -22,15 +22,18 @@ class OrderItemStockAdjustController extends Base {
         const promise = new Promise((resolve, reject) => {
           Tb.sequelize.query(
             'select '+
-            'id,'+
-            'tb_institution_id,'+
-            'tb_order_id,'+
-            'tb_stock_list_id,'+
-            'tb_product_id,'+
-            'quantity '+
-            'from tb_order_item '+
-            'where (tb_institution_id =? ) '+
-            ' and (tb_order_id =?) ',
+            'ori.id,'+
+            'ori.tb_institution_id,'+
+            'ori.tb_order_id,'+
+            'ori.tb_stock_list_id,'+
+            'ori.tb_product_id,'+
+            'pdt.description,'+
+            'ori.quantity '+
+            'from tb_order_item ori '+
+            '  inner join tb_product pdt '+
+            '  on (pdt.id = ori.tb_product_id)'+
+            'where (ori.tb_institution_id =? ) '+
+            ' and (ori.tb_order_id =?) ',
             {
               replacements: [tb_institution_id,tb_order_id],
               type: Tb.sequelize.QueryTypes.SELECT

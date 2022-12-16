@@ -49,6 +49,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *       required:
  *         - tb_stock_list_id
  *         - tb_product_id
+ *         - name_product
  *         - unit_value
  *         - quantity
  *       properties:
@@ -56,6 +57,8 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *           type: integer
  *         tb_product_id:
  *           type: integer
+ *         name_product:
+ *           type: string
  *         unit_value:
  *           type: number
  *         quantity:
