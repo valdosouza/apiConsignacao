@@ -246,8 +246,8 @@ class CollaboratorController extends Base {
         'et.id,  '+
         'et.name_company,  '+
         'et.nick_trade, '+
-        ' "F" docType, '+
-        'pe.cpf documento, '+
+        ' "F" doc_kind, '+
+        'pe.cpf doc_number, '+
         ' et.tb_linebusiness_id, '+
         ' ln.description desc_linebusiness '+
         'from tb_collaborator cl  '+
@@ -263,8 +263,8 @@ class CollaboratorController extends Base {
         'et.id,  '+
         'et.name_company,  '+
         'et.nick_trade, '+
-        ' "J" docType, '+
-        'co.cnpj documento, '+
+        ' "J" doc_kind, '+
+        'co.cnpj doc_number, '+
         ' et.tb_linebusiness_id, '+
         ' ln.description desc_linebusiness '+
         'from tb_collaborator cl  '+

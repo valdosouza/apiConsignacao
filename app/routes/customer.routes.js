@@ -59,13 +59,13 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *       properties:
  *         id:
  *           type: integer
- *         name:
+ *         name_company:
  *           type: string
- *         apelido:
+ *         nick_trade:
  *           type: string
- *         TipoDoc:
+ *         doc_kind:
  *           type: string
- *         Documento:
+ *         doc_number:
  *           type: string
  
  *     ListCustomerByRoute:
@@ -73,17 +73,19 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *       properties:
  *         tb_sales_route_id:
  *           type: integer
- *         sequencia:
+ *         name_sales_routed:
+ *           type: string 
+ *         sequence:
  *           type: integer
  *         id:
  *           type: integer
- *         name:
+ *         name_company:
  *           type: string
- *         apelido:
+ *         nick_trade:
  *           type: string
- *         TipoDoc:
+ *         doc_type:
  *           type: string
- *         Documento:
+ *         doc_number:
  *           type: string
  * 
  */
