@@ -24,7 +24,7 @@ class CityController extends Base {
         return promise;
     }
 
-    static get(ibge) {    
+    static getbyIbge(ibge) {    
         const promise = new Promise((resolve, reject) => {
         Tb.sequelize.query(
             'Select *  ' +
@@ -37,10 +37,31 @@ class CityController extends Base {
             if (data) { resolve(data[0]) } else { resolve(Null) };
             })
             .catch(err => {
-            reject(new Error(err+ " |"+ "Algum erro aconteceu ao buscar as cidadess"));
+            reject(new Error(err+ " |"+ "Algum erro aconteceu ao buscar a cidades"));
             });
         });
         return promise;
     }  
+    static getbyStateName(stateSigla,cityName) {    
+        const promise = new Promise((resolve, reject) => {
+        Tb.sequelize.query(
+            'Select ct.* '+
+            'from tb_city  ct '+
+            '  inner join tb_state st '+
+            '  on (st.id = ct.tb_state_id) '+
+            'where (UPPER(abbreviation) =?) '+
+            'and (UPPER(ct.name) =? ) ', 
+            {
+            replacements: [ String(stateSigla).toUpperCase(), String(cityName).toUpperCase()],
+            type: Tb.sequelize.QueryTypes.SELECT
+            }).then(data => {          
+            if (data) { resolve(data[0]) } else { resolve(Null) };
+            })
+            .catch(err => {
+            reject(new Error(err+ " |"+ "Algum erro aconteceu ao buscar a cidade"));
+            });
+        });
+        return promise;
+    }      
 }
 module.exports = CityController; 

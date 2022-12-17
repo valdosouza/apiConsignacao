@@ -92,7 +92,37 @@ router.get("/getlist/:tb_state_id", city.getlist);
  *        description: Some error happened
  */
   //protectedRouter.get("/:id", users.findOne);
-  router.get("/get/:ibge", city.get);
+  router.get("/get/:ibge", city.getbyIbge);
+
+/**
+ * @swagger
+ * /city/get/{state_sigla}/{city_name}:
+ *  get:
+ *    summary: Return City by the State Abreviation and City Name
+ *    tags: [City]
+ *    parameters:
+ *      - in: path
+ *        name: state_sigla
+ *      - in: path
+ *        name: city_name  
+ *        schema:
+ *          type: string
+ *        required: true
+ *        description: The State Abreviation and City Name
+ *    responses:
+ *      200:
+ *        description: The City was Listed
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/City'
+ *      404:
+ *        description: The City was not found
+ *      500:
+ *        description: Some error happened
+ */
+  //protectedRouter.get("/:id", users.findOne);
+  router.get("/get/:state_sigla/:city_name", city.getbyStateName);
 
 module.exports = router;  
 
