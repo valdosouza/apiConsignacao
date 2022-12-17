@@ -6,9 +6,10 @@ const company = require('./company.controller.js') ;
 const person = require('./person.controller.js') ;
 const address = require('./address.controller.js');
 const phone = require('./phone.controller.js');
+const salesRouteCustomer = require('./salesRouteCustomer.controller.js');
 
 class CustomerController extends Base {
-  static async getById(id) {    
+  static async getById(tb_institution_id,id) {    
     const promise = new Promise((resolve, reject) => {
       Tb.sequelize.query(
         'Select '+
@@ -26,12 +27,16 @@ class CustomerController extends Base {
         'from tb_customer  ct '+
         '  left outer join tb_entity slm '+
         '  on (slm.id = ct.tb_salesman_id) '+
-        'where ( ct.id =?) ', 
+        'where (ct.tb_institution_id =?) '+
+        ' and  ( ct.id =?)', 
         {
-          replacements: [id],
+          replacements: [tb_institution_id,id],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
-            resolve(data[0]);
+          if (data.length > 0)          
+          resolve(data[0])
+        else
+          resolve(data);
         })
         .catch(err => {
           reject('getById: ' + err);
@@ -40,25 +45,25 @@ class CustomerController extends Base {
     return promise;
   };
 
-  static async save(customer) {
+  static async save(body) {
     const promise = new Promise(async (resolve, reject) => {
       try{        
         
         var resultCustomer  = [];                
-        if (customer.customer.id > 0)
-          resultCustomer  = await this.getById(customer.customer.id);        
+        if (body.customer.id > 0)
+          resultCustomer  = await this.getById(body.customer.tb_institution_id,body.customer.id);        
         if (resultCustomer.length == 0){
-          this.insert(customer)
+          this.insert(body)
           .then(data => {
             resolve(data);
           })
         }else{
-          this.update(customer)
+          this.update(body)
           .then(data => {
             resolve(data);
           })
         }
-        resolve(customer);
+        resolve(body);
       } catch(err) {            
         reject('Customer.save: '+err);
       }                  
@@ -66,28 +71,28 @@ class CustomerController extends Base {
     return promise;
   }
 
-  static async insert(customer) {
+  static async insert(body) {
     const promise = new Promise(async (resolve, reject) => {
       try{
         var resultDoc = [];
-        if (customer.person){
-          resultDoc  = await person.getByCPF(customer.person.cpf);
+        if (body.person){
+          resultDoc  = await person.getByCPF(body.person.cpf);
         }else{
-          resultDoc  = await company.getByCNPJ(customer.company.cnpj);
+          resultDoc  = await company.getByCNPJ(body.company.cnpj);
         }                
         if (resultDoc.length == 0){          
-          this.insertComplete(customer)
+          this.insertComplete(body)
           .then(data => {
             resolve(data);
           })
         } else{
-          customer.customer.id = resultDoc[0].id;
-          this.insertParcial(customer)
+          body.customer.id = resultDoc[0].id;
+          this.insertParcial(body)
           .then(data => {
             resolve(data);
           })
         }
-        resolve(customer);
+        resolve(body);
       } catch(err) {            
         reject('Customer Insert: '+err);
       }                  
@@ -95,51 +100,63 @@ class CustomerController extends Base {
     return promise;
   }
 
-  static async insertComplete(customer) {
+  static async insertComplete(body) {
     const promise = new Promise(async (resolve, reject) => {
       try{        
-        entity.insert(customer.entity)
-        .then(data => {
-          const entityId =  data.id;
-          customer.entity.id =  entityId;          
+        entity.insert(body.entity)
+        .then(data => {          
+          body.entity.id =  data.id;
           //Salva a pessoa Juridica                        
-          if (customer.company){
-            customer.company.id = entityId; 
-            company.insert(customer.company)
+          if (body.company){
+            body.company.id = body.entity.id; 
+            company.insert(body.company)
               .catch(err => {
                 reject("Erro:"+ err);
               });            
           }else{
-            customer.person.id = entityId; 
-            person.insert(customer.person)
+            body.person.id = body.entity.id; 
+            person.insert(body.person)
              .catch(err => {
                reject("Erro:"+ err);
              });
           }       
              
           //Salva o endereço  
-          customer.address.id = entityId;                                    
-          address.insert(customer.address)
+          body.address.id = body.entity.id
+          address.insert(body.address)
             .catch(err => {
               reject("Erro:"+ err);
             });
 
           //Salva o Phone
-          customer.phone.id = entityId;              
-          phone.insert(customer.phone)
+          body.phone.id = body.entity.id;              
+          phone.insert(body.phone)
             .catch(err => {
               reject("Erro:"+ err);
             });
 
-          //Grava o customer
-          customer.customer.id = entityId;                                         
-          Tb.create(customer.customer)
+            //Grava o customer
+          body.customer.id = body.entity.id;                                         
+          Tb.create(body.customer)
             .catch(err => {
               reject("Erro:" + err);
             });
-          
+
+          //Salva o cliente na Rota de venda
+          const dataRoute = {
+            tb_institution_id : body.customer.tb_institution_id,
+            tb_sales_route_id : body.customer.tb_sales_route_id,
+            tb_customer_id : body.customer.id,
+            sequence : 0,
+            active : "S",
+          };
+          salesRouteCustomer.insert(dataRoute)
+            .catch(err => {
+              reject("Erro:"+ err);
+            });
+            
           //REtornogeral              
-          resolve(customer);
+          resolve(body);
         })
         .catch(err => {
           reject('Customer InsertComplete: '+err);
@@ -151,37 +168,50 @@ class CustomerController extends Base {
     return promise;
   }
 
-  static async insertParcial(customer) {
+  static async insertParcial(body) {
     const promise = new Promise(async (resolve, reject) => {
       try{        
         //Insere o customer
-        const existCustomer = await this.getById(customer.customer.id);
+        const existCustomer = await this.getById(body.customer.id);
         if (existCustomer.length == 0){
-          Tb.create(customer.customer);
+          Tb.create(body.customer);
         }else{
-          Tb.update(customer.customer,{
-            where:{ id: customer.customer.id}
+          Tb.update(body.customer,{
+            where:{ id: body.customer.id}
           });
         }
         //Atualiza Entidade    
-        customer.entity.id = customer.customer.id;
-        entity.update(customer.entity)
+        body.entity.id = body.customer.id;
+        entity.update(body.entity)
         //Atualiza  Person ou Company
-        if (customer.person){
-          customer.person.id = customer.customer.id;
-          company.update(customer.person);
+        if (body.person){
+          body.person.id = body.customer.id;
+          company.update(body.person);
         }else{
-          customer.company.id = customer.customer.id;
-          person.update(customer.company);
+          body.company.id = body.customer.id;
+          person.update(body.company);
         }          
         //Atualiza o endereço  
-        customer.address.id = customer.customer.id;
-        address.save(customer.address);
+        body.address.id = body.customer.id;
+        address.save(body.address);
         //Salva o Phone
-        customer.phone.id = customer.customer.id;
-        phone.save(customer.phone);
+        body.phone.id = body.customer.id;
+        phone.save(body.phone);
+        //Salva o cliente na Rota de venda
+        const dataRoute = {
+          tb_institution_id : body.customer.tb_institution_id,
+          tb_sales_route_id : body.customer.tb_sales_route_id,
+          tb_customer_id : body.customer.id,
+          sequence : 0,
+          active : "S"
+        };
+        salesRouteCustomer.insert(dataRoute)
+          .catch(err => {
+            reject("Erro:"+ err);
+          });
+
         //REtornogeral              
-        resolve(customer);        
+        resolve(body.customer);        
       } catch(err) {            
         reject('Customer InsertParcsabe: '+err);
       }                  
@@ -190,25 +220,33 @@ class CustomerController extends Base {
   }
 
 
-  static async update(customer) {
+  static async update(body) {
     const promise = new Promise((resolve, reject) => {
         try{ 
-          customer.entity.id = customer.customer.id
-          entity.update(customer.entity);
+          body.entity.id = body.customer.id
+          entity.update(body.entity);
           
-          if (customer.person){
-            customer.person.id = customer.customer.id
-            person.update(customer.person);
+          if (body.person){
+            body.person.id = body.customer.id
+            person.update(body.person);
           }else{
-            customer.company.id = customer.customer.id  
-            company.update(customer.company);
+            body.company.id = body.customer.id  
+            company.update(body.company);
           }
-          customer.address.id = customer.customer.id
-          address.save(customer.address);
-          customer.phone.id = customer.customer.id
-          phone.save(customer.phone);
-          Tb.update(customer.customer,{
-            where: { id: customer.customer.id }
+          body.address.id = body.customer.id
+          address.save(body.address);
+          body.phone.id = body.customer.id
+          phone.save(body.phone);
+          const dataRoute = {
+            tb_institution_id : body.customer.tb_institution_id,
+            tb_sales_route_id : body.customer.tb_sales_route_id,
+            tb_customer_id : body.customer.id,
+            sequence : 0,
+            active : "S"
+          };
+          salesRouteCustomer.update(dataRoute)   
+          Tb.update(body.customer,{
+            where: { id: body.customer.id }
           });          
           resolve("The Customer was updated");   
         } catch(err) {            
@@ -218,11 +256,11 @@ class CustomerController extends Base {
     return promise;        
   }        
 
-  static getCustomer = (id) => {
+  static getCustomer = (tb_institution_id,id) => {
     const promise = new Promise(async (resolve, reject) => {
       try{
         var result = {};
-        const dataCustomer = await this.getById(id);
+        const dataCustomer = await this.getById(tb_institution_id,id);
         result.customer = dataCustomer[0];
         const dataEntity = await entity.getById(id);
         result.entity = dataEntity; 

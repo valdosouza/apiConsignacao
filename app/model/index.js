@@ -52,6 +52,7 @@ db.pricelist = require("./priceList.model.js")(sequelize, Sequelize);
 db.price = require("./price.model.js")(sequelize, Sequelize);
 
 db.salesroute = require("./salesRoute.model.js")(sequelize, Sequelize);
+db.salesroutecustomer = require("./salesRouteCustomer.model.js")(sequelize, Sequelize);
 
 db.entity = require("./entity.model.js")(sequelize, Sequelize);
 db.entityHasMailing = require("./entityHasMailing.model.js")(sequelize, Sequelize);

@@ -20,7 +20,10 @@ class PhoneController extends Base {
             type: Tb.sequelize.QueryTypes.SELECT
           })
           .then(data => {
-            resolve(data[0]);
+            if (data.length > 0)          
+            resolve(data[0])
+          else
+            resolve(data);
           })
           .catch(err => {
             reject('Phone.getById: ' + err);

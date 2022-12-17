@@ -19,8 +19,14 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *           type: integer 
  *         tb_salesman_id:
  *           type: integer
+ *         salesman_name:
+ *           type: string
  *         tb_carrier_id:
  *           type: integer  
+ *         tb_sales_route_id:
+ *           type: integer
+ *         sales_route_name:
+ *           type: string
  *         credit_status:
  *           type: string
  *         credit_value:
@@ -123,13 +129,15 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
 
  /**
  * @swagger
- * /customer/{id}:
+ * /customer/{tb_institution_id}/{id}:
  *   get:
  *     summary: Returns the list of all the customer
  *     tags: [Customer]
  *     parameters:
  *      - in: path
- *        name: id
+ *        name: tb_institution_id
+ *      - in: path
+ *        name: id  
  *        schema:
  *          type: string
  *        required: true
@@ -142,7 +150,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *             schema: 
  *               $ref: '#/components/schemas/ObjCustomer'
  */
- router.get("/:id", customer.getCustomer);
+ router.get("/:tb_institution_id/:id", customer.getCustomer);
   
 /**
  * @swagger

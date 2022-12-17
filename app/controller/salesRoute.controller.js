@@ -63,24 +63,24 @@ class SalesRouteController extends Base {
         return promise;
     }
 
-    static get(tb_institution_id,id) {
-      const promise = new Promise((resolve, reject) => {
-        Tb.sequelize.query(
-          'select * ' +
-          'from tb_sales_route pl '+
-          'where (pl.tb_institution_id =? ) '+
-          ' and (pl.id =? )',
-          {
-            replacements: [tb_institution_id,id],
-            type: Tb.sequelize.QueryTypes.SELECT
-          }).then(data => {
-            resolve(data[0]);
-          })
-          .catch(err => {
-            reject('salesroute.get: '+err);
-          });
-      });
-      return promise;
+  static get(tb_institution_id,id) {
+    const promise = new Promise((resolve, reject) => {
+      Tb.sequelize.query(
+        'select * ' +
+        'from tb_sales_route pl '+
+        'where (pl.tb_institution_id =? ) '+
+        ' and (pl.id =? )',
+        {
+          replacements: [tb_institution_id,id],
+          type: Tb.sequelize.QueryTypes.SELECT
+        }).then(data => {
+          resolve(data[0]);
+        })
+        .catch(err => {
+          reject('salesroute.get: '+err);
+        });
+    });
+    return promise;
   }
 
     static async update(salesroute) {        

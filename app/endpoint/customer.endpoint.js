@@ -14,8 +14,7 @@ class CustomerEndPoint {
   }
 
   static getCustomer = (req, res) => {
-    const id = req.params.id;
-    CustomerController.getCustomer(id)
+    CustomerController.getCustomer(req.params.tb_institution_id,req.params.id)
       .then(data => {
         res.send(data);
       })
