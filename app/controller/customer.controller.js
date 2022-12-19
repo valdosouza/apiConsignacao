@@ -63,7 +63,6 @@ class CustomerController extends Base {
             resolve(data);
           })
         }
-        resolve(body);
       } catch(err) {            
         reject('Customer.save: '+err);
       }                  
@@ -75,11 +74,9 @@ class CustomerController extends Base {
     const promise = new Promise(async (resolve, reject) => {
       try{
         var resultDoc = [];
-        if (body.person.cpf != ""){
-          console.log("pesquisando CPF");
+        if (body.person.cpf != ""){          
           resultDoc  = await person.getByCPF(body.person.cpf);
         }else{
-          console.log("pesquisando CNPJ");
           resultDoc  = await company.getByCNPJ(body.company.cnpj);
         }              
         if (!resultDoc.id){                    
@@ -93,8 +90,7 @@ class CustomerController extends Base {
           .then(data => {
             resolve(data);
           })                   
-        }
-        resolve(body);
+        }        
       } catch(err) {            
         reject('Customer Insert: '+err);
       }                  
@@ -107,16 +103,14 @@ class CustomerController extends Base {
       try{                
         entity.insert(body.entity)
         .then(data => {          
-          body.entity.id =  data.id;
+          body.entity.id =  data.id;          
           //Salva a pessoa Juridica                        
-          if (body.company){
-            
+          if (body.company){            
             body.company.id = body.entity.id;
-            console.log(body.company);
             company.insert(body.company)
               .catch(err => {
-                reject("Erro:"+ err);
-              });            
+              reject("Erro:"+ err);
+            });            
           }else{
             body.person.id = body.entity.id;             
             person.insert(body.person)
@@ -139,12 +133,6 @@ class CustomerController extends Base {
               reject("Erro:"+ err);
             });
 
-            //Grava o customer
-          body.customer.id = body.entity.id;                                                   
-          Tb.create(body.customer)
-            .catch(err => {
-              reject("Erro:" + err);
-            });
 
           //Salva o cliente na Rota de venda
           const dataRoute = {
@@ -158,9 +146,14 @@ class CustomerController extends Base {
             .catch(err => {
               reject("Erro:"+ err);
             });
-            
+          //Grava o customer
+          body.customer.id = body.entity.id;                                                             
+          Tb.create(body.customer)
+          .catch(err => {
+              reject("Erro:" + err);
+          });
           //REtornogeral              
-          resolve(body);
+          resolve(body);                       
         })
         .catch(err => {
           reject('Customer InsertComplete: '+err);

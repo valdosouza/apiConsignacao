@@ -30,7 +30,6 @@ class CompanyController extends Base {
         if  (company.dt_foundation == "") delete company.dt_foundation;
         Tb.create(company)
             .then(data => {
-              console.log(data);
                 resolve(data);
             })
             .catch(err => {

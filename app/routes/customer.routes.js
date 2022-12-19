@@ -138,7 +138,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/ObjCustomer'
+ *               $ref: '#/components/schemas/ListCustomer'
  *       500:
  *         description: Some server error
  */

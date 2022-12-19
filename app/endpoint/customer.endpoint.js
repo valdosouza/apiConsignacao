@@ -6,8 +6,22 @@ class CustomerEndPoint {
     try{      
       
       CustomerController.save(req.body)
-        .then(data => {        
-          res.send(data);
+        .then(data => {  
+          var dataRes = {
+            id : data.entity.id,
+            name_company : data.entity.name_company,
+            nick_trade : data.entity.nick_trade,
+            doc_kind : "",
+            doc_number : "",
+          };
+          if ( data.person.id > 0) {
+            dataRes.doc_kind = "F";
+            dataRes.doc_number = data.person.cpf;
+          }else{          
+            dataRes.doc_kind = "J";
+            dataRes.doc_number = data.company.cnpj;
+          };
+          res.send(dataRes);
       })
     } catch (err) {
       res.send(err);
