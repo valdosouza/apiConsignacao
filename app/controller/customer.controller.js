@@ -76,21 +76,23 @@ class CustomerController extends Base {
       try{
         var resultDoc = [];
         if (body.person.cpf != ""){
+          console.log("pesquisando CPF");
           resultDoc  = await person.getByCPF(body.person.cpf);
         }else{
+          console.log("pesquisando CNPJ");
           resultDoc  = await company.getByCNPJ(body.company.cnpj);
-        }                  
-        if (resultDoc.id){          
+        }              
+        if (!resultDoc.id){                    
+          this.insertComplete(body)
+          .then(data => {
+            resolve(data);
+          })          
+        } else{
           body.customer.id = resultDoc.id;
           this.insertParcial(body)
           .then(data => {
             resolve(data);
           })                   
-        } else{
-          this.insertComplete(body)
-          .then(data => {
-            resolve(data);
-          })
         }
         resolve(body);
       } catch(err) {            
@@ -108,7 +110,9 @@ class CustomerController extends Base {
           body.entity.id =  data.id;
           //Salva a pessoa Juridica                        
           if (body.company){
-            body.company.id = body.entity.id;             
+            
+            body.company.id = body.entity.id;
+            console.log(body.company);
             company.insert(body.company)
               .catch(err => {
                 reject("Erro:"+ err);

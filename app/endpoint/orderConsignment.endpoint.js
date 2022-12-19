@@ -12,6 +12,7 @@ class OrderConsignmentEndPoint {
 
   static saveSupplying = (req, res) => {
     
+
     OrderConsignmentController.saveSupplying(req.body)
       .then(data => {
         res.send(data);
