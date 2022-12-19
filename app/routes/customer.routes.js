@@ -153,10 +153,9 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *     parameters:
  *      - in: path
  *        name: tb_institution_id
+ *        required: true 
  *      - in: path
  *        name: id  
- *        schema:
- *          type: string
  *        required: true
  *        description: The id customer
  *     responses:
@@ -178,8 +177,6 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *     parameters:
  *      - in: path
  *        name: tb_institution_id
- *        schema:
- *          type: integer  
  *        required: true
  *        description: The Customer tb_institution_id
  *     responses:
@@ -205,10 +202,9 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *     parameters:
  *      - in: path
  *        name: tb_institution_id
+ *        required: true
  *      - in: path
  *        name: tb_sales_route_id
- *        schema:
- *          type: integer  
  *        required: true
  *        description: The Customer List by tb_institution_id tb_sales_route
  *     responses:
@@ -234,12 +230,11 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *     parameters:
  *      - in: path
  *        name: tb_institution_id
+ *        required: true 
  *      - in: path
  *        name: tb_salesman_id
- *        schema:
- *          type: integer  
  *        required: true
- *        description: The Customer List by tb_institution_id tb_salesman
+ *        description: The Customer List by tb_institution_id tb_salesman_id
  *     responses:
  *       200:
  *         description: The list of Customer
@@ -262,8 +257,6 @@ router.get("/salesman/getlist/:tb_institution_id/:tb_salesman_id", customer.getL
  *    parameters:
  *      - in: path
  *        name: id
- *        schema:
- *          type: string
  *        required: true
  *        description: The customer id
  *    responses:
