@@ -97,6 +97,9 @@ class CompanyController extends Base {
           type: Tb.sequelize.QueryTypes.SELECT
         })
         .then(data => {
+          if (data.length > 0)       
+            resolve(data[0])
+          else       
           resolve(data);
         })
         .catch(err => {

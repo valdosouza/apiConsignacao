@@ -103,8 +103,11 @@ class PersonController extends Base {
         {
           replacements: [cpf],
           type: Tb.sequelize.QueryTypes.SELECT
-        }).then(data => {          
-            resolve(data);          
+        }).then(data => {   
+          if (data.length > 0)       
+            resolve(data[0])
+          else       
+          resolve(data);
         })
         .catch(err => {
           reject(new Error("Algum erro aconteceu ao buscar o CNPJ"));

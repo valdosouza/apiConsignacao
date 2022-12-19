@@ -73,6 +73,9 @@ class AddressController extends Base {
 
   static async insert(address) {
     const promise = new Promise((resolve, reject) => {
+      delete address.name_country;
+      delete address.name_state;
+      delete address.name_city;      
       Tb.create(address)
         .then(data => {
           resolve(data);

@@ -75,19 +75,19 @@ class CustomerController extends Base {
     const promise = new Promise(async (resolve, reject) => {
       try{
         var resultDoc = [];
-        if (body.person){
+        if (body.person.cpf != ""){
           resultDoc  = await person.getByCPF(body.person.cpf);
         }else{
           resultDoc  = await company.getByCNPJ(body.company.cnpj);
-        }                
-        if (resultDoc.length == 0){          
-          this.insertComplete(body)
+        }                  
+        if (resultDoc.id){          
+          body.customer.id = resultDoc.id;
+          this.insertParcial(body)
           .then(data => {
             resolve(data);
-          })
+          })                   
         } else{
-          body.customer.id = resultDoc[0].id;
-          this.insertParcial(body)
+          this.insertComplete(body)
           .then(data => {
             resolve(data);
           })
@@ -102,19 +102,19 @@ class CustomerController extends Base {
 
   static async insertComplete(body) {
     const promise = new Promise(async (resolve, reject) => {
-      try{        
+      try{                
         entity.insert(body.entity)
         .then(data => {          
           body.entity.id =  data.id;
           //Salva a pessoa Juridica                        
           if (body.company){
-            body.company.id = body.entity.id; 
+            body.company.id = body.entity.id;             
             company.insert(body.company)
               .catch(err => {
                 reject("Erro:"+ err);
               });            
           }else{
-            body.person.id = body.entity.id; 
+            body.person.id = body.entity.id;             
             person.insert(body.person)
              .catch(err => {
                reject("Erro:"+ err);
@@ -122,21 +122,21 @@ class CustomerController extends Base {
           }       
              
           //Salva o endereço  
-          body.address.id = body.entity.id
+          body.address.id = body.entity.id          
           address.insert(body.address)
             .catch(err => {
               reject("Erro:"+ err);
             });
 
           //Salva o Phone
-          body.phone.id = body.entity.id;              
+          body.phone.id = body.entity.id;          
           phone.insert(body.phone)
             .catch(err => {
               reject("Erro:"+ err);
             });
 
             //Grava o customer
-          body.customer.id = body.entity.id;                                         
+          body.customer.id = body.entity.id;                                                   
           Tb.create(body.customer)
             .catch(err => {
               reject("Erro:" + err);
@@ -149,7 +149,7 @@ class CustomerController extends Base {
             tb_customer_id : body.customer.id,
             sequence : 0,
             active : "S",
-          };
+          };          
           salesRouteCustomer.insert(dataRoute)
             .catch(err => {
               reject("Erro:"+ err);
@@ -261,16 +261,16 @@ class CustomerController extends Base {
       try{
         var result = {};
         const dataCustomer = await this.getById(tb_institution_id,id);
-        result.customer = dataCustomer[0];
+        result.customer = dataCustomer;
         const dataEntity = await entity.getById(id);
         result.entity = dataEntity; 
 
-        const dataPerson = await person.getById(id);
-        if (dataPerson.length > 0){            
+        const dataPerson = await person.getById(id);        
+        if (dataPerson.id){            
             result.person = dataPerson; 
         }
-        const dataCompany = await company.getById(id);
-        if (dataCompany.length > 0){            
+        const dataCompany = await company.getById(id);        
+        if (dataCompany.id){            
           result.company = dataCompany; 
         }
         const dataAddress = await address.getById(id);
@@ -331,7 +331,6 @@ class CustomerController extends Base {
   }
 
   static getListBySalesRoute = (tb_institution_id,tb_sales_route_id) => {
-
     const promise = new Promise((resolve, reject) => {
       Tb.sequelize.query(
         'Select '+
@@ -388,6 +387,57 @@ class CustomerController extends Base {
         })
         .catch(err => {
           reject('Customer.getListBySalesRoute: '+err);
+        });
+    });
+    return promise;
+  }
+
+  static getListBySalesman = (tb_institution_id,tb_salesman_id) => {
+    const promise = new Promise((resolve, reject) => {
+      Tb.sequelize.query(
+        'Select '+
+        'ct.tb_salesman_id, '+
+        'clb.name_company name_salesman, '+
+        'et.id, '+
+        'et.name_company, '+
+        'et.nick_trade, '+
+        ' "F" doc_kind, '+ 
+        'pe.cpf doc_number '+
+        'from tb_customer ct '+
+        '  inner join tb_entity et '+
+        '  on (ct.id = et.id) '+
+        '  inner join tb_person pe '+
+        '  on (pe.id = et.id) '+
+        '  inner join tb_entity clb '+
+        '  on (clb.id = ct.tb_salesman_id) '+
+        'where ( ct.tb_institution_id =?) '+
+        '  and ( ct.tb_salesman_id =?) '+
+        'union '+
+        'Select '+
+        'ct.tb_salesman_id, '+
+        'clb.name_company name_salesman, '+
+        'et.id, '+
+        'et.name_company, '+
+        'et.nick_trade, '+
+        ' "J" doc_kind, '+
+        'co.cnpj doc_number '+
+        'from tb_customer ct '+
+        '  inner join tb_entity et '+
+        '  on (ct.id = et.id) '+
+        '  inner join tb_company co '+
+        '  on (co.id = et.id) '+
+        '  inner join tb_entity clb '+
+        '  on (clb.id = ct.tb_salesman_id) '+
+        'where (ct.tb_institution_id =?) '+
+        '  and ( ct.tb_salesman_id =?)',
+        {
+          replacements: [tb_institution_id,tb_salesman_id,tb_institution_id,tb_salesman_id],
+          type: Tb.sequelize.QueryTypes.SELECT
+        }).then(data => {          
+          resolve(data);
+        })
+        .catch(err => {
+          reject('Customer.getListBySalesman: '+err);
         });
     });
     return promise;

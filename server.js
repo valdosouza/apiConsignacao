@@ -146,8 +146,6 @@ app.use("/orderstockadjust", orderstockadjust);
 const orderattendance = require("./app/routes/orderAttendance.routes");
 app.use("/orderattendance", orderattendance);
 
-
-
 const PORT = process.env.PORT || 3000;
 
 app.use("/doc", swaggerUI.serve, swaggerUI.setup(specs));

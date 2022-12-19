@@ -94,6 +94,23 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         doc_number:
  *           type: string
  * 
+ *     ListCustomerBySalesRoute:
+ *       type: object
+ *       properties:
+ *         tb_salesman_id:
+ *           type: integer
+ *         name_salesman:
+ *           type: string 
+ *         id:
+ *           type: integer
+ *         name_company:
+ *           type: string
+ *         nick_trade:
+ *           type: string
+ *         doc_type:
+ *           type: string
+ *         doc_number:
+ *           type: string 
  */
 
  /**
@@ -129,7 +146,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
 
  /**
  * @swagger
- * /customer/{tb_institution_id}/{id}:
+ * /customer/get/{tb_institution_id}/{id}:
  *   get:
  *     summary: Returns the list of all the customer
  *     tags: [Customer]
@@ -150,7 +167,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *             schema: 
  *               $ref: '#/components/schemas/ObjCustomer'
  */
- router.get("/:tb_institution_id/:id", customer.getCustomer);
+ router.get("/get/:tb_institution_id/:id", customer.getCustomer);
   
 /**
  * @swagger
@@ -181,7 +198,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
 
  /**
  * @swagger
- * /customer/getlist/{tb_institution_id}/{tb_sales_route_id}:
+ * /customer/salesroute/getlist/{tb_institution_id}/{tb_sales_route_id}:
  *   get:
  *     summary: Returns the list of all the Customer
  *     tags: [Customer]
@@ -206,8 +223,36 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *       500:
  *         description: Some server error 
  */
- router.get("/getlist/:tb_institution_id/:tb_sales_route_id", customer.getListBySalesRoute);
+ router.get("/salesroute/getlist/:tb_institution_id/:tb_sales_route_id", customer.getListBySalesRoute);
 
+/**
+ * @swagger
+ * /customer/salesman/getlist/{tb_institution_id}/{tb_salesman_id}:
+ *   get:
+ *     summary: Returns the list of all the Customer
+ *     tags: [Customer]
+ *     parameters:
+ *      - in: path
+ *        name: tb_institution_id
+ *      - in: path
+ *        name: tb_salesman_id
+ *        schema:
+ *          type: integer  
+ *        required: true
+ *        description: The Customer List by tb_institution_id tb_salesman
+ *     responses:
+ *       200:
+ *         description: The list of Customer
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/ListCustomerBySalesRoute'
+ *       500:
+ *         description: Some server error 
+ */
+router.get("/salesman/getlist/:tb_institution_id/:tb_salesman_id", customer.getListBySalesman); 
 /**
  * @swagger
  * /customer/{id}:
