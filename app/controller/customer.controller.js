@@ -133,6 +133,12 @@ class CustomerController extends Base {
               reject("Erro:"+ err);
             });
 
+          //Grava o customer
+          body.customer.id = body.entity.id;                                                             
+          Tb.create(body.customer)
+          .catch(err => {
+              reject("Erro:" + err);
+          });
 
           //Salva o cliente na Rota de venda
           const dataRoute = {
@@ -146,12 +152,6 @@ class CustomerController extends Base {
             .catch(err => {
               reject("Erro:"+ err);
             });
-          //Grava o customer
-          body.customer.id = body.entity.id;                                                             
-          Tb.create(body.customer)
-          .catch(err => {
-              reject("Erro:" + err);
-          });
           //REtornogeral              
           resolve(body);                       
         })
