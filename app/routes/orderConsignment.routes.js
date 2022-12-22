@@ -96,6 +96,8 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         - id
  *         - tb_institution_id
  *         - tb_customer_id
+ *         - current_debit_balance 
+ * 
  *       properties:
  *         id:
  *           type: integer
@@ -105,7 +107,9 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *           type: integer 
  *         name_customer:
  *           type: string 
- *     
+ *         current_debit_balance:
+ *           type: number   
+ *       
  *     OrderConsignmentItemSupplying:
  *       type: object
  *       required:
@@ -116,7 +120,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         - devolution
  *         - new_consignment
  *         - qty_consigned
- *         - current_debit_balance
+ *         - unit_value 
  * 
  *       properties:
  *         tb_product_id:
@@ -133,7 +137,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *           type: number
  *         qty_consigned:
  *           type: number   
- *         current_debit_balance:
+ *         unit_value:
  *           type: number   
  * 
  *     OrderConsignmentSupplyingMain:

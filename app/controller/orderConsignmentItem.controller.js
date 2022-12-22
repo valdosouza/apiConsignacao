@@ -81,7 +81,8 @@ class OrderConsignmentItemController extends Base {
         '  oci.leftover, '+
         '  oci.devolution, '+        
         '  oci.qty_consignment new_consignment,'+
-        '  oci.qty_consigned '+
+        '  oci.qty_consigned, '+
+        '  oci.unit_value '+
         'from tb_product pdt '+
         '    left outer join tb_order_consignment_item oci '+
         '    on (pdt.id = oci.tb_product_id) '+
