@@ -58,15 +58,24 @@ module.exports = sequelize => {
       comment: null,
       field: "change_value"
     },
-    debit_balance: {
+    previous_debit_balance: {
       type: DataTypes.DECIMAL,
       allowNull: true,
       defaultValue: "0",
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "debit_balance"
+      field: "previous_debit_balance"
     },
+    current_debit_balance: {
+      type: DataTypes.DECIMAL,
+      allowNull: true,
+      defaultValue: "0",
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "current_debit_balance"
+    },    
     createdAt: {
       type: DataTypes.DATE,
       allowNull: true,

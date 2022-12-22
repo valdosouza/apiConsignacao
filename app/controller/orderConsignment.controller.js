@@ -322,7 +322,7 @@ class OrderConsignmentController extends Base {
         'etd.name_company name_customer, '+
         'orc.total_value, '+
         'orc.change_value,  '+
-        'orc.debit_balance, '+
+        'orc.current_debit_balance, '+
         'ord.dt_record, '+
         'orc.number, '+
         'ord.status, '+
@@ -454,7 +454,8 @@ class OrderConsignmentController extends Base {
                 id : data.id,
                 tb_institution_id : data.tb_institution_id,
                 tb_customer_id : data.tb_customer_id,
-                name_customer : data.name_customer
+                name_customer : data.name_customer,
+                current_debit_balance : data.current_debit_balance,
               };
           result.Order = dataOrder;
           const dataItems = await consignmentItem.getSupplyingList(tb_institution_id,data.id);
