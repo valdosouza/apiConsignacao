@@ -40,6 +40,33 @@ module.exports = sequelize => {
       comment: null,
       field: "tb_customer_id"
     },
+    kind: {
+      type: DataTypes.STRING(15),
+      allowNull: false,
+      defaultValue: null,
+      primaryKey: true,
+      autoIncrement: false,
+      comment: null,
+      field: "kind"
+    },
+    number: {
+      type: DataTypes.INTEGER(11),
+      allowNull: true,
+      defaultValue: null,
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "number"
+    },
+    dt_record: {
+      type: DataTypes.DATE,
+      allowNull: true,
+      defaultValue: null,
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "dt_record"
+    },      
     total_value: {
       type: DataTypes.DECIMAL,
       allowNull: true,

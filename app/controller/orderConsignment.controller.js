@@ -29,21 +29,27 @@ class OrderConsignmentController extends Base {
 
   static async saveCheckpoint(body) {
     const promise = new Promise(async (resolve, reject) => {
-      try{                
-        var resultOrder  = [];                        
-        resultOrder  = await this.getById(body.Order.id,body.Order.tb_institution_id);        
-        if (resultOrder.length == 0){
-          this.insert(body)
-          .then(async () => {
-            await this.insertCheckpointItems(body);
-            await this.insertCheckpointPaid(body);            
-          })
-        }else{
-          await this.update(body)
+      try{                    
+        var dataOrder  = {
+          id:body.Order.id,
+          tb_institution_id:body.Order.tb_institution_id,
+          terminal:0,
+          tb_customer_id:body.Order.tb_customer_id,   
+          dt_record: body.Order.dt_record,                 
+          kind: "checkpoint",          
+          number:0,
+          total_value:body.Order.total_value,
+          change_value:body.Order.change_value,
+          previous_debit_balance:body.Order.previous_debit_balance,
+          current_debit_balance:body.Order.current_debit_balance,
+        };                   
+
+        this.insert(dataOrder)
+        .then(async () => {
           await this.insertCheckpointItems(body);
           await this.insertCheckpointPaid(body);            
-        }
-        resolve(body);
+          resolve(body);
+        })
       } catch(err) {            
         reject('OrderConsignmentController.saveCheckpoint: '+err);
       }                  
@@ -72,29 +78,19 @@ class OrderConsignmentController extends Base {
     return promise;
   }
 
-  static async insert(body) {      
+  static async insert(data) {      
     const promise = new Promise(async (resolve, reject) => {         
-
-      if (body.Order.number == 0)
-        body.Order.number = await this.getNextNumber(body.tb_institution_id);
-
-      const dataOrder = {
-        id: body.Order.id,
-        tb_institution_id: body.Order.tb_institution_id,
-        terminal:0,
-        tb_customer_id : body.Order.tb_customer_id,
-        number : body.number,
-        total_value : body.total_value,
-        change_value : body.change_value,
-        debit_balance:body.debit_balance       
-      }
-      Tb.create(dataOrder)
-        .then(async ()=>{
-          resolve(body);
+      if (data.number == 0)
+        data.number = await this.getNextNumber(data.tb_institution_id);
+      console.log(data);
+      Tb.create(data)
+        .then((data)=>{
+          resolve(data);
         })                                              
         .catch(err => {
           reject("OrderConsignmentController.insert:"+ err);        
         })
+
     });
     return promise;        
   }    
@@ -336,6 +332,7 @@ class OrderConsignmentController extends Base {
         '   on (etd.id = orc.tb_customer_id) '+
         'where (ord.tb_institution_id =? )  '+
         ' and (orc.tb_customer_id =? ) '+
+        ' and (orc.kind ="supplying") '+
         ' and (ord.dt_record  = ( '+
         '    select max(ord.dt_record) dt_record '+
         '    from tb_order ord  '+
@@ -345,6 +342,7 @@ class OrderConsignmentController extends Base {
         '         and (orc.terminal = ord.terminal)   '+
         '    where (ord.tb_institution_id =? )  '+
         '     and (orc.tb_customer_id =? ) '+
+        ' and (orc.kind ="supplying") '+
         '    )) '+
         'limit 1 ',        
         {

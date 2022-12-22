@@ -16,6 +16,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         - id
  *         - tb_institution_id
  *         - tb_customer_id
+ *         - dt_record
  *         - total_value
  *         - change_value
  *         - previous_debit_balance
@@ -26,7 +27,9 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         tb_institution_id:
  *           type: integer
  *         tb_customer_id:
- *           type: integer 
+ *           type: integer
+ *         dt_record:
+ *           type: string  
  *         name_customer:
  *           type: string
  *         total_value:
@@ -96,6 +99,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         - id
  *         - tb_institution_id
  *         - tb_customer_id
+ *         - dt_record
  *         - current_debit_balance 
  * 
  *       properties:
@@ -105,6 +109,8 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *           type: integer
  *         tb_customer_id:
  *           type: integer 
+ *         dt_record:
+ *           type: string  
  *         name_customer:
  *           type: string 
  *         current_debit_balance:
