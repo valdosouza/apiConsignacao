@@ -101,7 +101,38 @@ class OrderConsignmentItemController extends Base {
         });
     });
     return promise;
-}
+  }
+
+  static getSupplyingNewList(tb_institution_id) {
+    const promise = new Promise((resolve, reject) => {
+      Tb.sequelize.query(
+        'select '+
+        '0 bonus, '+
+        'pdt.id tb_product_id, '+
+        'pdt.description name_product, '+
+        '0 leftover, '+
+        '0 devolution, '+
+        '0 new_consignment, '+
+        '0 qty_consigned, '+
+        'price_tag unit_value '+
+        'from tb_product pdt '+
+        '  inner join tb_price prc '+
+        '  on (pdt.id = prc.tb_product_id) '+
+        '    and (pdt.tb_institution_id = prc.tb_institution_id) '+
+        'where pdt.tb_institution_id  =? '+
+        ' and prc.tb_price_list_id = 1 ',
+        {
+          replacements: [tb_institution_id],
+          type: Tb.sequelize.QueryTypes.SELECT
+        }).then(data => {          
+          resolve(data);
+        })
+        .catch(err => {
+          reject("OrderConsignmentItem.getSupplyingList: " + err);
+        });
+    });
+    return promise;
+  }
 
   static async delete(body) {      
       const promise = new Promise((resolve, reject) => {

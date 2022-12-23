@@ -6,6 +6,7 @@ const consignmentItem =require('./orderConsignmentItem.controller.js');
 const consignementPaid =require('./orderConsignmentPaid.controller.js');
 const { entity } = require('../model');
 const enityController = require('./entity.controller.js');
+const EntityController = require('./entity.controller.js');
 
 class OrderConsignmentController extends Base {     
   static async getById(id,tb_institution_id) {    
@@ -467,8 +468,8 @@ class OrderConsignmentController extends Base {
               result.Items = dataItems;
               resolve(result);
           }else{
-            entity.getById(tb_customer_id)
-            .then((data) => {
+            EntityController.getById(tb_customer_id)
+            .then(async (data) => {
               var dataOrder ={            
                 id : 0,
                 tb_institution_id : tb_institution_id,
@@ -477,8 +478,10 @@ class OrderConsignmentController extends Base {
                 current_debit_balance : 0,
               };
               result.Order = dataOrder;
-
-              resolve({result:400,description:"OrderConsigment não encontrada"});
+              const dataItems = await consignmentItem.getSupplyingNewList(tb_institution_id);
+              if (dataItems.length > 0)
+              result.Items = dataItems;
+              resolve(result);              
             });
           }
           
