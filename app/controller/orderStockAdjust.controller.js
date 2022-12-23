@@ -154,6 +154,7 @@ class OrderStockAdjustController extends Base {
           '  ora.tb_entity_id,'+
           '  etd.name_company name_entity,'+
           '  ord.dt_record, '+
+          '  ora.direction,'+
           '  ora.number, '+
           '  ord.status, '+          
           ' CAST(ord.note AS CHAR(1000) CHARACTER SET utf8) note '+
@@ -238,6 +239,10 @@ class OrderStockAdjustController extends Base {
         where: {id: dataOrderStockAdjust.id,              
                 tb_institution_id: dataOrderStockAdjust.tb_institution_id, 
                 terminal: dataOrderStockAdjust.terminal }
+        
+      })
+      .then(()=>{
+        resolve(dataOrderStockAdjust);
       })
       .catch(err => {
         reject("orderStockAdjust.updateOrder:"+ err);
@@ -252,8 +257,8 @@ class OrderStockAdjustController extends Base {
         var dataItem = {};        
         for(var item of body.Items) {              
           dataItem = {
-            id : 0,
-            tb_institution_id: body.Order.tb_institution_id,
+            id : item.id,
+            tb_institution_id: body.Order.tb_institution_id,            
             tb_order_id: body.Order.id,
             terminal: 0,
             tb_stock_list_id: item.tb_stock_list_id,
@@ -262,7 +267,11 @@ class OrderStockAdjustController extends Base {
             unit_value: item.unit_value                  
           } ;
           //Quanto o insert é mais complexo como getNext precisa do await no loop          
-          await orderItem.update(dataItem);
+          console.log(dataItem);
+          await orderItem.delete(dataItem);
+          console.log("deletou");
+          await orderItem.insert(dataItem);
+          console.log("inseriu");
         };
         resolve("Items Alterados");       
       } catch(err) {            

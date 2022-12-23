@@ -99,18 +99,20 @@ class OrderItemController extends Base {
       return promise;        
     }        
 
-    static async delete(order) {      
+    static async delete(item) {      
         const promise = new Promise((resolve, reject) => {
-          resolve("Em Desenvolvimento");
-            /*
-            Tb.delete(order)
-                .then((data) => {
-                    resolve(data);
-                })
-                .catch(err => {
-                    reject("Erro:"+ err);
-                });
-            */
+          Tb.destroy({ where: {id:item.id, 
+                               tb_institution_id: item.tb_institution_id,
+                              tb_order_id : item.tb_order_id,
+                              terminal:item.terminal,}
+          })   
+          .then((data) => {
+              resolve(data);
+          })
+          .catch(err => {
+              reject("Erro:"+ err);
+          });
+
         });
         return promise;        
     }        

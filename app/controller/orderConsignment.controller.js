@@ -4,9 +4,10 @@ const Tb = db.orderconsignment;
 const order = require('./order.controller.js');
 const consignmentItem =require('./orderConsignmentItem.controller.js');
 const consignementPaid =require('./orderConsignmentPaid.controller.js');
+const { entity } = require('../model');
+const enityController = require('./entity.controller.js');
 
 class OrderConsignmentController extends Base {     
-
   static async getById(id,tb_institution_id) {    
     const promise = new Promise((resolve, reject) => {
       Tb.sequelize.query(
@@ -466,7 +467,19 @@ class OrderConsignmentController extends Base {
               result.Items = dataItems;
               resolve(result);
           }else{
-            resolve({result:400,description:"OrderConsigment não encontrada"});
+            entity.getById(tb_customer_id)
+            .then((data) => {
+              var dataOrder ={            
+                id : 0,
+                tb_institution_id : tb_institution_id,
+                tb_customer_id : data.tb_customer_id,
+                name_customer : data.name_customer,                
+                current_debit_balance : 0,
+              };
+              result.Order = dataOrder;
+
+              resolve({result:400,description:"OrderConsigment não encontrada"});
+            });
           }
           
         })
