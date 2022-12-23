@@ -275,6 +275,7 @@ class OrderConsignmentController extends Base {
             'ord.tb_user_id,  '+
             'orc.tb_customer_id, '+
             'etd.name_company name_customer, '+
+            'orc.dt_record,'+
             'orc.total_value,'+
             'orc.change_value,'+            
             'orc.debit_balance,'+            
@@ -396,6 +397,7 @@ class OrderConsignmentController extends Base {
                 tb_institution_id : data.tb_institution_id,
                 tb_customer_id : data.tb_customer_id,
                 name_customer : data.name_customer,
+                dt_record:data.dt_record,
                 total_value : data.total_value,
                 change_value : data.change_value,
                 debit_balance : data.debit_balance,
@@ -424,6 +426,7 @@ class OrderConsignmentController extends Base {
                   id : data.id,
                   tb_institution_id : data.tb_institution_id,
                   tb_customer_id : data.tb_customer_id,
+                  dt_record: data.dt_record,
                   name_customer : data.name_customer
                 };
             result.Order = dataOrder;
@@ -453,6 +456,7 @@ class OrderConsignmentController extends Base {
                 tb_institution_id : data.tb_institution_id,
                 tb_customer_id : data.tb_customer_id,
                 name_customer : data.name_customer,
+                dt_record:data.dt_record,
                 current_debit_balance : data.current_debit_balance,
               };
           result.Order = dataOrder;
