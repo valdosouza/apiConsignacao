@@ -482,7 +482,7 @@ class OrderConsignmentController extends Base {
             .then(async (data) => {
               var dataOrder ={            
                 id : 0,
-                tb_institution_id : tb_institution_id,
+                tb_institution_id : parseInt(tb_institution_id),
                 tb_customer_id : data.id,
                 name_customer : data.name_company,                
                 current_debit_balance : "0.00",

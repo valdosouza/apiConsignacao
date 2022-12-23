@@ -267,12 +267,9 @@ class OrderStockAdjustController extends Base {
             unit_value: item.unit_value                  
           } ;
           //Quanto o insert é mais complexo como getNext precisa do await no loop          
-          console.log(dataItem);
           await orderItem.delete(dataItem);
-          console.log("deletou");
           await orderItem.insert(dataItem);
-          console.log("inseriu");
-        };
+s        };
         resolve("Items Alterados");       
       } catch(err) {            
         reject("orderStockAdjust.updateOrderItem:"+ err);
