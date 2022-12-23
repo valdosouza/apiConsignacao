@@ -27,7 +27,7 @@ class OrderStockAdjustEndPoint {
   }
 
   static update = (req, res) => {
-    console.log("entrei no update");
+    
     OrderStockAdjustController.update(req.body)
       .then(data => {
         if (data)

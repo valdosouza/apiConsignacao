@@ -107,13 +107,13 @@ class OrderConsignmentItemController extends Base {
     const promise = new Promise((resolve, reject) => {
       Tb.sequelize.query(
         'select '+
-        '0 bonus, '+
+        '"0.00" bonus, '+
         'pdt.id tb_product_id, '+
         'pdt.description name_product, '+
-        '0 leftover, '+
-        '0 devolution, '+
-        '0 new_consignment, '+
-        '0 qty_consigned, '+
+        '"0.00" leftover, '+
+        '"0.00" devolution, '+
+        '"0.00" new_consignment, '+
+        '"0.00" qty_consigned, '+
         'price_tag unit_value '+
         'from tb_product pdt '+
         '  inner join tb_price prc '+

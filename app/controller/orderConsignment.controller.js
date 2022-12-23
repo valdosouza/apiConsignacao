@@ -62,10 +62,21 @@ class OrderConsignmentController extends Base {
   static async saveSupplying(body) {
     const promise = new Promise(async (resolve, reject) => {
       try{                
-        var resultOrder  = [];             
+        var resultOrder  = [];            
         resultOrder  = await this.getById(body.Order.id,body.Order.tb_institution_id);        
-        if (resultOrder.length == 0){
-          this.insert(body)
+
+        if (resultOrder.length == 0) {
+          var dataOrder  = {
+            id:body.Order.id,
+            tb_institution_id:body.Order.tb_institution_id,
+            terminal:0,
+            tb_customer_id:body.Order.tb_customer_id,   
+            dt_record: body.Order.dt_record,                 
+            kind: "supplying",          
+            number:0,
+            current_debit_balance:body.Order.current_debit_balance,
+          };     
+          this.insert(dataOrder)
           .then(async () => {
             await this.insertSupplyngItems(body);            
           })
@@ -84,7 +95,6 @@ class OrderConsignmentController extends Base {
     const promise = new Promise(async (resolve, reject) => {         
       if (data.number == 0)
         data.number = await this.getNextNumber(data.tb_institution_id);
-      console.log(data);
       Tb.create(data)
         .then((data)=>{
           resolve(data);
@@ -141,8 +151,8 @@ class OrderConsignmentController extends Base {
             kind : 'supplying',
             leftover : item.leftover,
             devolution: item.devolution,
-            new_consignment: item.new_consignment,
-            qty_consigned : item.qty_consigned,           
+            qty_consignment: item.new_consignment,
+            qty_consigned: item.qty_consigned, 
           };    
           //Quanto o insert é mais complexo como getNext precisa do await no loop          
           await consignmentItem.insert(dataItem);
@@ -473,9 +483,9 @@ class OrderConsignmentController extends Base {
               var dataOrder ={            
                 id : 0,
                 tb_institution_id : tb_institution_id,
-                tb_customer_id : data.tb_customer_id,
-                name_customer : data.name_customer,                
-                current_debit_balance : 0,
+                tb_customer_id : data.id,
+                name_customer : data.name_company,                
+                current_debit_balance : "0.00",
               };
               result.Order = dataOrder;
               const dataItems = await consignmentItem.getSupplyingNewList(tb_institution_id);
