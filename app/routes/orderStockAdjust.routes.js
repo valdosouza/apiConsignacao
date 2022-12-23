@@ -15,7 +15,6 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *       required:
  *         - id
  *         - tb_institution_id
- *         - tb_order_id
  *         - tb_user_id
  *         - dt_record
  *         - tb_entity_id
@@ -24,8 +23,6 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         id:
  *           type: integer
  *         tb_institution_id:
- *           type: integer
- *         tb_order_id:
  *           type: integer
  *         tb_user_id:
  *           type: integer

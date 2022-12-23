@@ -451,19 +451,24 @@ class OrderConsignmentController extends Base {
         var result = {};
         this.getLastOrderByCustomer (tb_institution_id,tb_customer_id)
         .then(async data => {
-          var dataOrder ={            
-                id : data.id,
-                tb_institution_id : data.tb_institution_id,
-                tb_customer_id : data.tb_customer_id,
-                name_customer : data.name_customer,
-                dt_record:data.dt_record,
-                current_debit_balance : data.current_debit_balance,
-              };
-          result.Order = dataOrder;
-          const dataItems = await consignmentItem.getSupplyingList(tb_institution_id,data.id);
-          if (dataItems.length > 0)
-            result.Items = dataItems;                    
-          resolve(result);      
+          if (data){
+            var dataOrder ={            
+                  id : data.id,
+                  tb_institution_id : data.tb_institution_id,
+                  tb_customer_id : data.tb_customer_id,
+                  name_customer : data.name_customer,
+                  dt_record:data.dt_record,
+                  current_debit_balance : data.current_debit_balance,
+                };
+            result.Order = dataOrder;
+            const dataItems = await consignmentItem.getSupplyingList(tb_institution_id,data.id);
+            if (dataItems.length > 0)
+              result.Items = dataItems;
+              resolve(result);
+          }else{
+            resolve({result:400,description:"OrderConsigment não encontrada"});
+          }
+          
         })
       } 
       catch(err){
