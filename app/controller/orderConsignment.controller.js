@@ -62,27 +62,20 @@ class OrderConsignmentController extends Base {
   static async saveSupplying(body) {
     const promise = new Promise(async (resolve, reject) => {
       try{                
-        var resultOrder  = [];            
-        resultOrder  = await this.getById(body.Order.id,body.Order.tb_institution_id);        
-
-        if (resultOrder.length == 0) {
-          var dataOrder  = {
-            id:body.Order.id,
-            tb_institution_id:body.Order.tb_institution_id,
-            terminal:0,
-            tb_customer_id:body.Order.tb_customer_id,   
-            dt_record: body.Order.dt_record,                 
-            kind: "supplying",          
-            number:0,
-            current_debit_balance:body.Order.current_debit_balance,
-          };     
-          this.insert(dataOrder)
-          .then(async () => {
-            await this.insertSupplyngItems(body);            
-          })
-        }else{
-          await this.insertSupplyngItems(body);
-        }
+        var dataOrder  = {
+          id:body.Order.id,
+          tb_institution_id:body.Order.tb_institution_id,
+          terminal:0,
+          tb_customer_id:body.Order.tb_customer_id,   
+          dt_record: body.Order.dt_record,                 
+          kind: "supplying",          
+          number:0,
+          current_debit_balance:body.Order.current_debit_balance,
+        };     
+        this.insert(dataOrder)
+        .then(async () => {
+          await this.insertSupplyngItems(body);            
+        })
         resolve(body);
       } catch(err) {            
         reject('OrderConsignmentController.saveSupplying: '+err);
@@ -153,6 +146,7 @@ class OrderConsignmentController extends Base {
             devolution: item.devolution,
             new_consignment: item.new_consignment,
             qty_consigned: item.qty_consigned, 
+            unit_value : item.unit_value,
           };    
           //Quanto o insert é mais complexo como getNext precisa do await no loop          
           await consignmentItem.insert(dataItem);
