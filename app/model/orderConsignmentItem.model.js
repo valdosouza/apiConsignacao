@@ -76,14 +76,14 @@ const {
         comment: null,
         field: "devolution"
       },
-      qty_consignment: {
+      new_consignment: {
         type: DataTypes.DECIMAL,
         allowNull: true,
         defaultValue: "0",
         primaryKey: false,
         autoIncrement: false,
         comment: null,
-        field: "qty_consignment"
+        field: "new_consignment"
       },
       qty_consigned: {
         type: DataTypes.DECIMAL,

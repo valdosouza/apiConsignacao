@@ -80,7 +80,7 @@ class OrderConsignmentItemController extends Base {
         '  oci.bonus, '+
         '  oci.leftover, '+
         '  oci.devolution, '+        
-        '  oci.qty_consignment new_consignment,'+
+        '  oci.new_consignment,'+
         '  oci.qty_consigned, '+
         '  oci.unit_value '+
         'from tb_product pdt '+

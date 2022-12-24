@@ -151,7 +151,7 @@ class OrderConsignmentController extends Base {
             kind : 'supplying',
             leftover : item.leftover,
             devolution: item.devolution,
-            qty_consignment: item.new_consignment,
+            new_consignment: item.new_consignment,
             qty_consigned: item.qty_consigned, 
           };    
           //Quanto o insert é mais complexo como getNext precisa do await no loop          
