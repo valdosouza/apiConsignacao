@@ -105,6 +105,8 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  * @swagger
  * /collaborator/{id}:
  *   get:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Returns the list of all the collaborator
  *     tags: [Collaborator]
  *     parameters:

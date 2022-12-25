@@ -105,7 +105,10 @@ class UserEndPoint {
   };
   
   static authorization = (req, res) => {
-    return res.json("entrei");          
+    
+    return res.json({
+      "message": "Valid Token",      
+    });          
     const token = req.headers['x-access-token'];  
     
     if (!token) return res.status(401).json({ auth: false, message: 'No token provided.' });
@@ -114,7 +117,7 @@ class UserEndPoint {
       .then(data=>{          
           return res.json(data);          
       });      
-    };
+  };
 
   static recoveryPassword = (req, res) => {
     // Validate request
