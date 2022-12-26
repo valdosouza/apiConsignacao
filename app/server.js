@@ -10,12 +10,6 @@ const swaggerSpec = swaggerJsDoc(options);
 const routes = require('./routes');
 
 
-// app.use(function(req, res, next) {
-// 	res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
-// 	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-// 	res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
-// 	next();
-//   });
   
 let api;
 const server = {
@@ -25,12 +19,18 @@ const server = {
 	    const app = express();
 		app.use(bodyParser.urlencoded({ extended: true }));
 		app.use(bodyParser.json());
+		app.use(cookieParser());
+
+		app.use(cors());
+
 		// parse requests of content-type - application/json
 		app.use(bodyParser.json());
+
 		// parse requests of content-type - application/x-www-form-urlencoded
 		app.use(bodyParser.urlencoded({ extended: true }));
 		
-		app.use(cookieParser());
+
+
 			
 		app.use(cors({    
 				origin: "*",
@@ -38,17 +38,25 @@ const server = {
 				preflightContinue: true,
 				optionsSuccessStatus: 200
 		}));
-				        
-		api = app.get("/", (req, res) => {
+
+		app.use(function(req, res, next) {
+			//res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
+			res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+			//res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
+			next();
+		});
+
+		app.get("/", (req, res) => {
 		    res.json({ message: "Bem vindo a API do Sistema de Consignação." });
 		});
 				  
-		api = app.use( routes);
+		app.use( routes);
 				  
 		const PORT = process.env.PORT || 3000;
-		api = app.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+		app.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-        api = app.listen(PORT, () => {
+		
+        app.listen(PORT, () => {
 			console.log(`Server is running on port ${PORT}. \nAPI documentation: ${process.env.PATH_URL_API}/doc`);			
 		})
                 

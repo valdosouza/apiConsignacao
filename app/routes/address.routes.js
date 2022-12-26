@@ -110,8 +110,8 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *               items:
  *                 $ref: '#/components/schemas/Address'
  */
-//protectedRouter.get("/", address.getList);
-router.get("/", address.getList);
+protectedRouter.get("/", address.getList);
+//router.get("/", address.getList);
   
  /**
  * @swagger

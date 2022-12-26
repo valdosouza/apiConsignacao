@@ -1,6 +1,6 @@
 const { Router } = require("express");
   
-const users = require("../endpoint/user.endpoint.js");
+const auth = require("../endpoint/auth.endpoint.js");
 const { withJWTAuthMiddleware } = require("express-kun");
 
 const router = Router();
@@ -91,7 +91,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *       500:
  *         description: Some server error
  */
-  router.post("/authenticate", users.authenticate);
+  router.post("/authenticate", auth.authenticate);
   
 /** 
  * @swagger
@@ -115,7 +115,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *       500:
  *         description: Some server error
  */
- router.post("/recoverypassword", users.recoveryPassword);
+ router.post("/recoverypassword", auth.recoveryPassword);
 
 /** 
  * @swagger
@@ -139,7 +139,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *       500:
  *         description: Some server error
  */
- router.post("/changepassword", users.changePassword);
+ router.post("/changepassword", auth.changePassword);
 
 /** 
  * @swagger
@@ -157,7 +157,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *       500:
  *         description: Some server error
  */
-protectedRouter.get("/authorization", users.authorization);
+protectedRouter.get("/authorization", auth.authorization);
 
 module.exports = router;  
 
