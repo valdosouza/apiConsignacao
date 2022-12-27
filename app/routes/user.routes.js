@@ -119,7 +119,8 @@
  *       500:
  *         description: Some server error
  */
-  router.post("/", users.create);
+  //router.post("/", users.create);
+  protectedRouter.post("/", users.create);
 
  /**
  * @swagger
@@ -150,7 +151,8 @@
  *       500:
  *         description: Some server error
  */
- router.put("/:id", users.update);
+ //router.put("/:id", users.update);
+ protectedRouter.put("/:id", users.update);
 
 /**
  * @swagger
@@ -175,8 +177,8 @@
  *               items:
  *                 $ref: '#/components/schemas/User'
  */
-  //protectedRouter.get("/", users.findAll);
-  router.get("/getlist/:tb_institution_id", users.getlist);
+  //router.get("/getlist/:tb_institution_id", users.getlist);
+  protectedRouter.get("/getlist/:tb_institution_id", users.getlist);
 
  /**
  * @swagger
@@ -202,9 +204,9 @@
  *        description: The user was not found
  *      500:
  *        description: Some error happened
- */
-  //protectedRouter.get("/:id", users.findOne);
-  router.get("/get/:email", users.get);
+ */  
+  //router.get("/get/:email", users.get);
+  protectedRouter.get("/get/:email", users.get);
 
   /**
  * @swagger
@@ -238,8 +240,8 @@
  *        description: Some error happened
  */
   //protectedRouter.put("/:id", users.update);
-  router.put("/:id", users.update);
-
+  //router.put("/:id", users.update);
+  protectedRouter.put("/:id", users.update);
 /**
  * @swagger
  * /user/{id}:
@@ -262,7 +264,8 @@
  *        description: Some error happened
  */
 //protectedRouter.put("/:id", users.update);
-router.delete("/:id", users.delete);
+//router.delete("/:id", users.delete);
+protectedRouter.delete("/:id", users.delete);
 
 module.exports = router;  
 

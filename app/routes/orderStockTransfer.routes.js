@@ -120,7 +120,8 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *       500:
  *         description: Some server error
  */
- router.post("/", orderstocktransfer.create);
+  //router.post("/", orderstocktransfer.create);
+  protectedRouter.post("/", orderstocktransfer.create);
 
  /**
  * @swagger
@@ -145,9 +146,8 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *               items:
  *                 $ref: '#/components/schemas/OrderStockTransferMain'
  */
-
-router.get("/getlist/:tb_institution_id", orderstocktransfer.getList);
-  
+  //router.get("/getlist/:tb_institution_id", orderstocktransfer.getList);
+  protectedRouter.get("/getlist/:tb_institution_id", orderstocktransfer.getList);
 /**
  * @swagger
  * /orderstocktransfer/get/{tb_institution_id}/{id}:
@@ -171,8 +171,8 @@ router.get("/getlist/:tb_institution_id", orderstocktransfer.getList);
  *             schema:
  *               $ref: '#/components/schemas/OrderStockTransferMain'
  */
-
- router.get("/get/:tb_institution_id/:id", orderstocktransfer.get);
+  //router.get("/get/:tb_institution_id/:id", orderstocktransfer.get);
+  protectedRouter.get("/get/:tb_institution_id/:id", orderstocktransfer.get);
  /**
  * @swagger
  * /orderstocktransfer:
@@ -197,8 +197,8 @@ router.get("/getlist/:tb_institution_id", orderstocktransfer.getList);
  *      500:
  *        description: Some error happened
  */
- router.put("/", orderstocktransfer.update);
-
+  //router.put("/", orderstocktransfer.update);
+  protectedRouter.put("/", orderstocktransfer.update);
 /**
  * @swagger
  * /orderstocktransfer/{tb_institution_id}/{id}:
@@ -222,8 +222,8 @@ router.get("/getlist/:tb_institution_id", orderstocktransfer.getList);
  *      500:
  *        description: Some error happened
  */
-router.delete("/:tb_institution_id/:id", orderstocktransfer.delete);
-
+  //router.delete("/:tb_institution_id/:id", orderstocktransfer.delete);
+  protectedRouter.delete("/:tb_institution_id/:id", orderstocktransfer.delete);
 /**
  * @swagger
  * /orderstocktransfer/close:
@@ -246,8 +246,8 @@ router.delete("/:tb_institution_id/:id", orderstocktransfer.delete);
  *       500:
  *         description: Some error happened
  */
- router.post("/close/", orderstocktransfer.close);
-
+  //router.post("/close/", orderstocktransfer.close);
+  protectedRouter.post("/close/", orderstocktransfer.close);
  /**
   * @swagger
   * /orderstocktransfer/reopen:
@@ -270,6 +270,6 @@ router.delete("/:tb_institution_id/:id", orderstocktransfer.delete);
   *       500:
   *         description: Some error happened
   */
- router.post("/reopen/", orderstocktransfer.reopen);     
-
+  //router.post("/reopen/", orderstocktransfer.reopen);     
+  protectedRouter.post("/reopen/", orderstocktransfer.reopen);     
 module.exports = router;
