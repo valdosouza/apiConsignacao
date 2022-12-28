@@ -84,6 +84,8 @@ routes.use("/orderstockadjust", orderstockadjust);
 const orderattendance = require("../routes/orderAttendance.routes");
 routes.use("/orderattendance", orderattendance);
 
+const financial = require("../routes/financial.routes");
+routes.use("/financial", financial);
 
 
 

@@ -1,8 +1,8 @@
 const Base = require('./base.controller.js');
 const db = require("../model");
-const Tb = db.financial;
+const Tb = db.financialPayment;
 
-class FinancialController extends Base {     
+class FinancialPaymnetController extends Base {     
    
     static async insert(order) {      
       const promise = new Promise(async (resolve, reject) => {
@@ -11,7 +11,7 @@ class FinancialController extends Base {
               resolve(data);
             })
             .catch(err => {
-              reject("financial.insert:"+ err);
+              reject("financialPaymnent.insert:"+ err);
             });        
       });
       return promise;        
@@ -21,7 +21,7 @@ class FinancialController extends Base {
         const promise = new Promise((resolve, reject) => {
           Tb.sequelize.query(
             'select  * ' +
-            'from tb_financial '+
+            'from tb_financial_payment '+
             'where (tb_institution_id =? ) ',
             {
               replacements: [tb_institution_id],
@@ -30,7 +30,7 @@ class FinancialController extends Base {
               resolve(data);
             })
             .catch(err => {
-              reject("financial.getlist: " + err);
+              reject("financialPaymnent.getlist: " + err);
             });
         });
         return promise;
@@ -40,7 +40,7 @@ class FinancialController extends Base {
       const promise = new Promise((resolve, reject) => {
         Tb.sequelize.query(
           'select * ' +
-          'from tb_financial '+
+          'from tb_financial_payment '+
           'where (tb_institution_id =? ) '+
           ' and (tb_order_id =? )',
           ' and (parcel =? )',
@@ -51,7 +51,7 @@ class FinancialController extends Base {
             resolve(data);
           })
           .catch(err => {
-            reject('financial.get: '+err);
+            reject("financialPayment.get: "+err);
           });
       });
       return promise;
@@ -68,7 +68,7 @@ class FinancialController extends Base {
             resolve(data);
           })          
           .catch(err => {
-           reject("financial.update:"+ err);
+           reject("financialPaymnent.update:"+ err);
           });
         });
       return promise;        
@@ -91,4 +91,4 @@ class FinancialController extends Base {
     }        
     
 }
-module.exports = FinancialController;
+module.exports = FinancialPaymnetController;

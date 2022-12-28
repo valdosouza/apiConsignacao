@@ -4,15 +4,6 @@ const {
 
 module.exports = sequelize => {
   const attributes = {
-    id: {
-      type: DataTypes.INTEGER(11),
-      allowNull: false,
-      defaultValue: null,
-      primaryKey: true,
-      autoIncrement: false,
-      comment: null,
-      field: "id"
-    },     
     tb_institution_id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
@@ -67,14 +58,14 @@ module.exports = sequelize => {
       comment: null,
       field: "late_value"
     },
-    discount_aliqu: {
+    discount_value: {
       type: DataTypes.DECIMAL,
       allowNull: true,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "discount_aliqu"
+      field: "discount_value"
     },
     paid_value: {
       type: DataTypes.DECIMAL,
@@ -112,15 +103,6 @@ module.exports = sequelize => {
       comment: null,
       field: "dt_real_payment"
     },
-    settled: {
-      type: DataTypes.STRING(1),
-      allowNull: true,
-      defaultValue: null,
-      primaryKey: false,
-      autoIncrement: false,
-      comment: null,
-      field: "settled"
-    },
     tb_financial_plans_id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
@@ -139,35 +121,29 @@ module.exports = sequelize => {
       comment: null,
       field: "settled_code"
     },
-    created_at: {
+    createdAt: {
       type: DataTypes.DATE,
       allowNull: true,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "created_at"
+      field: "createdAt"
     },
-    updated_at: {
+    updatedAt: {
       type: DataTypes.DATE,
       allowNull: true,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "updated_at"
+      field: "updatedAt"
     }
   };
   const options = {
     tableName: "tb_financial_payment",
     comment: "",
-    timestamps: false,
-    indexes: [{
-      name: "tb_order_id",
-      unique: false,
-      type: "BTREE",
-      fields: ["tb_order_id"]
-    }]
+    timestamps: true,
   };
   const TbFinancialPaymentModel = sequelize.define("tb_financial_payment_model", attributes, options);
   return TbFinancialPaymentModel;

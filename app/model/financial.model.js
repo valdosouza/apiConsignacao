@@ -3,16 +3,7 @@ const {
   } = require('sequelize');
   
   module.exports = sequelize => {
-    const attributes = {
-        id: {
-            type: DataTypes.INTEGER(11),
-            allowNull: false,
-            defaultValue: null,
-            primaryKey: true,
-            autoIncrement: false,
-            comment: null,
-            field: "id"
-          },        
+    const attributes = {    
       tb_institution_id: {
         type: DataTypes.INTEGER(11),
         allowNull: false,
@@ -44,10 +35,37 @@ const {
         type: DataTypes.INTEGER(11),
         allowNull: false,
         defaultValue: null,
-        primaryKey: false,
+        primaryKey: true,
         autoIncrement: false,
         comment: null,
         field: "parcel"
+      },
+      tb_entity_id: {
+        type: DataTypes.INTEGER(11),
+        allowNull: false,
+        defaultValue: null,
+        primaryKey: false,
+        autoIncrement: false,
+        comment: null,
+        field: "tb_entity_id"
+      },
+      dt_record: {
+        type: DataTypes.DATEONLY,
+        allowNull: true,
+        defaultValue: null,
+        primaryKey: false,
+        autoIncrement: false,
+        comment: null,
+        field: "dt_record"
+      },
+      number: {
+        type: DataTypes.STRING(60),
+        allowNull: true,
+        defaultValue: null,
+        primaryKey: false,
+        autoIncrement: false,
+        comment: null,
+        field: "number"
       },
       dt_expiration: {
         type: DataTypes.DATEONLY,
@@ -76,35 +94,66 @@ const {
         comment: null,
         field: "tag_value"
       },
-      created_at: {
-        type: DataTypes.DATE,
-        allowNull: true,
-        defaultValue: null,
+      tb_financial_plans_id: {
+        type: DataTypes.INTEGER(11),
+        allowNull: false,
+        defaultValue: "0",
         primaryKey: false,
         autoIncrement: false,
         comment: null,
-        field: "created_at"
+        field: "tb_financial_plans_id"
       },
-      updated_at: {
+  
+      kind: {
+        type: DataTypes.STRING(2),
+        allowNull: true,
+        defaultValue: null,
+        primaryKey: false,
+        autoIncrement: false,
+        comment: null,
+        field: "kind"
+      },
+      situation: {
+        type: DataTypes.STRING(1),
+        allowNull: true,
+        defaultValue: null,
+        primaryKey: false,
+        autoIncrement: false,
+        comment: null,
+        field: "situation"
+      },
+      operation: {
+        type: DataTypes.STRING(1),
+        allowNull: true,
+        defaultValue: null,
+        primaryKey: false,
+        autoIncrement: false,
+        comment: null,
+        field: "operation"
+      }, 
+      createdAt: {
         type: DataTypes.DATE,
         allowNull: true,
         defaultValue: null,
         primaryKey: false,
         autoIncrement: false,
         comment: null,
-        field: "updated_at"
+        field: "createdAt"
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        defaultValue: null,
+        primaryKey: false,
+        autoIncrement: false,
+        comment: null,
+        field: "updatedAt"
       }
     };
     const options = {
       tableName: "tb_financial",
       comment: "",
-      timestamps: false,
-      indexes: [{
-        name: "tb_order_id",
-        unique: false,
-        type: "BTREE",
-        fields: ["tb_order_id"]
-      }]
+      timestamps: true,
     };
     const TbFinancialModel = sequelize.define("tb_financial_model", attributes, options);
     return TbFinancialModel;

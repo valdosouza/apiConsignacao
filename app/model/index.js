@@ -100,8 +100,7 @@ db.TbInstitutionHasUser = require("./institutionHasUser.model.js")(sequelize, Se
 db.order = require("./order.model.js")(sequelize, Sequelize);
 db.orderSale = require("./orderSale.model.js")(sequelize, Sequelize);
 db.financial = require("./financial.model.js")(sequelize, Sequelize);
-db.financialBills = require("./financial_bills.model.js")(sequelize, Sequelize);
-db.financialPAyment = require("./financial_payment.model.js")(sequelize, Sequelize);
+db.financialPayment = require("./financial_payment.model.js")(sequelize, Sequelize);
 db.orderConsignment = require("./orderConsignment.model.js")(sequelize, Sequelize);
 
 db.orderItemDetached = require("./orderItemDetached.model.js")(sequelize, Sequelize);
