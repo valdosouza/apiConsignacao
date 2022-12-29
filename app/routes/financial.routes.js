@@ -20,8 +20,23 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         kind:
  *           type: string 
  *
+ * 
+ *     FinancialListCustomerCharged:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *         name_customer:
+ *           type: string
+ *         time_attendace:
+ *           type: string
+ *         value_charged:
+ *           type: number   
+ * 
+ * 
  */
  
+
  /**
   * @swagger
   * tags:
@@ -120,5 +135,35 @@ router.get("/statement/getbymonth/:tb_institution_id/:tb_user_id/:date", financi
  */
 
 router.get("/statement/getbycustomer/:tb_institution_id/:tb_user_id/:tb_customer_id/:date", financial.getbyDaybyCustomer);
+
+/**
+ * @swagger
+ * /financial/customer/charged/getlist/{tb_institution_id}/{tb_user_id}/{date}:
+ *   get:
+ *     summary: Returns the list of customers charged
+ *     tags: [Financial]
+ *     parameters:
+ *      - in: path
+ *        name: tb_institution_id
+ *        required: true 
+ *      - in: path
+ *        name: tb_user_id
+ *        required: true  
+ *      - in: path
+ *        name: date
+ *        required: true
+ *     responses:
+ *       200:
+ *         description: The list of customer that was charged
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/FinancialListCustomerCharged'
+ */
+
+router.get("/customer/charged/getlist/:tb_institution_id/:tb_user_id/:date", financial.getlistCustomercharge);
+
 
 module.exports = router;

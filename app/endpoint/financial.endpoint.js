@@ -35,6 +35,15 @@ class FinancialEndPoint {
       })
   }
   
+  static getlistCustomercharge(req, res) {    
+    FinancialStatemenController.getListCustomerCharged(req.params.tb_institution_id,
+                                    req.params.tb_user_id,                                                                        
+                                    req.params.date,
+                                    'D' )
+      .then(data => {
+        res.send(data);
+      })
+  }  
 }
 
 module.exports = FinancialEndPoint; 

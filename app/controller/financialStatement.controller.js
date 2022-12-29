@@ -12,7 +12,7 @@ class FinancialStatementController extends Base {
         try {          
           var dataini = date;
           var datafim = date;
-          console.log(kind_date);
+
           if (kind_date != 'D'){               
             dataini = dateFunction.firtDayMonth(dataini);          
             datafim = dateFunction.lastDayMonth(datafim);          
@@ -76,13 +76,13 @@ class FinancialStatementController extends Base {
               totalvalue += Number(item.subtotal),
               dataResult.push({
                 "description": item.name_product,
-                "tag_value": Number(item.subtotal),
+                "tag_value": item.subtotal,
                 "kind": item.kind,
               });
             } 
             dataResult.push({
               "description": "Total de Vendas",
-              "tag_value": totalvalue,
+              "tag_value": totalvalue.toFixed(2),
               "kind": "summarized",
             });
             resolve(dataResult);
@@ -129,13 +129,13 @@ class FinancialStatementController extends Base {
             totalvalue += Number(item.subtotal),
             dataResult.push({
             "description": item.name_payment_type,
-            "tag_value": Number(item.subtotal),
+            "tag_value": item.subtotal,
             "kind": item.kind,
             });
           } 
           dataResult.push({
             "description": "Total a Receber",
-            "tag_value": totalvalue,
+            "tag_value": totalvalue.toFixed(2),
             "kind": "summarized",
           });            
           resolve(dataResult);
@@ -186,14 +186,14 @@ class FinancialStatementController extends Base {
             totalvalue += Number(item.subtotal),
             dataResult.push({
             "description": item.name_payment_type,
-            "tag_value": Number(item.subtotal),
+            "tag_value": item.subtotal,
             "kind": item.kind,
             });
           } 
           
           dataResult.push({
             "description": "Total Recebido",
-            "tag_value": totalvalue,
+            "tag_value": totalvalue.toFixed(2),
             "kind": "summarized",
           });
           
@@ -204,6 +204,65 @@ class FinancialStatementController extends Base {
         });
     });
     return promise;
-}  
+  }  
+
+  static getListCustomerCharged(tb_institution_id,tb_salesman_id,date,kind_date) {
+    const promise = new Promise(async (resolve, reject) => {
+        try {          
+          var dataini = date;
+          var datafim = date;
+          
+          if (kind_date != 'D'){               
+            dataini = dateFunction.firtDayMonth(dataini);          
+            datafim = dateFunction.lastDayMonth(datafim);          
+          }          
+          var dataResult =  await this.listCustomerCharged(tb_institution_id,tb_salesman_id,dataini,datafim);
+          
+          resolve(dataResult);
+        } catch (err) {
+          reject("getListCustomerCharged: " + err);
+        }
+    });
+    return promise;
+  }    
+
+  static listCustomerCharged(tb_institution_id,tb_salesman_id,dataini,datafim) {
+    const promise = new Promise((resolve, reject) => {       
+
+      var sqltxt = 
+        'select etd.name_company  name_customer, SUBSTRING(time(ora.createdAt), 1, 5) time_attendace, sum(fnp.paid_value) value_charged '+
+        'from tb_order_sale ors  '+
+        '  inner join tb_financial fnl  '+
+        '  on (fnl.tb_order_id = ors.id)  '+
+        '    and (fnl.tb_institution_id = ors.tb_institution_id) '+
+        '    inner join tb_financial_payment fnp  '+
+        '    on (fnl.tb_order_id = fnp.tb_order_id)  '+ 
+        '    and (fnl.tb_institution_id = fnp.tb_institution_id)  '+
+        '    and (fnl.parcel = fnp.parcel)  '+
+        '  inner join tb_entity etd '+
+        '  on (etd.id = fnl.tb_entity_id)  '+
+        '  inner join tb_order_attendance ora '+ 
+        '  on (ors.id = ora.id)  '+
+        '    and (ors.tb_institution_id = ora.tb_institution_id)  '+
+        'where (ors.tb_institution_id = ? ) '+
+        'and (ors.tb_salesman_id = ?) '+
+        'and (fnl.dt_record between ? and ?) '+
+        'group by 1,2 ';     
+     
+      Tb.sequelize.query(
+        sqltxt,
+        {
+          replacements: [tb_institution_id,tb_salesman_id,dataini,datafim],
+          type: Tb.sequelize.QueryTypes.SELECT
+        }).then(data => {
+          resolve(data);
+        })
+        .catch(err => {
+          reject("financialStatenebt.getOrderSale: " + err);
+        });
+    });
+    return promise;
+  }    
+
 }
 module.exports = FinancialStatementController;
