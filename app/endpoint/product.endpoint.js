@@ -18,6 +18,14 @@ class ProductEndPoint {
       })
   }
 
+  static priceListGetAll(req, res) {
+    
+    ProdcutController.priceListGetAll(req.params.tb_institution_id )
+      .then(data => {
+        res.send(data);
+      })
+  }
+
   static get(req, res) {
     
     ProdcutController.get(req.params.tb_institution_id,req.params.id )

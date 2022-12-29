@@ -2,6 +2,7 @@ const Base = require('./base.controller.js');
 const db = require("../model");
 const Tb = db.product;
 const price = require('./price.controller.js');
+const priceList =require('./priceList.controller.js');
 
 class ProdcutController extends Base {     
   static async getNextId(tb_institution_id) {      
@@ -134,6 +135,55 @@ class ProdcutController extends Base {
     });
     return promise;
   }
+
+  static async getPrice(tb_instituion_id,tb_price_list_id) {    
+    const promise = new Promise((resolve, reject) => {
+      Tb.sequelize.query(
+        'select prd.id, prd.description name_product, prc.price_tag '+
+        'from tb_product prd '+
+        '  inner join tb_price prc '+
+        '  on (prd.id = prc.tb_product_id) '+
+        '  and (prd.tb_institution_id = prc.tb_institution_id) '+
+        'where (prd.tb_institution_id =? )  '+
+        'and ( prc.tb_price_list_id =? ) ',
+        {
+          replacements: [tb_instituion_id,tb_price_list_id],
+          type: Tb.sequelize.QueryTypes.SELECT
+        }).then(data => {
+            resolve(data);
+        })
+        .catch(err => {
+          reject('getById: ' + err);
+        });
+    });
+    return promise;
+  };
+
+  static priceListGetAll(tb_institution_id,id) {
+    const promise = new Promise(async (resolve, reject) => {
+      try{
+        var result = [];
+        var dataPriceList = {};
+        var productPrice = [];
+        await priceList.getList(tb_institution_id)
+        .then(async data =>{
+           for (var item of data) {            
+             productPrice = await this.getPrice(tb_institution_id,item.id);
+             dataPriceList = {
+              "name_price_list": item.description,
+              "product_price": productPrice};
+             result.push(dataPriceList);
+           }         
+        });
+        resolve(result);        
+      } 
+      catch(err){
+        reject('priceListGetAll: ' + err);
+      } 
+    });
+    return promise;
+  }
+
 
   static async update(product) {        
     const promise = new Promise((resolve, reject) => {    

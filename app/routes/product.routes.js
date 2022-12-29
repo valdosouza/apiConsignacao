@@ -27,7 +27,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         active:
  *           type: string
  * 
- *     ProductPrice:
+ *     PriceListPrice:
  *       type: object
  *       required:
  *         - tb_price_list_id
@@ -48,8 +48,27 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         priceilist:
  *            type: array
  *            items:
- *              $ref: '#/components/schemas/ProductPrice'
-  
+ *              $ref: '#/components/schemas/PriceListPrice'
+ * 
+ *     ProductPrice:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *         name_product:
+ *           type: string
+ *         price_tag:
+ *           type: string 
+ * 
+ *     PriceListProductPrice:
+ *       type: object
+ *       properties:
+ *         name_price_list:
+ *           type: string
+ *         product_price:
+ *           type: array
+ *           items: 
+ *             $ref: '#/components/schemas/ProductPrice' 
  */
 
  /**
@@ -140,6 +159,33 @@ router.get("/getlist/:tb_institution_id", product.getList);
  */
 
  router.get("/get/:tb_institution_id/:id", product.get);
+
+/**
+ * @swagger
+ * /product/pricelist/getall/{tb_institution_id}:
+ *   get:
+ *     summary: Returns the List os PriceList and Products
+ *     tags: [Product]
+ *     parameters:
+ *      - in: path
+ *        name: tb_institution_id
+ *        schema:
+ *          type: string
+ *        required: true
+ *        description: The product and price by tb_institution_id 
+ *     responses:
+ *       200:
+ *         description: The Product
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/PriceListProductPrice'
+ */
+
+router.get("/pricelist/getall/:tb_institution_id/", product.priceListGetAll);
+
  /**
  * @swagger
  * /product:
