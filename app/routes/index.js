@@ -87,6 +87,7 @@ routes.use("/orderattendance", orderattendance);
 const financial = require("../routes/financial.routes");
 routes.use("/financial", financial);
 
-
+const cashier = require("../routes/cashier.routes");
+routes.use("/cashier", cashier);
 
 module.exports = routes;

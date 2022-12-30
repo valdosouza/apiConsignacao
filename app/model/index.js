@@ -84,6 +84,10 @@ db.orderconsignment = require("./orderConsignment.model.js")(sequelize, Sequeliz
 db.orderconsignmentitem = require("./orderConsignmentItem.model.js")(sequelize, Sequelize);
 db.orderconsignmentpaid = require("./orderConsignmentPaid.model.js")(sequelize, Sequelize);
 db.orderattendance = require("./orderAttendance.model.js")(sequelize, Sequelize);
+db.cashier = require("./cashier.model.js")(sequelize, Sequelize);
+db.cashierclosure = require("./cashierClosure.model.js")(sequelize, Sequelize);
+
+
 
 db.restSubgroup = require("./restSubgroup.model.js")(sequelize, Sequelize);
 db.restGroup = require("./restGroup.model.js")(sequelize, Sequelize);

@@ -115,7 +115,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
 
 /**
  * @swagger
- * /institution::
+ * /institution:
  *   post:
  *     summary: Create a new institution
  *     tags: [Institution]

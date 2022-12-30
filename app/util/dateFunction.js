@@ -9,9 +9,9 @@ class DateFunctions{
             month = '0' + month;
         if (day.length < 2) 
             day = '0' + day;
-    
+        console.log([year, month, day].join('-'));
         return [year, month, day].join('-');
-    }    
+    }            
 
     static firtDayMonth(date) {        
         
@@ -34,6 +34,19 @@ class DateFunctions{
         return [year, month, day].join('-');
     }    
     
+    static newDate() { 
+        var date = new Date();
+        var dateStr = this.formatDate(date);        
+        return dateStr;
+    } 
+    static getTime() { 
+        var d = new Date(),
+            hour = '' + (d.getHours()),
+            minunte = '' + d.getMinutes();
+       
+    
+        return [hour, minunte].join(':');
+    }        
 }
 
 module.exports = DateFunctions;
