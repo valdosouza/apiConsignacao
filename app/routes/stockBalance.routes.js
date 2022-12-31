@@ -28,13 +28,32 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *           type: integer
  *         name_stock_list:
  *           type: string
+ *         items:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/StockBalanceItems'
+ *  
+ *     StockBalanceItems:
+ *       type: object
+ *       properties:
  *         tb_merchandise_id:
  *           type: integer
  *         name_merchandise:
  *           type: string  
  *         quantity:
- *           type: number 
- *  
+ *           type: number  
+ * 
+ *     StockBalanceSummarized:
+ *       type: object
+ *       properties:
+ *         tb_merchandise_id:
+ *           type: integer
+ *         name_merchandise:
+ *           type: string
+ *         quantity:
+ *           type: number
+ * 
+ *   
 */
     
  
@@ -47,19 +66,17 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
 
 /**
  * @swagger
- * /stockBalance/getlist/{tb_institution_id}/{tb_stock_list_id}:
+ * /stockbalance/getlist/{tb_institution_id}/{tb_stock_list_id}:
  *  get:
- *    summary: Return stockstatement by the tb_institution_id and tb_stock_list_id
+ *    summary: Return stockbalance by the tb_institution_id and tb_stock_list_id
  *    tags: [StockBalance]
  *    parameters:
  *      - in: path
  *        name: tb_institution_id
+ *        required: true
  *      - in: path
  *        name: tb_stock_list_id 
- *        schema:
- *          type: string
  *        required: true
- *        description: The id Institution and Id StockList
  *    responses:
  *      200:
  *        description: The Stock Balance was Listed
@@ -74,5 +91,85 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  */
 router.get("/getlist/:tb_institution_id/:tb_stock_list_id/", stockBalance.getList);
   
+/**
+ * @swagger
+ * /stockbalance/salesman/getlist/{tb_institution_id}/{tb_salesman_id}:
+ *  get:
+ *    summary: Return stockbalance by the salesman
+ *    tags: [StockBalance]
+ *    parameters:
+ *      - in: path
+ *        name: tb_institution_id
+ *        required: true
+ *      - in: path
+ *        name: tb_salesman_id
+ *        required: true
+ *    responses:
+ *      200:
+ *        description: The Stock Balance was Listed
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/StockBalanceSummarized'
+ *      404:
+ *        description: The stock Balance was not found
+ *      500:
+ *        description: Some error happened
+ */
+router.get("/salesman/getlist/:tb_institution_id/:tb_salesman_id/", stockBalance.getListBySalesman);
+
+/**
+ * @swagger
+ * /stockbalance/customer/getlist/{tb_institution_id}/{tb_salesman_id}:
+ *  get:
+ *    summary: Return stockbalance of all customer by the salesman
+ *    tags: [StockBalance]
+ *    parameters:
+ *      - in: path
+ *        name: tb_institution_id
+ *        required: true
+ *      - in: path
+ *        name: tb_salesman_id
+ *        required: true
+ *    responses:
+ *      200:
+ *        description: The Stock Balance was Listed
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/StockBalanceSummarized'
+ *      404:
+ *        description: The stock Balance was not found
+ *      500:
+ *        description: Some error happened
+ */
+router.get("/customer/getlist/:tb_institution_id/:tb_salesman_id/", stockBalance.getListAllCustomer);
+
+/**
+ * @swagger
+ * /stockbalance/salesman/getall/{tb_institution_id}/{tb_salesman_id}:
+ *  get:
+ *    summary: Return stockbalance of all customer and the salesman  by the salesman
+ *    tags: [StockBalance]
+ *    parameters:
+ *      - in: path
+ *        name: tb_institution_id
+ *        required: true
+ *      - in: path
+ *        name: tb_salesman_id
+ *        required: true
+ *    responses:
+ *      200:
+ *        description: The Stock Balance was Listed
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/StockBalanceSummarized'
+ *      404:
+ *        description: The stock Balance was not found
+ *      500:
+ *        description: Some error happened
+ */
+router.get("/salesman/getall/:tb_institution_id/:tb_salesman_id/", stockBalance.getAllBySalesman);
 
 module.exports = router;  

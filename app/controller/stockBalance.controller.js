@@ -39,14 +39,176 @@ class StockBalanceController extends Base {
           {
             replacements: [tb_institution_id,tb_stock_list_id],
             type: Tb.sequelize.QueryTypes.SELECT
-          }).then(data => {              
-            resolve(data);
+          }).then(data => {  
+            if (data.length > 0){  
+              var dataResult = {
+                id : data[0].id,
+                tb_institution_id : data[0].tb_institution_idid,
+                tb_stock_list_id : data[0].tb_stock_list_id,
+                name_stock_list : data[0].name_stock_list,
+              };
+              var items = [];
+              var itemResult = {};
+              for (var item of data){
+                itemResult = {
+                  tb_merchandise_id: item.tb_merchandise_id,
+                  name_merchandise: item.name_merchandise,
+                  quantity: item.quantity
+                }
+                items.push(itemResult);
+              }
+              dataResult.items = items;
+              resolve(dataResult);
+            }else{
+              resolve("Estoque não encontrado");
+            }
           })
           .catch(err => {
             reject("StockBalance.getlist: " + err);
           });
       });
       return promise;
+  }
+
+  static getListBySalesman(tb_institution_id,tb_salesman_id) {
+    const promise = new Promise((resolve, reject) => {
+      Tb.sequelize.query(
+        'select '+
+        'stb.tb_merchandise_id, '+
+        'prd.description name_merchandise, '+
+        'stb.quantity '+
+        'from tb_stock_balance stb '+
+        '  inner join tb_stock_list stl   '+
+        '  on (stl.id = stb.tb_stock_list_id) '+
+        '    and (stl.tb_institution_id = stb.tb_institution_id) '+
+        '  inner join tb_product prd '+
+        '  on (prd.id = stb.tb_merchandise_id)  '+
+        '  inner join tb_entity_has_stock_list ehs  '+
+        '  on (ehs.tb_stock_list_id = stb.tb_stock_list_id)  '+
+        '    and (ehs.tb_institution_id = stb.tb_institution_id) '+
+        '  inner join tb_collaborator c '+
+        '  on (c.id = ehs.tb_entity_id) '+
+        '    and (c.tb_institution_id = ehs.tb_institution_id) '+
+        'where stb.tb_institution_id =?   '+
+        'and ehs.tb_entity_id =?   ',
+        {
+          replacements: [tb_institution_id,tb_salesman_id],
+          type: Tb.sequelize.QueryTypes.SELECT
+        }).then(data => {  
+          if (data.length > 0){
+            resolve(data);
+          }else{
+            resolve("Estoque não encontrado");
+          }
+        })
+        .catch(err => {
+          reject("StockBalance.getListByEnitity: " + err);
+        });
+    });
+    return promise;
+  }
+
+  static getListAllCustomer(tb_institution_id,tb_salesman_id) {
+    const promise = new Promise((resolve, reject) => {
+      Tb.sequelize.query(
+        'select '+
+        'stb.tb_merchandise_id, '+
+        'prd.description name_merchandise, '+
+        'sum(stb.quantity) quantity '+
+        'from tb_stock_balance stb '+
+        '  inner join tb_stock_list stl '+
+        '  on (stl.id = stb.tb_stock_list_id) '+
+        '    and (stl.tb_institution_id = stb.tb_institution_id) '+
+        '  inner join tb_product prd '+
+        '  on (prd.id = stb.tb_merchandise_id) '+
+        '  inner join tb_entity_has_stock_list ehs '+
+        '  on (ehs.tb_stock_list_id = stb.tb_stock_list_id) '+
+        '    and (ehs.tb_institution_id = stb.tb_institution_id) '+
+        '  inner join tb_customer ct '+
+        '  on (ct.id = ehs.tb_entity_id) '+
+        '    and (ct.tb_institution_id = ehs.tb_institution_id) '+
+        'where stb.tb_institution_id =?  '+
+        'and ct.tb_salesman_id =?  '+
+        'group by 1,2 ',        
+        {
+          replacements: [tb_institution_id,tb_salesman_id],
+          type: Tb.sequelize.QueryTypes.SELECT
+        }).then(data => { 
+            if (data.length > 0){
+              resolve(data);
+            }else{
+              resolve("Saldo estoque não encontrato!");
+            }
+        })
+        .catch(err => {
+          reject("StockBalance.getListAllCustomer: " + err);
+        });
+    });
+    return promise;
+  }
+
+  static getAllBySalesman(tb_institution_id,tb_salesman_id) {
+    const promise = new Promise((resolve, reject) => {
+      Tb.sequelize.query(
+          '  select '+
+          '  tb_merchandise_id, '+
+          '  name_merchandise, '+
+          '  sum(quantity) quantity '+
+          'from ( '+
+          '  select  '+
+          '  stb.tb_merchandise_id,  '+
+          '  prd.description name_merchandise,  '+
+          '  stb.quantity '+
+          '  from tb_stock_balance stb  '+
+          '    inner join tb_stock_list stl    '+
+          '    on (stl.id = stb.tb_stock_list_id)  '+
+          '      and (stl.tb_institution_id = stb.tb_institution_id)  '+
+          '    inner join tb_product prd  '+
+          '    on (prd.id = stb.tb_merchandise_id)   '+
+          '    inner join tb_entity_has_stock_list ehs   '+
+          '    on (ehs.tb_stock_list_id = stb.tb_stock_list_id)   '+
+          '      and (ehs.tb_institution_id = stb.tb_institution_id)  '+
+          '    inner join tb_customer ct  '+
+          '    on (ct.id = ehs.tb_entity_id)  '+
+          '      and (ct.tb_institution_id = ehs.tb_institution_id)  '+
+          '  where stb.tb_institution_id =? '+
+          '  and ct.tb_salesman_id =? '+      
+          '   union '+
+          '   select  '+
+          '   stb.tb_merchandise_id,  '+
+          '   prd.description name_merchandise, '+
+          '   stb.quantity  '+
+          '   from tb_stock_balance stb '+
+          '     inner join tb_stock_list stl '+
+          '     on (stl.id = stb.tb_stock_list_id)  '+
+          '       and (stl.tb_institution_id = stb.tb_institution_id)  '+
+          '     inner join tb_product prd  '+
+          '     on (prd.id = stb.tb_merchandise_id)   '+
+          '     inner join tb_entity_has_stock_list ehs   '+
+          '     on (ehs.tb_stock_list_id = stb.tb_stock_list_id)   '+
+          '       and (ehs.tb_institution_id = stb.tb_institution_id)  '+
+          '     inner join tb_collaborator c  '+
+          '     on (c.id = ehs.tb_entity_id)  '+
+          '       and (c.tb_institution_id = ehs.tb_institution_id) '+
+          '   where stb.tb_institution_id =1   '+
+          '   and ehs.tb_entity_id =2 '+
+          ' ) tb_stock_by_salesman '+
+          ' group by 1,2  ',
+        {
+          replacements: [tb_institution_id,tb_salesman_id],
+          type: Tb.sequelize.QueryTypes.SELECT
+        }).then(data => { 
+            if (data.length > 0){
+              resolve(data);
+            }else{
+              resolve("Saldo estoque não encontrato!");
+            }
+        })
+        .catch(err => {
+          reject("StockBalance.getListAllCustomer: " + err);
+        });
+    });
+    return promise;
   }
 
   static async delete(price) {      
