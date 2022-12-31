@@ -4,6 +4,15 @@ const {
   
   module.exports = sequelize => {
     const attributes = {    
+      id: {
+        type: DataTypes.INTEGER(11),
+        allowNull: false,
+        defaultValue: null,
+        primaryKey: true,
+        autoIncrement: false,
+        comment: null,
+        field: "id"
+      },
       tb_institution_id: {
         type: DataTypes.INTEGER(11),
         allowNull: false,
@@ -12,15 +21,6 @@ const {
         autoIncrement: false,
         comment: null,
         field: "tb_institution_id"
-      },
-      tb_order_id: {
-        type: DataTypes.INTEGER(11),
-        allowNull: false,
-        defaultValue: null,
-        primaryKey: true,
-        autoIncrement: false,
-        comment: null,
-        field: "tb_order_id"
       },
       terminal: {
         type: DataTypes.INTEGER(11),
@@ -31,23 +31,14 @@ const {
         comment: null,
         field: "terminal"
       },
-      parcel: {
+      tb_banck_account_id: {
         type: DataTypes.INTEGER(11),
-        allowNull: false,
-        defaultValue: null,
-        primaryKey: true,
-        autoIncrement: false,
-        comment: null,
-        field: "parcel"
-      },
-      tb_entity_id: {
-        type: DataTypes.INTEGER(11),
-        allowNull: false,
-        defaultValue: null,
+        allowNull: true,
+        defaultValue: 0,
         primaryKey: false,
         autoIncrement: false,
         comment: null,
-        field: "tb_entity_id"
+        field: "tb_banck_account_id"
       },
       dt_record: {
         type: DataTypes.DATEONLY,
@@ -58,23 +49,104 @@ const {
         comment: null,
         field: "dt_record"
       },
-      number: {
-        type: DataTypes.STRING(60),
+      tb_banck_historic_id: {
+        type: DataTypes.INTEGER(11),
         allowNull: true,
-        defaultValue: null,
+        defaultValue: 0,
         primaryKey: false,
         autoIncrement: false,
         comment: null,
-        field: "number"
+        field: "tb_banck_historic_id"
       },
-      dt_expiration: {
-        type: DataTypes.DATEONLY,
+      credit_value: {
+        type: DataTypes.DECIMAL,
+        allowNull: true,
+        defaultValue: 0,
+        primaryKey: false,
+        autoIncrement: false,
+        comment: null,
+        field: "credit_value"
+      },
+      debit_value: {
+        type: DataTypes.DECIMAL,
+        allowNull: true,
+        defaultValue: 0,
+        primaryKey: false,
+        autoIncrement: false,
+        comment: null,
+        field: "debit_value"
+      },
+      manual_history: {
+        type: DataTypes.STRING(100),
         allowNull: true,
         defaultValue: null,
         primaryKey: false,
         autoIncrement: false,
         comment: null,
-        field: "dt_expiration"
+        field: "manual_history"
+      },
+      kind: {
+        type: DataTypes.STRING(1),
+        allowNull: true,
+        defaultValue: null,
+        primaryKey: false,
+        autoIncrement: false,
+        comment: null,
+        field: "kind"
+      },    
+      settled_code: {
+        type: DataTypes.INTEGER(11),
+        allowNull: false,
+        defaultValue: null,
+        primaryKey: false,
+        autoIncrement: false,
+        comment: null,
+        field: "settled_code"
+      },
+      tb_user_id: {
+        type: DataTypes.INTEGER(11),
+        allowNull: false,
+        defaultValue: null,
+        primaryKey: false,
+        autoIncrement: false,
+        comment: null,
+        field: "tb_user_id"
+      },
+      future: {
+        type: DataTypes.STRING(1),
+        allowNull: false,
+        defaultValue: null,
+        primaryKey: false,
+        autoIncrement: false,
+        comment: null,
+        field: "future"
+      },
+      dt_original: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: null,
+        primaryKey: false,
+        autoIncrement: false,
+        comment: null,
+        field: "dt_original"
+      },
+      doc_reference: {
+        type: DataTypes.STRING(30),
+        allowNull: false,
+        defaultValue: null,
+        primaryKey: false,
+        autoIncrement: false,
+        comment: null,
+        field: "doc_reference"
+      },
+      conferred: {
+        type: DataTypes.STRING(1),
+        allowNull: false,
+        defaultValue: null,
+        primaryKey: false,
+        autoIncrement: false,
+        comment: null,
+        field: "conferred"
       },
       tb_payment_types_id: {
         type: DataTypes.INTEGER(11),
@@ -85,52 +157,24 @@ const {
         comment: null,
         field: "tb_payment_types_id"
       },
-      tag_value: {
-        type: DataTypes.DECIMAL,
-        allowNull: true,
-        defaultValue: null,
-        primaryKey: false,
-        autoIncrement: false,
-        comment: null,
-        field: "tag_value"
-      },
-      tb_financial_plans_id: {
+      tb_financial_plans_id_cre: {
         type: DataTypes.INTEGER(11),
         allowNull: false,
         defaultValue: "0",
         primaryKey: false,
         autoIncrement: false,
         comment: null,
-        field: "tb_financial_plans_id"
+        field: "tb_financial_plans_id_cre"
       },
-  
-      kind: {
-        type: DataTypes.STRING(2),
-        allowNull: true,
-        defaultValue: null,
+      tb_financial_plans_id_deb: {
+        type: DataTypes.INTEGER(11),
+        allowNull: false,
+        defaultValue: "0",
         primaryKey: false,
         autoIncrement: false,
         comment: null,
-        field: "kind"
+        field: "tb_financial_plans_id_deb"
       },
-      situation: {
-        type: DataTypes.STRING(1),
-        allowNull: true,
-        defaultValue: null,
-        primaryKey: false,
-        autoIncrement: false,
-        comment: null,
-        field: "situation"
-      },
-      operation: {
-        type: DataTypes.STRING(1),
-        allowNull: true,
-        defaultValue: null,
-        primaryKey: false,
-        autoIncrement: false,
-        comment: null,
-        field: "operation"
-      }, 
       createdAt: {
         type: DataTypes.DATE,
         allowNull: true,
@@ -151,10 +195,10 @@ const {
       }
     };
     const options = {
-      tableName: "tb_financial",
+      tableName: "tb_financial_statement",
       comment: "",
       timestamps: true,
     };
-    const TbFinancialModel = sequelize.define("tb_financial_model", attributes, options);
-    return TbFinancialModel;
+    const TbFinancialStatementModel = sequelize.define("tb_financial_statement_model", attributes, options);
+    return TbFinancialStatementModel;
   };
