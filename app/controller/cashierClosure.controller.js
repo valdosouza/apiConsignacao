@@ -37,6 +37,55 @@ class CashierClosureController extends Base {
     });
     return promise;
   }
+
+  static async get(tb_institution_id,tb_user_id,dt_record) {
+    const promise = new Promise(async (resolve, reject) => {
+      try{
+        Tb.sequelize.query(
+        '  select '+
+        '  c.dt_record, '+
+        '  c.tb_institution_id, '+
+        '  c.tb_user_id, '+
+        '  cc.description, '+
+        '  cc.tag_value, '+
+        '  cc.kind '+
+        'from tb_cashier_closure cc '+
+        '   inner join tb_cashier c '+
+        '   on (c.id = cc.tb_cashier_id) '+
+        '   and (c.tb_institution_id = cc.tb_institution_id) '+
+        'where ( c.tb_institution_id =? ) '+
+        'and ( c.tb_user_id = ? ) '+
+        'and ( c.dt_record =? ) ',
+        {
+          replacements: [tb_institution_id,tb_user_id,dt_record],
+          type: Tb.sequelize.QueryTypes.SELECT
+        })
+        .then(data => {   
+          var dataResult = {
+            dt_record : data[0].dt_record,   
+            tb_institution_id : data[0].tb_institution_id,
+            tb_user_id : data[0].tb_user_id,
+          }
+          var items = [];
+          var itemResult = {};
+          for (var item of data){
+            itemResult = {
+              description: item.description,
+              tag_value: item.tag_value,
+              kind: item.kind
+            }
+            items.push(itemResult);
+          }
+          dataResult.items = items;
+          resolve(dataResult);
+        })
+        
+      } catch(err) {            
+        reject('CashierClosure.closure: '+err);
+      }                                             
+    });
+    return promise;
+  }
   
 }
 module.exports =  CashierClosureController;

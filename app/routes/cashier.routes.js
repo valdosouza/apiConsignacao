@@ -41,7 +41,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *     CashierClosure:
  *       type: object
  *       properties:
- *         data:
+ *         dt_record:
  *           type: string
  *         tb_institution_id:
  *           type: integer
@@ -84,8 +84,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  */
  router.post("/open", cashier.open);
  
- 
-  /**
+ /**
  * @swagger
  * /cashier/closure:
  *  post:
@@ -106,5 +105,35 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *        description: Some error happened
  */
   router.post("/closure/", cashier.closure);
+
+/**
+ * @swagger
+ * /cashier/closure/get/{tb_institution_id}/{tb_user_id}/{dt_record}:
+ *  get:
+ *    summary: Update the Cashier by the id
+ *    tags: [Cashier]
+ *    parameters:
+ *      - in: path
+ *        name: tb_institution_id
+ *        required: true
+ *      - in: path
+ *        name: tb_user_id
+ *        required: true
+ *      - in: path
+ *        name: dt_record
+ *        required: true
+ *    responses:
+ *      200:
+ *        description: The Cashier Closure was lited successfully
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/CashierClosure'
+ *      404:
+ *        description: The Cashier was not found
+ *      500:
+ *        description: Some error happened
+ */
+router.get("/closure/get/:tb_institution_id/:tb_user_id/:dt_record", cashier.get);
 
 module.exports = router;  
