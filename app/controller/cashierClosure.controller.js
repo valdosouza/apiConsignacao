@@ -86,6 +86,32 @@ class CashierClosureController extends Base {
     });
     return promise;
   }
+ 
+  static async getlist(tb_institution_id,tb_user_id,dt_record) {
+    const promise = new Promise(async (resolve, reject) => {
+      try{
+        Tb.sequelize.query(
+        'select '+
+        '  c.id, '+
+        '  c.dt_record '+
+        'from tb_cashier c '+
+        'where ( c.tb_institution_id =? ) '+
+        'and ( c.tb_user_id = ? ) ',
+        {
+          replacements: [tb_institution_id,tb_user_id,dt_record],
+          type: Tb.sequelize.QueryTypes.SELECT
+        })
+        .then(data => {   
+          resolve(data);
+        })
+        
+      } catch(err) {            
+        reject('CashierClosure.getlist: '+err);
+      }                                             
+    });
+    return promise;
+  }
   
+
 }
 module.exports =  CashierClosureController;

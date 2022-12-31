@@ -166,4 +166,5 @@ router.get("/statement/getbycustomer/:tb_institution_id/:tb_user_id/:tb_customer
 router.get("/customer/charged/getlist/:tb_institution_id/:tb_user_id/:date", financial.getlistCustomercharge);
 
 
+
 module.exports = router;

@@ -51,6 +51,34 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *           type: array
  *           items:
  *            $ref: '#/components/schemas/CashierClosureItem'
+ * 
+ *     ListOfCashierClosure:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *         dt_record:
+ *           type: string 
+ * 
+ * 
+ *     BalanceOfCashierItem:
+ *       type: object
+ *       properties:
+ *         name_payment_type:
+ *           type: string
+ *         balance_value:
+ *           type: number
+ * 
+ *  
+ *     BalanceOfCashier:
+ *       type: object
+ *       properties:
+ *         dt_record:
+ *           type: string  
+ *         items:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/BalanceOfCashierItem'
  */
 
  /**
@@ -110,7 +138,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  * @swagger
  * /cashier/closure/get/{tb_institution_id}/{tb_user_id}/{dt_record}:
  *  get:
- *    summary: Update the Cashier by the id
+ *    summary: get Cashier Closure
  *    tags: [Cashier]
  *    parameters:
  *      - in: path
@@ -124,7 +152,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *        required: true
  *    responses:
  *      200:
- *        description: The Cashier Closure was lited successfully
+ *        description: The Cashier Closure was listed successfully
  *        content:
  *          application/json:
  *            schema:
@@ -134,6 +162,62 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *      500:
  *        description: Some error happened
  */
-router.get("/closure/get/:tb_institution_id/:tb_user_id/:dt_record", cashier.get);
+router.get("/closure/get/:tb_institution_id/:tb_user_id/:dt_record/", cashier.get);
+
+/**
+ * @swagger
+ * /cashier/closure/getlist/{tb_institution_id}/{tb_user_id}:
+ *  get:
+ *    summary: Get List of Closures by user
+ *    tags: [Cashier]
+ *    parameters:
+ *      - in: path
+ *        name: tb_institution_id
+ *        required: true
+ *      - in: path
+ *        name: tb_user_id
+ *        required: true
+ *    responses:
+ *      200:
+ *        description: The List of Cashier Closure was lited successfully
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: array
+ *              items:
+ *                $ref: '#/components/schemas/ListOfCashierClosure' 
+ *      404:
+ *        description: The Cashier was not found
+ *      500:
+ *        description: Some error happened
+ */
+router.get("/closure/getlist/:tb_institution_id/:tb_user_id/", cashier.getlist);
+
+/**
+ * @swagger
+ * /cashier/balance/get/{tb_institution_id}/{tb_user_id}/{dt_record}:
+ *   get:
+ *     summary: Returns the balance of cashier
+ *     tags: [Cashier]
+ *     parameters:
+ *      - in: path
+ *        name: tb_institution_id
+ *        required: true 
+ *      - in: path
+ *        name: tb_user_id
+ *        required: true  
+ *      - in: path
+ *        name: dt_record
+ *        required: true
+ *     responses:
+ *       200:
+ *         description: The balance of cashier
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/BalanceOfCashier'
+ */
+
+router.get("/balance/get/:tb_institution_id/:tb_user_id/:dt_record/", cashier.getBalance);
 
 module.exports = router;  

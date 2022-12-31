@@ -18,9 +18,7 @@ class CashierEndPoint {
     })
   }
 
-  static get(req, res) {
-    console.log(req.params);
-
+  static get(req, res) {    
     CashierClosureController.get(req.params.tb_institution_id,
                                     req.params.tb_user_id,
                                     req.params.dt_record)
@@ -29,5 +27,21 @@ class CashierEndPoint {
     })
   }
 
+  static getlist(req, res) {    
+    CashierClosureController.getlist(req.params.tb_institution_id,
+                                    req.params.tb_user_id)
+    .then(data => {
+      res.send(data);
+    })
+  }  
+
+  static getBalance(req, res) {    
+    CashierController.getBalance(req.params.tb_institution_id,
+                                        req.params.tb_user_id,
+                                        req.params.dt_record)
+    .then(data => {
+      res.send(data);
+    })
+  }  
 }  
 module.exports = CashierEndPoint; 
