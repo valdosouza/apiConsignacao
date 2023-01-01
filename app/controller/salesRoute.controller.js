@@ -1,6 +1,7 @@
 const Base = require('./base.controller.js');
 const db = require("../model");
 const Tb = db.salesroute;
+const SalesRouteCustomerController = require('./salesRouteCustomer.controller.js');
 
 class SalesRouteController extends Base {     
     static async getNextId(tb_institution_id) {      
@@ -96,6 +97,43 @@ class SalesRouteController extends Base {
            reject("salesroute.update:"+ err);
           });
         });
+      return promise;        
+    }        
+
+    static async sequence(body) {        
+      const promise = new Promise(async (resolve, reject) => {
+        try {
+          var dataRoute = await SalesRouteCustomerController.getListByRoute(body.tb_institution_id,
+                                                                            body.tb_sales_route_id,
+                                                                            body.sequence,
+                                                                            body.tb_customer_id);
+          var seqRoute = body.sequence;
+          var dataSequence = {};
+          dataSequence = {
+            tb_institution_id : body.tb_institution_id,
+            tb_sales_route_id : body.tb_sales_route_id,
+            tb_customer_id : body.tb_customer_id,
+            sequence : seqRoute,
+          };    
+          await SalesRouteCustomerController.updateSequence(dataSequence);           
+                                                                
+          if (dataRoute.length > 0){
+            for (var item of dataRoute){                            
+              seqRoute = seqRoute + 1;            
+              dataSequence = {
+                tb_institution_id : item.tb_institution_id,
+                tb_sales_route_id : item.tb_sales_route_id,
+                tb_customer_id : item.tb_customer_id,
+                sequence : seqRoute,
+              };   
+              await SalesRouteCustomerController.updateSequence(dataSequence);
+            }     
+          }
+          resolve("Sequência da rota atualizada!!")     ;
+        } catch (err) {
+          reject("salesroute.sequence:"+ err);
+        }
+      });
       return promise;        
     }        
 

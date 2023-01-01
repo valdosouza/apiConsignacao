@@ -26,6 +26,24 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *           type: string
  *         active:
  *           type: string
+ * 
+ *     SalesRouteSequence:
+ *       type: object
+ *       required:
+ *         - tb_institution_id
+ *         - tb_sales_route_id
+ *         - tb_customer_id
+ *         - sequence
+ *       properties: 
+ *         tb_institution_id:
+ *           type: integer
+ *         tb_sales_route_id:
+ *           type: integer  
+ *         tb_customer_id:
+ *           type: integer
+ *         sequence:
+ *           type: integer
+ 
  */
 
  /**
@@ -137,6 +155,30 @@ router.get("/getlist/:tb_institution_id", salesroute.getList);
  *        description: Some error happened
  */
  router.put("/", salesroute.update);
+
+ router.get("/get/:tb_institution_id/:id", salesroute.get);
+
+/**
+ * @swagger
+ * /salesroute/sequence/:
+ *  post:
+ *    summary: Set the sequence of customer in the route
+ *    tags: [SalesRoute]
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            $ref: '#/components/schemas/SalesRouteSequence'
+ *    responses:
+ *      200:
+ *        description: The Sequence of Sales Route was updated
+ *      404:
+ *        description: The Sequence of salesroute was not found
+ *      500:
+ *        description: Some error happened
+ */
+ router.post("/sequence/", salesroute.sequence);
 
 /**
  * @swagger

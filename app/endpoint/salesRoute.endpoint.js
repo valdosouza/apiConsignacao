@@ -34,6 +34,13 @@ class SalesRouteEndPoint {
       })
   }
 
+  static sequence = (req, res) => {
+    SalesRouteController.sequence(req.body)
+      .then(() => {        
+        res.send(req.body);
+      })
+  }
+
   static delete(req, res) {
 
     SalesRouteController.delete(req.body)
