@@ -31,9 +31,9 @@ class OrderItemController extends Base {
     static async insert(item) {      
       const promise = new Promise(async (resolve, reject) => {
           const nextId  = await this.getNextId(item.tb_institution_id,item.tb_order_id);             
-          item.id = nextId;          
+          item.id = nextId;             
           Tb.create(item)
-            .then((data) => {             
+            .then((data) => {    
               resolve(data);
             })
             .catch(err => {

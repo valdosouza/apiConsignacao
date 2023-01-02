@@ -1,6 +1,6 @@
 const { Router } = require("express");
   
-const ordersale =  require("../endpoint/orderBonus.endpoint.js");
+const ordersale =  require("../endpoint/orderSale.endpoint.js");
 
 const { withJWTAuthMiddleware } = require("express-kun");
 const router = Router();
@@ -15,7 +15,6 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *       required:
  *         - id
  *         - tb_institution_id
- *         - tb_order_id
  *         - tb_user_id
  *         - dt_record
  *         - tb_customer_id
@@ -25,8 +24,6 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         id:
  *           type: integer
  *         tb_institution_id:
- *           type: integer
- *         tb_order_id:
  *           type: integer
  *         tb_user_id:
  *           type: integer
@@ -45,21 +42,33 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         status:
  *           type: string
  * 
- *     OrderStockAdjustment:
+ *     OrderSaleItem:
  *       type: object
  *       required:
  *         - tb_product_id
  *         - unit_value
- *         - quantity
+ *         - quantity 
  *       properties:
+ *         id:
+ *           type: integer 
+ *         tb_stock_list_id:
+ *           type: integer
+ *         name_stock_list:
+ *           type: string  
+ *         tb_price_list_id:
+ *           type: integer
+ *         name_price_list:
+ *           type: string  
  *         tb_product_id:
  *           type: integer
  *         unit_value:
  *           type: number
  *         quantity:
  *           type: number
+ *         update_status:
+ *           type: string;
  * 
- *     OrderStockAdjustmentMain:
+ *     OrderSaleMain:
  *       type: object
  *       properties:
  *         Order:
@@ -104,35 +113,30 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
 
  /**
  * @swagger
- * /ordersale/getlist/{tb_institution_id}/{tb_order_id}:
+ * /ordersale/getlist/{tb_institution_id}:
  *   get:
  *     summary: Returns the list of all the OrderSales
  *     tags: [OrderSale]
  *     parameters:
  *      - in: path
  *        name: tb_institution_id
- *      - in: path
- *        name: tb_order_id
- *        schema:
- *          type: string
- *        required: true
- *        description: The ordersale tb_institution_id
+ *        required: true 
  *     responses:
  *       200:
- *         description: The list of the payment types
+ *         description: The list of Order Sales
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/OrderSaleMain'
+ *                 $ref: '#/components/schemas/OrderSale'
  */
 
-router.get("/getlist/:tb_institution_id/:tb_order_id", ordersale.getList);
+router.get("/getlist/:tb_institution_id/", ordersale.getList);
   
 /**
  * @swagger
- * /ordersale/get/{tb_institution_id}/{tb_order_id}/{id}:
+ * /ordersale/get/{tb_institution_id}/{tb_order_id}:
  *   get:
  *     summary: Returns the OrderSale
  *     tags: [OrderSale]
@@ -141,12 +145,6 @@ router.get("/getlist/:tb_institution_id/:tb_order_id", ordersale.getList);
  *        name: tb_institution_id
  *      - in: path
  *        name: tb_order_id
- *      - in: path
- *        name: id
- *        schema:
- *          type: string
- *        required: true
- *        description: The ordersale by tb_institution_id and....
  *     responses:
  *       200:
  *         description: The OrderSale
@@ -156,7 +154,7 @@ router.get("/getlist/:tb_institution_id/:tb_order_id", ordersale.getList);
  *               $ref: '#/components/schemas/OrderSaleMain'
  */
 
- router.get("/get/:tb_institution_id/:tb_order_id/:id", ordersale.get);
+ router.get("/get/:tb_institution_id/:tb_order_id", ordersale.get);
  
  /**
  * @swagger
@@ -186,21 +184,17 @@ router.get("/getlist/:tb_institution_id/:tb_order_id", ordersale.getList);
 
 /**
  * @swagger
- * /ordersale/{tb_institution_id}/{tb_order_id}/{id}:
+ * /ordersale/{tb_institution_id}/{tb_order_id}:
  *  delete:
  *    summary: Delete the ordersale by the id
  *    tags: [OrderSale]
  *    parameters:
  *      - in: path
  *        name: tb_institution_id
+ *        required: true
  *      - in: path
  *        name: tb_order_id
- *      - in: path
- *        name: id 
- *        schema:
- *          type: string
- *        required: true
- *        description: The ordersale id
+ *        required: true 
  *    responses:
  *      200:
  *        description: The OrderSale was deleted
@@ -209,6 +203,6 @@ router.get("/getlist/:tb_institution_id/:tb_order_id", ordersale.getList);
  *      500:
  *        description: Some error happened
  */
-router.delete("/:tb_institution_id/:tb_order_id/:id", ordersale.delete);
+router.delete("/:tb_institution_id/:tb_order_id", ordersale.delete);
 
 module.exports = router;
