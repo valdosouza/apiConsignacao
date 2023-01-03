@@ -171,7 +171,7 @@ class ProdcutController extends Base {
              productPrice = await this.getPrice(tb_institution_id,item.id);
              dataPriceList = {
               "name_price_list": item.description,
-              "product_price": productPrice};
+              "product_price": Number(productPrice)};
              result.push(dataPriceList);
            }         
         });
