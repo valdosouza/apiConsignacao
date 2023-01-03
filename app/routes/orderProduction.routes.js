@@ -96,7 +96,8 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *       500:
  *         description: Some server error
  */
- router.post("/", orderproduction.create);
+ //router.post("/", orderproduction.create);
+ protectedRouter.post("/", orderproduction.create);
 
  /**
  * @swagger
@@ -121,9 +122,9 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *               items:
  *                 $ref: '#/components/schemas/OrderProduction'
  */
+//router.get("/getlist/:tb_institution_id", orderproduction.getList);
+  protectedRouter.get("/getlist/:tb_institution_id", orderproduction.getList);
 
-router.get("/getlist/:tb_institution_id", orderproduction.getList);
-  
 /**
  * @swagger
  * /orderproduction/get/{tb_institution_id}/{id}:
@@ -151,8 +152,9 @@ router.get("/getlist/:tb_institution_id", orderproduction.getList);
  *             schema:
  *               $ref: '#/components/schemas/OrderProduction'
  */
+ //router.get("/get/:tb_institution_id/:id", orderproduction.get);
+ protectedRouter.get("/get/:tb_institution_id/:id", orderproduction.get);
 
- router.get("/get/:tb_institution_id/:id", orderproduction.get);
  /**
  * @swagger
  * /orderproduction:
@@ -177,7 +179,8 @@ router.get("/getlist/:tb_institution_id", orderproduction.getList);
  *      500:
  *        description: Some error happened
  */
- router.put("/", orderproduction.update);
+//router.put("/", orderproduction.update);
+  protectedRouter.put("/", orderproduction.update);
 
 /**
  * @swagger
@@ -200,8 +203,8 @@ router.get("/getlist/:tb_institution_id", orderproduction.getList);
  *      500:
  *        description: Some error happened
  */
-router.delete("/", orderproduction.delete);
-
+ //router.delete("/", orderproduction.delete);
+  protectedRouter.delete("/", orderproduction.delete);
 /**
  * @swagger
  * /orderproduction/close:
@@ -224,7 +227,8 @@ router.delete("/", orderproduction.delete);
  *       500:
  *         description: Some error happened
  */
- router.post("/close/", orderproduction.close);
+ //router.post("/close/", orderproduction.close);
+ protectedRouter.post("/close/", orderproduction.close);
 
  /**
   * @swagger
@@ -248,6 +252,7 @@ router.delete("/", orderproduction.delete);
   *       500:
   *         description: Some error happened
   */
- router.post("/reopen/", orderproduction.reopen);     
+ //router.post("/reopen/", orderproduction.reopen);     
+ protectedRouter.post("/reopen/", orderproduction.reopen);
 
-module.exports = router;
+ module.exports = router;
