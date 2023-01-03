@@ -159,23 +159,40 @@ class ProdcutController extends Base {
     return promise;
   };
 
-  static priceListGetAll(tb_institution_id,id) {
+  static priceListGetAll(tb_institution_id) {
     const promise = new Promise(async (resolve, reject) => {
-      try{
-        var result = [];
-        var dataPriceList = {};
-        var productPrice = [];
+      try{        
+        var vetPriceList = [];
+        var jsonPriceList = {};
+
+        var vetProductPriceList = [];
+        var jsonProductPrice = {};
+        
+        var dataProductPriceList = [];
+
         await priceList.getList(tb_institution_id)
         .then(async data =>{
-           for (var item of data) {            
-             productPrice = await this.getPrice(tb_institution_id,item.id);
-             dataPriceList = {
-              "name_price_list": item.description,
-              "product_price": Number(productPrice)};
-             result.push(dataPriceList);
-           }         
+          for (var item of data) {            
+            dataProductPriceList = await this.getPrice(tb_institution_id,item.id);
+            vetProductPriceList = [];
+            for (var itemPrice of dataProductPriceList){
+
+              jsonProductPrice = {
+                id : itemPrice.id,
+                name_product: itemPrice.name_product,
+                price_tag: Number(itemPrice.price_tag),
+              };
+              vetProductPriceList.push(jsonProductPrice);
+            }    
+            jsonPriceList = {
+              tb_price_list_id : item.id,
+              name_price_list: item.description,
+              product_price : vetProductPriceList,
+            }
+            vetPriceList.push(jsonPriceList);
+          }         
         });
-        resolve(result);        
+        resolve(vetPriceList);        
       } 
       catch(err){
         reject('priceListGetAll: ' + err);

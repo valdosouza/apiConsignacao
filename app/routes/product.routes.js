@@ -58,11 +58,13 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         name_product:
  *           type: string
  *         price_tag:
- *           type: string 
+ *           type: number 
  * 
  *     PriceListProductPrice:
  *       type: object
  *       properties:
+ *         tb_price_list_id:
+ *           type: integer
  *         name_price_list:
  *           type: string
  *         product_price:
