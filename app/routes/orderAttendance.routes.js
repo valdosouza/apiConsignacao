@@ -36,6 +36,8 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *           type: integer
  *         name_customer:
  *           type: string 
+ *         tb_price_list_id:
+ *           type: integer
  *         tb_salesman_id:
  *           type: integer
  *         name_salesman:

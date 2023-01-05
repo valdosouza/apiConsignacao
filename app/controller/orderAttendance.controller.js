@@ -41,6 +41,7 @@ class OrderStockTransferController extends Base {
         number : body.number,
         tb_salesman_id: body.tb_salesman_id,
         tb_customer_id : body.tb_customer_id,
+        tb_price_list_id:body.tb_price_list_id,
         visited : body.visited,
         charged : body.charged,
         longitude : body.longitude,
@@ -92,6 +93,7 @@ class OrderStockTransferController extends Base {
           '  ord.tb_user_id, '+
           '  oat.tb_customer_id, '+
           '  etc.name_company name_customer, '+
+          '  tb_price_list_id, '+
           '  oat.tb_salesman_id, '+
           '  ets.name_company name_salesman, '+
           '  ord.dt_record, '+
@@ -155,6 +157,7 @@ class OrderStockTransferController extends Base {
         '  ord.tb_user_id, '+
         '  oat.tb_customer_id, '+
         '  etc.name_company name_customer, '+
+        ' tb_price_list_id,'+
         '  oat.tb_salesman_id, '+
         '  ets.name_company name_salesman, '+
         '  ord.dt_record, '+

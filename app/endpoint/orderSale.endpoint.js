@@ -1,4 +1,5 @@
 const OrderSaleController = require("../controller/orderSale.controller.js");
+const OrderSaleItemController = require("../controller/orderSaleItem.controller.js");
 
 class OrderSaleEndPoint {
 
@@ -13,6 +14,14 @@ class OrderSaleEndPoint {
   static getList(req, res) {
     
     OrderSaleController.getList(req.params.tb_institution_id )
+      .then(data => {
+        res.send(data);
+      })
+  }
+
+  static preSaleGetList(req, res) {
+    
+    OrderSaleItemController.getPreListForSale(req.params.tb_institution_id,req.params.tb_price_list_id )
       .then(data => {
         res.send(data);
       })

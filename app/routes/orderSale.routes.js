@@ -77,6 +77,28 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *            type: array
  *            items:
  *              $ref: '#/components/schemas/OrderSaleItem'
+ * 
+ * 
+ *     ItemsPreListForSale:
+ *       type: object
+ *       required:
+ *         - tb_product_id
+ *         - name_product
+ *         - bonus
+ *         - sale
+ *         - unit_value
+ *       properties:
+ *         tb_product_id:
+ *           type: integer
+ *         name_product:
+ *           type: string
+ *         bonus:
+ *           type: number
+ *         sale:
+ *           type: number 
+ *         unit_value:
+ *           type: number 
+ 
  */
  
  
@@ -134,6 +156,32 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
 
 router.get("/getlist/:tb_institution_id/", ordersale.getList);
   
+ /**
+ * @swagger
+ * /ordersale/presale/getlist/{tb_institution_id}/{tb_price_list_id}:
+ *   get:
+ *     summary: Returns the list of items for pre sale
+ *     tags: [OrderSale]
+ *     parameters:
+ *      - in: path
+ *        name: tb_institution_id
+ *        required: true 
+ *      - in: path
+ *        name: tb_price_list_id
+ *        required: true  
+ *     responses:
+ *       200:
+ *         description: The list of Items for Sales
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/ItemsPreListForSale'
+ */
+
+ router.get("/presale/getlist/:tb_institution_id/:tb_price_list_id/", ordersale.preSaleGetList);
+
 /**
  * @swagger
  * /ordersale/get/{tb_institution_id}/{tb_order_id}:

@@ -49,6 +49,15 @@ module.exports = sequelize => {
       comment: null,
       field: "tb_customer_id"
     },
+    tb_price_list_id: {
+      type: DataTypes.INTEGER(11),
+      allowNull: false,
+      defaultValue: null,
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "tb_price_list_id"
+    },
     visited: {
       type: DataTypes.STRING(1),
       allowNull: true,
