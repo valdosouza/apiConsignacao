@@ -65,7 +65,7 @@ class OrderSaleItemController extends Base {
           for (var item of data){
             resData.push(
               {
-                id: parseInt(item.tb_product_id),
+                tb_product_id: parseInt(item.tb_product_id),
                 name_product: item.name_product,
                 bonus: Number(item.bonus),
                 sale:Number(item.sale),
