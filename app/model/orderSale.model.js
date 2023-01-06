@@ -58,6 +58,24 @@ module.exports = sequelize => {
       comment: null,
       field: "tb_customer_id"
     },
+    total_value: {
+      type: DataTypes.DECIMAL,
+      allowNull: true,
+      defaultValue: "0",
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "total_value"
+    },
+    change_value: {
+      type: DataTypes.DECIMAL,
+      allowNull: true,
+      defaultValue: "0",
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "change_value"
+    },    
     createdAt: {
       type: DataTypes.DATE,
       allowNull: false,

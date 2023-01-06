@@ -4,6 +4,8 @@ const Tb = db.ordersale;
 const order = require('./order.controller.js');
 const orderItem =require('./orderItemSale.controller.js');
 const stockStatement =require('./stockStatement.controller.js');
+const orderSaleCard =require('./orderSaleCard.controller.js');
+const orderPaid =require('./orderPaid.controller.js');
 
 class OrderSaleController extends Base {     
   static async getNextNumber(tb_institution_id) {      
@@ -43,7 +45,10 @@ class OrderSaleController extends Base {
         tb_salesman_id: body.Order.tb_salesman_id,
         number : body.Order.number,
         tb_customer_id : body.Order.tb_customer_id,        
+        total_value:body.Order.total_value,
+        change_value:body.Order.change_value,
       }
+      console.log(dataOrder);
       Tb.create(dataOrder)
       .then(() => {          
         resolve(body);
@@ -427,6 +432,77 @@ class OrderSaleController extends Base {
                 
     });
     return promise;        
-  }       
+  }      
+  
+  static async saveOrderBySaleCard(body) {
+    const promise = new Promise(async (resolve, reject) => {
+      try{        
+        //Não salva tb_order por que já foi criado no attendance     
+        this.insertOrder(body)
+        .then(async (data)=>{          
+          await this.insertOrderSaleCard(body);   
+          await this.insertOrderPaid(body);        
+          resolve(body);
+        })
+      } catch(err) {            
+        reject('OrderSaleController.saveOrderBySaleCard: '+err);
+      }                  
+    });
+    return promise;
+  }
+  
+  static async insertOrderSaleCard(body) {      
+    const promise = new Promise(async (resolve, reject) => {
+      try{
+        var dataItem = {};        
+        for(var item of body.Items) {              
+          dataItem = {
+            id : body.Order.id,
+            tb_institution_id: body.Order.tb_institution_id,            
+            terminal: 0,
+            tb_product_id : item.tb_product_id,            
+            bonus : item.bonus,
+            sale : item.sale,
+            unit_value : item.unit_value,           
+          };    
+          console.log(dataItem)      ;
+          //Quanto o insert é mais complexo como getNext precisa do await no loop          
+          await orderSaleCard.insert(dataItem);
+        };
+        resolve("Items Adicionaos");       
+      } catch(err) {            
+        reject("OrderSaleController.insertOrderSaleCard:"+ err);
+      }          
+      
+    });
+    return promise;        
+  }     
+
+  static async insertOrderPaid(body) {      
+    const promise = new Promise(async (resolve, reject) => {
+      try{
+        var dataPayment = {};        
+        for(var item of body.Payments) {                       
+          dataPayment = {
+            id : body.Order.id,
+            tb_institution_id: body.Order.tb_institution_id,            
+            terminal: 0,
+            tb_payment_type_id : item.tb_payment_type_id,
+            dt_record: item.dt_expiration,
+            value : item.value           
+          } ;
+          if  (item.dt_expiration == "") delete item.dt_expiration;
+          //Quanto o insert é mais complexo como getNext precisa do await no loop          
+          await orderPaid.insert(dataPayment);
+        };
+        resolve("Pagamentos Adicionaos");       
+      } catch(err) {            
+        reject("OrderSaleController.insertOrderPaid:"+ err);
+      }          
+      
+    });
+    return promise;        
+  }     
+
 }
 module.exports = OrderSaleController;

@@ -1,11 +1,19 @@
 const OrderSaleController = require("../controller/orderSale.controller.js");
-const OrderSaleItemController = require("../controller/orderSaleItem.controller.js");
+const OrderSaleCardController = require("../controller/orderSaleCard.controller.js");
 
 class OrderSaleEndPoint {
 
   static create = (req, res) => {
     
     OrderSaleController.insert(req.body)
+      .then(data => {
+        res.send(data);
+    })
+  }
+
+  static saveOrderBySaleCard = (req, res) => {
+    
+    OrderSaleController.saveOrderBySaleCard(req.body)
       .then(data => {
         res.send(data);
     })
@@ -19,9 +27,9 @@ class OrderSaleEndPoint {
       })
   }
 
-  static preSaleGetList(req, res) {
+  static getNewOrderSaleCard(req, res) {
     
-    OrderSaleItemController.getPreListForSale(req.params.tb_institution_id,req.params.tb_price_list_id )
+    OrderSaleCardController.getNewOrderSaleCard(req.params.tb_institution_id,req.params.tb_price_list_id )
       .then(data => {
         res.send(data);
       })

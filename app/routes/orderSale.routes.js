@@ -27,6 +27,8 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *           type: integer
  *         tb_user_id:
  *           type: integer
+ *         number:
+ *           type: integer
  *         tb_customer_id:
  *           type: integer
  *         name_customer:
@@ -42,7 +44,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         status:
  *           type: string
  * 
- *     OrderSaleItem:
+ *     OrderSaleItems:
  *       type: object
  *       required:
  *         - tb_product_id
@@ -68,7 +70,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         update_status:
  *           type: string;
  * 
- *     OrderSaleMain:
+ *     OrderSaleMainCard:
  *       type: object
  *       properties:
  *         Order:
@@ -76,10 +78,13 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         Items:
  *            type: array
  *            items:
- *              $ref: '#/components/schemas/OrderSaleItem'
+ *              $ref: '#/components/schemas/OrderSaleCard'
+ *         Payments:
+ *            type: array
+ *            items:
+ *              $ref: '#/components/schemas/OrderPaid' 
  * 
- * 
- *     ItemsPreListForSale:
+ *     OrderSaleCard:
  *       type: object
  *       required:
  *         - tb_product_id
@@ -133,6 +138,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  */
  router.post("/", ordersale.create);
 
+ 
  /**
  * @swagger
  * /ordersale/getlist/{tb_institution_id}:
@@ -156,31 +162,6 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
 
 router.get("/getlist/:tb_institution_id/", ordersale.getList);
   
- /**
- * @swagger
- * /ordersale/presale/getlist/{tb_institution_id}/{tb_price_list_id}:
- *   get:
- *     summary: Returns the list of items for pre sale
- *     tags: [OrderSale]
- *     parameters:
- *      - in: path
- *        name: tb_institution_id
- *        required: true 
- *      - in: path
- *        name: tb_price_list_id
- *        required: true  
- *     responses:
- *       200:
- *         description: The list of Items for Sales
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/ItemsPreListForSale'
- */
-
- router.get("/presale/getlist/:tb_institution_id/:tb_price_list_id/", ordersale.preSaleGetList);
 
 /**
  * @swagger
@@ -252,5 +233,55 @@ router.get("/getlist/:tb_institution_id/", ordersale.getList);
  *        description: Some error happened
  */
 router.delete("/:tb_institution_id/:tb_order_id", ordersale.delete);
+
+/**
+ * @swagger
+ * /ordersale/card:
+ *   post:
+ *     summary: Create a new ordersale card
+ *     tags: [OrderSale]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/OrderSaleMainCard'
+ *     responses:
+ *       200:
+ *         description: The OrderSale card was successfully created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/OrderSale'
+ *       500:
+ *         description: Some server error
+ */
+router.post("/card", ordersale.saveOrderBySaleCard);
+
+ /**
+ * @swagger
+ * /ordersale/card/newlist/{tb_institution_id}/{tb_price_list_id}:
+ *   get:
+ *     summary: Returns the list of items of card
+ *     tags: [OrderSale]
+ *     parameters:
+ *      - in: path
+ *        name: tb_institution_id
+ *        required: true 
+ *      - in: path
+ *        name: tb_price_list_id
+ *        required: true  
+ *     responses:
+ *       200:
+ *         description: The list of Items of card
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/OrderSaleCard'
+ */
+
+ router.get("/card/newlist/:tb_institution_id/:tb_price_list_id/", ordersale.getNewOrderSaleCard);
 
 module.exports = router;

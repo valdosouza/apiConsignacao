@@ -1,15 +1,15 @@
 const Base = require('./base.controller.js');
 const db = require("../model");
-const Tb = db.ordersaleitem;
+const Tb = db.ordersalecard;
 
-class OrderSaleItemController extends Base {     
+class OrderSaleCardController extends Base {     
 
   static async getById(id,tb_institution_id,tb_product_id) {    
     const promise = new Promise((resolve, reject) => {
       Tb.sequelize.query(
         'Select * '+        
-        'from tb_order_sale_item  oci '+
-        'where ( ct.id =?) '+
+        'from tb_order_sale_card  occ '+
+        'where ( id =?) '+
         ' and (tb_institution_id =?)'+
         ' and (tb_product_id =?)' , 
         {
@@ -32,26 +32,26 @@ class OrderSaleItemController extends Base {
           resolve(data);
         })            
         .catch(err => {
-          reject("OrderSaleItemController.insert:"+ err);
+          reject("OrderSaleCardController.insert:"+ err);
         });        
     });
     return promise;        
   }    
 
   
-  static getPreListForSale(tb_institution_id,tb_price_list_id) {
+  static getNewOrderSaleCard(tb_institution_id,tb_price_list_id) {
     const promise = new Promise((resolve, reject) => {
       Tb.sequelize.query(
         'select '+
         'pdt.id tb_product_id, '+
         'pdt.description name_product, '+
-        'osi.bonus, '+
-        'osi.sale, '+
+        'osc.bonus, '+
+        'osc.sale, '+
         'prc.price_tag unit_value '+
         'from tb_product pdt '+
-        '  left outer join tb_order_sale_item osi '+
-        '  on (pdt.id = osi.tb_product_id) '+
-        '     and (pdt.tb_institution_id = osi.tb_institution_id) '+
+        '  left outer join tb_order_sale_card osc '+
+        '  on (pdt.id = osc.tb_product_id) '+
+        '     and (pdt.tb_institution_id = osc.tb_institution_id) '+
         '  inner join tb_price prc '+
         '  on (prc.tb_product_id = pdt.id ) '+
         '     and (pdt.tb_institution_id = prc.tb_institution_id) '+
@@ -76,7 +76,7 @@ class OrderSaleItemController extends Base {
           resolve(resData);
         })
         .catch(err => {
-          reject("OrderSaleItem.getPreListForSale: " + err);
+          reject("OrderSaleCard.getPreListForSale: " + err);
         });
     });
     return promise;
@@ -99,4 +99,4 @@ class OrderSaleItemController extends Base {
   }        
   
 }
-module.exports = OrderSaleItemController;
+module.exports = OrderSaleCardController;

@@ -41,7 +41,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         current_debit_balance:
  *           type: number 
  *     
- *     OrderConsignmentItemCheckPoint:
+ *     OrderConsignmentCardCheckPoint:
  *       type: object
  *       required:
  *         - tb_product_id
@@ -65,7 +65,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         unit_value:
  *           type: number 
  * 
- *     OrderConsignmentItemPayment:
+ *     OrderPaid:
  *       type: object
  *       required:
  *         - tb_payment_type_id
@@ -76,6 +76,8 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *           type : integer
  *         name_payment_type:
  *           type: string
+ *         dt_expiration:
+ *           type : string
  *         value:
  *           type: number
  *  
@@ -87,11 +89,11 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         Items:
  *            type: array
  *            items:
- *              $ref: '#/components/schemas/OrderConsignmentItemCheckPoint'
+ *              $ref: '#/components/schemas/OrderConsignmentCardCheckPoint'
  *         Payments:
  *            type: array
  *            items:
- *              $ref: '#/components/schemas/OrderConsignmentItemPayment'
+ *              $ref: '#/components/schemas/OrderPaid'
  * 
  *     OrderConsignmentSupplying:
  *       type: object
@@ -116,7 +118,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         current_debit_balance:
  *           type: number   
  *       
- *     OrderConsignmentItemSupplying:
+ *     OrderConsignmentCardSupplying:
  *       type: object
  *       required:
  *         - tb_product_id
@@ -154,7 +156,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         Items:
  *            type: array
  *            items:
- *              $ref: '#/components/schemas/OrderConsignmentItemSupplying' 
+ *              $ref: '#/components/schemas/OrderConsignmentCardSupplying' 
  * 
  */
  

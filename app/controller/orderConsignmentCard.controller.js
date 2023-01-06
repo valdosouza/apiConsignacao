@@ -1,15 +1,15 @@
 const Base = require('./base.controller.js');
 const db = require("../model");
-const Tb = db.orderconsignmentitem;
+const Tb = db.orderconsignmentcard;
 
-class OrderConsignmentItemController extends Base {     
+class OrderConsignmentCardController extends Base {     
 
   static async getById(id,tb_institution_id,tb_product_id,kind) {    
     const promise = new Promise((resolve, reject) => {
       Tb.sequelize.query(
         'Select * '+        
-        'from tb_order_consignment_item  oci '+
-        'where ( ct.id =?) '+
+        'from tb_order_consignment_card  occ '+
+        'where ( id =?) '+
         ' and (tb_institution_id =?)'+
         ' and (tb_product_id =?)'+
         ' and (kind =?)', 
@@ -33,7 +33,7 @@ class OrderConsignmentItemController extends Base {
           resolve(data);
         })            
         .catch(err => {
-          reject("OrderConsignmentItemController.insert:"+ err);
+          reject("OrderConsignmentCardController.insert:"+ err);
         });        
     });
     return promise;        
@@ -44,19 +44,19 @@ class OrderConsignmentItemController extends Base {
       const promise = new Promise((resolve, reject) => {
         Tb.sequelize.query(
           '  select '+
-          '  oci.tb_product_id, '+
+          '  occ.tb_product_id, '+
           '  pdt.description name_product, '+
-          '  oci.bonus, '+
-          '  oci.qty_consigned, '+
-          '  oci.leftover, '+
-          '  oci.qty_sold, '+
-          '  oci.unit_value '+
+          '  occ.bonus, '+
+          '  occ.qty_consigned, '+
+          '  occ.leftover, '+
+          '  occ.qty_sold, '+
+          '  occ.unit_value '+
           'from tb_product pdt '+
-          '    left outer join tb_order_consignment_item oci '+
-          '    on (pdt.id = oci.tb_product_id) '+
-          '       and (pdt.tb_institution_id = oci.tb_institution_id) '+
+          '    left outer join tb_order_consignment_card occ '+
+          '    on (pdt.id = occ.tb_product_id) '+
+          '       and (pdt.tb_institution_id = occ.tb_institution_id) '+
           'where pdt.tb_institution_id  =? '+
-          ' and oci.id =? '+
+          ' and occ.id =? '+
           ' and kind =? ',
           {
             replacements: [tb_institution_id,id,'checkpoint'],
@@ -65,7 +65,7 @@ class OrderConsignmentItemController extends Base {
             resolve(data);
           })
           .catch(err => {
-            reject("OrderConsignmentItem.getCheckpointList: " + err);
+            reject("OrderConsignmentCard.getCheckpointList: " + err);
           });
       });
       return promise;
@@ -75,20 +75,20 @@ class OrderConsignmentItemController extends Base {
     const promise = new Promise((resolve, reject) => {
       Tb.sequelize.query(
         '  select '+
-        '  oci.tb_product_id, '+
+        '  occ.tb_product_id, '+
         '  pdt.description name_product, '+
-        '  oci.bonus, '+
-        '  oci.leftover, '+
-        '  oci.devolution, '+        
-        '  oci.new_consignment,'+
-        '  oci.qty_consigned, '+
-        '  oci.unit_value '+
+        '  occ.bonus, '+
+        '  occ.leftover, '+
+        '  occ.devolution, '+        
+        '  occ.new_consignment,'+
+        '  occ.qty_consigned, '+
+        '  occ.unit_value '+
         'from tb_product pdt '+
-        '    left outer join tb_order_consignment_item oci '+
-        '    on (pdt.id = oci.tb_product_id) '+
-        '       and (pdt.tb_institution_id = oci.tb_institution_id) '+
+        '    left outer join tb_order_consignment_card occ '+
+        '    on (pdt.id = occ.tb_product_id) '+
+        '       and (pdt.tb_institution_id = occ.tb_institution_id) '+
         'where pdt.tb_institution_id  =? '+
-        ' and oci.id =? '+
+        ' and occ.id =? '+
         ' and kind =? ',
         {
           replacements: [tb_institution_id,id,'supplying'],
@@ -97,7 +97,7 @@ class OrderConsignmentItemController extends Base {
           resolve(data);
         })
         .catch(err => {
-          reject("OrderConsignmentItem.getSupplyingList: " + err);
+          reject("OrderConsignmentCard.getSupplyingList: " + err);
         });
     });
     return promise;
@@ -128,7 +128,7 @@ class OrderConsignmentItemController extends Base {
           resolve(data);
         })
         .catch(err => {
-          reject("OrderConsignmentItem.getSupplyingList: " + err);
+          reject("OrderConsignmentCard.getSupplyingList: " + err);
         });
     });
     return promise;
@@ -151,4 +151,4 @@ class OrderConsignmentItemController extends Base {
   }        
   
 }
-module.exports = OrderConsignmentItemController;
+module.exports = OrderConsignmentCardController;

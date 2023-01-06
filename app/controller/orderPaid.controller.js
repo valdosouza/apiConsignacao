@@ -1,14 +1,14 @@
 const Base = require('./base.controller.js');
 const db = require("../model");
-const Tb = db.orderconsignmentpaid;
+const Tb = db.orderpaid;
 
-class OrderConsignmentPaidController extends Base {     
+class OrderPaidController extends Base {     
 
   static async getById(id,tb_institution_id,tb_payment_type_id) {    
     const promise = new Promise((resolve, reject) => {
       Tb.sequelize.query(
         'Select * '+        
-        'from tb_order_consignment_paid '+
+        'from tb_order_paid '+
         'where ( id =?) '+
         ' and (tb_institution_id =?)'+
         ' and (tb_payment_type_id =?)', 
@@ -19,7 +19,7 @@ class OrderConsignmentPaidController extends Base {
             resolve(data[0]);
         })
         .catch(err => {
-          reject('OrderConsignmentPaidController.getById: ' + err);
+          reject('OrderPaidController.getById: ' + err);
         });
     });
     return promise;
@@ -43,7 +43,7 @@ class OrderConsignmentPaidController extends Base {
         }
         resolve(body);
       } catch(err) {            
-        reject('OrderConsignmentPaidController.save: '+err);
+        reject('OrderPaidController.save: '+err);
       }                  
     });
     return promise;
@@ -56,13 +56,13 @@ class OrderConsignmentPaidController extends Base {
           resolve(data);
         })            
         .catch(err => {
-          reject("OrderConsignmentPaidController.insert:"+ err);
+          reject("OrderPaidController.insert:"+ err);
         });        
     });
     return promise;        
   }    
 
-
+    //Lembrar que está vinculada a Consignação
     static getList(tb_institution_id) {
         const promise = new Promise((resolve, reject) => {
           Tb.sequelize.query(
@@ -91,7 +91,7 @@ class OrderConsignmentPaidController extends Base {
               resolve(data);
             })
             .catch(err => {
-              reject("OrderConsignmentPaidController.getlist: " + err);
+              reject("OrderPaidController.getlist: " + err);
             });
         });
         return promise;
@@ -115,7 +115,7 @@ class OrderConsignmentPaidController extends Base {
         resolve(body);
       }) 
       .catch(err => {
-        reject("OrderConsignmentPaidController.update:"+ err);
+        reject("OrderPaidController.update:"+ err);
       });        
     });
     return promise;        
@@ -138,4 +138,4 @@ class OrderConsignmentPaidController extends Base {
   }        
   
 }
-module.exports = OrderConsignmentPaidController;
+module.exports = OrderPaidController;

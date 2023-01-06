@@ -31,42 +31,33 @@ const {
         comment: null,
         field: "terminal"
       },
-      tb_product_id: {
+      tb_payment_type_id: {
         type: DataTypes.INTEGER(11),
         allowNull: false,
         defaultValue: null,
         primaryKey: true,
         autoIncrement: false,
         comment: null,
-        field: "tb_product_id"
+        field: "tb_payment_type_id"
       },
-      bonus: {
-        type: DataTypes.DECIMAL,
+      dt_expiration: {
+        type: DataTypes.DATE,
         allowNull: true,
-        defaultValue: "0",
+        defaultValue: null,
         primaryKey: false,
         autoIncrement: false,
         comment: null,
-        field: "bonus"
-      },
-      sale: {
+        field: "dt_expiration"
+      },      
+      value: {
         type: DataTypes.DECIMAL,
-        allowNull: true,
-        defaultValue: "0",
-        primaryKey: false,
+        allowNull: false,
+        defaultValue: null,
+        primaryKey: true,
         autoIncrement: false,
         comment: null,
-        field: "sale"
-      },
-      unit_value: {
-        type: DataTypes.DECIMAL,
-        allowNull: true,
-        defaultValue: "0",
-        primaryKey: false,
-        autoIncrement: false,
-        comment: null,
-        field: "unit_value"
-      },
+        field: "value"
+      },      
       createdAt: {
         type: DataTypes.DATE,
         allowNull: true,
@@ -87,11 +78,11 @@ const {
       }
     };
     const options = {
-      tableName: "tb_order_sale_item",
+      tableName: "tb_order_paid",
       comment: "",
       timestamps: true,
       indexes: []
     };
-    const TbOrderSaleItemModel = sequelize.define("tb_order_sale_item_model", attributes, options);
-    return TbOrderSaleItemModel;
+    const TbOrderPaidModel = sequelize.define("tb_order_paid_model", attributes, options);
+    return TbOrderPaidModel;
   };

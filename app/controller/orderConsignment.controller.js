@@ -2,8 +2,8 @@ const Base = require('./base.controller.js');
 const db = require("../model");
 const Tb = db.orderconsignment;
 const order = require('./order.controller.js');
-const consignmentItem =require('./orderConsignmentItem.controller.js');
-const consignementPaid =require('./orderConsignmentPaid.controller.js');
+const consignmentCard =require('./orderConsignmentCard.controller.js');
+const orderPaid =require('./orderPaid.controller.js');
 const { entity } = require('../model');
 const enityController = require('./entity.controller.js');
 const EntityController = require('./entity.controller.js');
@@ -31,7 +31,8 @@ class OrderConsignmentController extends Base {
 
   static async saveCheckpoint(body) {
     const promise = new Promise(async (resolve, reject) => {
-      try{                    
+      try{       
+        //Não salva tb_order por que já foi criado no attendance             
         var dataOrder  = {
           id:body.Order.id,
           tb_institution_id:body.Order.tb_institution_id,
@@ -48,7 +49,7 @@ class OrderConsignmentController extends Base {
 
         this.insert(dataOrder)
         .then(async () => {
-          await this.insertCheckpointItems(body);
+          await this.insertCheckpointCard(body);
           await this.insertCheckpointPaid(body);            
           resolve(body);
         })
@@ -74,7 +75,7 @@ class OrderConsignmentController extends Base {
         };     
         this.insert(dataOrder)
         .then(async () => {
-          await this.insertSupplyngItems(body);            
+          await this.insertSupplyngCard(body);            
         })
         resolve(body);
       } catch(err) {            
@@ -100,7 +101,7 @@ class OrderConsignmentController extends Base {
     return promise;        
   }    
 
-  static async insertCheckpointItems(body) {      
+  static async insertCheckpointCard(body) {      
     const promise = new Promise(async (resolve, reject) => {
       try{
         var dataItem = {};        
@@ -119,18 +120,18 @@ class OrderConsignmentController extends Base {
            
           };          
           //Quanto o insert é mais complexo como getNext precisa do await no loop          
-          await consignmentItem.insert(dataItem);
+          await consignmentCard.insert(dataItem);
         };
         resolve("Items Adicionaos");       
       } catch(err) {            
-        reject("OrderConsignmentController.insertCheckpointItems:"+ err);
+        reject("OrderConsignmentController.insertCheckpointCard:"+ err);
       }          
       
     });
     return promise;        
   }     
 
-  static async insertSupplyngItems(body) {      
+  static async insertSupplyngCard(body) {      
     const promise = new Promise(async (resolve, reject) => {
       try{
         var dataItem = {};        
@@ -149,11 +150,11 @@ class OrderConsignmentController extends Base {
             unit_value : item.unit_value,
           };    
           //Quanto o insert é mais complexo como getNext precisa do await no loop          
-          await consignmentItem.insert(dataItem);
+          await consignmentCard.insert(dataItem);
         };
         resolve("Items Adicionaos");       
       } catch(err) {            
-        reject("OrderConsignmentController.insertSupplyngItems:"+ err);
+        reject("OrderConsignmentController.insertSupplyngCard:"+ err);
       }          
       
     });
@@ -163,20 +164,24 @@ class OrderConsignmentController extends Base {
   static async insertCheckpointPaid(body) {      
     const promise = new Promise(async (resolve, reject) => {
       try{
-        var dataPayment = {};        
-        for(var item of body.Payments) {              
-          dataPayment = {
-            id : body.Order.id,
-            tb_institution_id: body.Order.tb_institution_id,            
-            terminal: 0,
-            tb_payment_type_id : item.tb_payment_type_id,
-            value : item.value
-           
-          } ;
-          //Quanto o insert é mais complexo como getNext precisa do await no loop          
-          await consignementPaid.insert(dataPayment);
-        };
-        resolve("Pagamentos Adicionaos");       
+        if (body.Payments) {
+          var dataPayment = {};        
+          for(var item of body.Payments) {              
+            dataPayment = {
+              id : body.Order.id,
+              tb_institution_id: body.Order.tb_institution_id,            
+              terminal: 0,
+              tb_payment_type_id : item.tb_payment_type_id,
+              value : item.value
+            
+            } ;
+            //Quanto o insert é mais complexo como getNext precisa do await no loop          
+            await orderPaid.insert(dataPayment);
+          };
+          resolve("Pagamentos Adicionaos");
+        }else{
+          resolve("Tag Payments não encontrada");
+        }
       } catch(err) {            
         reject("OrderConsignmentController.insertCheckpointPaid:"+ err);
       }          
@@ -409,7 +414,7 @@ class OrderConsignmentController extends Base {
                 debit_balance : data.debit_balance,
               };
           result.Order = dataOrder;
-          const dataItems = await consignmentItem.getCheckpointList(tb_institution_id,id);
+          const dataItems = await consignmentCard.getCheckpointList(tb_institution_id,id);
           result.Items = dataItems;                    
           resolve(result);      
         })
@@ -436,7 +441,7 @@ class OrderConsignmentController extends Base {
                   name_customer : data.name_customer
                 };
             result.Order = dataOrder;
-            const dataItems = await consignmentItem.getSupplyingList(tb_institution_id,id);
+            const dataItems = await consignmentCard.getSupplyingList(tb_institution_id,id);
             result.Items = dataItems;                    
             resolve(result);
           }else{
@@ -467,7 +472,7 @@ class OrderConsignmentController extends Base {
                   current_debit_balance : data.current_debit_balance,
                 };
             result.Order = dataOrder;
-            const dataItems = await consignmentItem.getSupplyingList(tb_institution_id,data.id);
+            const dataItems = await consignmentCard.getSupplyingList(tb_institution_id,data.id);
             if (dataItems.length > 0)
               result.Items = dataItems;
               resolve(result);
@@ -482,13 +487,12 @@ class OrderConsignmentController extends Base {
                 current_debit_balance : "0.00",
               };
               result.Order = dataOrder;
-              const dataItems = await consignmentItem.getSupplyingNewList(tb_institution_id);
+              const dataItems = await consignmentCard.getSupplyingNewList(tb_institution_id);
               if (dataItems.length > 0)
               result.Items = dataItems;
               resolve(result);              
             });
-          }
-          
+          }          
         })
       } 
       catch(err){
