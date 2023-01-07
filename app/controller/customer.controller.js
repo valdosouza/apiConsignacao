@@ -375,7 +375,7 @@ class CustomerController extends Base {
         '  and  (src.tb_institution_id = sr.tb_institution_id) '+
         'where ct.tb_institution_id =? '+        
         '  and ( (tb_sales_route_id =?) or (tb_sales_route_id =0))'+        
-        'order by 1,4 ',
+        'order by 3 ',
         {
           replacements: [tb_institution_id,tb_sales_route_id,tb_institution_id,tb_sales_route_id],
           type: Tb.sequelize.QueryTypes.SELECT

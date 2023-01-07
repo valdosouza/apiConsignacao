@@ -70,7 +70,7 @@ class SalesRouteController extends Base {
         'select * ' +
         'from tb_sales_route pl '+
         'where (pl.tb_institution_id =? ) '+
-        ' and (pl.id =? )',
+        ' and (pl.id =? )',      
         {
           replacements: [tb_institution_id,id],
           type: Tb.sequelize.QueryTypes.SELECT

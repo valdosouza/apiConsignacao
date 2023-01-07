@@ -47,8 +47,7 @@ class OrderSaleController extends Base {
         tb_customer_id : body.Order.tb_customer_id,        
         total_value:body.Order.total_value,
         change_value:body.Order.change_value,
-      }
-      console.log(dataOrder);
+      }      
       Tb.create(dataOrder)
       .then(() => {          
         resolve(body);
@@ -442,7 +441,7 @@ class OrderSaleController extends Base {
         .then(async (data)=>{          
           await this.insertOrderSaleCard(body);   
           await this.insertOrderPaid(body);        
-          resolve(body);
+          resolve(body.Order);
         })
       } catch(err) {            
         reject('OrderSaleController.saveOrderBySaleCard: '+err);
@@ -464,8 +463,7 @@ class OrderSaleController extends Base {
             bonus : item.bonus,
             sale : item.sale,
             unit_value : item.unit_value,           
-          };    
-          console.log(dataItem)      ;
+          };              
           //Quanto o insert é mais complexo como getNext precisa do await no loop          
           await orderSaleCard.insert(dataItem);
         };

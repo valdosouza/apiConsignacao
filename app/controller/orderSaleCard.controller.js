@@ -45,13 +45,10 @@ class OrderSaleCardController extends Base {
         'select '+
         'pdt.id tb_product_id, '+
         'pdt.description name_product, '+
-        'osc.bonus, '+
-        'osc.sale, '+
+        ' 0 bonus, '+
+        ' 0 sale, '+
         'prc.price_tag unit_value '+
         'from tb_product pdt '+
-        '  left outer join tb_order_sale_card osc '+
-        '  on (pdt.id = osc.tb_product_id) '+
-        '     and (pdt.tb_institution_id = osc.tb_institution_id) '+
         '  inner join tb_price prc '+
         '  on (prc.tb_product_id = pdt.id ) '+
         '     and (pdt.tb_institution_id = prc.tb_institution_id) '+
