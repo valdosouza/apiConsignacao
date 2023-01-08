@@ -486,9 +486,10 @@ class OrderSaleController extends Base {
           dataPayment = {
             id : body.Order.id,
             tb_institution_id: body.Order.tb_institution_id,            
-            terminal: 0,
+            terminal: 0,            
             tb_payment_type_id : item.tb_payment_type_id,
-            value : item.value           
+            value : item.value,
+            dt_expiration: item.dt_expiration,
           } ;                   
           //Quanto o insert é mais complexo como getNext precisa do await no loop          
           await orderPaid.insert(dataPayment);
