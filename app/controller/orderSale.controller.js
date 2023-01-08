@@ -482,16 +482,16 @@ class OrderSaleController extends Base {
       try{
         var dataPayment = {};        
         for(var item of body.Payments) {                       
+          if  (item.dt_expiration == "") delete item.dt_expiration;
           dataPayment = {
             id : body.Order.id,
             tb_institution_id: body.Order.tb_institution_id,            
             terminal: 0,
             tb_payment_type_id : item.tb_payment_type_id,
-            dt_expiration: moment(item.dt_expiration).format("YYYY-MM-DD"),            
             value : item.value           
           } ;
           console.log(dataPayment);
-          if  (item.dt_expiration == "") delete item.dt_expiration;
+          
           //Quanto o insert é mais complexo como getNext precisa do await no loop          
           await orderPaid.insert(dataPayment);
         };
