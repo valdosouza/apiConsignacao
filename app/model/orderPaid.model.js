@@ -41,7 +41,7 @@ const {
         field: "tb_payment_type_id"
       },
       dt_expiration: {
-        type: DataTypes.DATE,
+        type: DataTypes.DATEONLY,
         allowNull: true,
         defaultValue: null,
         primaryKey: false,

@@ -41,7 +41,7 @@ module.exports = sequelize => {
       field: "tb_user_id"
     },
     dt_record: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       allowNull: false,
       defaultValue: null,
       primaryKey: true,

@@ -122,7 +122,7 @@ const {
         field: "future"
       },
       dt_original: {
-        type: DataTypes.DATE,
+        type: DataTypes.DATEONLY,
         allowNull: false,
         defaultValue: null,
         primaryKey: false,

@@ -16,49 +16,50 @@ const server = {
   launchServer(){
     return new Promise((resolve,reject) =>{
       try{
-	    const app = express();
-		app.use(bodyParser.urlencoded({ extended: true }));
-		app.use(bodyParser.json());
-		app.use(cookieParser());
+        process.env.TZ = "America/Sao_Paulo";        
+	      const app = express();
+        app.use(bodyParser.urlencoded({ extended: true }));
+        app.use(bodyParser.json());
+        app.use(cookieParser());
 
-		app.use(cors());
+        app.use(cors());
 
-		// parse requests of content-type - application/json
-		app.use(bodyParser.json());
+        // parse requests of content-type - application/json
+        app.use(bodyParser.json());
 
-		// parse requests of content-type - application/x-www-form-urlencoded
-		app.use(bodyParser.urlencoded({ extended: true }));
-		
+        // parse requests of content-type - application/x-www-form-urlencoded
+        app.use(bodyParser.urlencoded({ extended: true }));
+        
 
 
-			
-		app.use(cors({    
-				origin: "*",
-		    	methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-				preflightContinue: true,
-				optionsSuccessStatus: 200
-		}));
+          
+        app.use(cors({    
+            origin: "*",
+              methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+            preflightContinue: true,
+            optionsSuccessStatus: 200
+        }));
 
-		app.use(function(req, res, next) {
-			//res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
-			res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-			//res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
-			next();
-		});
+        app.use(function(req, res, next) {
+          //res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
+          res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+          //res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
+          next();
+        });
 
-		app.get("/", (req, res) => {
-		    res.json({ message: "Bem vindo a API do Sistema de Consignação." });
-		});
-				  
-		app.use( routes);
-				  
-		const PORT = process.env.PORT || 3000;
-		app.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+        app.get("/", (req, res) => {
+            res.json({ message: "Bem vindo a API do Sistema de Consignação." });
+        });
+              
+        app.use( routes);
+        
+        const PORT = process.env.PORT || 3000;
+        app.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-		
-        app.listen(PORT, () => {
-			console.log(`Server is running on port ${PORT}. \nAPI documentation: ${process.env.PATH_URL_API}/doc`);			
-		})
+        
+            app.listen(PORT, () => {
+          console.log(`Server is running on port ${PORT}. \nAPI documentation: ${process.env.PATH_URL_API}/doc`);			
+        })
                 
       } catch (error){
         console.log(error);

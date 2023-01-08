@@ -59,7 +59,7 @@ module.exports = sequelize => {
       field: "number"
     },
     dt_record: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       allowNull: true,
       defaultValue: null,
       primaryKey: false,

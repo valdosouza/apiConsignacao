@@ -53,6 +53,7 @@ class OrderPaidController extends Base {
     const promise = new Promise(async (resolve, reject) => {         
       Tb.create(body)
         .then(async (data)=>{
+          console.log(data);
           resolve(data);
         })            
         .catch(err => {

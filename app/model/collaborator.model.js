@@ -23,7 +23,7 @@ const {
         field: "tb_institution_id"
       },
       dt_resignation: {
-        type: DataTypes.DATE,
+        type: DataTypes.DATEONLY,
         allowNull: true,
         defaultValue: null,
         primaryKey: false,

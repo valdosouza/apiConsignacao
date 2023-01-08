@@ -5,7 +5,7 @@ const sequelize = new Sequelize(
   dbConfig.DB, 
   dbConfig.USER, 
   dbConfig.PASSWORD,
-     { host: dbConfig.HOST,
+     {  host: dbConfig.HOST,      
         dialect: dbConfig.dialect,
         pool: { max: dbConfig.pool.max,
                 min: dbConfig.pool.min,
@@ -16,16 +16,17 @@ const sequelize = new Sequelize(
                   freezeTableName: true, // use singular table name
                   timestamps: false // I don't want timestamp fields by default
                 },
-        dialectOptions: { //useUTC: false, // for reading from database
-                          dateStrings: true,
+        dialectOptions: { dateStrings: true,
                           typeCast(field, next) {            
-                            if (field.type === 'DATETIME') {
+                            if ((field.type === 'DATETIME') || (field.type === 'DATE') ){
                               return field.string();
                             }
                             return next();
                           }
                         },
-        timezone: '-03:00',
+        timezone: "-03:00",
+        seederStorage: "sequelize",
+        operatorsAliases: false
       }
 );
 
