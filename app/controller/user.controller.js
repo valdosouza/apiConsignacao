@@ -14,8 +14,7 @@ class UserController extends Base {
 
   // Save USer in the database
   static create = (user) => {
-    const promise = new Promise((resolve, reject) => {
-      const user = user;
+    const promise = new Promise((resolve, reject) => {      
       MailingController.findOne(user.email)
       .then(data => {
         if (data){
@@ -28,8 +27,8 @@ class UserController extends Base {
             tb_linebusiness_id:0
           };              
           TbEntity.create(dataEntity)
-          .then(data => {
-            const entityId =  data.id;           
+          .then(async data => {
+            user.id =  data.id;           
             //Salva o email
             const dataMailing = {
               email:user.email
@@ -39,7 +38,7 @@ class UserController extends Base {
                 //Vincula a entidade e o email com Grupo do email especifico 2 - Sistema
                 const MailingId = data.id;
                 const entityHM = {
-                  tb_entity_id:entityId,
+                  tb_entity_id:user.id,
                   tb_mailing_id:MailingId,
                   tb_mailing_group_id:"2"
                 }
@@ -48,22 +47,21 @@ class UserController extends Base {
               });
             //Salva o Usuario
             const dataUser = {           
-              id:entityId,
+              id:user.id,
               password:user.password,
               kind:user.kindd
             };
-            TbUser.create(dataUser);
+            await TbUser.create(dataUser);
             const dataInstitutionHU = {
               tb_institution_id:user.tb_institution_id,
-              tb_user_id:entityId,
+              tb_user_id:user.id,
               kind:user.kind,
               active:"S"
             };
-            TbInstitutionHasUser.create(dataInstitutionHU)
+            await TbInstitutionHasUser.create(dataInstitutionHU);
             //REtornogeral
-            user.id = entityId;
             const dataResolve = {                            
-                "id":entityId,
+                "id":user.id,
                 "tb_institution_id":user.tb_institution_id,
                 "password":'',
                 "kind":user.kind,
@@ -103,8 +101,8 @@ class UserController extends Base {
         
         //Atualiza a institution
         const dataInstitutionHU = {
-          tb_institution_id:user.tb_institution_id,
-          tb_user_id: id,
+          tb_institution_id: user.tb_institution_id,
+          tb_user_id: user.id,
           kind:user.kind,
           active:user.active
         };        
@@ -113,14 +111,14 @@ class UserController extends Base {
         });
         
         const dataResolve = {              
-          "id":user.id,
-          "tb_institution_id":user.tb_institution_id,
-          "password":'',
-          "kind":user.kind,
-          "tb_device_id":0,
-          "active":user.active,
-          "email": user.email,
-          "nick":user.nick  
+          id:user.id,
+          tb_institution_id:user.tb_institution_id,
+          password:'',
+          kind:user.kind,
+          tb_device_id:0,
+          active:user.active,
+          email: user.email,
+          nick:user.nick  
         };
         resolve(dataResolve); 
       } catch (e) {            
@@ -180,7 +178,12 @@ class UserController extends Base {
   static getlist(tb_institution_id) {
     const promise = new Promise((resolve, reject) => {
       TbUser.sequelize.query(
-        'Select u.id, ihu.tb_institution_id, et.nick_trade nick, ma.email, u.kind '+
+        'Select u.id, '+
+        ' ihu.tb_institution_id, '+
+        ' et.nick_trade nick, '+
+        ' ma.email, u.kind, '+
+        ' u.tb_device_id, '+
+        ' u.active '+
         'from tb_user u  '+
         '  inner join tb_institution_has_user ihu  '+
         '  on (u.id = ihu.tb_user_id)  '+

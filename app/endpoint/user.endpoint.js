@@ -31,7 +31,8 @@ class UserEndPoint {
 
   // Update a user by the id in the request
   static update = (req, res) => {
-    UserController.update(req.params.id,req.body)
+    console.log("Enttrei");
+    UserController.update(req.body)
       .then(data => {
       res.send(data);
     })

@@ -123,6 +123,7 @@ class InstitutionController extends Base {
   static async update(institution) {
     const promise = new Promise((resolve, reject) => {
         try{  //Salva a entidad
+          if (institution.dt_foundation == "") delete institution.dt_foundation;
           const dataEntity = {
             id:institution.id,
             name_company: institution.name_company,
@@ -223,7 +224,7 @@ class InstitutionController extends Base {
         '  et.name_company, '+
         '  et.nick_trade, '+
         '  et.tb_linebusiness_id, '+
-        '  et.note, '+
+        'CAST(et.note AS CHAR(1000) CHARACTER SET utf8) note, '+        
         '  it.active, '+
         '  co.cnpj, '+
         '  co.ie, '+

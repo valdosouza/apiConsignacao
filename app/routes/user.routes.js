@@ -124,17 +124,11 @@
 
  /**
  * @swagger
- * /user/{id}:
+ * /user:
  *   put:
  *     summary: Update then user
  *     tags: [User]
  *     parameters:
- *      - in: path
- *        name: id
- *        schema:
- *          type: string
- *        required: true
- *        description: The id user 
  *     requestBody:
  *       required: true
  *       content:
@@ -151,8 +145,8 @@
  *       500:
  *         description: Some server error
  */
- //router.put("/:id", users.update);
- protectedRouter.put("/:id", users.update);
+ router.put("/", users.update);
+ //protectedRouter.put("/", users.update);
 
 /**
  * @swagger
@@ -208,40 +202,7 @@
   //router.get("/get/:email", users.get);
   protectedRouter.get("/get/:email", users.get);
 
-  /**
- * @swagger
- * /user/{id}:
- *  put:
- *    summary: Update the users by the id
- *    tags: [Address]
- *    parameters:
- *      - in: path
- *        name: id
- *        schema:
- *          type: string
- *        required: true
- *        description: The user id
- *    requestBody:
- *      required: true
- *      content:
- *        application/json:
- *          schema:
- *            $ref: '#/components/schemas/User'
- *    responses:
- *      200:
- *        description: The user was updated
- *        content:
- *          application/json:
- *            schema:
- *              $ref: '#/components/schemas/User'
- *      404:
- *        description: The user was not found
- *      500:
- *        description: Some error happened
- */
-  //protectedRouter.put("/:id", users.update);
-  //router.put("/:id", users.update);
-  protectedRouter.put("/:id", users.update);
+
 /**
  * @swagger
  * /user/{id}:
@@ -263,7 +224,6 @@
  *      500:
  *        description: Some error happened
  */
-//protectedRouter.put("/:id", users.update);
 //router.delete("/:id", users.delete);
 protectedRouter.delete("/:id", users.delete);
 
