@@ -20,8 +20,11 @@ class SalesRouteCustomerController extends Base {
   static getByCustomer(tb_institution_id,tb_customer_id) {
     const promise = new Promise((resolve, reject) => {
       Tb.sequelize.query(
-        'select * ' +
+        'select * , sr.description ' +
         'from tb_sales_route_customer src '+
+        '  inner join tb_sales_route sr '+
+        '  on (sr.id = src.tb_sales_route_id) '+
+        '  and (sr.tb_institution_id = src.tb_institution_id) '+     
         'where (src.tb_institution_id =? ) '+
         ' and (src.tb_customer_id =? )',
         {

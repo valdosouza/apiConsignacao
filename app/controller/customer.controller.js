@@ -57,10 +57,11 @@ class CustomerController extends Base {
           .then(data => {
             resolve(data);
           })
-        }else{
+        }else{ 
+          
           this.update(body)
-          .then(data => {
-            resolve(data);
+          .then(() => {
+            resolve(body);
           })
         }
       } catch(err) {            
@@ -258,10 +259,14 @@ class CustomerController extends Base {
       try{
         var result = {};
         const dataCustomer = await this.getById(tb_institution_id,id);
+        var dataSalesRoute = await salesRouteCustomer.getByCustomer(tb_institution_id,id);
+        dataCustomer['tb_sales_route_id'] = dataSalesRoute.tb_sales_route_id;
+        dataCustomer['sales_route_name'] = dataSalesRoute.description;
         result.customer = dataCustomer;
+
         const dataEntity = await entity.getById(id);
         result.entity = dataEntity; 
-
+        
         const dataPerson = await person.getById(id);        
         if (dataPerson.id){            
             result.person = dataPerson; 

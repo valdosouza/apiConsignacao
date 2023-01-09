@@ -142,7 +142,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *       500:
  *         description: Some server error
  */
- router.post("/", customer.create);
+ router.post("/", customer.save);
 
  /**
  * @swagger

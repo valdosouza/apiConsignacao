@@ -33,7 +33,7 @@ class UserController extends Base {
             const dataMailing = {
               email:user.email
             };            
-            MailingController.create(dataMailing)
+            await MailingController.create(dataMailing)
               .then(data=>{
                 //Vincula a entidade e o email com Grupo do email especifico 2 - Sistema
                 const MailingId = data.id;
@@ -49,26 +49,26 @@ class UserController extends Base {
             const dataUser = {           
               id:user.id,
               password:user.password,
-              kind:user.kindd
+              kind:user.kind
             };
             await TbUser.create(dataUser);
             const dataInstitutionHU = {
-              tb_institution_id:user.tb_institution_id,
-              tb_user_id:user.id,
-              kind:user.kind,
+              tb_institution_id: user.tb_institution_id,
+              tb_user_id: user.id,
+              kind: user.kind,
               active:"S"
             };
             await TbInstitutionHasUser.create(dataInstitutionHU);
             //REtornogeral
             const dataResolve = {                            
-                "id":user.id,
-                "tb_institution_id":user.tb_institution_id,
-                "password":'',
-                "kind":user.kind,
-                "tb_device_id":0,
-                "active":user.active,
-                "email": user.email,
-                "nick":user.nick                
+                id:user.id,
+                tb_institution_id:user.tb_institution_id,
+                password:'',
+                kind:user.kind,
+                tb_device_id:0,
+                active:user.active,
+                email: user.email,
+                nick:user.nick                
             }            
             resolve(dataResolve); 
             

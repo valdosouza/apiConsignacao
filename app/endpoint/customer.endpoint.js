@@ -2,11 +2,11 @@ const CustomerController = require("../controller/customer.controller.js");
 
 class CustomerEndPoint {
 
-  static create = (req, res) => {
+  static save = (req, res) => {
     try{      
       
       CustomerController.save(req.body)
-        .then(data => {  
+        .then(data => {            
           var dataRes = {
             id : data.entity.id,
             name_company : data.entity.name_company,
