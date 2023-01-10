@@ -1,6 +1,6 @@
 const { Router } = require("express");
-  
-const collaborator =  require("../endpoint/collaborator.endpoint.js");
+
+const collaborator = require("../endpoint/collaborator.endpoint.js");
 
 const { withJWTAuthMiddleware } = require("express-kun");
 const router = Router();
@@ -59,23 +59,27 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *       properties:
  *         id:
  *           type: integer
- *         name:
+ *         name_company:
  *           type: string
- *         apelido:
+ *         nick_trade:
  *           type: string
+ *         doc_kind:
+ *           type: string
+ *         doc_number:
+ *           type: string 
  *         tb_linebusiness_id:
  *           type: integer
- *         desc_linebusiness:
+ *         name_linebusiness:
  *           type: string  
  *  
  */
 
- /**
-  * @swagger
-  * tags:
-  *   name: Collaborator
-  *   description: The Collaborator managing API
-  */
+/**
+ * @swagger
+ * tags:
+ *   name: Collaborator
+ *   description: The Collaborator managing API
+ */
 
 /**
  * @swagger
@@ -95,15 +99,42 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/ObjCollaborator'
+ *               $ref: '#/components/schemas/ListCollaborator'
  *       500:
  *         description: Some server error
  */
- router.post("/", collaborator.create);
+router.post("/", collaborator.save);
 
- /**
- * @swagger
- * /collaborator/{id}:
+/**
+* @swagger
+* /collaborator/getlist/{tb_institution_id}:
+*   get:
+*     summary: Returns the list of all the Collaborator
+*     tags: [Collaborator]
+*     parameters:
+*      - in: path
+*        name: tb_institution_id
+*        schema:
+*          type: integer  
+*        required: true
+*        description: The Collaborator tb_institution_id
+*     responses:
+*       200:
+*         description: The list of collaborator
+*         content:
+*           application/json:
+*             schema:
+*               type: array
+*               items:
+*                 $ref: '#/components/schemas/ListCollaborator'
+*       500:
+*         description: Some server error 
+*/
+router.get("/getlist/:tb_institution_id/", collaborator.getList);
+
+/**
+ * @swagger 
+ * /collaborator/{tb_institution_id}/{id}:
  *   get:
  *     security:
  *       - bearerAuth: []
@@ -111,11 +142,9 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *     tags: [Collaborator]
  *     parameters:
  *      - in: path
+ *        name: tb_institution_id
+ *      - in: path
  *        name: id
- *        schema:
- *          type: string
- *        required: true
- *        description: The id collaborator
  *     responses:
  *       200:
  *         description: The  collaborator
@@ -124,34 +153,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *             schema: 
  *               $ref: '#/components/schemas/ObjCollaborator'
  */
- router.get("/:id", collaborator.get);
-  
- /**
- * @swagger
- * /collaborator/getlist/{tb_institution_id}:
- *   get:
- *     summary: Returns the list of all the Collaborator
- *     tags: [Collaborator]
- *     parameters:
- *      - in: path
- *        name: tb_institution_id
- *        schema:
- *          type: integer  
- *        required: true
- *        description: The Collaborator tb_institution_id
- *     responses:
- *       200:
- *         description: The list of collaborator
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/ListCollaborator'
- *       500:
- *         description: Some server error 
- */
-router.get("/getlist/:tb_institution_id", collaborator.getList);
+router.get("/:tb_institution_id/:id/", collaborator.get);
 
 /**
  * @swagger

@@ -192,9 +192,9 @@ class FinancialStatementController extends Base {
           } 
           
           dataResult.push({
-            "description": "Total Recebido",
-            "tag_value": totalvalue.toFixed(2),
-            "kind": "summarized",
+            description: "Total Recebido",
+            tag_value: totalvalue,
+            kind: "summarized",
           });
           
           resolve(dataResult);

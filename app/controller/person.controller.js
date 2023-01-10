@@ -12,7 +12,7 @@ class PersonController extends Base {
         {
           replacements: [id],
           type: Tb.sequelize.QueryTypes.SELECT
-        }).then(data => {
+        }).then(data => {          
           if (data.length > 0)          
           resolve(data[0])
         else
