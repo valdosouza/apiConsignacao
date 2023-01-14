@@ -545,7 +545,20 @@ class OrderConsignmentController extends Base {
             unit_value: item.unit_value                  
           } ;
           //Quanto o insert é mais complexo como getNext precisa do await no loop          
-          await orderItem.update(dataItem);
+          switch (item.update_status) {
+            case "I":
+              await orderItem.insert(dataItem)
+                .then(data => {
+                  item.id = data.id;
+                });
+              break;
+            case "E":
+              await orderItem.update(dataItem);
+              break;
+            case "D":
+              await orderItem.delete(dataItem);
+              break;
+          }
         };
         resolve("Items Alterados");       
       } catch(err) {            

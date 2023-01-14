@@ -250,7 +250,7 @@ class CollaboratorController extends Base {
         ' "F" doc_kind, ' +
         'pe.cpf doc_number, ' +
         ' et.tb_linebusiness_id, ' +
-        ' ln.description desc_linebusiness ' +
+        ' ln.description name_linebusiness ' +
         'from tb_collaborator cl  ' +
         '  inner join tb_entity et  ' +
         '  on (cl.id = et.id)  ' +
@@ -267,7 +267,7 @@ class CollaboratorController extends Base {
         ' "J" doc_kind, ' +
         'co.cnpj doc_number, ' +
         ' et.tb_linebusiness_id, ' +
-        ' ln.description desc_linebusiness ' +
+        ' ln.description name_linebusiness ' +
         'from tb_collaborator cl  ' +
         '  inner join tb_entity et  ' +
         '  on (cl.id = et.id)  ' +

@@ -83,7 +83,7 @@ class OrderController extends Base {
 
   static async update(order) {
     const promise = new Promise((resolve, reject) => {
-      if (order.validity == '') delete order.validity;
+      if (order.validity == '') delete order.validity;      
       Tb.update(order, {
         where: {
           id: order.id,

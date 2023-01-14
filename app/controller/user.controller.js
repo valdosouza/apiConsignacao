@@ -302,12 +302,12 @@ class UserController extends Base {
       const now = Math.floor(Date.now() / 1000);
       
       const userId =  data[0].id;
-      const institutionId =  data[0].tb_institution_id;
+      const tbInstitutionId =  data[0].tb_institution_id;
       const userEmail = data[0].email;
             
       const payload = {
         id: userId,
-        institution : institutionId,
+        tbInstitution : tbInstitutionId,
         email: userEmail        
       }      
       
@@ -315,7 +315,7 @@ class UserController extends Base {
       const result = {
         auth: true,
         id: userId,
-        institution : institutionId,
+        tbInstitutionId : tbInstitutionId,
         username: userEmail,
         password: "",
         jwt : token,

@@ -235,10 +235,12 @@ class FinancialStatementController extends Base {
         '  inner join tb_financial fnl  '+
         '  on (fnl.tb_order_id = ors.id)  '+
         '    and (fnl.tb_institution_id = ors.tb_institution_id) '+
+
         '    inner join tb_financial_payment fnp  '+
         '    on (fnl.tb_order_id = fnp.tb_order_id)  '+ 
         '    and (fnl.tb_institution_id = fnp.tb_institution_id)  '+
         '    and (fnl.parcel = fnp.parcel)  '+
+        
         '  inner join tb_entity etd '+
         '  on (etd.id = fnl.tb_entity_id)  '+
         '  inner join tb_order_attendance ora '+ 

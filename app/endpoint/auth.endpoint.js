@@ -23,7 +23,7 @@ class AuthEndPoint {
           const dataReturn = {          
           "auth": false, 
           "id": 0,
-          "institution" : 0,
+          "tb_institution_id" : 0,
           "username" : '',
           "password": '',
           "jwt": '' };              

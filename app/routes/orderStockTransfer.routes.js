@@ -48,6 +48,24 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         status:
  *           type: string
  *  
+ *     OrderStockTransferList:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *         tb_user_id:
+ *           type: integer
+ *         dt_record:
+ *           type: string
+ *         number:
+ *           type: integer
+ *         tb_entity_id:
+ *           type: integer
+ *         name_entity:
+ *           type: string 
+ *         status:
+ *           type: string
+ * 
  *     OrderStockTransferItem:
  *       type: object
  *       required:
@@ -144,7 +162,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/OrderStockTransferMain'
+ *                 $ref: '#/components/schemas/OrderStockTransferList'
  */
   //router.get("/getlist/:tb_institution_id", orderstocktransfer.getList);
   protectedRouter.get("/getlist/:tb_institution_id", orderstocktransfer.getList);

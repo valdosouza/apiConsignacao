@@ -2,24 +2,24 @@ const OrderStockTransferController = require("../controller/orderStockTransfer.c
 
 class OrderStockTransferEndPoint {
 
-  static create = (req, res) => {    
+  static create = (req, res) => {
     OrderStockTransferController.insert(req.body)
       .then(data => {
-        res.send(data);
-    })
+        res.send(data.Order);
+      })
   }
 
   static getList(req, res) {
-    
-    OrderStockTransferController.getList(req.params.tb_institution_id )
+
+    OrderStockTransferController.getList(req.params.tb_institution_id)
       .then(data => {
         res.send(data);
       })
   }
 
   static get(req, res) {
-    
-    OrderStockTransferController.get(req.params.tb_institution_id,req.params.id )
+
+    OrderStockTransferController.get(req.params.tb_institution_id, req.params.id)
       .then(data => {
         res.send(data);
       })
@@ -27,11 +27,9 @@ class OrderStockTransferEndPoint {
 
   static update = (req, res) => {
     OrderStockTransferController.update(req.body)
-      .then(data => {
-        if (data)
-          res.send(req.body)
-        else
-          res.send(data);
+      .then((data) => {
+
+        res.send(data.Order)
       })
   }
 
@@ -42,31 +40,31 @@ class OrderStockTransferEndPoint {
         res.send(data);
       })
   }
-  
+
   static close(req, res) {
-    
+
     OrderStockTransferController.close(req.body)
-      .then(data => {        
-        if (data == 200){
+      .then(data => {
+        if (data == 200) {
           res.status(200).send('The OrderStockTransfer was closed');
-        }else{
-          if (data == 201){
+        } else {
+          if (data == 201) {
             res.status(201).send('The OrderStockTransfer is already closed');
-          }  
+          }
         }
       })
   }
-   
+
   static reopen(req, res) {
-    
+
     OrderStockTransferController.reopen(req.body)
-      .then(data => {        
-        if (data == 200){
+      .then(data => {
+        if (data == 200) {
           res.status(200).send('The OrderStockTransfer was open');
-        }else{
-          if (data == 201){
+        } else {
+          if (data == 201) {
             res.status(201).send('The OrderStockTransfer is already open');
-          }  
+          }
         }
       })
   }
