@@ -279,7 +279,7 @@ class UserController extends Base {
         'where ( u.id=? ) '+
         ' and u.salt=?' ,
         {
-          replacements: [body.userId,body.salt],
+          replacements: [body.tb_user_id,body.salt],
           type: TbUser.sequelize.QueryTypes.SELECT
         })
         .then(data => {                
@@ -301,24 +301,24 @@ class UserController extends Base {
 
       const now = Math.floor(Date.now() / 1000);
       
-      const userId =  data[0].id;
+      const tbUserId =  data[0].id;
       const tbInstitutionId =  data[0].tb_institution_id;
       const userEmail = data[0].email;
             
       const payload = {
-        id: userId,
-        tbInstitution : tbInstitutionId,
+        id: tbUserId,
+        tbInstitutionId : tbInstitutionId,
         email: userEmail        
       }      
       
       var token =jwt.sign({ payload }, process.env.SECRET, {expiresIn: "15d",algorithm: 'HS256' });
       const result = {
-        auth: true,
-        id: userId,
-        tbInstitutionId : tbInstitutionId,
-        username: userEmail,
-        password: "",
-        jwt : token,
+        "auth": true,
+        "id": tbUserId,
+        "tb_institution_id" : tbInstitutionId,
+        "username": userEmail,
+        "password": "",
+        "jwt" : token,
       }     
       resolve(result);
     });
@@ -350,8 +350,8 @@ class UserController extends Base {
   static async recoveryPassword(email){
     const promise = new Promise(async (resolve,reject) => {    
       try {        
-        const userId = await  this.getIdUserByEmail(email) ;
-        if (userId > 0){        
+        const tbUserId = await  this.getIdUserByEmail(email) ;
+        if (tbUserId > 0){        
           
           var hashSalt = Math.random() * (100000 - 999999) + 100000;          
           hashSalt = Math.abs(hashSalt);          
@@ -362,13 +362,13 @@ class UserController extends Base {
             ' salt=? ' +
             'where id=? ' ,        
             {
-              replacements: [hashSalt,userId],
+              replacements: [hashSalt,tbUserId],
               type: TbUser.sequelize.QueryTypes.UPDATE
             }
           )
             .then(() => {
               const dataResult ={
-                user:userId,
+                tbUserId: tbUserId,
                 email: email,
                 salt:hashSalt
               }              
@@ -399,7 +399,7 @@ class UserController extends Base {
           ' and salt=? '+
           ' and salt is not NULL ',
           {
-            replacements: [body.newPassword,body.userId,body.salt],
+            replacements: [body.newPassword,body.tb_user_id,body.salt],
             type: TbUser.sequelize.QueryTypes.UPDATE
           }
         )

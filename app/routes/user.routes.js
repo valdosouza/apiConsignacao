@@ -71,11 +71,11 @@
  *     ChangePassword:
  *       type: object
  *       required:
- *         - userId
+ *         - tb_user_id
  *         - salt
  *         - newPassword
  *       properties:
- *         userId:
+ *         tb_user_id:
  *           type: integer
  *         salt: 
  *           type: string

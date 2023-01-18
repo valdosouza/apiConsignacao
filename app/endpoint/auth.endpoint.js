@@ -78,7 +78,7 @@ class AuthEndPoint {
         });
         return;
       }
-      if (!req.body.userId) {
+      if (!req.body.tb_user_id) {
         res.status(400).send({
           message: "Codidgo usuário não pode ser Vazio!"
         });

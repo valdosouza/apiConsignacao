@@ -282,8 +282,7 @@ class OrderStockAdjustController extends Base {
             case "D":
               await orderItem.delete(dataItem);
               break;
-          }
-          s
+          }          
         };
         resolve("Items Alterados");
       } catch (err) {
