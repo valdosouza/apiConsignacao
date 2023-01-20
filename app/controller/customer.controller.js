@@ -246,7 +246,7 @@ class CustomerController extends Base {
           Tb.update(body.customer,{
             where: { id: body.customer.id }
           });          
-          resolve("The Customer was updated");   
+          resolve(body);   
         } catch(err) {            
             reject('Customer.update: '+err);
         }  

@@ -27,7 +27,8 @@ class CompanyController extends Base {
 
   static async insert(company) {
     const promise = new Promise((resolve, reject) => {
-        if  (company.dt_foundation == "") delete company.dt_foundation;
+      
+        
         Tb.create(company)
             .then(data => {
                 resolve(data);

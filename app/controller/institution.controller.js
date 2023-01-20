@@ -24,8 +24,7 @@ class InstitutionController extends Base {
           //Salva a entidad
           const dataEntity = {
             name_company: institution.name_company,
-            nick_trade:institution.nick_trade,
-            aniversary:institution.dt_foundation,
+            nick_trade:institution.nick_trade,            
             tb_line_buiness_id:institution.tb_line_buiness_id,
             note:institution.note                        
           };                    
@@ -122,13 +121,11 @@ class InstitutionController extends Base {
 
   static async update(institution) {
     const promise = new Promise((resolve, reject) => {
-        try{  //Salva a entidad
-          if (institution.dt_foundation == "") delete institution.dt_foundation;
+        try{  //Salva a entidad          
           const dataEntity = {
             id:institution.id,
             name_company: institution.name_company,
             nick_trade:institution.nick_trade,
-            aniversary:institution.dt_foundation,
             tb_institution_id:institution.tb_institution_id,
             note:institution.note                        
           };       
@@ -229,8 +226,7 @@ class InstitutionController extends Base {
         '  co.cnpj, '+
         '  co.ie, '+
         '  co.im, '+
-        '  co.iest, '+
-        '  co.dt_foundation, '+
+        '  co.iest, '+        
         '  co.crt, '+
         '  co.crt_modal, '+
         '  ind_ie_destinatario, '+

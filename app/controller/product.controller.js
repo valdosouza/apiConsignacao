@@ -36,14 +36,14 @@ class ProdcutController extends Base {
         if (product.validity == '') delete  product.product.validity;
         Tb.create(product.product)
           .then((data) => {    
-            //grava o preço
-            var pricelist = product.pricelist;
+            
+            
             var dataPrice = {};
-            for(var item of pricelist) {              
+            for(var item of product.pricelist) {              
               dataPrice = {
                 tb_institution_id : product.product.tb_institution_id,
-                tb_price_list_id : item.tb_price_list_id,
-                tb_product_id : product.product.id,
+                tb_price_list_id : item.id,
+                tb_product_id : data.id,
                 price_tag : item.price_tag
               }           
               //Quanto o insert é menos complexo insert direto não precisa do await no loop                     
@@ -71,7 +71,7 @@ class ProdcutController extends Base {
         {
           replacements: [tb_institution_id],
           type: Tb.sequelize.QueryTypes.SELECT
-        }).then(data => {
+        }).then(data => {          
           resolve(data);
         })
         .catch(err => {

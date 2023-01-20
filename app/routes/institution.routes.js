@@ -50,8 +50,6 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *           type: string
  *         iest:
  *           type: string
- *         dt_foundation:
- *           type: string
  *         crt:
  *           type: string
  *         crt_modal:

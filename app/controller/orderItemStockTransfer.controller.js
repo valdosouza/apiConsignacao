@@ -87,7 +87,7 @@ class OrderItemStockTransferController extends Base {
 
     static async delete(item) {      
         const promise = new Promise((resolve, reject) => {
-          console.log(item);
+          
           orderitem.delete(item)
           .then(data => {
             resolve(data);

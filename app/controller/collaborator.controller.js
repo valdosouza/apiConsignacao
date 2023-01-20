@@ -37,7 +37,7 @@ class CollaboratorController extends Base {
           delete collaborator.collaborator.dt_admission;
         if (collaborator.collaborator.dt_resignation == '')
           delete collaborator.collaborator.dt_resignation;
-
+        
 
         var resultCollaborator = [];
         if (collaborator.collaborator.id > 0)
@@ -53,7 +53,6 @@ class CollaboratorController extends Base {
               resolve(data);
             })
         }
-        resolve(collaborator);
       } catch (err) {
         reject('Collaborator.save: ' + err);
       }
@@ -65,7 +64,7 @@ class CollaboratorController extends Base {
     const promise = new Promise(async (resolve, reject) => {
       try {
         var resultDoc = [];
-        if (collaborator.person) {
+        if (collaborator.person.cpf != "") {
           resultDoc = await person.getByCPF(collaborator.person.cpf);
         } else {
           resultDoc = await company.getByCNPJ(collaborator.company.cnpj);
@@ -98,7 +97,7 @@ class CollaboratorController extends Base {
             const entityId = data.id;
             collaborator.entity.id = entityId;
             //Salva a pessoa Juridica                        
-            if (collaborator.company) {
+            if (collaborator.company.cnpj != "") {
               collaborator.company.id = entityId;
               company.insert(collaborator.company)
                 .catch(err => {
@@ -199,7 +198,7 @@ class CollaboratorController extends Base {
         Tb.update(collaborator.collaborator, {
           where: { id: collaborator.collaborator.id }
         });
-        resolve("The Collaborator was updated");
+        resolve(collaborator);
       } catch (err) {
         reject('Collaborator.update: ' + err);
       }

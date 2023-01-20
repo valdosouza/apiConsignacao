@@ -1,7 +1,6 @@
 const Base = require('./base.controller.js');
 const db = require("../model");
 const Tb = db.price;
-const product = require("./product.controller.js");
 
 class PriceController extends Base {     
     
@@ -130,8 +129,8 @@ class PriceController extends Base {
     
   static autoInsertByPriceList(tb_institution_id,tb_price_list_id) {
     const promise = new Promise(async (resolve, reject) => {
-      try {
-        var dataProduct = await product.getList(tb_institution_id);
+      try {        
+        var dataProduct = await this.productGetList(tb_institution_id);
         var dataPrice = {};
         for (var item of dataProduct){
           dataPrice ={
@@ -146,6 +145,29 @@ class PriceController extends Base {
       } catch (err) {
         reject('autoInsertByPriceList: ' + err)
       }
+    });
+    return promise;
+  }  
+
+  static productGetList(tb_institution_id) {
+    const promise = new Promise((resolve, reject) => {
+      Tb.sequelize.query(
+        'select '+
+        'id, '+
+        'tb_institution_id, '+
+        'description, '+
+        'active '+
+        'from tb_product p '+
+        'where (p.tb_institution_id =? ) ',
+        {
+          replacements: [tb_institution_id],
+          type: Tb.sequelize.QueryTypes.SELECT
+        }).then(data => {          
+          resolve(data);
+        })
+        .catch(err => {
+          reject("price.productGetList: " + err);
+        });
     });
     return promise;
   }  
