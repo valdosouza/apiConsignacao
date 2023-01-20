@@ -106,7 +106,7 @@ class CustomerController extends Base {
         .then(data => {          
           body.entity.id =  data.id;          
           //Salva a pessoa Juridica                        
-          if (body.company){            
+          if (body.company.cnpj != ""){            
             body.company.id = body.entity.id;
             company.insert(body.company)
               .catch(err => {
