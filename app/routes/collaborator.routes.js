@@ -40,6 +40,14 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         active:
  *           type: string 
  * 
+ *     UserColab:
+ *       type: object
+ *       required:
+ *         - email
+ *       properties:
+ *         email:
+ *           type: string
+ * 
  *     ObjCollaborator:
  *       type: object
  *       properties:
@@ -53,7 +61,9 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *           $ref: '#/components/schemas/Address' 
  *         phone:
  *           $ref: '#/components/schemas/Phone'  
- *             
+ *         user:
+ *           $ref: '#/components/schemas/UserColab'               
+ 
  *     ListCollaborator:
  *       type: object
  *       properties:

@@ -1,13 +1,23 @@
 const CollaboratorController = require("../controller/collaborator.controller.js");
 const { entity } = require("../model/index.js");
 const lineBusinessController = require("../controller/lineBusiness.controller.js");
+const entityHasStockList = require("../controller/entityHasStockList.controller.js");
 class CollaboratorEndPoint {
 
   static save = (req, res) => {
     try {
       CollaboratorController.save(req.body)
         .then(async data => {
+          //verifica o cargo do Vendedor
           var lineBusinessModel = await lineBusinessController.get(data.collaborator.tb_institution_id, data.entity.tb_linebusiness_id)
+          if (lineBusinessModel.description.toLowerCase() === "Vendedor".toLowerCase()) {
+            var dataEntityHasStockList = {
+              tb_institution_id: data.collaborator.tb_institution_id,
+              tb_entity_id: data.entity.id,
+              name_entity: data.entity.nick_trade,
+            }
+            await entityHasStockList.createAuto(dataEntityHasStockList);
+          }
           var dataRes = {
             id: data.entity.id,
             name_company: data.entity.name_company,

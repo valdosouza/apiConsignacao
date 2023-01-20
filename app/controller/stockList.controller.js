@@ -41,6 +41,7 @@ class StockListController extends Base {
     return promise;
   }
 
+
   static getList(tb_institution_id) {
     const promise = new Promise((resolve, reject) => {
       Tb.sequelize.query(

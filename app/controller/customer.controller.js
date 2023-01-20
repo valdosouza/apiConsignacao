@@ -80,13 +80,13 @@ class CustomerController extends Base {
         }else{
           resultDoc  = await company.getByCNPJ(body.company.cnpj);
         }              
-        if (!resultDoc.id){                    
+        if (resultDoc.length == 0){                    
           this.insertComplete(body)
           .then(data => {
             resolve(data);
           })          
         } else{
-          body.customer.id = resultDoc.id;
+          body.customer.id = resultDoc[0].id;
           this.insertParcial(body)
           .then(data => {
             resolve(data);

@@ -57,6 +57,8 @@ db.salesroutecustomer = require("./salesRouteCustomer.model.js")(sequelize, Sequ
 
 db.entity = require("./entity.model.js")(sequelize, Sequelize);
 db.entityHasMailing = require("./entityHasMailing.model.js")(sequelize, Sequelize);
+db.entityHasStockList = require("./entityHasStockList.model.js")(sequelize, Sequelize);
+
 db.address = require("./address.model.js")(sequelize, Sequelize);
 db.phone = require("./phone.model.js")(sequelize, Sequelize);
 db.mailing = require("./mailing.model.js")(sequelize, Sequelize);

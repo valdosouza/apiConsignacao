@@ -99,9 +99,7 @@ class CompanyController extends Base {
           type: Tb.sequelize.QueryTypes.SELECT
         })
         .then(data => {
-          if (data.length > 0)       
-            resolve(data[0])
-          else       
+          //deve retornar o vetor mesmo que vazio para a verificação na função subsequente
           resolve(data);
         })
         .catch(err => {

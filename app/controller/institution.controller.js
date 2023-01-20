@@ -17,8 +17,8 @@ class InstitutionController extends Base {
   static async insert(institution) {
 
     const promise = new Promise(async (resolve, reject) => {
-      const dataCompany  = await company.getByCNPJ(institution.cnpj);    
-      if (dataCompany != '0'){
+      const dataResult  = await company.getByCNPJ(institution.cnpj);    
+      if (dataResult.length >0){
         this.update(institution); 
       }else{
           //Salva a entidad

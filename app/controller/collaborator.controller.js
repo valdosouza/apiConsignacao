@@ -6,7 +6,8 @@ const person = require('./person.controller.js');
 const company = require('./company.controller.js');
 const address = require('./address.controller.js');
 const phone = require('./phone.controller.js');
-const { collaborator } = require('../model');
+const user = require('./user.controller.js');
+const md5 = require('md5');
 
 class CollaboratorController extends Base {
 
@@ -21,7 +22,7 @@ class CollaboratorController extends Base {
           replacements: [tb_institution_id, id],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
-          resolve(data[0]);
+          resolve(data);
         })
         .catch(err => {
           reject('Collaborator.getById: ' + err);
@@ -37,7 +38,7 @@ class CollaboratorController extends Base {
           delete collaborator.collaborator.dt_admission;
         if (collaborator.collaborator.dt_resignation == '')
           delete collaborator.collaborator.dt_resignation;
-        
+
 
         var resultCollaborator = [];
         if (collaborator.collaborator.id > 0)
@@ -76,6 +77,7 @@ class CollaboratorController extends Base {
               resolve(data);
             })
         } else {
+          
           collaborator.collaborator.id = resultDoc[0].id;
           this.insertParcial(collaborator)
             .then((data) => {
@@ -131,6 +133,19 @@ class CollaboratorController extends Base {
               .catch(err => {
                 reject("Tb.create.collaborator:" + err);
               });
+            //Grava Usuario
+            var userModel = {
+              tb_institution_id: collaborator.collaborator.tb_institution_id,
+              id: collaborator.entity.id,
+              nick: collaborator.entity.nick_trade,
+              email: collaborator.user.email,
+              password: md5('12345'),
+              kind: "Sistema",
+              tb_device_id: 0,
+              active: "S"
+            }
+            user.createAuto(userModel);
+            
             //REtornogeral              
             resolve(collaborator);
           })
@@ -148,8 +163,11 @@ class CollaboratorController extends Base {
     const promise = new Promise(async (resolve, reject) => {
       try {
         //Insere o collaborator
-        const existCollaborator = await this.getById(collaborator.collaborator.id);
+        console.log(collaborator);         
+        const existCollaborator = await this.getById(collaborator.collaborator.tb_institution_id, collaborator.collaborator.id);
+        
         if (existCollaborator.length == 0) {
+          console.log("criou o colab");
           Tb.create(collaborator.collaborator);
         } else {
           Tb.update(collaborator.collaborator, {
@@ -173,6 +191,18 @@ class CollaboratorController extends Base {
         //Salva o Phone
         collaborator.phone.id = collaborator.collaborator.id;
         phone.save(collaborator.phone);
+        //Grava Usuario
+        var userModel = {
+          tb_institution_id: collaborator.collaborator.tb_institution_id,
+          id: collaborator.entity.id,
+          nick: collaborator.entity.nick_trade,
+          email: collaborator.user.email,
+          password: md5('12345'),
+          kind: "Sistema",
+          tb_device_id: 0,
+          active: "S"
+        }
+        user.createAuto(userModel);
         //REtornogeral              
         resolve(collaborator);
       } catch (err) {
@@ -211,7 +241,7 @@ class CollaboratorController extends Base {
       try {
         var result = {};
         const dataCollaborator = await this.getById(tb_institution_id, id);
-        result.collaborator = dataCollaborator;
+        result.collaborator = dataCollaborator[0];
         const dataEntity = await entity.getById(id);
         result.entity = dataEntity;
 
@@ -228,6 +258,9 @@ class CollaboratorController extends Base {
 
         const dataPhone = await phone.getById(id, 'Comercial');
         result.phone = dataPhone;
+
+        const userEmail = await user.getEmailByEntity(id);
+        result.user = { email: userEmail };
 
         resolve(result);
       }
