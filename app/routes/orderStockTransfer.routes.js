@@ -244,7 +244,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
   protectedRouter.delete("/:tb_institution_id/:id", orderstocktransfer.delete);
 /**
  * @swagger
- * /orderstocktransfer/close:
+ * /orderstocktransfer/closure:
  *   post:
  *     summary: Close status Order StockTransfer
  *     tags: [OrderStockTransfer]
@@ -264,8 +264,8 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *       500:
  *         description: Some error happened
  */
-  //router.post("/close/", orderstocktransfer.close);
-  protectedRouter.post("/close/", orderstocktransfer.close);
+  
+  protectedRouter.post("/closure/", orderstocktransfer.closure);
  /**
   * @swagger
   * /orderstocktransfer/reopen:

@@ -204,7 +204,7 @@ router.delete("/:tb_institution_id/:id", orderattendance.delete);
 
 /**
  * @swagger
- * /orderattendance/close:
+ * /orderattendance/closure:
  *   post:
  *     summary: Close status Order Attendance
  *     tags: [OrderAttendance]
@@ -224,7 +224,7 @@ router.delete("/:tb_institution_id/:id", orderattendance.delete);
  *       500:
  *         description: Some error happened
  */
- router.post("/close/", orderattendance.close);
+ router.post("/closure/", orderattendance.closure);
 
  /**
   * @swagger

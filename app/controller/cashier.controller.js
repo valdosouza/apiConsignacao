@@ -81,7 +81,7 @@ class CashierController extends Base {
     return promise;
   };
 
-  static async close(tb_institution_id,id) {
+  static async closure(tb_institution_id,id) {
     const promise = new Promise(async (resolve, reject) => {
       try{
         var hrEnd = dateFunction.getTime();
@@ -99,7 +99,7 @@ class CashierController extends Base {
           resolve(data);
         })               
       } catch(err) {            
-        reject('Cashier.close: '+err);
+        reject('Cashier.closure: '+err);
       }                        
                      
     });

@@ -338,7 +338,7 @@ class OrderStockAdjustController extends Base {
   }
 
 
-  static async close(body) {
+  static async closure(body) {
     const promise = new Promise(async (resolve, reject) => {
       try {
         var status = await this.getStatus(body.tb_institution_id, body.id);
@@ -387,8 +387,8 @@ class OrderStockAdjustController extends Base {
             direction = 'E'
           }
           else {
-            direction = 'E'
-          };
+            direction = 'S'
+          };          
           var dataItem = {};
           for (var item of items) {
             dataItem = {

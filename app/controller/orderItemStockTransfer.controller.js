@@ -36,7 +36,7 @@ class OrderItemStockTransferController extends Base {
             {
               replacements: [tb_institution_id,tb_order_id],
               type: Tb.sequelize.QueryTypes.SELECT
-            }).then(data => {
+            }).then(data => {              
               resolve(data);
             })
             .catch(err => {

@@ -25,7 +25,7 @@ class CashierClosureController extends Base {
             };
             await Tb.create(dataClosure);
           }
-          CashierController.close(body.tb_institution_id, idCashier);
+          CashierController.closure(body.tb_institution_id, idCashier);
           resolve("Fechamento Executado com Sucesso!");
         } else {
           resolve("Não foi encontrado caixa aberto para este usuário!");

@@ -162,12 +162,11 @@ class CollaboratorController extends Base {
   static async insertParcial(collaborator) {
     const promise = new Promise(async (resolve, reject) => {
       try {
-        //Insere o collaborator
-        console.log(collaborator);         
+        //Insere o collaborator        
         const existCollaborator = await this.getById(collaborator.collaborator.tb_institution_id, collaborator.collaborator.id);
         
         if (existCollaborator.length == 0) {
-          console.log("criou o colab");
+          
           Tb.create(collaborator.collaborator);
         } else {
           Tb.update(collaborator.collaborator, {

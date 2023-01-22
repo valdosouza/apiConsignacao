@@ -63,9 +63,9 @@ class OrderSaleEndPoint {
       })
   }
   
-  static close(req, res) {
+  static closure(req, res) {
     
-    OrderSaleController.close(req.body)
+    OrderSaleController.closure(req.body)
       .then(data => {        
         if (data == 200){
           res.status(200).send('The OrderSale was closed');

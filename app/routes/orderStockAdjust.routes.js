@@ -227,7 +227,7 @@ router.delete("/:tb_institution_id/:tb_order_id", orderstockadjust.delete);
 
 /**
  * @swagger
- * /orderstockadjust/close:
+ * /orderstockadjust/closure:
  *   post:
  *     summary: Close status Order StockAdjust
  *     tags: [OrderStockAdjust]
@@ -247,7 +247,7 @@ router.delete("/:tb_institution_id/:tb_order_id", orderstockadjust.delete);
  *       500:
  *         description: Some error happened
  */
-  router.post("/close/", orderstockadjust.close);
+  router.post("/closure/", orderstockadjust.closure);
 
 /**
  * @swagger

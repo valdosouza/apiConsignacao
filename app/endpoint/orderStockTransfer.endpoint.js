@@ -41,9 +41,9 @@ class OrderStockTransferEndPoint {
       })
   }
 
-  static close(req, res) {
+  static closure(req, res) {
 
-    OrderStockTransferController.close(req.body)
+    OrderStockTransferController.closure(req.body)
       .then(data => {
         if (data == 200) {
           res.status(200).send('The OrderStockTransfer was closed');

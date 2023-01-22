@@ -161,7 +161,7 @@ class OrderStockTransferController extends Base {
     return promise;
   }
 
-  static getOrder(tb_institution_id, id) {
+  static async getOrder(tb_institution_id, id) {
     const promise = new Promise((resolve, reject) => {
       Tb.sequelize.query(
         '  select ' +
@@ -196,8 +196,8 @@ class OrderStockTransferController extends Base {
         {
           replacements: [tb_institution_id, id],
           type: Tb.sequelize.QueryTypes.SELECT
-        }).then(data => {
-          resolve(data[0]);
+        }).then(data => {          
+          resolve(data[0]);          
         })
         .catch(err => {
           reject('orderstocktransfer.get: ' + err);
@@ -337,12 +337,13 @@ class OrderStockTransferController extends Base {
   }
 
 
-  static async close(body) {
+  static async closure(body) {
     const promise = new Promise(async (resolve, reject) => {
       try {
-        var dataOrder = await this.getOrder(body.tb_institution_id, body.id);
+        var dataOrder = await this.getOrder(body.tb_institution_id, body.id);        
         if (dataOrder.status == 'A') {
           var items = await orderItem.getList(body.tb_institution_id, body.id);
+          
           var dataItem = {};
           for (var item of items) {
             dataItem = {

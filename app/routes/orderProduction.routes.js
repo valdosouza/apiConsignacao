@@ -207,7 +207,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
   protectedRouter.delete("/", orderproduction.delete);
 /**
  * @swagger
- * /orderproduction/close:
+ * /orderproduction/closure:
  *   post:
  *     summary: Close status Order Production
  *     tags: [OrderProduction]
@@ -227,8 +227,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *       500:
  *         description: Some error happened
  */
- //router.post("/close/", orderproduction.close);
- protectedRouter.post("/close/", orderproduction.close);
+  protectedRouter.post("/closure/", orderproduction.closure);
 
  /**
   * @swagger

@@ -45,9 +45,9 @@ class OrderStockAdjustEndPoint {
       })
   }
   
-  static close(req, res) {
+  static closure(req, res) {
     
-    OrderStockAdjustController.close(req.body)
+    OrderStockAdjustController.closure(req.body)
       .then(data => {        
         if (data == 200){
           res.status(200).send('The OrderStockAdjust was closed');

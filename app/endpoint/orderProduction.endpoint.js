@@ -44,9 +44,9 @@ class OrderProductionEndPoint {
       })
   }
   
-  static close(req, res) {
+  static closure(req, res) {
     
-    OrderProductionController.close(req.body)
+    OrderProductionController.closure(req.body)
       .then(data => {        
         if (data == 200){
           res.status(200).send('The OrderProduction was closed');

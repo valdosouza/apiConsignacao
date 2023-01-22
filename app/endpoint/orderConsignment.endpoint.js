@@ -13,8 +13,7 @@ class OrderConsignmentEndPoint {
 
   static saveSupplying = (req, res) => {
     OrderConsignmentController.saveSupplying(req.body)
-      .then(async data => {
-        console.log(data);
+      .then(async data => {        
         //Verificar se já existe um Estoque para o cliente
         var dataEntityHasStockList = {
           tb_institution_id: data.Order.tb_institution_id,

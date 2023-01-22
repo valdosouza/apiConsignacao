@@ -609,7 +609,7 @@ class OrderConsignmentController extends Base {
   }        
   
 
-  static async close(body) {      
+  static async closure(body) {      
     const promise = new Promise(async (resolve, reject) => {
       try {          
         var status = await this.getStatus(body.tb_institution_id,body.id);        

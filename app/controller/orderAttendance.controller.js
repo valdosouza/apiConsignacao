@@ -254,7 +254,7 @@ class OrderStockTransferController extends Base {
     return promise;
   }
 
-  static async close(body) {
+  static async closure(body) {
     const promise = new Promise(async (resolve, reject) => {
       try {
         var dataOrder = await this.getOrder(body.tb_institution_id, body.id);
