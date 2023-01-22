@@ -8,6 +8,7 @@ class EntityHasStockListController extends Base {
   static async createAuto(body) {
     const promise = new Promise(async (resolve, reject) => {
       var checkExist = await this.getByEntity(body.tb_institution_id, body.tb_entity_id)
+      
       if (checkExist.length == 0) {
         try {
           var dataStockList = {
@@ -19,21 +20,22 @@ class EntityHasStockListController extends Base {
           }
           stockListcontroller.insert(dataStockList)
             .then(data => {
-              var dataEntityHasStockList ={                
+              var dataEntityHasStockList = {
                 tb_institution_id: body.tb_institution_id,
-                tb_entity_id : body.tb_entity_id,
-                tb_stock_list_id : data.id,
+                tb_entity_id: body.tb_entity_id,
+                tb_stock_list_id: data.id,
               }
               Tb.create(dataEntityHasStockList)
                 .then((data) => {
-                  resolve("Estoque registrado na entidade!");
+                  resolve(data);
                 })
             })
         } catch (error) {
           reject("Erro:" + err);
         }
-      }
-      resolve("Entidade já tem estoque registrado");
+      } else {
+        resolve(checkExist);
+      }      
     });
     return promise;
   }

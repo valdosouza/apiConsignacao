@@ -15,19 +15,21 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *       required:
  *         - id
  *         - tb_institution_id
- *         - tb_order_id
  *         - tb_user_id
- *         - dt_record
  *         - tb_customer_id
- *         - tb_salesman_id 
+ *         - tb_salesman_id
+ *         - dt_record
+ *         - status
  *       properties:
  *         id:
  *           type: integer
  *         tb_institution_id:
  *           type: integer
- *         tb_order_id:
- *           type: integer
  *         tb_user_id:
+ *           type: integer
+ *         dt_record:
+ *           type: string
+ *         number:
  *           type: integer
  *         tb_customer_id:
  *           type: integer
@@ -37,13 +39,29 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *           type: integer
  *         name_salesman:
  *           type: string 
- *         dt_record:
- *           type: string
  *         note:
  *           type: string 
  *         status:
  *           type: string
  *  
+ *     OrderBonusList:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *         tb_user_id:
+ *           type: integer
+ *         dt_record:
+ *           type: string
+ *         number:
+ *           type: integer
+ *         tb_customer_id:
+ *           type: integer
+ *         name_customer:
+ *           type: string 
+ *         status:
+ *           type: string
+ * 
  *     OrderBonusItem:
  *       type: object
  *       required:
@@ -53,11 +71,28 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *       properties:
  *         tb_product_id:
  *           type: integer
+ *         name_product:
+ *           type: string
  *         unit_value:
  *           type: number
  *         quantity:
  *           type: number
  * 
+ *     OrderStockAdOperation:
+ *       type: object
+ *       required:
+ *         - tb_institution_id
+ *         - tb_order_id 
+ *         - dt_record
+ *         - direction 
+ *       properties:
+ *         tb_institution_id:
+ *           type: integer
+ *         id:
+ *           type: integer
+ *         dt_record:
+ *           type: string 
+ *
  *     OrderBonusMain:
  *       type: object
  *       properties:
@@ -95,43 +130,41 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/OrderBonus'
+ *               $ref: '#/components/schemas/OrderBonusMain'
  *       500:
  *         description: Some server error
  */
- router.post("/", orderbonus.create);
+  //router.post("/", orderbonus.create);
+  protectedRouter.post("/", orderbonus.create);
 
  /**
  * @swagger
- * /orderbonus/getlist/{tb_institution_id}/{tb_order_id}:
+ * /orderbonus/getlist/{tb_institution_id}:
  *   get:
  *     summary: Returns the list of all the OrderBonuss
  *     tags: [OrderBonus]
  *     parameters:
  *      - in: path
  *        name: tb_institution_id
- *      - in: path
- *        name: tb_order_id
  *        schema:
  *          type: string
  *        required: true
  *        description: The orderbonus tb_institution_id
  *     responses:
  *       200:
- *         description: The list of the payment types
+ *         description: The list of the Bonus
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/OrderBonusMain'
+ *                 $ref: '#/components/schemas/OrderBonusList'
  */
-
-router.get("/getlist/:tb_institution_id/:tb_order_id", orderbonus.getList);
-  
+  //router.get("/getlist/:tb_institution_id", orderbonus.getList);
+  protectedRouter.get("/getlist/:tb_institution_id", orderbonus.getList);
 /**
  * @swagger
- * /orderbonus/get/{tb_institution_id}/{tb_order_id}/{id}:
+ * /orderbonus/get/{tb_institution_id}/{id}:
  *   get:
  *     summary: Returns the OrderBonus
  *     tags: [OrderBonus]
@@ -139,13 +172,11 @@ router.get("/getlist/:tb_institution_id/:tb_order_id", orderbonus.getList);
  *      - in: path
  *        name: tb_institution_id
  *      - in: path
- *        name: tb_order_id
- *      - in: path
  *        name: id
  *        schema:
  *          type: string
  *        required: true
- *        description: The orderbonus by tb_institution_id and....
+ *        description: The Order Bonus by tb_institution_id and id
  *     responses:
  *       200:
  *         description: The OrderBonus
@@ -154,8 +185,8 @@ router.get("/getlist/:tb_institution_id/:tb_order_id", orderbonus.getList);
  *             schema:
  *               $ref: '#/components/schemas/OrderBonusMain'
  */
-
- router.get("/get/:tb_institution_id/:tb_order_id/:id", orderbonus.get);
+  //router.get("/get/:tb_institution_id/:id", orderbonus.get);
+  protectedRouter.get("/get/:tb_institution_id/:id", orderbonus.get);
  /**
  * @swagger
  * /orderbonus:
@@ -174,25 +205,23 @@ router.get("/getlist/:tb_institution_id/:tb_order_id", orderbonus.getList);
  *        content:
  *          application/json:
  *            schema:
- *              $ref: '#/components/schemas/OrderBonus'
+ *              $ref: '#/components/schemas/OrderBonusMain'
  *      404:
  *        description: The orderbonus was not found
  *      500:
  *        description: Some error happened
  */
- router.put("/", orderbonus.update);
-
+  //router.put("/", orderbonus.update);
+  protectedRouter.put("/", orderbonus.update);
 /**
  * @swagger
- * /orderbonus/{tb_institution_id}/{tb_order_id}/{id}:
+ * /orderbonus/{tb_institution_id}/{id}:
  *  delete:
  *    summary: Delete the orderbonus by the id
  *    tags: [OrderBonus]
  *    parameters:
  *      - in: path
  *        name: tb_institution_id
- *      - in: path
- *        name: tb_order_id
  *      - in: path
  *        name: id 
  *        schema:
@@ -207,6 +236,54 @@ router.get("/getlist/:tb_institution_id/:tb_order_id", orderbonus.getList);
  *      500:
  *        description: Some error happened
  */
-router.delete("/:tb_institution_id/:tb_order_id/:id", orderbonus.delete);
-
+  //router.delete("/:tb_institution_id/:id", orderbonus.delete);
+  protectedRouter.delete("/:tb_institution_id/:id", orderbonus.delete);
+/**
+ * @swagger
+ * /orderbonus/closure:
+ *   post:
+ *     summary: Close status Order Bonus
+ *     tags: [OrderBonus]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/OrderStockAdOperation'
+ *     responses:
+ *       200:
+ *         description: The OrderBonus was closed
+ *       201:
+ *         description: The OrderBonus is already closed
+ *       404:
+ *         description: The Order Bonus was not found
+ *       500:
+ *         description: Some error happened
+ */
+  
+  protectedRouter.post("/closure/", orderbonus.closure);
+ /**
+  * @swagger
+  * /orderbonus/reopen:
+  *   post:
+  *     summary: Reopen Status Order Bonus
+  *     tags: [OrderBonus]
+  *     requestBody:
+  *       required: true
+  *       content:
+  *         application/json:
+  *           schema:
+  *             $ref: '#/components/schemas/OrderStockAdOperation'
+  *     responses:
+  *       200:
+  *         description: The OrderBonus was open
+  *       201:
+  *         description: The OrderBonus is already open
+  *       404:
+  *         description: The Order Bonus was not found
+  *       500:
+  *         description: Some error happened
+  */
+  //router.post("/reopen/", orderbonus.reopen);     
+  protectedRouter.post("/reopen/", orderbonus.reopen);     
 module.exports = router;

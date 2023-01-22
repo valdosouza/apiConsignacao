@@ -70,12 +70,13 @@ class OrderStockTransferController extends Base {
             tb_stock_list_id: item.tb_stock_list_id,
             tb_product_id: item.tb_product_id,
             quantity: item.quantity,
-            unit_value: item.unit_value
+            unit_value: item.unit_value,
+            kind : 'StockTransfer',
           };
           //Quanto o insert é mais complexo como getNext precisa do await no loop          
           await orderItem.insert(dataItem);
         };
-        resolve("Items Adicionaos");
+        resolve("Items Adicionados");
       } catch (err) {
         reject("orderStockTransfer.insertOrderItem:" + err);
       }
@@ -359,7 +360,7 @@ class OrderStockTransferController extends Base {
               direction: "S",
               tb_merchandise_id: item.tb_product_id,
               quantity: item.quantity,
-              operation: "Tranferência"
+              operation: "Transfer"
             };
             //Origen
             dataItem['tb_stock_list_id'] = dataOrder.tb_stock_list_id_ori;
@@ -403,7 +404,7 @@ class OrderStockTransferController extends Base {
               direction: "S",
               tb_merchandise_id: item.tb_product_id,
               quantity: item.quantity,
-              operation: "Tranferência"
+              operation: "Transfer"
             };
             //Origen - Inverte direção ao reabrir
             dataItem['tb_stock_list_id'] = dataOrder.tb_stock_list_id_ori;
@@ -425,5 +426,95 @@ class OrderStockTransferController extends Base {
     });
     return promise;
   }
+
+  static async saveByCard(body) {
+    const promise = new Promise(async (resolve, reject) => {
+      try {
+        var qtde = 0;
+        for (var item of body.Items) {
+          qtde += item.devolution;
+        }
+        if (qtde > 0) {
+          body.Order['number'] = 0;
+          await this.insertOrder(body);
+          await this.insertOrderItemByCard(body)
+          await this.closurebyCard(body);
+        }
+        resolve(body);
+      } catch (err) {
+        reject(err);
+      }
+    });
+    return promise;
+  }
+
+  static async insertOrderItemByCard(body) {
+    const promise = new Promise(async (resolve, reject) => {
+      try {
+        var dataItem = {};
+        for (var item of body.Items) {
+          if (item.devolution > 0) {
+            dataItem = {
+              id: 0,
+              tb_institution_id: body.Order.tb_institution_id,
+              tb_order_id: body.Order.id,
+              terminal: 0,
+              tb_stock_list_id: body.StockSalesman.tb_stock_list_id,
+              tb_product_id: item.tb_product_id,
+              quantity: item.devolution,
+              unit_value: item.unit_value,
+              kind : 'Transfer',
+            };
+            //Quanto o insert é mais complexo como getNext precisa do await no loop          
+            await orderItem.insert(dataItem);
+          }
+        };
+        resolve("Items Adicionados");
+      } catch (err) {
+        reject("orderBonus.insertOrderItem:" + err);
+      }
+
+    });
+    return promise;
+  }
+
+  static async closurebyCard(body) {
+    const promise = new Promise(async (resolve, reject) => {
+      try {
+        var items = await this.getItemList(body.Order.tb_institution_id, body.Order.id);
+        var dataItem = {};
+        for (var item of items) {
+          dataItem = {
+            id: 0,
+            tb_institution_id: item.tb_institution_id,
+            tb_order_id: item.tb_order_id,
+            terminal: 0,
+            tb_order_item_id: item.id,
+            tb_stock_list_id: item.tb_stock_list_id,
+            local: "web",
+            kind: "Fechamento",
+            dt_record: body.Order.dt_record,
+            direction: "S",
+            tb_merchandise_id: item.tb_product_id,
+            quantity: item.quantity,
+            operation: "Transfer"
+          };
+          //Devolve o item do estoque do vendedor
+          dataItem['tb_stock_list_id'] = body.StockSalesman.tb_stock_list_id;
+          dataItem['direction'] = 'E';
+          await stockStatement.insert(dataItem);
+          //retira o item no estoque do cliente
+          dataItem['tb_stock_list_id'] = body.StockCustomer.tb_stock_list_id;
+          dataItem['direction'] = 'S';
+          await stockStatement.insert(dataItem);          
+
+        };
+        resolve("200");
+      } catch (err) {
+        reject(err);
+      }
+    });
+    return promise;
+  }  
 }
 module.exports = OrderStockTransferController;

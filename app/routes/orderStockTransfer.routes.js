@@ -260,7 +260,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *       201:
  *         description: The OrderStockTransfer is already closed
  *       404:
- *         description: The Order StockAdjust was notTransfer
+ *         description: The Order Transfer was notTransfer
  *       500:
  *         description: Some error happened
  */
@@ -284,7 +284,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
   *       201:
   *         description: The OrderStockTransfer is already open
   *       404:
-  *         description: The Order StockAdjust was notTransfer
+  *         description: The Order Transfer was notTransfer
   *       500:
   *         description: Some error happened
   */

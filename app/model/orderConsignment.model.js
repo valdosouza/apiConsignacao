@@ -40,6 +40,15 @@ module.exports = sequelize => {
       comment: null,
       field: "tb_customer_id"
     },
+    tb_salesman_id: {
+      type: DataTypes.INTEGER(11),
+      allowNull: false,
+      defaultValue: null,
+      primaryKey: true,
+      autoIncrement: false,
+      comment: null,
+      field: "tb_salesman_id"
+    },
     kind: {
       type: DataTypes.STRING(15),
       allowNull: false,

@@ -68,12 +68,13 @@ class OrderStockAdjustController extends Base {
             tb_stock_list_id: item.tb_stock_list_id,
             tb_product_id: item.tb_product_id,
             quantity: item.quantity,
-            unit_value: item.unit_value
+            unit_value: item.unit_value,
+            kind : 'StockAdjustment',
           };
           //Quanto o insert é mais complexo como getNext precisa do await no loop          
           await orderItem.insert(dataItem);
         };
-        resolve("Items Adicionaos");
+        resolve("Items Adicionados");
       } catch (err) {
         reject("orderStockAdjust.insertOrderItem:" + err);
       }

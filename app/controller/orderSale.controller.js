@@ -474,7 +474,7 @@ class OrderSaleController extends Base {
           //Quanto o insert é mais complexo como getNext precisa do await no loop          
           await orderSaleCard.insert(dataItem);
         };
-        resolve("Items Adicionaos");
+        resolve("Items Adicionados");
       } catch (err) {
         reject("OrderSaleController.insertOrderSaleCard:" + err);
       }
@@ -500,7 +500,7 @@ class OrderSaleController extends Base {
           //Quanto o insert é mais complexo como getNext precisa do await no loop          
           await orderPaid.insert(dataPayment);
         };
-        resolve("Pagamentos Adicionaos");
+        resolve("Pagamentos Adicionados");
       } catch (err) {
         reject("OrderSaleController.insertOrderPaid:" + err);
       }
