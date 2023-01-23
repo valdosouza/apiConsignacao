@@ -65,7 +65,7 @@ class OrderSaleCardController extends Base {
                 tb_product_id: parseInt(item.tb_product_id),
                 name_product: item.name_product,
                 bonus: Number(item.bonus),
-                sale:Number(item.sale),
+                qtty_sold:Number(item.qtty_sold),
                 unit_value: Number(item.unit_value),
               }
             )
