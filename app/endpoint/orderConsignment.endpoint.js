@@ -1,7 +1,7 @@
 const OrderConsignmentController = require("../controller/orderConsignment.controller.js");
 const entityHasStockList = require("../controller/entityHasStockList.controller.js");
 const OrderBonusController = require('../controller/orderBonus.controller.js');
-const OrderStockTransferController = require('../controller/orderItemStockTransfer.controller.js');
+const OrderStockTransferController = require('../controller/orderStockTransfer.controller.js');
 const OrderSaleController = require('../controller/orderSale.controller.js');
 
 class OrderConsignmentEndPoint {
