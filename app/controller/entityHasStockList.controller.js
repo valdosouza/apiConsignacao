@@ -7,8 +7,9 @@ class EntityHasStockListController extends Base {
 
   static async createAuto(body) {
     const promise = new Promise(async (resolve, reject) => {
-      var checkExist = await this.getByEntity(body.tb_institution_id, body.tb_entity_id)
-      
+      var dataResult = {};
+      var checkExist = await this.getByEntity(body.tb_institution_id, body.tb_entity_id);
+
       if (checkExist.length == 0) {
         try {
           var dataStockList = {
@@ -27,15 +28,25 @@ class EntityHasStockListController extends Base {
               }
               Tb.create(dataEntityHasStockList)
                 .then((data) => {
-                  resolve(data);
-                })
+                  dataResult = {
+                    tb_institution_id: data.tb_institution_id,
+                    tb_entity_id: data.tb_entity_id,
+                    tb_stock_list_id: data.tb_stock_list_id,
+                  }
+                  resolve(dataResult);
+                });
             })
         } catch (error) {
           reject("Erro:" + err);
         }
       } else {
-        resolve(checkExist);
-      }      
+        dataResult = {
+          tb_institution_id: checkExist.tb_institution_id,
+          tb_entity_id: checkExist.tb_entity_id,
+          tb_stock_list_id: checkExist.tb_stock_list_id,
+        }
+        resolve(dataResult);
+      }
     });
     return promise;
   }
@@ -74,7 +85,7 @@ class EntityHasStockListController extends Base {
           replacements: [tb_institution_id, tb_entity_id],
           type: Tb.sequelize.QueryTypes.SELECT
         })
-        .then(data => {
+        .then(data => {          
           resolve(data);
         })
         .catch(err => {

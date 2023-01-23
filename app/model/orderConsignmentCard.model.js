@@ -85,23 +85,23 @@ const {
         comment: null,
         field: "new_consignment"
       },
-      qty_consigned: {
+      qtty_consigned: {
         type: DataTypes.DECIMAL,
         allowNull: true,
         defaultValue: "0",
         primaryKey: false,
         autoIncrement: false,
         comment: null,
-        field: "qty_consigned"
+        field: "qtty_consigned"
       },
-      qty_sold: {
+      qtty_sold: {
         type: DataTypes.DECIMAL,
         allowNull: true,
         defaultValue: "0",
         primaryKey: false,
         autoIncrement: false,
         comment: null,
-        field: "qty_sold"
+        field: "qtty_sold"
       },
       unit_value: {
         type: DataTypes.DECIMAL,

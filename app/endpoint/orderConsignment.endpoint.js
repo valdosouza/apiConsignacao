@@ -40,11 +40,10 @@ class OrderConsignmentEndPoint {
         }
         //Cria o estoque do cliente ou retorna o estoque do cliente
         var stockCustomer = await entityHasStockList.createAuto(dataEntityHasStockList)
-        req.body['StockCustomer'] = stockCustomer[0];          
+        req.body['StockCustomer'] = stockCustomer;          
         //Retorna do estoque do vendedor
         var stockSalesman = await entityHasStockList.getByEntity(req.body.Order.tb_institution_id,req.body.Order.tb_salesman_id);        
         req.body['StockSalesman'] = stockSalesman[0];          
-        
 
         await OrderBonusController.saveByCard(req.body);
 
@@ -52,7 +51,7 @@ class OrderConsignmentEndPoint {
 
         await OrderStockTransferController.saveByCard(req.body);
         
-        res.send(req.body);
+        res.send("Supplying recored successfully.");
       })
   }
 

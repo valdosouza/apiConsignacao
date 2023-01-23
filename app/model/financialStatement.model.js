@@ -132,7 +132,7 @@ const {
       },
       doc_reference: {
         type: DataTypes.STRING(30),
-        allowNull: false,
+        allowNull: true,
         defaultValue: null,
         primaryKey: false,
         autoIncrement: false,

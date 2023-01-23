@@ -47,9 +47,9 @@ class OrderConsignmentCardController extends Base {
           '  occ.tb_product_id, '+
           '  pdt.description name_product, '+
           '  occ.bonus, '+
-          '  occ.qty_consigned, '+
+          '  occ.qtty_consigned, '+
           '  occ.leftover, '+
-          '  occ.qty_sold, '+
+          '  occ.qtty_sold, '+
           '  occ.unit_value '+
           'from tb_product pdt '+
           '    left outer join tb_order_consignment_card occ '+
@@ -81,7 +81,7 @@ class OrderConsignmentCardController extends Base {
         '  occ.leftover, '+
         '  occ.devolution, '+        
         '  occ.new_consignment,'+
-        '  occ.qty_consigned, '+
+        '  occ.qtty_consigned, '+
         '  occ.unit_value '+
         'from tb_product pdt '+
         '    left outer join tb_order_consignment_card occ '+
@@ -113,7 +113,7 @@ class OrderConsignmentCardController extends Base {
         '"0.00" leftover, '+
         '"0.00" devolution, '+
         '"0.00" new_consignment, '+
-        '"0.00" qty_consigned, '+
+        '"0.00" qtty_consigned, '+
         'price_tag unit_value '+
         'from tb_product pdt '+
         '  inner join tb_price prc '+

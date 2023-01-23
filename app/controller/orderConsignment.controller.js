@@ -116,9 +116,9 @@ class OrderConsignmentController extends Base {
             tb_product_id: item.tb_product_id,
             kind: 'checkpoint',
             bonus: item.bonus,
-            qty_consigned: item.qty_consigned,
+            qtty_consigned: item.qtty_consigned,
             leftover: item.leftover,
-            qty_sold: item.qty_sold,
+            qtty_sold: item.qtty_sold,
             unit_value: item.unit_value
 
           };
@@ -149,7 +149,7 @@ class OrderConsignmentController extends Base {
             leftover: item.leftover,
             devolution: item.devolution,
             new_consignment: item.new_consignment,
-            qty_consigned: item.qty_consigned,
+            qtty_consigned: item.qtty_consigned,
             unit_value: item.unit_value,
           };
           //Quanto o insert é mais complexo como getNext precisa do await no loop          

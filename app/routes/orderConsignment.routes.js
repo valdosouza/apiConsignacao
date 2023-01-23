@@ -52,20 +52,20 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         - tb_product_id
  *         - name_product
  *         - bonus
- *         - qty_consigned
+ *         - qtty_consigned
  *         - leftover
- *         - qty_sold
+ *         - qtty_sold
  *         - unit_value
  *       properties:
  *         tb_product_id:
  *           type: integer
  *         bonus:
  *           type: number
- *         qty_consigned:
+ *         qtty_consigned:
  *           type: number 
  *         leftover:
  *           type: number
- *         qty_sold:
+ *         qtty_sold:
  *           type: number
  *         unit_value:
  *           type: number 
@@ -137,7 +137,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         - leftover
  *         - devolution
  *         - new_consignment
- *         - qty_consigned
+ *         - qtty_consigned
  *         - unit_value 
  * 
  *       properties:
@@ -153,7 +153,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *           type: number
  *         new_consignment:
  *           type: number
- *         qty_consigned:
+ *         qtty_consigned:
  *           type: number   
  *         unit_value:
  *           type: number   
