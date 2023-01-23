@@ -50,7 +50,6 @@ class OrderSaleController extends Base {
       }      
       Tb.create(dataOrder)
         .then((data) => {
-          console.log("gravei OrderSale");
           resolve(body);
         })
         .catch(err => {

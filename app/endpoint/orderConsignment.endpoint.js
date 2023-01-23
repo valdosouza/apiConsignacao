@@ -50,7 +50,9 @@ class OrderConsignmentEndPoint {
 
         await OrderConsignmentController.saveByCard(req.body);
 
-        await OrderStockTransferController.saveByCard(req.body);
+        await OrderStockTransferController.saveByCardByConsignment(req.body);
+
+        await OrderStockTransferController.saveByCardByDevolution(req.body);
         
         res.send(req.body);
       })

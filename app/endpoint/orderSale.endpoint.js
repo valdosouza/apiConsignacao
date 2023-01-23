@@ -18,7 +18,7 @@ class OrderSaleEndPoint {
     
     OrderSaleController.saveCard(req.body)
       .then(async data => {
-        console.log("Entrei");
+        
         //Retorna do estoque do vendedor - Venda direta pelo estoque do vendedor ....lembrar da venda direta pelo estoque do cliente
         var stockSalesman = await entityHasStockList.getByEntity(req.body.Order.tb_institution_id,req.body.Order.tb_salesman_id);        
         req.body['StockManager'] = stockSalesman[0];          

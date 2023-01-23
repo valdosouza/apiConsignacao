@@ -756,7 +756,10 @@ class OrderConsignmentController extends Base {
         }
         if (qtde > 0) {
           await this.insertOrderItemByCard(body)
+          /*
+          A Consignação não tem fechamento com atualização do estoque por que uma ordem de traferencia vai ser feita.
           await this.closurebyCard(body);
+          */
         }
         resolve(body);
       } catch (err) {
@@ -795,46 +798,5 @@ class OrderConsignmentController extends Base {
     });
     return promise;
   }
-
-  static async closurebyCard(body) {
-    const promise = new Promise(async (resolve, reject) => {
-      try {
-        var items = await this.getItemList(body.Order.tb_institution_id, body.Order.id);
-        var dataItem = {};
-        for (var item of items) {
-          dataItem = {
-            id: 0,
-            tb_institution_id: item.tb_institution_id,
-            tb_order_id: item.tb_order_id,
-            terminal: 0,
-            tb_order_item_id: item.id,
-            tb_stock_list_id: item.tb_stock_list_id,
-            local: "web",
-            kind: "Fechamento",
-            dt_record: body.Order.dt_record,
-            direction: "S",
-            tb_merchandise_id: item.tb_product_id,
-            quantity: item.quantity,
-            operation: "Consignment"
-          };
-          //Retira o item do estoque do vendedor
-          dataItem['tb_stock_list_id'] = body.StockSalesman.tb_stock_list_id;
-          dataItem['direction'] = 'S';
-          await stockStatement.insert(dataItem);
-          //Inclui o item no estoque do cliente
-          dataItem['tb_stock_list_id'] = body.StockCustomer.tb_stock_list_id;
-          dataItem['direction'] = 'E';
-          await stockStatement.insert(dataItem);
-        };
-        await order.updateStatus(body.Order.tb_institution_id, body.Order.id, 'F');
-        resolve("200");
-      } catch (err) {
-        reject(err);
-      }
-    });
-    return promise;
-  }
-
-
 }
 module.exports = OrderConsignmentController;

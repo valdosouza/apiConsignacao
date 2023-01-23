@@ -141,7 +141,6 @@ class FinancialPaymnetController extends Base {
             dataFinancial.paid_value = item.value,  
             dataFinancial.settled_code = await this.getSettledCode(body.Order.tb_institution_id);
             item['settled_code'] = dataFinancial.settled_code;
-            console.log(dataFinancial);
             await this.insert(dataFinancial);
           }
         }
