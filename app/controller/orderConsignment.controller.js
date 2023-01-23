@@ -296,10 +296,11 @@ class OrderConsignmentController extends Base {
         '    and (orc.tb_institution_id = ori.tb_institution_id) ' +
         '    and (orc.terminal = ori.terminal)  ' +
         'where (ord.tb_institution_id =? )  ' +
-        'and (orc.id =?) '+
-        ' and ori.kind =? ',
+        ' and ( orc.id =? ) '+
+        ' and ( ori.kind =? ) '+
+        ' and ( orc.kind = ? )',
         {
-          replacements: [tb_institution_id, id,'Consignment'],
+          replacements: [tb_institution_id, id,'Consignment','supplying'],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve(data);
