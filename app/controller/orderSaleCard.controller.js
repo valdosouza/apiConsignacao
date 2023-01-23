@@ -46,7 +46,7 @@ class OrderSaleCardController extends Base {
         'pdt.id tb_product_id, '+
         'pdt.description name_product, '+
         ' 0 bonus, '+
-        ' 0 sale, '+
+        ' 0 qtty_sold, '+
         'prc.price_tag unit_value '+
         'from tb_product pdt '+
         '  inner join tb_price prc '+
