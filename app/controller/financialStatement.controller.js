@@ -1,11 +1,24 @@
 const Base = require('./base.controller.js');
 const db = require("../model");
 const { DOUBLE } = require('sequelize');
-const Tb = db.financial;
-const dateFunction = require('../util/dateFunction.js');
-
+const Tb = db.financialStatement;
+const DateFunction = require('../util/dateFunction.js');
 
 class FinancialStatementController extends Base {
+
+  static async insert(body) {
+    const promise = new Promise(async (resolve, reject) => {
+      Tb.create(body)
+        .then((data) => {
+          resolve(data);
+        })
+        .catch(err => {
+          reject("FinancialStatement.insert:" + err);
+        });
+    });
+    return promise;
+  }
+
 
   static get(tb_institution_id, tb_salesman_id, tb_customer_id, date, kind_date) {
     const promise = new Promise(async (resolve, reject) => {
@@ -14,8 +27,8 @@ class FinancialStatementController extends Base {
         var datafim = date;
 
         if (kind_date != 'D') {
-          dataini = dateFunction.firtDayMonth(dataini);
-          datafim = dateFunction.lastDayMonth(datafim);
+          dataini = DateFunction.firtDayMonth(dataini);
+          datafim = DateFunction.lastDayMonth(datafim);
         }
         var dataResult = [];
 
@@ -213,8 +226,8 @@ class FinancialStatementController extends Base {
         var datafim = date;
 
         if (kind_date != 'D') {
-          dataini = dateFunction.firtDayMonth(dataini);
-          datafim = dateFunction.lastDayMonth(datafim);
+          dataini = DateFunction.firtDayMonth(dataini);
+          datafim = DateFunction.lastDayMonth(datafim);
         }
         var dataResult = await this.listCustomerCharged(tb_institution_id, tb_salesman_id, dataini, datafim);
 
@@ -326,5 +339,45 @@ class FinancialStatementController extends Base {
     return promise;
   }
 
+  static async saveByCard(body) {
+    const promise = new Promise(async (resolve, reject) =>  {
+      try {
+        var dataFinancial = {
+          tb_institution_id: body.Order.tb_institution_id,
+          tb_order_id : body.Order.id,          
+          terminal:0,
+          tb_bank_account_id:0,
+          dt_record : DateFunction.newDate(),
+          tb_bank_historic_id:0,
+          credit_value:0,
+          debit_value: 0,
+          manual_history: ["Pedido:", body.Order.number, "Cliente:",body.Order.name_customer].join(' '),
+          kind: "C",
+          settled_code:0,
+          tb_user_id : body.Order.tb_salesman_id,
+          future :"N",
+          dt_original : DateFunction.newDate(),
+          doc_reference: body.Order.number,
+          conferred : "N",
+          tb_payment_types_id:0,
+          tb_financial_plans_id_cre:0,
+          tb_financial_plans_id_deb:0,        
+        }
+        for (var item of body.Payments){
+          if (item.value > 0){
+            dataFinancial.tb_payment_types_id = item.tb_payment_type_id,          
+            dataFinancial.credit_value = item.value,
+            dataFinancial.settled_code = item.settled_code,
+            await this.insert(dataFinancial);
+          }
+        }
+        resolve(body);
+      } catch (error) {
+        reject('financialStatement.SaveBycard: '+error)
+      }
+
+    });
+    return promise;
+  }      
 }
 module.exports = FinancialStatementController;

@@ -1,7 +1,7 @@
-class DateFunctions{
+class DateFunction{
     static formatDate(date) {                
         var d = new Date(date),
-            month = '' + (d.getMonth()),
+            month = '' + (d.getMonth()+1),
             day = '' + d.getDate(),
             year = d.getFullYear();
         
@@ -48,5 +48,5 @@ class DateFunctions{
     }        
 }
 
-module.exports = DateFunctions;
+module.exports = DateFunction;
 

@@ -9,7 +9,7 @@ const {
         allowNull: false,
         defaultValue: null,
         primaryKey: true,
-        autoIncrement: false,
+        autoIncrement: true,
         comment: null,
         field: "id"
       },
@@ -31,14 +31,14 @@ const {
         comment: null,
         field: "terminal"
       },
-      tb_banck_account_id: {
+      tb_bank_account_id: {
         type: DataTypes.INTEGER(11),
         allowNull: true,
         defaultValue: 0,
         primaryKey: false,
         autoIncrement: false,
         comment: null,
-        field: "tb_banck_account_id"
+        field: "tb_bank_account_id"
       },
       dt_record: {
         type: DataTypes.DATEONLY,
@@ -49,14 +49,14 @@ const {
         comment: null,
         field: "dt_record"
       },
-      tb_banck_historic_id: {
+      tb_bank_historic_id: {
         type: DataTypes.INTEGER(11),
         allowNull: true,
         defaultValue: 0,
         primaryKey: false,
         autoIncrement: false,
         comment: null,
-        field: "tb_banck_historic_id"
+        field: "tb_bank_historic_id"
       },
       credit_value: {
         type: DataTypes.DECIMAL,

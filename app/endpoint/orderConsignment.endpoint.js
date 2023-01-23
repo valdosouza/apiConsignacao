@@ -3,6 +3,9 @@ const entityHasStockList = require("../controller/entityHasStockList.controller.
 const OrderBonusController = require('../controller/orderBonus.controller.js');
 const OrderStockTransferController = require('../controller/orderStockTransfer.controller.js');
 const OrderSaleController = require('../controller/orderSale.controller.js');
+const FinancialController = require('../controller/financial.controller.js');
+const FinancialPaymentController = require('../controller/financialPayment.controller.js');
+const FinancialStatementController = require('../controller/financialStatement.controller.js');
 
 class OrderConsignmentEndPoint {
 
@@ -15,6 +18,12 @@ class OrderConsignmentEndPoint {
         req.body['StockCustomer'] = stockCustomer[0];                
 
         await OrderSaleController.saveByCard(req.body);
+        
+        await FinancialController.saveByCard(req.body);
+
+        await FinancialPaymentController.saveByCard(req.body);
+
+        await FinancialStatementController.saveByCard(req.body);
 
         res.send(data);
       })
