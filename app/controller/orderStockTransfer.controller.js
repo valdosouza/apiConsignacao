@@ -71,7 +71,7 @@ class OrderStockTransferController extends Base {
             tb_product_id: item.tb_product_id,
             quantity: item.quantity,
             unit_value: item.unit_value,
-            kind : 'StockTransfer',
+            kind: 'StockTransfer',
           };
           //Quanto o insert é mais complexo como getNext precisa do await no loop          
           await orderItem.insert(dataItem);
@@ -162,6 +162,36 @@ class OrderStockTransferController extends Base {
     return promise;
   }
 
+  static getItemList(tb_institution_id, id) {
+    const promise = new Promise((resolve, reject) => {
+      Tb.sequelize.query(
+        'select '+
+        'ori.* '+
+        'from tb_order ord  '+
+        '  inner join tb_order_stock_transfer ort  '+
+        '  on (ort.id = ord.id)  '+
+        '    and (ort.tb_institution_id = ord.tb_institution_id)  '+
+        '    and (ort.terminal = ord.terminal)  '+
+        '  inner join tb_order_item ori  '+
+        '  on (ort.id = ori.tb_ordeR_id)  '+
+        '    and (ort.tb_institution_id = ori.tb_institution_id)  '+
+        '    and (ort.terminal = ori.terminal)   '+
+        'where (ord.tb_institution_id =? )  '+
+        ' and ( ort.id = ? )  '+
+        ' and ( ori.kind =? )  ',
+        {
+          replacements: [tb_institution_id, id, 'Transfer'],
+          type: Tb.sequelize.QueryTypes.SELECT
+        }).then(data => {
+          resolve(data);
+        })
+        .catch(err => {
+          reject("orderSale.getItemlist: " + err);
+        });
+    });
+    return promise;
+  }
+
   static async getOrder(tb_institution_id, id) {
     const promise = new Promise((resolve, reject) => {
       Tb.sequelize.query(
@@ -197,8 +227,8 @@ class OrderStockTransferController extends Base {
         {
           replacements: [tb_institution_id, id],
           type: Tb.sequelize.QueryTypes.SELECT
-        }).then(data => {          
-          resolve(data[0]);          
+        }).then(data => {
+          resolve(data[0]);
         })
         .catch(err => {
           reject('orderstocktransfer.get: ' + err);
@@ -341,10 +371,10 @@ class OrderStockTransferController extends Base {
   static async closure(body) {
     const promise = new Promise(async (resolve, reject) => {
       try {
-        var dataOrder = await this.getOrder(body.tb_institution_id, body.id);        
+        var dataOrder = await this.getOrder(body.tb_institution_id, body.id);
         if (dataOrder.status == 'A') {
           var items = await orderItem.getList(body.tb_institution_id, body.id);
-          
+
           var dataItem = {};
           for (var item of items) {
             dataItem = {
@@ -436,7 +466,19 @@ class OrderStockTransferController extends Base {
         }
         if (qtde > 0) {
           body.Order['number'] = 0;
-          await this.insertOrder(body);
+          var _order = {
+            id: body.Order.id,
+            tb_institution_id: body.Order.tb_institution_id,
+            terminal: 0,
+            number: body.Order.number,
+            tb_entity_id: body.Order.tb_customer_id,
+            direction: body.Order.direction,
+            tb_stock_list_id_ori: body.StockCustomer.tb_stock_list_id,
+            tb_stock_list_id_des: body.StockSalesman.tb_stock_list_id,
+          }
+          var _body = {};
+          _body['Order'] = _order;
+          await this.insertOrder(_body);
           await this.insertOrderItemByCard(body)
           await this.closurebyCard(body);
         }
@@ -463,7 +505,7 @@ class OrderStockTransferController extends Base {
               tb_product_id: item.tb_product_id,
               quantity: item.devolution,
               unit_value: item.unit_value,
-              kind : 'Transfer',
+              kind: 'Transfer',
             };
             //Quanto o insert é mais complexo como getNext precisa do await no loop          
             await orderItem.insert(dataItem);
@@ -506,7 +548,7 @@ class OrderStockTransferController extends Base {
           //retira o item no estoque do cliente
           dataItem['tb_stock_list_id'] = body.StockCustomer.tb_stock_list_id;
           dataItem['direction'] = 'S';
-          await stockStatement.insert(dataItem);          
+          await stockStatement.insert(dataItem);
 
         };
         resolve("200");
@@ -515,6 +557,6 @@ class OrderStockTransferController extends Base {
       }
     });
     return promise;
-  }  
+  }
 }
 module.exports = OrderStockTransferController;
