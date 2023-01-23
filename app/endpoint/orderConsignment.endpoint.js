@@ -13,9 +13,9 @@ class OrderConsignmentEndPoint {
 
     OrderConsignmentController.saveCheckpoint(req.body)
       .then( async data => {
-        //Retorna o estoque do cliente
+        //Retorna do estoque do Cliente - Venda direta pelo estoque do Cliente ....lembrar da venda direta pelo estoque do Vendedor
         var stockCustomer = await entityHasStockList.getByEntity(req.body.Order.tb_institution_id,req.body.Order.tb_customer_id);
-        req.body['StockCustomer'] = stockCustomer[0];                
+        req.body['StockManager'] = stockCustomer[0];                
 
         await OrderSaleController.saveByCard(req.body);
         

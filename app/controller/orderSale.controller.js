@@ -6,7 +6,6 @@ const orderItem = require('./orderItemSale.controller.js');
 const stockStatement = require('./stockStatement.controller.js');
 const orderSaleCard = require('./orderSaleCard.controller.js');
 const orderPaid = require('./orderPaid.controller.js');
-const moment = require("moment");
 
 class OrderSaleController extends Base {
   static async getNextNumber(tb_institution_id) {
@@ -48,9 +47,10 @@ class OrderSaleController extends Base {
         tb_customer_id: body.Order.tb_customer_id,
         total_value: body.Order.total_value,
         change_value: body.Order.change_value,
-      }
+      }      
       Tb.create(dataOrder)
-        .then(() => {
+        .then((data) => {
+          console.log("gravei OrderSale");
           resolve(body);
         })
         .catch(err => {
@@ -142,7 +142,7 @@ class OrderSaleController extends Base {
         'and (ors.id = ?) '+
         ' and ori.kind =? ',
         {
-          replacements: [tb_institution_id, id,'sale'],
+          replacements: [tb_institution_id, id,'Sale'],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve(data);
@@ -470,24 +470,21 @@ class OrderSaleController extends Base {
     return promise;
   }
 
-  static async saveOrderBySaleCard(body) {
+  static async saveCard(body) {
     const promise = new Promise(async (resolve, reject) => {
       try {
-        //Não salva tb_order por que já foi criado no attendance     
-        this.insertOrder(body)
-          .then(async () => {
-            await this.insertOrderSaleCard(body);
-            await this.insertOrderPaid(body);
-            resolve(body.Order);
-          })
+        //Não salva tb_order por que já foi criado no attendance   
+        await this.insertCard(body);
+        await this.insertOrderPaid(body);
+        resolve(body.Order);
       } catch (err) {
-        reject('OrderSaleController.saveOrderBySaleCard: ' + err);
+        reject('OrderSaleController.saveCard: ' + err);
       }
     });
     return promise;
   }
 
-  static async insertOrderSaleCard(body) {
+  static async insertCard(body) {
     const promise = new Promise(async (resolve, reject) => {
       try {
         var dataItem = {};
@@ -506,7 +503,7 @@ class OrderSaleController extends Base {
         };
         resolve("Items Adicionados");
       } catch (err) {
-        reject("OrderSaleController.insertOrderSaleCard:" + err);
+        reject("OrderSaleController.insertCard:" + err);
       }
 
     });
@@ -544,12 +541,12 @@ class OrderSaleController extends Base {
       try {
         var qtde = 0;
         for (var item of body.Items) {
-          qtde += item.qty_sold;
+          qtde += item.qtty_sold;
         }
         if (qtde > 0) {
           body.Order['number'] = 0;
           await this.insertOrder(body);
-          await this.insertOrderItemByCard(body)
+          await this.insertOrderItemByCard(body);
           await this.closurebyCard(body);
         }
         resolve(body);
@@ -565,17 +562,17 @@ class OrderSaleController extends Base {
       try {
         var dataItem = {};
         for (var item of body.Items) {
-          if (item.qty_sold > 0) {
+          if (item.qtty_sold > 0) {
             dataItem = {
               id: 0,
               tb_institution_id: body.Order.tb_institution_id,
               tb_order_id: body.Order.id,
               terminal: 0,
-              tb_stock_list_id: body.StockCustomer.tb_stock_list_id,//Neste caso via card na consignação deve informar o estoque do cliente 
+              tb_stock_list_id: body.StockManager.tb_stock_list_id,//Neste caso via card na consignação deve informar o estoque do cliente 
               tb_product_id: item.tb_product_id,
-              quantity: item.qty_sold,
+              quantity: item.qtty_sold,
               unit_value: item.unit_value,
-              kind: 'sale',
+              kind: 'Sale',
             };
             //Quanto o insert é mais complexo como getNext precisa do await no loop          
             await orderItem.insert(dataItem);

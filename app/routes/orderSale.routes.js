@@ -268,7 +268,7 @@ router.delete("/:tb_institution_id/:tb_order_id", ordersale.delete);
  *       500:
  *         description: Some server error
  */
-router.post("/card", ordersale.saveOrderBySaleCard);
+router.post("/card", ordersale.saveByCard);
 
  /**
  * @swagger

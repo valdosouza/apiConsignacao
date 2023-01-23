@@ -94,35 +94,35 @@ class FinancialController extends Base {
   }
 
   static async saveByCard(body) {
-    const promise = new Promise(async (resolve, reject) =>  {
+    const promise = new Promise(async (resolve, reject) => {
       try {
         var dataFinancial = {
           tb_institution_id: body.Order.tb_institution_id,
-          tb_order_id : body.Order.id,
-          terminal:0,
-          parcel:1,
+          tb_order_id: body.Order.id,
+          terminal: 0,
+          parcel: 1,
           tb_entity_id: body.Order.tb_customer_id,
           dt_record: body.Order.dt_record,
-          number:0,
+          number: 0,
           dt_expiration: body.Order.dt_record,
-          tb_payment_types_id:0,
-          tag_value:0,
-          tb_financial_plans_id:0,  
+          tb_payment_types_id: 0,
+          tag_value: 0,
+          tb_financial_plans_id: 0,
           kind: "RA",
           situation: "D",
-          operation:"C",
+          operation: "C",
         }
-        for (var item of body.Payments){
-          if (item.value > 0){
+        for (var item of body.Payments) {
+          if ((item.value > 0) || (item.name_payment_type == 'BOLETO')) {
             dataFinancial.parcel += dataFinancial.parcel,
-            dataFinancial.tb_payment_types_id = item.tb_payment_type_id,
-            dataFinancial.tag_value = item.value,  
-            await this.insert(dataFinancial);
+              dataFinancial.tb_payment_types_id = item.tb_payment_type_id,
+              dataFinancial.tag_value = item.value,
+              await this.insert(dataFinancial);
           }
         }
         resolve(body);
       } catch (error) {
-        reject('financial.SaveBycard: '+error)
+        reject('financial.SaveBycard: ' + error)
       }
 
     });
