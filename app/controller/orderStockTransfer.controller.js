@@ -461,6 +461,7 @@ class OrderStockTransferController extends Base {
   static async saveByCard(body) {
     const promise = new Promise(async (resolve, reject) => {
       try {
+        console.log(body);
         var qtde = 0;
         for (var item of body.Items) {
           qtde += item.devolution;
@@ -479,6 +480,8 @@ class OrderStockTransferController extends Base {
           }
           body.Order['tb_stock_list_id_ori'] = body.StockCustomer.tb_stock_list_id;
           body.Order['tb_stock_list_id_des'] = body.StockSalesman.tb_stock_list_id;
+          console.log('--------------------------------');
+          console.log(body);
           var _body = {};
           _body["Order"] = _order;
           await this.insertOrder(_body);

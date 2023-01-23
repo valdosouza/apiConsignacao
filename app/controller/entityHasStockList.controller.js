@@ -28,6 +28,7 @@ class EntityHasStockListController extends Base {
               }
               Tb.create(dataEntityHasStockList)
                 .then((data) => {
+                  console.log(data);
                   dataResult = {
                     tb_institution_id: data.tb_institution_id,
                     tb_entity_id: data.tb_entity_id,
@@ -39,13 +40,8 @@ class EntityHasStockListController extends Base {
         } catch (error) {
           reject("Erro:" + err);
         }
-      } else {
-        dataResult = {
-          tb_institution_id: checkExist.tb_institution_id,
-          tb_entity_id: checkExist.tb_entity_id,
-          tb_stock_list_id: checkExist.tb_stock_list_id,
-        }
-        resolve(dataResult);
+      } else {        
+        resolve(checkExist[0]);
       }
     });
     return promise;

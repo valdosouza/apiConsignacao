@@ -51,7 +51,7 @@ class OrderConsignmentEndPoint {
 
         await OrderStockTransferController.saveByCard(req.body);
         
-        res.send("Supplying recored successfully.");
+        res.send("Supplying recorded successfully.");
       })
   }
 
