@@ -71,7 +71,7 @@ class OrderConsignmentController extends Base {
           terminal: 0,
           tb_customer_id: body.Order.tb_customer_id,
           dt_record: body.Order.dt_record,
-          tb_salesman_id : body.Order.tb_salesman_id,
+          tb_salesman_id: body.Order.tb_salesman_id,
           kind: "supplying",
           number: 0,
           current_debit_balance: body.Order.current_debit_balance,
@@ -296,11 +296,11 @@ class OrderConsignmentController extends Base {
         '    and (orc.tb_institution_id = ori.tb_institution_id) ' +
         '    and (orc.terminal = ori.terminal)  ' +
         'where (ord.tb_institution_id =? )  ' +
-        ' and ( orc.id =? ) '+
-        ' and ( ori.kind =? ) '+
+        ' and ( orc.id =? ) ' +
+        ' and ( ori.kind =? ) ' +
         ' and ( orc.kind = ? )',
         {
-          replacements: [tb_institution_id, id,'Consignment','supplying'],
+          replacements: [tb_institution_id, id, 'Consignment', 'supplying'],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve(data);
@@ -315,33 +315,33 @@ class OrderConsignmentController extends Base {
   static getOrder(tb_institution_id, id) {
     const promise = new Promise((resolve, reject) => {
       Tb.sequelize.query(
-        'select '+
-        'ord.id, '+
-        'ord.tb_institution_id, '+
-        'ord.tb_user_id, '+
-        'orc.tb_customer_id, '+
-        'ctm.name_company name_customer, '+
-        'orc.tb_salesman_id, '+
-        'slm.name_company name_salesman, '+
-        'orc.dt_record, '+
-        'orc.total_value, '+
-        'orc.change_value, '+
-        'orc.previous_debit_balance, '+
-        'orc.current_debit_balance, '+
-        'ord.dt_record,   '+
-        'orc.number, '+
-        'ord.status, '+
-        'CAST(ord.note AS CHAR(1000) CHARACTER SET utf8) note '+
-        'from tb_order ord '+
-        '   inner join tb_order_consignment orc '+
-        '   on (orc.id = ord.id) '+
-        '     and (orc.tb_institution_id = ord.tb_institution_id) '+
-        '     and (orc.terminal = ord.terminal) '+
-        '   inner join tb_entity ctm '+
-        '   on (ctm.id = orc.tb_customer_id) '+
-        '   inner join tb_entity slm '+
-        '   on (slm.id = orc.tb_customer_id) '+
-        'where (ord.tb_institution_id =1 )  '+
+        'select ' +
+        'ord.id, ' +
+        'ord.tb_institution_id, ' +
+        'ord.tb_user_id, ' +
+        'orc.tb_customer_id, ' +
+        'ctm.name_company name_customer, ' +
+        'orc.tb_salesman_id, ' +
+        'slm.name_company name_salesman, ' +
+        'orc.dt_record, ' +
+        'orc.total_value, ' +
+        'orc.change_value, ' +
+        'orc.previous_debit_balance, ' +
+        'orc.current_debit_balance, ' +
+        'ord.dt_record,   ' +
+        'orc.number, ' +
+        'ord.status, ' +
+        'CAST(ord.note AS CHAR(1000) CHARACTER SET utf8) note ' +
+        'from tb_order ord ' +
+        '   inner join tb_order_consignment orc ' +
+        '   on (orc.id = ord.id) ' +
+        '     and (orc.tb_institution_id = ord.tb_institution_id) ' +
+        '     and (orc.terminal = ord.terminal) ' +
+        '   inner join tb_entity ctm ' +
+        '   on (ctm.id = orc.tb_customer_id) ' +
+        '   inner join tb_entity slm ' +
+        '   on (slm.id = orc.tb_customer_id) ' +
+        'where (ord.tb_institution_id =1 )  ' +
         ' and (ord.id =? )',
         {
           replacements: [tb_institution_id, id],
@@ -533,7 +533,7 @@ class OrderConsignmentController extends Base {
                     tb_institution_id: parseInt(tb_institution_id),
                     tb_customer_id: data.id,
                     name_customer: data.name_company,
-                    tb_salesman_id : 0,
+                    tb_salesman_id: 0,
                     name_salesman: "",
                     current_debit_balance: "0.00",
                   };
@@ -755,11 +755,8 @@ class OrderConsignmentController extends Base {
           qtde += item.new_consignment;
         }
         if (qtde > 0) {
-          await this.insertOrderItemByCard(body)
-          /*
-          A Consignação não tem fechamento com atualização do estoque por que uma ordem de traferencia vai ser feita.
-          await this.closurebyCard(body);
-          */
+          await this.insertOrderItemByCard(body, "Consignment");
+          await this.closurebyCard(body, "Consignment");
         }
         resolve(body);
       } catch (err) {
@@ -784,7 +781,7 @@ class OrderConsignmentController extends Base {
               tb_product_id: item.tb_product_id,
               quantity: item.new_consignment,
               unit_value: item.unit_value,
-              kind : 'Consignment',
+              kind: 'Consignment',
             };
             //Quanto o insert é mais complexo como getNext precisa do await no loop          
             await orderItem.insert(dataItem);
@@ -795,6 +792,45 @@ class OrderConsignmentController extends Base {
         reject("orderConsignment.insertOrderItem:" + err);
       }
 
+    });
+    return promise;
+  }
+
+  static async closurebyCard(body, operation) {
+    const promise = new Promise(async (resolve, reject) => {
+      try {
+        var items = await this.getItemList(body.Order.tb_institution_id, body.Order.id, operation);
+        var dataItem = {};
+        for (var item of items) {
+          dataItem = {
+            id: 0,
+            tb_institution_id: item.tb_institution_id,
+            tb_order_id: item.tb_order_id,
+            terminal: 0,
+            tb_order_item_id: item.id,
+            tb_stock_list_id: item.tb_stock_list_id,
+            local: "web",
+            kind: "Fechamento",
+            dt_record: body.Order.dt_record,
+            direction: "S",
+            tb_merchandise_id: item.tb_product_id,
+            quantity: item.quantity,
+            operation: operation,
+          };
+          //Sempre sai da Origem 
+          dataItem['tb_stock_list_id'] = body.StockSalesman.tb_stock_list_id;
+          dataItem['direction'] = 'S';
+          await stockStatement.insert(dataItem);
+          //Sempre Entra no Destino
+          dataItem['tb_stock_list_id'] = body.StockCustomer.tb_stock_list_id;
+          dataItem['direction'] = 'E';
+          await stockStatement.insert(dataItem);
+
+        };
+        resolve("200");
+      } catch (err) {
+        reject(err);
+      }
     });
     return promise;
   }

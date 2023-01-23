@@ -161,7 +161,7 @@ class OrderStockTransferController extends Base {
     return promise;
   }
 
-  static getItemList(tb_institution_id, id) {
+  static getItemList(tb_institution_id, id,kind) {
     const promise = new Promise((resolve, reject) => {
       Tb.sequelize.query(
         'select ' +
@@ -179,7 +179,7 @@ class OrderStockTransferController extends Base {
         ' and ( ort.id = ? )  ' +
         ' and ( ori.kind =? )  ',
         {
-          replacements: [tb_institution_id, id, 'Transfer'],
+          replacements: [tb_institution_id, id,kind],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve(data);
@@ -456,41 +456,9 @@ class OrderStockTransferController extends Base {
     return promise;
   }
 
-  static async saveByCardByConsignment(body) {
-    const promise = new Promise(async (resolve, reject) => {
-      try {
-        var qtde = 0;
-        for (var item of body.Items) {
-          qtde += item.new_consignment;
-        }
-        if (qtde > 0) {
-          body.Order['number'] = 0;
-          var _order = {
-            id: body.Order.id,
-            tb_institution_id: body.Order.tb_institution_id,
-            terminal: 0,
-            number: body.Order.number,
-            tb_entity_id: body.Order.tb_customer_id,
-            dt_record :body.Order.dt_record,
-            tb_stock_list_id_ori: body.StockSalesman.tb_stock_list_id,
-            tb_stock_list_id_des: body.StockCustomer.tb_stock_list_id,
-          }
-          var _body = {};
-          _body['Order'] = _order;
-          _body['Items'] = body.Items;
-          await this.insertOrder(_body);
-          await this.insertOrderItemByCard(_body)
-          await this.closurebyCard(_body);
-        }
-        resolve(body);
-      } catch (err) {
-        reject(err);
-      }
-    });
-    return promise;
-  }
 
-  static async saveByCardByDevolution(body) {
+
+  static async saveByCard(body) {
     const promise = new Promise(async (resolve, reject) => {
       try {
         var qtde = 0;
@@ -509,12 +477,13 @@ class OrderStockTransferController extends Base {
             tb_stock_list_id_ori: body.StockCustomer.tb_stock_list_id,
             tb_stock_list_id_des: body.StockSalesman.tb_stock_list_id,
           }
+          body.Order['tb_stock_list_id_ori'] = body.StockCustomer.tb_stock_list_id;
+          body.Order['tb_stock_list_id_des'] = body.StockSalesman.tb_stock_list_id;
           var _body = {};
-          _body['Order'] = _order;
-          _body['Items'] = body.Items;
+          _body["Order"] = _order;
           await this.insertOrder(_body);
-          await this.insertOrderItemByCard(_body)
-          await this.closurebyCard(_body);
+          await this.insertOrderItemByCard(body,"Transferência");
+          await this.closurebyCard(body,"Transferência");
         }
         resolve(body);
       } catch (err) {
@@ -524,7 +493,7 @@ class OrderStockTransferController extends Base {
     return promise;
   }
 
-  static async insertOrderItemByCard(body) {
+  static async insertOrderItemByCard(body,kind) {
     const promise = new Promise(async (resolve, reject) => {
       try {
         
@@ -547,7 +516,7 @@ class OrderStockTransferController extends Base {
               tb_product_id: item.tb_product_id,
               quantity: quantity,
               unit_value: item.unit_value,
-              kind: 'Transfer',
+              kind: kind,
             };
             //Quanto o insert é mais complexo como getNext precisa do await no loop          
             await orderItem.insert(dataItem);
@@ -562,12 +531,10 @@ class OrderStockTransferController extends Base {
     return promise;
   }
 
-  static async closurebyCard(body) {
+  static async closurebyCard(body,operation) {
     const promise = new Promise(async (resolve, reject) => {
       try {
-        console.log(body);
-        var items = await this.getItemList(body.Order.tb_institution_id, body.Order.id);
-        console.log(items);
+        var items = await this.getItemList(body.Order.tb_institution_id, body.Order.id,operation);
         var dataItem = {};
         for (var item of items) {
           dataItem = {
@@ -583,7 +550,7 @@ class OrderStockTransferController extends Base {
             direction: "S",
             tb_merchandise_id: item.tb_product_id,
             quantity: item.quantity,
-            operation: "Transfer"
+            operation: operation,
           };
           //Sempre sai da Origem 
           dataItem['tb_stock_list_id'] = body.Order.tb_stock_list_id_ori;

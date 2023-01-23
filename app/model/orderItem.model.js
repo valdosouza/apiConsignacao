@@ -40,6 +40,16 @@ module.exports = sequelize => {
       comment: null,
       field: "terminal"
     },
+    kind: {
+      type: DataTypes.STRING(50),
+      allowNull: false,
+      defaultValue: null,
+      primaryKey: true,
+      autoIncrement: false,
+      comment: null,
+      field: "kind"
+    },    
+
     tb_stock_list_id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
@@ -104,15 +114,6 @@ module.exports = sequelize => {
       comment: null,
       field: "discount_value"
     },
-    kind: {
-      type: DataTypes.STRING(50),
-      allowNull: true,
-      defaultValue: null,
-      primaryKey: false,
-      autoIncrement: false,
-      comment: null,
-      field: "kind"
-    },    
     createdAt: {
       type: DataTypes.DATE,
       allowNull: true,

@@ -3,15 +3,16 @@ const db = require("../model");
 const Tb = db.orderitem;
 
 class OrderItemController extends Base {     
-    static async getNextId(tb_institution_id,tb_order_id) {      
+    static async getNextId(tb_institution_id,tb_order_id,kind) {      
       const promise = new Promise((resolve, reject) => {        
         Tb.sequelize.query(
           'Select max(id) lastId ' +
           'from tb_order_item '+
           'WHERE ( tb_institution_id =? ) '+
-          ' and (tb_order_id =?)',
+          ' and (tb_order_id =?)'+
+          ' and ( kind =? ) ',
           {
-            replacements: [tb_institution_id,tb_order_id],
+            replacements: [tb_institution_id,tb_order_id,kind],
             type: Tb.sequelize.QueryTypes.SELECT
           }).then(data => {   
             if (data){
@@ -30,7 +31,7 @@ class OrderItemController extends Base {
     
     static async insert(item) {      
       const promise = new Promise(async (resolve, reject) => {
-          const nextId  = await this.getNextId(item.tb_institution_id,item.tb_order_id);             
+          const nextId  = await this.getNextId(item.tb_institution_id,item.tb_order_id,item.kind);             
           item.id = nextId;             
           Tb.create(item)
             .then((data) => {    
