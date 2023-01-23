@@ -124,6 +124,36 @@ class OrderSaleController extends Base {
     return promise;
   }
 
+  static getItemList(tb_institution_id, id) {
+    const promise = new Promise((resolve, reject) => {
+      Tb.sequelize.query(
+        'select ' +
+        'ori.* ' +
+        'from tb_order ord ' +
+        '  inner join tb_order_sale ors ' +
+        '  on (ors.id = ord.id) ' +
+        '    and (ors.tb_institution_id = ord.tb_institution_id) ' +
+        '    and (ors.terminal = ord.terminal) ' +
+        '  inner join tb_order_item ori ' +
+        '  on (ors.id = ori.tb_ordeR_id) ' +
+        '    and (ors.tb_institution_id = ori.tb_institution_id) ' +
+        '    and (ors.terminal = ori.terminal)  ' +
+        'where (ord.tb_institution_id =? ) ' +
+        'and (ors.id = ?) '+
+        ' and ori.kind =? ',
+        {
+          replacements: [tb_institution_id, id,'sale'],
+          type: Tb.sequelize.QueryTypes.SELECT
+        }).then(data => {
+          resolve(data);
+        })
+        .catch(err => {
+          reject("orderSale.getItemlist: " + err);
+        });
+    });
+    return promise;
+  }
+
   static getOrder(tb_institution_id, id) {
     const promise = new Promise((resolve, reject) => {
       Tb.sequelize.query(
@@ -508,6 +538,88 @@ class OrderSaleController extends Base {
     });
     return promise;
   }
+  //====================================================================================
+  static async saveByCard(body) {
+    const promise = new Promise(async (resolve, reject) => {
+      try {
+        var qtde = 0;
+        for (var item of body.Items) {
+          qtde += item.qty_sold;
+        }
+        if (qtde > 0) {
+          body.Order['number'] = 0;
+          await this.insertOrder(body);
+          await this.insertOrderItemByCard(body)
+          await this.closurebyCard(body);
+        }
+        resolve(body);
+      } catch (err) {
+        reject(err);
+      }
+    });
+    return promise;
+  }
 
+  static async insertOrderItemByCard(body) {
+    const promise = new Promise(async (resolve, reject) => {
+      try {
+        var dataItem = {};
+        for (var item of body.Items) {
+          if (item.qty_sold > 0) {
+            dataItem = {
+              id: 0,
+              tb_institution_id: body.Order.tb_institution_id,
+              tb_order_id: body.Order.id,
+              terminal: 0,
+              tb_stock_list_id: body.StockCustomer.tb_stock_list_id,//Neste caso via card na consignação deve informar o estoque do cliente 
+              tb_product_id: item.tb_product_id,
+              quantity: item.qty_sold,
+              unit_value: item.unit_value,
+              kind: 'sale',
+            };
+            //Quanto o insert é mais complexo como getNext precisa do await no loop          
+            await orderItem.insert(dataItem);
+          }
+        };
+        resolve("Items Adicionados");
+      } catch (err) {
+        reject("orderSale.insertOrderItem:" + err);
+      }
+
+    });
+    return promise;
+  }
+
+  static async closurebyCard(body) {
+    const promise = new Promise(async (resolve, reject) => {
+      try {
+        var items = await this.getItemList(body.Order.tb_institution_id, body.Order.id);
+        var dataItem = {};
+        for (var item of items) {
+          dataItem = {
+            id: 0,
+            tb_institution_id: item.tb_institution_id,
+            tb_order_id: item.tb_order_id,
+            terminal: 0,
+            tb_order_item_id: item.id,
+            tb_stock_list_id: item.tb_stock_list_id,
+            local: "web",
+            kind: "Fechamento",
+            dt_record: body.Order.dt_record,
+            direction: "S",
+            tb_merchandise_id: item.tb_product_id,
+            quantity: item.quantity,
+            operation: "Sale"
+          };
+          await stockStatement.insert(dataItem);
+
+        };
+        resolve("200");
+      } catch (err) {
+        reject(err);
+      }
+    });
+    return promise;
+  }
 }
 module.exports = OrderSaleController;

@@ -2,13 +2,20 @@ const OrderConsignmentController = require("../controller/orderConsignment.contr
 const entityHasStockList = require("../controller/entityHasStockList.controller.js");
 const OrderBonusController = require('../controller/orderBonus.controller.js');
 const OrderStockTransferController = require('../controller/orderItemStockTransfer.controller.js');
+const OrderSaleController = require('../controller/orderSale.controller.js');
 
 class OrderConsignmentEndPoint {
 
   static saveCheckpoint = (req, res) => {
 
     OrderConsignmentController.saveCheckpoint(req.body)
-      .then(data => {
+      .then( async data => {
+        //Retorna o estoque do cliente
+        var stockCustomer = await entityHasStockList.getByEntity(req.body.Order.tb_institution_id,req.body.Order.tb_customer_id);
+        req.body['StockCustomer'] = stockCustomer[0];                
+
+        await OrderSaleController.saveByCard(req.body);
+
         res.send(data);
       })
   }
@@ -25,7 +32,7 @@ class OrderConsignmentEndPoint {
         //Cria o estoque do cliente ou retorna o estoque do cliente
         var stockCustomer = await entityHasStockList.createAuto(dataEntityHasStockList)
         req.body['StockCustomer'] = stockCustomer[0];          
-        //Verificar o estoque do vendedor
+        //Retorna do estoque do vendedor
         var stockSalesman = await entityHasStockList.getByEntity(req.body.Order.tb_institution_id,req.body.Order.tb_salesman_id);        
         req.body['StockSalesman'] = stockSalesman[0];          
         
@@ -36,9 +43,6 @@ class OrderConsignmentEndPoint {
 
         await OrderStockTransferController.saveByCard(req.body);
         
-        //criar Order Bonus Vinculado a mesma ordem de atendimento e Consignment
-        //Criar Order Items Bonus Vinculado a mesma ordem de atendimento e Consignment
-        //Criar Order Items Consignment Vinculado a mesma ordem de atendimento e Consignment
         res.send(req.body);
       })
   }

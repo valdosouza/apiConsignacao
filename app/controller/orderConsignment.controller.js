@@ -39,6 +39,7 @@ class OrderConsignmentController extends Base {
           tb_institution_id: body.Order.tb_institution_id,
           terminal: 0,
           tb_customer_id: body.Order.tb_customer_id,
+          tb_salesman_id: body.Order.tb_salesman_id,
           dt_record: body.Order.dt_record,
           kind: "checkpoint",
           number: 0,
@@ -777,7 +778,7 @@ class OrderConsignmentController extends Base {
               terminal: 0,
               tb_stock_list_id: body.StockSalesman.tb_stock_list_id,
               tb_product_id: item.tb_product_id,
-              quantity: item.bonus,
+              quantity: item.new_consignment,
               unit_value: item.unit_value,
               kind : 'Consignment',
             };

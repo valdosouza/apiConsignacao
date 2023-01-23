@@ -165,9 +165,10 @@ class OrderBonusController extends Base {
         '    and (orb.tb_institution_id = ori.tb_institution_id) ' +
         '    and (orb.terminal = ori.terminal)  ' +
         'where (ord.tb_institution_id =? ) ' +
-        'and (orb.id = ?) ',
+        'and (orb.id = ?) '+
+        ' and ori.kind =? ',
         {
-          replacements: [tb_institution_id, id],
+          replacements: [tb_institution_id, id,'bonus'],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve(data);
