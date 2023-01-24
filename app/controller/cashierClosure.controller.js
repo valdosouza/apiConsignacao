@@ -137,23 +137,23 @@ class CashierClosureController extends Base {
 
         var dataOrdersale = [];
         dataOrdersale = await FinancialStatementController.getOrderSales(tb_institution_id, tb_user_id, 0, dataini, datafim);
-        
+
         var dataFinancialReceived = [];
-        dataFinancialReceived = await FinancialStatementController.getFinancialReceived(tb_institution_id, tb_user_id,0, dataini, datafim);
-        
+        dataFinancialReceived = await FinancialStatementController.getFinancialReceived(tb_institution_id, tb_user_id, 0, dataini, datafim);
+
         var dataFinancialToReceived = []
-        dataFinancialToReceived = await FinancialStatementController.getFinancialToReceive(tb_institution_id, tb_user_id,0, dataini, datafim);
-        
+        dataFinancialToReceived = await FinancialStatementController.getFinancialToReceive(tb_institution_id, tb_user_id, 0, dataini, datafim);
+
         dataResult = dataOrdersale.concat(dataFinancialReceived, dataFinancialToReceived);
-        
-        
+
+
         var DataGeral = {
-            dt_record: dt_record,
-            tb_institution_id : parseInt(tb_institution_id),
-            tb_user_id: parseInt(tb_user_id),
-            items: dataResult,
-          }
-        
+          dt_record: dt_record,
+          tb_institution_id: parseInt(tb_institution_id),
+          tb_user_id: parseInt(tb_user_id),
+          items: dataResult,
+        }
+
         resolve(DataGeral);
 
       } catch (err) {

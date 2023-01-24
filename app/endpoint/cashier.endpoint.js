@@ -12,6 +12,15 @@ class CashierEndPoint {
     })
   }
 
+  static isOpen = (req, res) => {
+    
+    CashierController.getLastIdOpen(req.params.tb_institution_id,req.params.tb_user_id)
+    .then(data => {
+      
+      res.send({result: (data > 0)});
+    })
+  }
+
   static closure(req, res) {
     CashierClosureController.create(req.body)
     .then(data => {

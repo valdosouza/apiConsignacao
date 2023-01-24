@@ -1,5 +1,4 @@
 const express = require('express');
-
 const  cashier = require('../endpoint/cashier.endpoint.js');
 const { withJWTAuthMiddleware } = require('express-kun');
 const router = express.Router();
@@ -81,13 +80,32 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *             $ref: '#/components/schemas/BalanceOfCashierItem'
  */
 
- /**
-  * @swagger
-  * tags:
-  *   name: Cashier
-  *   description: The Persons managing API
-  */
+/**
+ * @swagger
+ * tags:
+ *   name: Cashier
+ *   description: The Persons managing API
+ */
 
+/**
+ * @swagger
+ * /cashier/isopen/{tb_institution_id}/{tb_user_id}:
+ *   get:
+ *     summary: Returns whether is cashier is open or not
+ *     tags: [Cashier]
+ *     parameters:
+ *      - in: path
+ *        name: tb_institution_id
+ *        required: true 
+ *      - in: path
+ *        name: tb_user_id
+ *        required: true  
+ *     responses:
+ *       200:
+ *         description: True or False
+ */
+
+router.get("/isopen/:tb_institution_id/:tb_user_id/", cashier.isOpen);
 
  /**
  * @swagger
@@ -196,5 +214,6 @@ router.get("/closure/getlist/:tb_institution_id/:tb_user_id/", cashier.getlist);
  */
 
 router.get("/balance/get/:tb_institution_id/:tb_user_id/:dt_record/", cashier.getBalance);
+
 
 module.exports = router;  
