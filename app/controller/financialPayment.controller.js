@@ -135,7 +135,7 @@ class FinancialPaymnetController extends Base {
           settled_code:0,
         }
         for (var item of body.Payments){
-          if (item.value > 0){
+          if ((item.value > 0) && (item.name_payment_type != 'BOLETO')) {
             dataFinancial.parcel += dataFinancial.parcel,  
             dataFinancial.tb_payment_types_id = item.tb_payment_type_id,          
             dataFinancial.paid_value = item.value,  

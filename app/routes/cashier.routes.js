@@ -88,30 +88,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
   *   description: The Persons managing API
   */
 
-/**
- * @swagger
- * /cashier/open:
- *   post:
- *     summary: Create a new Cashier
- *     tags: [Cashier]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/Cashier'
- *     responses:
- *       200:
- *         description: The Cashier was successfully created
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/CashierAnswer'
- *       500:
- *         description: Some server error
- */
- router.post("/open", cashier.open);
- 
+
  /**
  * @swagger
  * /cashier/closure:
@@ -162,7 +139,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *      500:
  *        description: Some error happened
  */
-router.get("/closure/get/:tb_institution_id/:tb_user_id/:dt_record/", cashier.get);
+router.get("/closure/get/:tb_institution_id/:tb_user_id/:dt_record/", cashier.getForClosure);
 
 /**
  * @swagger

@@ -54,6 +54,26 @@ class CashierController extends Base {
     return promise;
   }
 
+  static async autoCreate(tb_institution_id,tb_user_id) { 
+    const promise = new Promise(async (resolve, reject) => {        
+      
+      var checkExist = await this.getLastIdOpen(tb_institution_id, tb_user_id);
+      console.log(checkExist);
+      if (!checkExist) {
+        try {
+          await this.open(tb_institution_id,tb_user_id);
+          resolve("Caixa foi aberto");
+        } catch (err) {
+          reject("Erro:" + err);
+        }
+      }
+      else{
+        resolve("Caixa já estava aberto");
+      }         
+    });
+    return promise;
+  }
+
   static async open(tb_institution_id,tb_user_id) {    
     const promise = new Promise(async (resolve, reject) => {
       try{
@@ -69,6 +89,7 @@ class CashierController extends Base {
           dt_record : dtRecord,
           hr_begin : hrBegin,
         };
+        console.log(dataCashier);
         Tb.create(dataCashier)
         .then((data) => {             
           resolve(data);

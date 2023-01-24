@@ -19,10 +19,10 @@ class CashierEndPoint {
     })
   }
 
-  static get(req, res) {    
-    CashierClosureController.get(req.params.tb_institution_id,
-                                    req.params.tb_user_id,
-                                    req.params.dt_record)
+  static getForClosure(req, res) {    
+    CashierClosureController.getForClosure(req.params.tb_institution_id,
+                                            req.params.tb_user_id,
+                                            req.params.dt_record)
     .then(data => {
       res.send(data);
     })

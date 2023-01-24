@@ -2,7 +2,8 @@ const Base = require('./base.controller.js');
 const db = require("../model");
 const Tb = db.cashierclosure;
 const CashierController = require("../controller/cashier.controller.js");
-const dateFunction = require('../util/dateFunction.js');
+const DateFunction = require('../util/dateFunction.js');
+const FinancialStatementController = require("../controller/financialStatement.controller.js");
 
 class CashierClosureController extends Base {
   static async create(body) {
@@ -127,6 +128,40 @@ class CashierClosureController extends Base {
     return promise;
   }
 
+  static async getForClosure(tb_institution_id, tb_user_id, dt_record) {
+    const promise = new Promise(async (resolve, reject) => {
+      try {
+        var dataini = DateFunction.newDate();
+        var datafim = DateFunction.newDate()
+        var dataResult = [];
+
+        var dataOrdersale = [];
+        dataOrdersale = await FinancialStatementController.getOrderSales(tb_institution_id, tb_user_id, 0, dataini, datafim);
+        
+        var dataFinancialReceived = [];
+        dataFinancialReceived = await FinancialStatementController.getFinancialReceived(tb_institution_id, tb_user_id,0, dataini, datafim);
+        
+        var dataFinancialToReceived = []
+        dataFinancialToReceived = await FinancialStatementController.getFinancialToReceive(tb_institution_id, tb_user_id,0, dataini, datafim);
+        
+        dataResult = dataOrdersale.concat(dataFinancialReceived, dataFinancialToReceived);
+        
+        
+        var DataGeral = {
+            dt_record: dt_record,
+            tb_institution_id : parseInt(tb_institution_id),
+            tb_user_id: parseInt(tb_user_id),
+            items: dataResult,
+          }
+        
+        resolve(DataGeral);
+
+      } catch (err) {
+        reject('CashierClosure.getForClosure: ' + err);
+      }
+    });
+    return promise;
+  }
 
 }
 module.exports = CashierClosureController;

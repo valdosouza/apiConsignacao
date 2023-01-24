@@ -23,8 +23,8 @@ class FinancialStatementController extends Base {
   static get(tb_institution_id, tb_salesman_id, tb_customer_id, date, kind_date) {
     const promise = new Promise(async (resolve, reject) => {
       try {
-        var dataini = date;
-        var datafim = date;
+        var dataini = DateFunction.newDate();
+        var datafim = DateFunction.newDate();
 
         if (kind_date != 'D') {
           dataini = DateFunction.firtDayMonth(dataini);
@@ -55,7 +55,7 @@ class FinancialStatementController extends Base {
     const promise = new Promise((resolve, reject) => {
 
       var sqltxt =
-        'select prd.description name_product, sum((ori.quantity * ori.unit_value)) subtotal, "sold" kind ' +
+        'select prd.description name_product, sum((ori.quantity * ori.unit_value)) subtotal, "Total de Vendas" kind ' +
         'from tb_order ord ' +
         '  inner join tb_order_sale ors ' +
         '  on (ord.id = ors.id) and (ord.tb_institution_id = ors.tb_institution_id)  ' +
@@ -89,14 +89,14 @@ class FinancialStatementController extends Base {
             totalvalue += Number(item.subtotal),
               dataResult.push({
                 "description": item.name_product,
-                "tag_value": item.subtotal,
+                "tag_value": Number(item.subtotal),
                 "kind": item.kind,
               });
           }
           dataResult.push({
             "description": "Total de Vendas",
-            "tag_value": totalvalue.toFixed(2),
-            "kind": "summarized",
+            "tag_value": Number(totalvalue.toFixed(2)),
+            "kind": "Total de Vendas",
           });
           resolve(dataResult);
         })
@@ -110,14 +110,18 @@ class FinancialStatementController extends Base {
   static getFinancialToReceive(tb_institution_id, tb_salesman_id, tb_customer_id, dataini, datafim) {
     const promise = new Promise((resolve, reject) => {
       var sqltxt =
-        'select pmt.description name_payment_type, sum(fnl.tag_value) subtotal, "toReceive" kind ' +
+        'select pmt.description name_payment_type, sum(fnl.tag_value) subtotal, "Total a Receber" kind ' +
         'from tb_order_sale ors ' +
         '   inner join tb_financial fnl ' +
         '   on (fnl.tb_order_id = ors.id) and (fnl.tb_institution_id = ors.tb_institution_id)  ' +
+        '   left outer join tb_financial_payment fnp  ' +
+        '   on (fnp.tb_order_id = ors.id) and (fnp.tb_institution_id = ors.tb_institution_id)   ' +
+     
         '   inner join tb_payment_types pmt ' +
         '   on (pmt.id = fnl.tb_payment_types_id)  ' +
         'where (ors.tb_institution_id =? ) ' +
-        ' and (ors.tb_salesman_id =?)';
+        ' and (ors.tb_salesman_id =?)'+
+        ' and (fnp.tb_order_id is null) ';
 
       if (tb_customer_id == 0) {
         sqltxt = sqltxt + ' and (ors.tb_customer_id <> ?) ';
@@ -142,14 +146,14 @@ class FinancialStatementController extends Base {
             totalvalue += Number(item.subtotal),
               dataResult.push({
                 "description": item.name_payment_type,
-                "tag_value": item.subtotal,
+                "tag_value": Number(item.subtotal),
                 "kind": item.kind,
               });
           }
           dataResult.push({
             "description": "Total a Receber",
-            "tag_value": totalvalue.toFixed(2),
-            "kind": "summarized",
+            "tag_value": Number(totalvalue),
+            "kind": "Total a Receber",
           });
           resolve(dataResult);
         })
@@ -163,7 +167,7 @@ class FinancialStatementController extends Base {
   static getFinancialReceived(tb_institution_id, tb_salesman_id, tb_customer_id, dataini, datafim) {
     const promise = new Promise((resolve, reject) => {
       var sqltxt =
-        'select pmt.description name_payment_type, sum(fnp.paid_value) subtotal, "Received" kind ' +
+        'select pmt.description name_payment_type, sum(fnp.paid_value) subtotal, "Total Recebido" kind ' +
         'from tb_order_sale ors ' +
         '   inner join tb_financial fnl ' +
         '   on (fnl.tb_order_id = ors.id) ' +
@@ -199,15 +203,15 @@ class FinancialStatementController extends Base {
             totalvalue += Number(item.subtotal),
               dataResult.push({
                 "description": item.name_payment_type,
-                "tag_value": item.subtotal,
+                "tag_value": Number(item.subtotal),
                 "kind": item.kind,
               });
           }
 
           dataResult.push({
             description: "Total Recebido",
-            tag_value: totalvalue,
-            kind: "summarized",
+            tag_value: Number(totalvalue),
+            kind: "Total Recebido",
           });
 
           resolve(dataResult);
@@ -222,8 +226,8 @@ class FinancialStatementController extends Base {
   static getListCustomerCharged(tb_institution_id, tb_salesman_id, date, kind_date) {
     const promise = new Promise(async (resolve, reject) => {
       try {
-        var dataini = date;
-        var datafim = date;
+        var dataini = DateFunction.newDate();
+        var datafim = DateFunction.newDate();
 
         if (kind_date != 'D') {
           dataini = DateFunction.firtDayMonth(dataini);
@@ -340,44 +344,44 @@ class FinancialStatementController extends Base {
   }
 
   static async saveByCard(body) {
-    const promise = new Promise(async (resolve, reject) =>  {
+    const promise = new Promise(async (resolve, reject) => {
       try {
         var dataFinancial = {
           tb_institution_id: body.Order.tb_institution_id,
-          tb_order_id : body.Order.id,          
-          terminal:0,
-          tb_bank_account_id:0,
-          dt_record : DateFunction.newDate(),
-          tb_bank_historic_id:0,
-          credit_value:0,
+          tb_order_id: body.Order.id,
+          terminal: 0,
+          tb_bank_account_id: 0,
+          dt_record: DateFunction.newDate(),
+          tb_bank_historic_id: 0,
+          credit_value: 0,
           debit_value: 0,
-          manual_history: ["Pedido:", body.Order.number, "Cliente:",body.Order.name_customer].join(' '),
+          manual_history: ["Pedido:", body.Order.number, "Cliente:", body.Order.name_customer].join(' '),
           kind: "C",
-          settled_code:0,
-          tb_user_id : body.Order.tb_salesman_id,
-          future :"N",
-          dt_original : DateFunction.newDate(),
+          settled_code: 0,
+          tb_user_id: body.Order.tb_salesman_id,
+          future: "N",
+          dt_original: DateFunction.newDate(),
           doc_reference: body.Order.number,
-          conferred : "N",
-          tb_payment_types_id:0,
-          tb_financial_plans_id_cre:0,
-          tb_financial_plans_id_deb:0,        
+          conferred: "N",
+          tb_payment_types_id: 0,
+          tb_financial_plans_id_cre: 0,
+          tb_financial_plans_id_deb: 0,
         }
-        for (var item of body.Payments){
-          if (item.value > 0){
-            dataFinancial.tb_payment_types_id = item.tb_payment_type_id,          
-            dataFinancial.credit_value = item.value,
-            dataFinancial.settled_code = item.settled_code,
-            await this.insert(dataFinancial);
+        for (var item of body.Payments) {
+          if ((item.value > 0) && (item.name_payment_type != 'BOLETO')) {
+            dataFinancial.tb_payment_types_id = item.tb_payment_type_id,
+              dataFinancial.credit_value = item.value,
+              dataFinancial.settled_code = item.settled_code,
+              await this.insert(dataFinancial);
           }
         }
         resolve(body);
       } catch (error) {
-        reject('financialStatement.SaveBycard: '+error)
+        reject('financialStatement.SaveBycard: ' + error)
       }
 
     });
     return promise;
-  }      
+  }
 }
 module.exports = FinancialStatementController;

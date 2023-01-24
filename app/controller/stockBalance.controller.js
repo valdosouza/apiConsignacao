@@ -43,7 +43,7 @@ class StockBalanceController extends Base {
           if (data.length > 0) {
             var dataResult = {
               id: data[0].id,
-              tb_institution_id: data[0].tb_institution_idid,
+              tb_institution_id: data[0].tb_institution_id,
               tb_stock_list_id: data[0].tb_stock_list_id,
               name_stock_list: data[0].name_stock_list,
             };
@@ -60,7 +60,16 @@ class StockBalanceController extends Base {
             dataResult.items = items;
             resolve(dataResult);
           } else {
-            resolve("Estoque não encontrado");
+            var dataResult = {
+              id: 0,
+              tb_institution_id: tb_institution_id,
+              tb_stock_list_id: 0,
+              name_stock_list: "",
+            };
+            var items = [];
+            dataResult.items = items;
+            resolve(dataResult);            
+            
           }
         })
         .catch(err => {
@@ -74,6 +83,9 @@ class StockBalanceController extends Base {
     const promise = new Promise((resolve, reject) => {
       Tb.sequelize.query(
         'select ' +
+        'stb.tb_institution_id,' +
+        'stb.tb_stock_list_id,' +
+        'stl.description name_stock_list, ' +
         'stb.tb_merchandise_id, ' +
         'prd.description name_merchandise, ' +
         'stb.quantity ' +
@@ -96,9 +108,35 @@ class StockBalanceController extends Base {
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           if (data.length > 0) {
-            resolve(data);
+            var dataResult = {
+              id: data[0].id,
+              tb_institution_id: data[0].tb_institution_id,
+              tb_stock_list_id: data[0].tb_stock_list_id,
+              name_stock_list: data[0].name_stock_list,
+            };
+            var items = [];
+            var itemResult = {};
+            for (var item of data) {
+              itemResult = {
+                tb_merchandise_id: item.tb_merchandise_id,
+                name_merchandise: item.name_merchandise,
+                quantity: Number(item.quantity)
+              }
+              items.push(itemResult);
+            }
+            dataResult.items = items;
+            resolve(dataResult);
           } else {
-            resolve("Estoque não encontrado");
+            var dataResult = {
+              id: 0,
+              tb_institution_id: tb_institution_id,
+              tb_stock_list_id: 0,
+              name_stock_list: "",
+            };
+            var items = [];
+            dataResult.items = items;
+            resolve(dataResult);
+
           }
         })
         .catch(err => {
@@ -112,6 +150,9 @@ class StockBalanceController extends Base {
     const promise = new Promise((resolve, reject) => {
       Tb.sequelize.query(
         'select ' +
+        'stb.tb_institution_id,' +
+        'stb.tb_stock_list_id,' +
+        'stl.description name_stock_list, ' +
         'stb.tb_merchandise_id, ' +
         'prd.description name_merchandise, ' +
         'sum(stb.quantity) quantity ' +
@@ -129,15 +170,40 @@ class StockBalanceController extends Base {
         '    and (ct.tb_institution_id = ehs.tb_institution_id) ' +
         'where stb.tb_institution_id =?  ' +
         'and ct.tb_salesman_id =?  ' +
-        'group by 1,2 ',
+        'group by 1,2,3,4,5 ',
         {
           replacements: [tb_institution_id, tb_salesman_id],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           if (data.length > 0) {
-            resolve(data);
+            var dataResult = {
+              id: data[0].id,
+              tb_institution_id: data[0].tb_institution_id,
+              tb_stock_list_id: data[0].tb_stock_list_id,
+              name_stock_list: data[0].name_stock_list,
+            };
+            var items = [];
+            var itemResult = {};
+            for (var item of data) {
+              itemResult = {
+                tb_merchandise_id: item.tb_merchandise_id,
+                name_merchandise: item.name_merchandise,
+                quantity: Number(item.quantity)
+              }
+              items.push(itemResult);
+            }
+            dataResult.items = items;
+            resolve(dataResult);
           } else {
-            resolve("Saldo estoque não encontrato!");
+            var dataResult = {
+              id: 0,
+              tb_institution_id: tb_institution_id,
+              tb_stock_list_id: 0,
+              name_stock_list: "",
+            };
+            var items = [];
+            dataResult.items = items;
+            resolve(dataResult);
           }
         })
         .catch(err => {
@@ -151,11 +217,17 @@ class StockBalanceController extends Base {
     const promise = new Promise((resolve, reject) => {
       Tb.sequelize.query(
         '  select ' +
+        '  tb_institution_id, ' +
+        '  tb_stock_list_id, ' +
+        '  name_stock_list, ' +
         '  tb_merchandise_id, ' +
         '  name_merchandise, ' +
         '  sum(quantity) quantity ' +
         'from ( ' +
         '  select  ' +
+        '  stb.tb_institution_id, ' +
+        '  stb.tb_stock_list_id, ' +
+        '  stl.description name_stock_list, ' +
         '  stb.tb_merchandise_id,  ' +
         '  prd.description name_merchandise,  ' +
         '  stb.quantity ' +
@@ -175,6 +247,9 @@ class StockBalanceController extends Base {
         '  and ct.tb_salesman_id =? ' +
         '   union ' +
         '   select  ' +
+        '  stb.tb_institution_id, ' +
+        '  stb.tb_stock_list_id, ' +
+        '  stl.description name_stock_list, ' +
         '   stb.tb_merchandise_id,  ' +
         '   prd.description name_merchandise, ' +
         '   stb.quantity  ' +
@@ -193,15 +268,41 @@ class StockBalanceController extends Base {
         '   where stb.tb_institution_id =1   ' +
         '   and ehs.tb_entity_id =2 ' +
         ' ) tb_stock_by_salesman ' +
-        ' group by 1,2  ',
+        ' group by 1,2,3,4,5  ',
         {
           replacements: [tb_institution_id, tb_salesman_id],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           if (data.length > 0) {
-            resolve(data);
+            var dataResult = {
+              id: data[0].id,
+              tb_institution_id: data[0].tb_institution_id,
+              tb_stock_list_id: data[0].tb_stock_list_id,
+              name_stock_list: data[0].name_stock_list,
+            };
+            var items = [];
+            var itemResult = {};
+            for (var item of data) {
+              itemResult = {
+                tb_merchandise_id: item.tb_merchandise_id,
+                name_merchandise: item.name_merchandise,
+                quantity: Number(item.quantity)
+              }
+              items.push(itemResult);
+            }
+            dataResult.items = items;
+            resolve(dataResult);
           } else {
-            resolve("Saldo estoque não encontrato!");
+            var dataResult = {
+              id: 0,
+              tb_institution_id: tb_institution_id,
+              tb_stock_list_id: 0,
+              name_stock_list: "",
+            };
+            var items = [];
+            dataResult.items = items;
+            resolve(dataResult);
+
           }
         })
         .catch(err => {

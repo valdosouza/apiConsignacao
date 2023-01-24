@@ -1,11 +1,14 @@
 const OrderAttendanceController = require("../controller/orderAttendance.controller.js");
+const CashierController = require('../controller/cashier.controller.js');
 
 class OrderAttendanceEndPoint {
 
   static create = (req, res) => {
     
     OrderAttendanceController.insert(req.body)
-      .then(data => {
+      .then(data => { 
+        
+        CashierController.autoCreate(req.body.tb_institution_id,req.body.tb_user_id);
         res.send(data);
     })
   }

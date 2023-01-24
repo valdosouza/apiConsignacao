@@ -6,7 +6,6 @@ const OrderSaleController = require('../controller/orderSale.controller.js');
 const FinancialController = require('../controller/financial.controller.js');
 const FinancialPaymentController = require('../controller/financialPayment.controller.js');
 const FinancialStatementController = require('../controller/financialStatement.controller.js');
-
 class OrderConsignmentEndPoint {
 
   static saveCheckpoint = (req, res) => {
@@ -15,6 +14,7 @@ class OrderConsignmentEndPoint {
       .then( async data => {
         //Retorna do estoque do Cliente - Venda direta pelo estoque do Cliente ....lembrar da venda direta pelo estoque do Vendedor
         var stockCustomer = await entityHasStockList.getByEntity(req.body.Order.tb_institution_id,req.body.Order.tb_customer_id);
+        //Usar o grupo estoque manager por que pode ser usado tanto customer quanto o salesman 
         req.body['StockManager'] = stockCustomer[0];                
 
         await OrderSaleController.saveByCard(req.body);

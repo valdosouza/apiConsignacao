@@ -453,7 +453,7 @@ class OrderBonusController extends Base {
               tb_institution_id: body.Order.tb_institution_id,
               tb_order_id: body.Order.id,
               terminal: 0,
-              tb_stock_list_id: body.StockSalesman.tb_stock_list_id,
+              tb_stock_list_id: body.StockManager.tb_stock_list_id,
               tb_product_id: item.tb_product_id,
               quantity: item.bonus,
               unit_value: item.unit_value,
