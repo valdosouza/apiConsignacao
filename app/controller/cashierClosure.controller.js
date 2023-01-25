@@ -112,7 +112,8 @@ class CashierClosureController extends Base {
           '  c.dt_record ' +
           'from tb_cashier c ' +
           'where ( c.tb_institution_id =? ) ' +
-          'and ( c.tb_user_id = ? ) ',
+          'and ( c.tb_user_id = ? ) '+
+          ' and ( hr_end is not null)',
           {
             replacements: [tb_institution_id, tb_user_id, dt_record],
             type: Tb.sequelize.QueryTypes.SELECT
