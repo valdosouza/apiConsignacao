@@ -64,7 +64,7 @@ class FinancialStatementController extends Base {
         '  inner join tb_product prd ' +
         '  on (prd.id = ori.tb_product_id)  and (ori.tb_institution_id = prd.tb_institution_id) ' +
         'where (ord.tb_institution_id =? ) ' +
-        ' and (ors.tb_salesman_id =?)';
+        ' and (ors.tb_salesman_id =?)';        
 
       if (tb_customer_id == 0) {
         sqltxt = sqltxt + ' and (ors.tb_customer_id <> ?) ';
@@ -74,13 +74,14 @@ class FinancialStatementController extends Base {
 
       sqltxt = sqltxt +
         '  and (ord.dt_record between ? and ?) ' +
+        ' and (ori.kind =?) '+
         'group by 1 ';
 
 
       Tb.sequelize.query(
         sqltxt,
         {
-          replacements: [tb_institution_id, tb_salesman_id, tb_customer_id, dataini, datafim],
+          replacements: [tb_institution_id, tb_salesman_id, tb_customer_id, dataini, datafim,'sale'],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           var dataResult = [];
