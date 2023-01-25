@@ -131,6 +131,36 @@ router.get("/isopen/:tb_institution_id/:tb_user_id/", cashier.isOpen);
 
 /**
  * @swagger
+ * /cashier/closure/getforclosure/{tb_institution_id}/{tb_user_id}/{dt_record}:
+ *  get:
+ *    summary: Get data for Closure
+ *    tags: [Cashier]
+ *    parameters:
+ *      - in: path
+ *        name: tb_institution_id
+ *        required: true
+ *      - in: path
+ *        name: tb_user_id
+ *        required: true
+ *      - in: path
+ *        name: dt_record
+ *        required: true
+ *    responses:
+ *      200:
+ *        description: The data for  Closure was listed successfully
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/CashierClosure'
+ *      404:
+ *        description: The Cashier was not found
+ *      500:
+ *        description: Some error happened
+ */
+router.get("/closure/getforclosure/:tb_institution_id/:tb_user_id/:dt_record/", cashier.getForClosure);
+
+/**
+ * @swagger
  * /cashier/closure/get/{tb_institution_id}/{tb_user_id}/{dt_record}:
  *  get:
  *    summary: get Cashier Closure
@@ -157,7 +187,7 @@ router.get("/isopen/:tb_institution_id/:tb_user_id/", cashier.isOpen);
  *      500:
  *        description: Some error happened
  */
-router.get("/closure/get/:tb_institution_id/:tb_user_id/:dt_record/", cashier.getForClosure);
+router.get("/closure/get/:tb_institution_id/:tb_user_id/:dt_record/", cashier.get);
 
 /**
  * @swagger
