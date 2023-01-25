@@ -131,8 +131,8 @@ class CashierClosureController extends Base {
   static async getForClosure(tb_institution_id, tb_user_id, dt_record) {
     const promise = new Promise(async (resolve, reject) => {
       try {
-        var dataini = DateFunction.newDate();
-        var datafim = DateFunction.newDate()
+        var dataini = dt_record;
+        var datafim = dt_record;
         var dataResult = [];
 
         var dataOrdersale = [];

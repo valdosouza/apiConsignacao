@@ -16,7 +16,7 @@ class CashierEndPoint {
     
     CashierController.getLastIdOpen(req.params.tb_institution_id,req.params.tb_user_id)
     .then(data => {
-      
+      console.log(data);
       res.send({result: (data > 0)});
     })
   }
