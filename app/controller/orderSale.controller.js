@@ -567,7 +567,7 @@ class OrderSaleController extends Base {
               tb_institution_id: body.Order.tb_institution_id,
               tb_order_id: body.Order.id,
               terminal: 0,
-              tb_stock_list_id: body.StockManager.tb_stock_list_id,//Neste caso via card na consignação deve informar o estoque do cliente 
+              tb_stock_list_id: body.StockOrigen.tb_stock_list_id,//Neste caso via card na consignação deve informar o estoque do cliente 
               tb_product_id: item.tb_product_id,
               quantity: item.qtty_sold,
               unit_value: item.unit_value,

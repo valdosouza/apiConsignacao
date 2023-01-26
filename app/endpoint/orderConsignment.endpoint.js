@@ -13,9 +13,9 @@ class OrderConsignmentEndPoint {
     OrderConsignmentController.saveCheckpoint(req.body)
       .then( async data => {
         //Retorna do estoque do Cliente - Venda direta pelo estoque do Cliente ....lembrar da venda direta pelo estoque do Vendedor
-        var stockCustomer = await entityHasStockList.getByEntity(req.body.Order.tb_institution_id,req.body.Order.tb_customer_id);
+        var StockDestiny = await entityHasStockList.getByEntity(req.body.Order.tb_institution_id,req.body.Order.tb_customer_id);
         //Usar o grupo estoque manager por que pode ser usado tanto customer quanto o salesman 
-        req.body['StockManager'] = stockCustomer[0];                
+        req.body['StockOrigen'] = StockDestiny[0];                
 
         await OrderSaleController.saveByCard(req.body);
         
@@ -39,17 +39,17 @@ class OrderConsignmentEndPoint {
           name_entity: data.Order.name_customer,
         }
         //Cria o estoque do cliente ou retorna o estoque do cliente
-        var stockCustomer = await entityHasStockList.createAuto(dataEntityHasStockList)
-        req.body['StockCustomer'] = stockCustomer;          
+        var StockDestiny = await entityHasStockList.createAuto(dataEntityHasStockList)
+        req.body['StockDestiny'] = StockDestiny;          
         //Retorna do estoque do vendedor
         var stockSalesman = await entityHasStockList.getByEntity(req.body.Order.tb_institution_id,req.body.Order.tb_salesman_id);        
-        req.body['StockSalesman'] = stockSalesman[0];          
+        req.body['StockOrigen'] = stockSalesman[0];          
 
         await OrderBonusController.saveByCard(req.body);
 
         await OrderConsignmentController.saveByCard(req.body);       
 
-        await OrderStockTransferController.saveByCard(req.body);
+        await OrderStockTransferController.saveDevolutionByCard(req.body);
         
         res.send("Supplying recorded successfully.");
       })

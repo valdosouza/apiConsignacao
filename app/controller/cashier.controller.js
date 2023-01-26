@@ -58,8 +58,7 @@ class CashierController extends Base {
     const promise = new Promise(async (resolve, reject) => {        
       
       var checkExist = await this.getLastIdOpen(tb_institution_id, tb_user_id);
-      console.log(checkExist);
-      if (!checkExist) {
+            if (!checkExist) {
         try {
           await this.open(tb_institution_id,tb_user_id);
           resolve("Caixa foi aberto");
@@ -89,7 +88,6 @@ class CashierController extends Base {
           dt_record : dtRecord,
           hr_begin : hrBegin,
         };
-        console.log(dataCashier);
         Tb.create(dataCashier)
         .then((data) => {             
           resolve(data);

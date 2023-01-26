@@ -69,7 +69,7 @@ class OrderStockAdjustController extends Base {
             tb_product_id: item.tb_product_id,
             quantity: item.quantity,
             unit_value: item.unit_value,
-            kind : 'StockAdjustment',
+            kind: 'StockAdjustment',
           };
           //Quanto o insert é mais complexo como getNext precisa do await no loop          
           await orderItem.insert(dataItem);
@@ -137,6 +137,7 @@ class OrderStockAdjustController extends Base {
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve(data);
+
         })
         .catch(err => {
           reject("orderstockadjust.getlist: " + err);
@@ -283,7 +284,7 @@ class OrderStockAdjustController extends Base {
             case "D":
               await orderItem.delete(dataItem);
               break;
-          }          
+          }
         };
         resolve("Items Alterados");
       } catch (err) {
@@ -389,7 +390,7 @@ class OrderStockAdjustController extends Base {
           }
           else {
             direction = 'S'
-          };          
+          };
           var dataItem = {};
           for (var item of items) {
             dataItem = {

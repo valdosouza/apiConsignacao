@@ -23,7 +23,7 @@ class OrderSaleEndPoint {
         //Retorna do estoque do vendedor - Venda direta pelo estoque do vendedor ....lembrar da venda direta pelo estoque do cliente
         var stockSalesman = await entityHasStockList.getByEntity(req.body.Order.tb_institution_id,req.body.Order.tb_salesman_id);    
         //Usar o grupo estoque manager por que pode ser usado tanto salesman quanto o customer    
-        req.body['StockManager'] = stockSalesman[0];          
+        req.body['StockOrigen'] = stockSalesman[0];          
 
         await OrderBonusController.saveByCard(req.body);
 

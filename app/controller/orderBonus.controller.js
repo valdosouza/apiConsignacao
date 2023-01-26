@@ -43,7 +43,7 @@ class OrderBonusController extends Base {
         tb_salesman_id: body.Order.tb_salesman_id,
         number: body.Order.number,
         tb_customer_id: body.Order.tb_customer_id,
-      }      
+      }
       Tb.create(dataOrder)
         .then(() => {
           resolve(body);
@@ -69,7 +69,7 @@ class OrderBonusController extends Base {
             tb_product_id: item.tb_product_id,
             quantity: item.quantity,
             unit_value: item.unit_value,
-            kind : 'bonus',
+            kind: 'bonus',
           };
           //Quanto o insert é mais complexo como getNext precisa do await no loop          
           await orderItem.insert(dataItem);
@@ -120,6 +120,7 @@ class OrderBonusController extends Base {
         '  ord.tb_user_id, ' +
         '  orb.tb_customer_id, ' +
         '  etd.name_company name_customer, ' +
+        '  orb.tb_salesman_id,'+
         '  ord.dt_record,  ' +
         '  orb.number,  ' +
         '  ord.status, ' +
@@ -131,17 +132,12 @@ class OrderBonusController extends Base {
         '     and (orb.terminal = ord.terminal) ' +
         '   inner join tb_entity etd ' +
         '   on (etd.id = orb.tb_customer_id)  ' +
-        'where (ord.tb_institution_id =? ) ' +
+        'where (ord.tb_institution_id =? ) ' ,
         {
           replacements: [tb_institution_id],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
-          var dataReturn = {};
-          var arrayReturn = [];
-          for (var item of data) {
-            arrayReturn.push(item);
-          }
-          resolve(arrayReturn);
+          resolve(data);
         })
         .catch(err => {
           reject("orderBonus.getlist: " + err);
@@ -165,10 +161,10 @@ class OrderBonusController extends Base {
         '    and (orb.tb_institution_id = ori.tb_institution_id) ' +
         '    and (orb.terminal = ori.terminal)  ' +
         'where (ord.tb_institution_id =? ) ' +
-        'and (orb.id = ?) '+
+        'and (orb.id = ?) ' +
         ' and ori.kind =? ',
         {
-          replacements: [tb_institution_id, id,'bonus'],
+          replacements: [tb_institution_id, id, 'bonus'],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve(data);
@@ -189,6 +185,7 @@ class OrderBonusController extends Base {
         '  ord.tb_user_id, ' +
         '  orb.tb_customer_id, ' +
         '  etd.name_company name_customer, ' +
+        '  orb.tb_salesman_id,'+
         '  ord.dt_record,  ' +
         '  orb.number,  ' +
         '  ord.status, ' +
@@ -453,11 +450,11 @@ class OrderBonusController extends Base {
               tb_institution_id: body.Order.tb_institution_id,
               tb_order_id: body.Order.id,
               terminal: 0,
-              tb_stock_list_id: body.StockManager.tb_stock_list_id,
+              tb_stock_list_id: body.StockOrigen.tb_stock_list_id,
               tb_product_id: item.tb_product_id,
               quantity: item.bonus,
               unit_value: item.unit_value,
-              kind : 'bonus',
+              kind: 'bonus',
             };
             //Quanto o insert é mais complexo como getNext precisa do await no loop          
             await orderItem.insert(dataItem);

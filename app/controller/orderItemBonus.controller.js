@@ -24,17 +24,23 @@ class OrderItemBonusController extends Base {
             'select '+
             'ori.id,'+
             'ori.tb_institution_id,'+
-            'ori.tb_order_id,'+            
+            'ori.tb_order_id,'+
+            'ori.tb_stock_list_id,'+
+            'stl.description name_stock_list,'+
             'ori.tb_product_id,'+
             'pdt.description,'+
             'ori.quantity '+
             'from tb_order_item ori '+
             '  inner join tb_product pdt '+
             '  on (pdt.id = ori.tb_product_id)'+
+            '  inner join tb_stock_list stl '+
+            '  on (stl.id = ori.tb_stock_list_id)'+
+            '    and (stl.tb_institution_id = ori.tb_institution_id)'+            
             'where (ori.tb_institution_id =? ) '+
-            ' and (ori.tb_order_id =?) ',                       
+            ' and (ori.tb_order_id =?) '+
+            ' and (ori.kind =?)',
             {
-              replacements: [tb_institution_id,tb_order_id],
+              replacements: [tb_institution_id,tb_order_id,'bonus'],
               type: Tb.sequelize.QueryTypes.SELECT
             }).then(data => {              
               resolve(data);

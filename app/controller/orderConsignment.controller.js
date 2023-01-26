@@ -777,7 +777,7 @@ class OrderConsignmentController extends Base {
               tb_institution_id: body.Order.tb_institution_id,
               tb_order_id: body.Order.id,
               terminal: 0,
-              tb_stock_list_id: body.StockSalesman.tb_stock_list_id,
+              tb_stock_list_id: body.StockOrigen.tb_stock_list_id,
               tb_product_id: item.tb_product_id,
               quantity: item.new_consignment,
               unit_value: item.unit_value,
@@ -818,11 +818,11 @@ class OrderConsignmentController extends Base {
             operation: operation,
           };
           //Sempre sai da Origem 
-          dataItem['tb_stock_list_id'] = body.StockSalesman.tb_stock_list_id;
+          dataItem['tb_stock_list_id'] = body.StockOrigen.tb_stock_list_id;
           dataItem['direction'] = 'S';
           await stockStatement.insert(dataItem);
           //Sempre Entra no Destino
-          dataItem['tb_stock_list_id'] = body.StockCustomer.tb_stock_list_id;
+          dataItem['tb_stock_list_id'] = body.StockDestiny.tb_stock_list_id;
           dataItem['direction'] = 'E';
           await stockStatement.insert(dataItem);
 

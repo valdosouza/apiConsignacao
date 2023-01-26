@@ -458,16 +458,16 @@ class OrderStockTransferController extends Base {
 
 
 
-  static async saveByCard(body) {
+  static async saveDevolutionByCard(body) {
     const promise = new Promise(async (resolve, reject) => {
       try {
-        console.log(body);
         var qtde = 0;
         for (var item of body.Items) {
           qtde += item.devolution;
         }
         if (qtde > 0) {
           body.Order['number'] = 0;
+          //Inverter direção do estoque por que o cliente vai devolver para o Vendedor
           var _order = {
             id: body.Order.id,
             tb_institution_id: body.Order.tb_institution_id,
@@ -475,13 +475,11 @@ class OrderStockTransferController extends Base {
             number: body.Order.number,
             tb_entity_id: body.Order.tb_customer_id,
             dt_record: body.Order.dt_record,
-            tb_stock_list_id_ori: body.StockCustomer.tb_stock_list_id,
-            tb_stock_list_id_des: body.StockSalesman.tb_stock_list_id,
+            tb_stock_list_id_ori: body.StockDestiny.tb_stock_list_id,//estoque invertiro devido a devolução
+            tb_stock_list_id_des: body.StockOrigen.tb_stock_list_id,//estoque invertiro devido a devolução
           }
-          body.Order['tb_stock_list_id_ori'] = body.StockCustomer.tb_stock_list_id;
-          body.Order['tb_stock_list_id_des'] = body.StockSalesman.tb_stock_list_id;
-          console.log('--------------------------------');
-          console.log(body);
+          body.Order['tb_stock_list_id_ori'] = body.StockDestiny.tb_stock_list_id;//estoque invertiro devido a devolução
+          body.Order['tb_stock_list_id_des'] = body.StockOrigen.tb_stock_list_id;//estoque invertiro devido a devolução
           var _body = {};
           _body["Order"] = _order;
           await this.insertOrder(_body);

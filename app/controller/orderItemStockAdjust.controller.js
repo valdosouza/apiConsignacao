@@ -20,6 +20,7 @@ class OrderItemStockAdjustController extends Base {
 
     static getList(tb_institution_id,tb_order_id) {
         const promise = new Promise((resolve, reject) => {
+          
           Tb.sequelize.query(
             'select '+
             'ori.id,'+

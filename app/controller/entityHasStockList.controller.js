@@ -15,7 +15,7 @@ class EntityHasStockListController extends Base {
           var dataStockList = {
             id: 0,
             tb_institution_id: body.tb_institution_id,
-            description: body.name_entity,
+            description: body.name_entity.substr(0,body.name_entity.indexOf(" ")),
             main: "N",
             active: "S",
           }
@@ -28,7 +28,6 @@ class EntityHasStockListController extends Base {
               }
               Tb.create(dataEntityHasStockList)
                 .then((data) => {
-                  console.log(data);
                   dataResult = {
                     tb_institution_id: data.tb_institution_id,
                     tb_entity_id: data.tb_entity_id,
