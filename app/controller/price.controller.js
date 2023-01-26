@@ -23,7 +23,7 @@ class PriceController extends Base {
       const promise = new Promise((resolve, reject) => {
         var sqltxt = '';
         if (tb_product_id > 0 ){
-          sqltxt = 'select '+
+          sqltxt = 'select  distinct  '+
           'pl.id tb_price_list_id,  '+
           'pl.description name_price_list,  '+
           'coalesce(p.price_tag,0) as  price_tag  '+
@@ -35,7 +35,7 @@ class PriceController extends Base {
           'where  (pl.tb_institution_id =? )  AND  '+
           '       ((p.tb_product_id = '+ tb_product_id + ') or  (p.tb_product_id is null) )';
         }else{
-          sqltxt = 'select '+
+          sqltxt = 'select  distinct  '+
           '  pl.id tb_price_list_id, '+
           '  pl.description name_price_list, '+
           '  0 price_tag '+
