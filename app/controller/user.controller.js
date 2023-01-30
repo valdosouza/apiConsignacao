@@ -128,7 +128,7 @@ class UserController extends Base {
 
 
   static update = (user) => {
-    const promise = new Promise((resolve, reject) => {
+    const promise = new Promise(async (resolve, reject) => {
       try {
         //Salva a entidade
         const dataEntity = {
@@ -141,7 +141,15 @@ class UserController extends Base {
           .catch(err => {
             reject(new Error("Update Usuário." + err));
           });
-
+        //Atualiza o Mailing
+        MailingController.findByEntityId(user.id)
+        .then(async (data) =>  {
+          const dataMailing = {
+            id : data[0].id,
+            email: user.email
+          }
+          await MailingController.update(dataMailing)
+        });  
         //Atualiza a institution
         const dataInstitutionHU = {
           tb_institution_id: user.tb_institution_id,
@@ -317,22 +325,22 @@ class UserController extends Base {
 
     const promise = new Promise((resolve, reject) => {
       TbUser.sequelize.query(
-        'Select m.email '+
-        'from tb_entity e '+
-        '  inner join tb_entity_has_mailing ehm '+
-        '  on (ehm.tb_entity_id = e.id) '+
-        '  inner join tb_mailing m '+
-        '  on (ehm.tb_mailing_id = m.id) '+
-        '  inner join tb_user u '+
-        '  on (u.id = e.id) '+
-        '  inner join tb_institution_has_user ihu '+
-        '  on (ihu.tb_user_id = u.id) '+
+        'Select m.email ' +
+        'from tb_entity e ' +
+        '  inner join tb_entity_has_mailing ehm ' +
+        '  on (ehm.tb_entity_id = e.id) ' +
+        '  inner join tb_mailing m ' +
+        '  on (ehm.tb_mailing_id = m.id) ' +
+        '  inner join tb_user u ' +
+        '  on (u.id = e.id) ' +
+        '  inner join tb_institution_has_user ihu ' +
+        '  on (ihu.tb_user_id = u.id) ' +
         'where ( e.id = ? ) ',
         {
           replacements: [entity],
           type: TbUser.sequelize.QueryTypes.SELECT
         }).then(data => {
-          if (data[0]) {            
+          if (data[0]) {
             resolve(data[0].email)
           } else {
             resolve("")

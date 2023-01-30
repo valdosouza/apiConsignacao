@@ -120,7 +120,7 @@ class OrderBonusController extends Base {
         '  ord.tb_user_id, ' +
         '  orb.tb_customer_id, ' +
         '  etd.name_company name_customer, ' +
-        '  orb.tb_salesman_id,'+
+        '  orb.tb_salesman_id,' +
         '  ord.dt_record,  ' +
         '  orb.number,  ' +
         '  ord.status, ' +
@@ -132,7 +132,7 @@ class OrderBonusController extends Base {
         '     and (orb.terminal = ord.terminal) ' +
         '   inner join tb_entity etd ' +
         '   on (etd.id = orb.tb_customer_id)  ' +
-        'where (ord.tb_institution_id =? ) ' ,
+        'where (ord.tb_institution_id =? ) ',
         {
           replacements: [tb_institution_id],
           type: Tb.sequelize.QueryTypes.SELECT
@@ -176,6 +176,41 @@ class OrderBonusController extends Base {
     return promise;
   }
 
+  static getQttyByDay(tb_institution_id, tb_salesman_id, dt_record, tb_product_id) {
+    const promise = new Promise((resolve, reject) => {
+      Tb.sequelize.query(
+        'select sum(quantity) total ' +
+        'from tb_order_item ori ' +
+        '  inner join tb_order_bonus orb ' +
+        '  on (orb.id = ori.tb_order_id) ' +
+        '    and (orb.tb_institution_id = ori.tb_institution_id) ' +
+        '  inner join tb_order ord ' +
+        '  on (orb.id = ord.id) ' +
+        '    and (orb.tb_institution_id = ord.tb_institution_id) ' +
+        'where ( ori.tb_institution_id = ?) ' +
+        'and ( ori.kind =? )' +
+        ' and (ori.tb_product_id =? )' +
+        'and (orb.tb_salesman_id = ?) ' +
+        'and ( ord.dt_record = ? ) ',
+        {
+          replacements: [tb_institution_id, 'bonus', tb_product_id, tb_salesman_id, dt_record],
+          type: Tb.sequelize.QueryTypes.SELECT
+        }).then(data => {
+
+          if (data.length > 0) {
+            resolve(Number(data[0].total))
+          } else {
+            resolve(0);
+          }
+        })
+        .catch(err => {
+          reject("orderSale.getItemlist: " + err);
+        });
+    });
+    return promise;
+  }
+
+
   static async getOrder(tb_institution_id, id) {
     const promise = new Promise((resolve, reject) => {
       Tb.sequelize.query(
@@ -185,7 +220,7 @@ class OrderBonusController extends Base {
         '  ord.tb_user_id, ' +
         '  orb.tb_customer_id, ' +
         '  etd.name_company name_customer, ' +
-        '  orb.tb_salesman_id,'+
+        '  orb.tb_salesman_id,' +
         '  ord.dt_record,  ' +
         '  orb.number,  ' +
         '  ord.status, ' +

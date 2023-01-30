@@ -20,11 +20,11 @@ class MailingController extends Base {
     return promise;
   }
 
-  static update = (id,mailing) => {
+  static update = (mailing) => {
     const promise = new Promise((resolve, reject) => {
 
       Tb.update(mailing, {
-        where: { id: id }
+        where: { id: mailing.id }
       })
         .then(data => {
           resolve(data);
@@ -61,7 +61,29 @@ class MailingController extends Base {
       Tb.sequelize.query(
         'Select * ' +
         'from tb_mailing  ',
+        {          
+          type: Tb.sequelize.QueryTypes.SELECT
+        }
+      ).then(data => {
+        resolve(data);
+      })
+        .catch(err => {
+          reject(new Error("Algum erro aconteceu ao buscar Email"));
+        });
+    });
+    return promise;
+  }
+
+  static findByEntityId = (entityId) => {
+    const promise = new Promise((resolve, reject) => {
+      Tb.sequelize.query(
+        'Select * ' +
+        'from tb_mailing m '+
+        '  inner join tb_entity_has_mailing ehm '+
+        '  on (ehm.tb_mailing_id = m.id ) '+
+        'where (ehm.tb_entity_id =?)',
         {
+          replacements: [entityId],
           type: Tb.sequelize.QueryTypes.SELECT
         }
       ).then(data => {

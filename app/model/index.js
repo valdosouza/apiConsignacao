@@ -90,7 +90,7 @@ db.orderpaid = require("./orderPaid.model.js")(sequelize, Sequelize);
 db.orderattendance = require("./orderAttendance.model.js")(sequelize, Sequelize);
 db.cashier = require("./cashier.model.js")(sequelize, Sequelize);
 db.cashierclosure = require("./cashierClosure.model.js")(sequelize, Sequelize);
-
+db.orderloadcard = require("./orderLoadCard.model.js")(sequelize, Sequelize);
 
 
 db.restSubgroup = require("./restSubgroup.model.js")(sequelize, Sequelize);

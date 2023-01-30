@@ -20,7 +20,7 @@ class MailingEndPoint {
     })
   };
 
-  // Update a mailnig by the id in the request
+  // Update a mailing by the id in the request
   static update = (req, res) => {
     const id = req.params.id;
     const mailing = req.body;

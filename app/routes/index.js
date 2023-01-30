@@ -90,4 +90,7 @@ routes.use("/financial", financial);
 const cashier = require("../routes/cashier.routes");
 routes.use("/cashier", cashier);
 
+const orderloadcard = require("../routes/orderLoadCard.routes");
+routes.use("/orderloadcard", orderloadcard);
+
 module.exports = routes;

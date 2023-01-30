@@ -47,7 +47,7 @@ class OrderSaleController extends Base {
         tb_customer_id: body.Order.tb_customer_id,
         total_value: body.Order.total_value,
         change_value: body.Order.change_value,
-      }      
+      }
       Tb.create(dataOrder)
         .then((data) => {
           resolve(body);
@@ -138,10 +138,10 @@ class OrderSaleController extends Base {
         '    and (ors.tb_institution_id = ori.tb_institution_id) ' +
         '    and (ors.terminal = ori.terminal)  ' +
         'where (ord.tb_institution_id =? ) ' +
-        'and (ors.id = ?) '+
+        'and (ors.id = ?) ' +
         ' and ori.kind =? ',
         {
-          replacements: [tb_institution_id, id,'Sale'],
+          replacements: [tb_institution_id, id, 'Sale'],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve(data);
@@ -152,7 +152,39 @@ class OrderSaleController extends Base {
     });
     return promise;
   }
-
+  static getQttyByDay(tb_institution_id, tb_salesman_id, dt_record, tb_product_id) {
+    const promise = new Promise((resolve, reject) => {
+      Tb.sequelize.query(
+        'select sum(quantity) total ' +
+        'from tb_order_item ori ' +
+        '  inner join tb_order_sale ors ' +
+        '  on (ors.id = ori.tb_order_id) ' +
+        '    and (ors.tb_institution_id = ori.tb_institution_id) ' +
+        '  inner join tb_order ord ' +
+        '  on (ors.id = ord.id) ' +
+        '    and (ors.tb_institution_id = ord.tb_institution_id) ' +
+        'where ( ori.tb_institution_id = ?) ' +
+        'and ( ori.kind =? )' +
+        ' and (ori.tb_product_id =? )' +
+        'and (ors.tb_salesman_id = ?) ' +
+        'and ( ord.dt_record = ? ) ',
+        {
+          replacements: [tb_institution_id, 'sale', tb_product_id, tb_salesman_id, dt_record],
+          type: Tb.sequelize.QueryTypes.SELECT
+        }).then(data => {
+          
+          if (data.length > 0) {
+            resolve(Number(data[0].total))
+          } else {
+            resolve(0);
+          }
+        })
+        .catch(err => {
+          reject("orderSale.getItemlist: " + err);
+        });
+    });
+    return promise;
+  }
   static getOrder(tb_institution_id, id) {
     const promise = new Promise((resolve, reject) => {
       Tb.sequelize.query(
