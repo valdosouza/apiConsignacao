@@ -34,7 +34,7 @@ class OrderLoadCardController extends Base {
         id: 0,
         tb_institution_id: body.tb_institution_id,
         terminal: 0,
-        tb_user_id: body.tb_salesman_id,
+        tb_user_id: body.tb_user_id,
         dt_record: body.dt_record,
       }
       order.insert(dataOrder)
@@ -60,7 +60,7 @@ class OrderLoadCardController extends Base {
   }
 
 
-  static getNewOrderLoadCard(tb_institution_id, tb_salesman_id, dt_record) {
+  static getNewOrderLoadCard(tb_institution_id, tb_user_id, dt_record) {
     const promise = new Promise((resolve, reject) => {
       Tb.sequelize.query(
         'select ' +
@@ -77,7 +77,7 @@ class OrderLoadCardController extends Base {
         'where (pdt.tb_institution_id  =?) ' +
         'and (tb_entity_id = ?)  ',
         {
-          replacements: [tb_institution_id, tb_salesman_id],
+          replacements: [tb_institution_id, tb_user_id],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(async data => {
           var resData = [];
@@ -87,8 +87,8 @@ class OrderLoadCardController extends Base {
                 tb_product_id: parseInt(item.tb_product_id),
                 name_product: item.name_product,
                 stock_balance: Number(item.stock_balance),
-                sale: await OrderSaleController.getQttyByDay(tb_institution_id, tb_salesman_id, dt_record, item.tb_product_id),
-                bonus: await OrderBonusController.getQttyByDay(tb_institution_id, tb_salesman_id, dt_record, item.tb_product_id),
+                sale: await OrderSaleController.getQttyByDay(tb_institution_id, tb_user_id, dt_record, item.tb_product_id),
+                bonus: await OrderBonusController.getQttyByDay(tb_institution_id, tb_user_id, dt_record, item.tb_product_id),
                 adjust: Number(0),
                 new_load: Number(0),
               }

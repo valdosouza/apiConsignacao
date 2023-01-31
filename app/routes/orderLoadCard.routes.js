@@ -14,14 +14,14 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *       type: object
  *       required:
  *         - tb_institution_id
- *         - tb_salesman_id
+ *         - tb_user_id
  *         - dt_record
  *       properties:
  *         id:
  *           type: integer 
  *         tb_institution_id:
  *           type: integer
- *         tb_salesman_id:
+ *         tb_user_id:
  *           type: integer
  *         dt_record:
  *           type: string 
@@ -81,7 +81,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
 
  /**
  * @swagger
- * /orderloadcard/{tb_institution_id}/{tb_salesman_id}/{dt_record}:
+ * /orderloadcard/{tb_institution_id}/{tb_user_id}/{dt_record}:
  *   get:
  *     summary: Returns the list of items of card
  *     tags: [OrderLoadCard]
@@ -90,7 +90,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *        name: tb_institution_id
  *        required: true 
  *      - in: path
- *        name: tb_salesman_id
+ *        name: tb_user_id
  *        required: true  
  *      - in: path
  *        name: dt_record
@@ -104,6 +104,6 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *               $ref: '#/components/schemas/OrderLoadCardMain'
  */
   
- router.get("/:tb_institution_id/:tb_salesman_id/:dt_record", orderloadcard.getNewOrderLoadCard);
+ router.get("/:tb_institution_id/:tb_user_id/:dt_record", orderloadcard.getNewOrderLoadCard);
 
 module.exports = router;
