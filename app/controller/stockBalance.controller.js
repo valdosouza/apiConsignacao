@@ -217,17 +217,11 @@ class StockBalanceController extends Base {
     const promise = new Promise((resolve, reject) => {
       Tb.sequelize.query(
         '  select ' +
-        '  tb_institution_id, ' +
-        '  tb_stock_list_id, ' +
-        '  name_stock_list, ' +
         '  tb_merchandise_id, ' +
         '  name_merchandise, ' +
         '  sum(quantity) quantity ' +
         'from ( ' +
         '  select  ' +
-        '  stb.tb_institution_id, ' +
-        '  stb.tb_stock_list_id, ' +
-        '  stl.description name_stock_list, ' +
         '  stb.tb_merchandise_id,  ' +
         '  prd.description name_merchandise,  ' +
         '  stb.quantity ' +
@@ -247,9 +241,6 @@ class StockBalanceController extends Base {
         '  and ct.tb_salesman_id =? ' +
         '   union ' +
         '   select  ' +
-        '  stb.tb_institution_id, ' +
-        '  stb.tb_stock_list_id, ' +
-        '  stl.description name_stock_list, ' +
         '   stb.tb_merchandise_id,  ' +
         '   prd.description name_merchandise, ' +
         '   stb.quantity  ' +
@@ -268,7 +259,7 @@ class StockBalanceController extends Base {
         '   where stb.tb_institution_id =1   ' +
         '   and ehs.tb_entity_id =2 ' +
         ' ) tb_stock_by_salesman ' +
-        ' group by 1,2,3,4,5  ',
+        ' group by 1,2  ',
         {
           replacements: [tb_institution_id, tb_salesman_id],
           type: Tb.sequelize.QueryTypes.SELECT
