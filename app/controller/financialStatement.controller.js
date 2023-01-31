@@ -313,7 +313,7 @@ class FinancialStatementController extends Base {
               for (var item of data) {
                 itemResult = {
                   name_payment_type: item.name_payment_type,
-                  balance_value: item.balance_value
+                  balance_value: Number(item.balance_value)
                 }
                 items.push(itemResult);
               }
