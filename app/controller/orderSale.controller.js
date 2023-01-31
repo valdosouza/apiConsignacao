@@ -134,7 +134,7 @@ class OrderSaleController extends Base {
         '    and (ors.tb_institution_id = ord.tb_institution_id) ' +
         '    and (ors.terminal = ord.terminal) ' +
         '  inner join tb_order_item ori ' +
-        '  on (ors.id = ori.tb_ordeR_id) ' +
+        '  on (ors.id = ori.tb_order_id) ' +
         '    and (ors.tb_institution_id = ori.tb_institution_id) ' +
         '    and (ors.terminal = ori.terminal)  ' +
         'where (ord.tb_institution_id =? ) ' +

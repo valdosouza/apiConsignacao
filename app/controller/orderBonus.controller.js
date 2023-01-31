@@ -157,7 +157,7 @@ class OrderBonusController extends Base {
         '    and (orb.tb_institution_id = ord.tb_institution_id) ' +
         '    and (orb.terminal = ord.terminal) ' +
         '  inner join tb_order_item ori ' +
-        '  on (orb.id = ori.tb_ordeR_id) ' +
+        '  on (orb.id = ori.tb_order_id) ' +
         '    and (orb.tb_institution_id = ori.tb_institution_id) ' +
         '    and (orb.terminal = ori.terminal)  ' +
         'where (ord.tb_institution_id =? ) ' +

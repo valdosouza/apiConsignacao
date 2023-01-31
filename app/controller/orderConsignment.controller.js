@@ -292,7 +292,7 @@ class OrderConsignmentController extends Base {
         '    and (orc.tb_institution_id = ord.tb_institution_id) ' +
         '    and (orc.terminal = ord.terminal) ' +
         '  inner join tb_order_item ori  ' +
-        '  on (orc.id = ori.tb_ordeR_id)  ' +
+        '  on (orc.id = ori.tb_order_id)  ' +
         '    and (orc.tb_institution_id = ori.tb_institution_id) ' +
         '    and (orc.terminal = ori.terminal)  ' +
         'where (ord.tb_institution_id =? )  ' +

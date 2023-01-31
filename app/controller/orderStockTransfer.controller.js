@@ -172,7 +172,7 @@ class OrderStockTransferController extends Base {
         '    and (ort.tb_institution_id = ord.tb_institution_id)  ' +
         '    and (ort.terminal = ord.terminal)  ' +
         '  inner join tb_order_item ori  ' +
-        '  on (ort.id = ori.tb_ordeR_id)  ' +
+        '  on (ort.id = ori.tb_order_id)  ' +
         '    and (ort.tb_institution_id = ori.tb_institution_id)  ' +
         '    and (ort.terminal = ori.terminal)   ' +
         'where (ord.tb_institution_id =? )  ' +
@@ -483,8 +483,44 @@ class OrderStockTransferController extends Base {
           var _body = {};
           _body["Order"] = _order;
           await this.insertOrder(_body);
-          await this.insertOrderItemByCard(body,"Transferência");
-          await this.closurebyCard(body,"Transferência");
+          await this.insertOrderItemByCard(body,"StockTransfer");
+          await this.closurebyCard(body,"StockTransfer");
+        }
+        resolve(body);
+      } catch (err) {
+        reject(err);
+      }
+    });
+    return promise;
+  }
+
+
+  static async saveLoadCarByCard(body) {
+    const promise = new Promise(async (resolve, reject) => {
+      try {
+        var qtde = 0;
+        for (var item of body.Items) {
+          qtde += item.new_load;
+        }
+        if (qtde > 0) {
+          var _order = {
+            id: body.Order.id,
+            tb_institution_id: body.Order.tb_institution_id,
+            terminal: 0,
+            number: body.Order.number,
+            tb_entity_id: body.Order.tb_user_id,
+            dt_record: body.Order.dt_record,
+            number:0,
+            tb_stock_list_id_ori: body.StockOrigen.tb_stock_list_id,
+            tb_stock_list_id_des: body.StockDestiny.tb_stock_list_id,
+          }
+          body.Order['tb_stock_list_id_ori'] = body.StockOrigen.tb_stock_list_id;
+          body.Order['tb_stock_list_id_des'] = body.StockDestiny.tb_stock_list_id;
+          var _body = {};
+          _body["Order"] = _order;
+          await this.insertOrder(_body);
+          await this.insertOrderItemByCard(body,"StockTransfer");
+          await this.closurebyCard(body,"StockTransfer");
         }
         resolve(body);
       } catch (err) {
@@ -501,12 +537,9 @@ class OrderStockTransferController extends Base {
         var dataItem = {};
         var quantity = 0;
         for (var item of body.Items) {
-          if (item.devolution > 0) {
-            quantity = item.devolution
-          }else{
-            quantity = item.new_consignment
-          }  
-
+          if (item.new_load > 0) {
+            quantity = item.new_load
+          }
           if (quantity > 0) {
             dataItem = {
               id: 0,

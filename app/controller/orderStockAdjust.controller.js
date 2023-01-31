@@ -44,6 +44,7 @@ class OrderStockAdjustController extends Base {
         tb_entity_id: body.Order.tb_entity_id,
         direction: body.Order.direction
       }
+      console.log(dataOrder);
       Tb.create(dataOrder)
         .then(() => {
           resolve(body);
@@ -141,6 +142,36 @@ class OrderStockAdjustController extends Base {
         })
         .catch(err => {
           reject("orderstockadjust.getlist: " + err);
+        });
+    });
+    return promise;
+  }
+
+  static getItemList(tb_institution_id, id,kind) {
+    const promise = new Promise((resolve, reject) => {
+      Tb.sequelize.query(
+        'select ' +
+        'ori.* ' +
+        'from tb_order ord  ' +
+        '  inner join tb_order_stock_adjust ora  ' +
+        '  on (ora.id = ord.id)  ' +
+        '    and (ora.tb_institution_id = ord.tb_institution_id)  ' +
+        '    and (ora.terminal = ord.terminal)  ' +
+        '  inner join tb_order_item ori  ' +
+        '  on (ora.id = ori.tb_order_id)  ' +
+        '    and (ora.tb_institution_id = ori.tb_institution_id)  ' +
+        '    and (ora.terminal = ori.terminal)   ' +
+        'where (ord.tb_institution_id =? )  ' +
+        ' and ( ora.id = ? )  ' +
+        ' and ( ori.kind =? )  ',
+        {
+          replacements: [tb_institution_id, id,kind],
+          type: Tb.sequelize.QueryTypes.SELECT
+        }).then(data => {
+          resolve(data);
+        })
+        .catch(err => {
+          reject("orderSale.getItemlist: " + err);
         });
     });
     return promise;
@@ -421,6 +452,111 @@ class OrderStockAdjustController extends Base {
         reject(err);
       }
 
+    });
+    return promise;
+  }
+
+  static async saveByCard(body) {
+    const promise = new Promise(async (resolve, reject) => {
+      try {
+        var qtde = 0;
+        for (var item of body.Items) {
+          qtde += item.adjust;
+        }
+        if (qtde > 0) {
+          var _order = {
+            id: body.Order.id,
+            tb_institution_id: body.Order.tb_institution_id,
+            terminal: 0,
+            number: 0,
+            tb_entity_id: body.Order.tb_entity_id,
+            dt_record: body.Order.dt_record,
+            tb_stock_list_id_ori: body.StockOrigen.tb_stock_list_id,
+            tb_stock_list_id_des: body.StockDestiny.tb_stock_list_id,
+            direction : body.Order.direction,
+          }
+          var _body = {};
+          _body["Order"] = _order;
+          await this.insertOrder(_body);          
+          await this.insertOrderItemByCard(body, "StockAdjustment");
+          await this.closurebyCard(body, "StockAdjustment");
+        }
+        resolve(body);
+      } catch (err) {
+        reject(err);
+      }
+
+
+    });
+    return promise;
+  }
+
+  static async insertOrderItemByCard(body, kind) {
+    const promise = new Promise(async (resolve, reject) => {
+      try {
+
+        var dataItem = {};
+        var quantity = 0;
+        for (var item of body.Items) {
+          if (item.adjust > 0) {
+            quantity = item.adjust
+
+            if (quantity > 0) {
+              dataItem = {
+                id: 0,
+                tb_institution_id: body.Order.tb_institution_id,
+                tb_order_id: body.Order.id,
+                terminal: 0,
+                tb_stock_list_id: body.Order.tb_stock_list_id_des,
+                tb_product_id: item.tb_product_id,
+                quantity: item.adjust,
+                unit_value: 0,
+                kind: kind,
+              };
+              //Quanto o insert é mais complexo como getNext precisa do await no loop          
+              await orderItem.insert(dataItem);
+            };
+          }
+        };
+        resolve("Items Adicionados");
+      } catch (err) {
+        reject("orderStockAdjust.insertOrderItemByCard:" + err);
+      }
+
+    });
+    return promise;
+  }
+
+  static async closurebyCard(body,operation) {
+    const promise = new Promise(async (resolve, reject) => {
+      try {
+        var items = await this.getItemList(body.Order.tb_institution_id, body.Order.id,operation);
+        var dataItem = {};
+        for (var item of items) {
+          dataItem = {
+            id: 0,
+            tb_institution_id: item.tb_institution_id,
+            tb_order_id: item.tb_order_id,
+            terminal: 0,
+            tb_order_item_id: item.id,
+            tb_stock_list_id: item.tb_stock_list_id,
+            local: "web",
+            kind: "Fechamento",
+            dt_record: body.Order.dt_record,
+            direction: "S",
+            tb_merchandise_id: item.tb_product_id,
+            quantity: item.quantity,
+            operation: operation,
+          };
+          //Sempre sai da Origem 
+          dataItem['tb_stock_list_id'] = body.Order.tb_stock_list_id_ori;
+          dataItem['direction'] = 'S';
+          await stockStatement.insert(dataItem);
+        };
+        resolve("200");
+      } catch (err) {
+        reject(err);
+      }
     });
     return promise;
   }

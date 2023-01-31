@@ -50,7 +50,7 @@ class OrderLoadCardController extends Base {
               reject("OrderLoadCardController.insert:" + err);
             }
           }
-          resolve({ result: "LoadCard saved" });
+          resolve(body);
         })
         .catch(err => {
           reject("OrderLoadCardController.insert:" + err);
