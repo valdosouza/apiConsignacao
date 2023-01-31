@@ -47,9 +47,9 @@ class CustomerEndPoint {
       })
   };
 
-  static getListBySalesRoute = (req, res) => {
+  static getListSalesRoute = (req, res) => {
 
-    CustomerController.getListBySalesRoute(req.params.tb_institution_id, req.params.tb_sales_route_id)
+    CustomerController.getListSalesRoute(req.params.tb_institution_id, req.params.tb_sales_route_id,req.params.tb_salesman_id)
       .then(data => {
         res.send(data);
       })

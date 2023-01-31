@@ -332,7 +332,7 @@ class CustomerController extends Base {
     return promise;
   }
 
-  static getListBySalesRoute = (tb_institution_id,tb_sales_route_id) => {
+  static getListSalesRoute = (tb_institution_id,tb_sales_route_id,tb_salesman_id) => {
     const promise = new Promise((resolve, reject) => {
       Tb.sequelize.query(
         'Select '+
@@ -357,6 +357,7 @@ class CustomerController extends Base {
         '  and  (src.tb_institution_id = sr.tb_institution_id) '+              
         'where ct.tb_institution_id =? '+        
         '  and ( (tb_sales_route_id =?) or (tb_sales_route_id =0))'+
+        ' and (ct.tb_salesman_id = ?)'+
         'union '+
         'Select  '+
         'src.tb_sales_route_id, '+
@@ -379,10 +380,11 @@ class CustomerController extends Base {
         ' on (src.tb_sales_route_id = sr.id)  '+
         '  and  (src.tb_institution_id = sr.tb_institution_id) '+
         'where ct.tb_institution_id =? '+        
-        '  and ( (tb_sales_route_id =?) or (tb_sales_route_id =0))'+        
+        '  and ( (tb_sales_route_id =?) or (tb_sales_route_id =0))'+   
+        ' and (ct.tb_salesman_id = ?)'+     
         'order by 3 ',
         {
-          replacements: [tb_institution_id,tb_sales_route_id,tb_institution_id,tb_sales_route_id],
+          replacements: [tb_institution_id,tb_sales_route_id,tb_salesman_id,tb_institution_id,tb_sales_route_id,tb_salesman_id],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {          
           resolve(data);
