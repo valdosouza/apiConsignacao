@@ -89,7 +89,7 @@ class OrderLoadCardController extends Base {
                 stock_balance: Number(item.stock_balance),
                 sale: await OrderSaleController.getQttyByDay(tb_institution_id, tb_salesman_id, dt_record, item.tb_product_id),
                 bonus: await OrderBonusController.getQttyByDay(tb_institution_id, tb_salesman_id, dt_record, item.tb_product_id),
-                ajust: Number(0),
+                adjust: Number(0),
                 new_load: Number(0),
               }
             )
