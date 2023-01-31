@@ -4,6 +4,7 @@ const Tb = db.orderloadcard;
 const order = require('./order.controller.js');
 const OrderSaleController = require("../controller/orderSale.controller.js");
 const OrderBonusController = require("../controller/orderBonus.controller.js");
+const StockBalanceControler = require('../controller/stockBalance.controller.js');
 
 class OrderLoadCardController extends Base {
 
@@ -61,44 +62,30 @@ class OrderLoadCardController extends Base {
 
 
   static getNewOrderLoadCard(tb_institution_id, tb_user_id, dt_record) {
-    const promise = new Promise((resolve, reject) => {
-      Tb.sequelize.query(
-        'select ' +
-        'pdt.id tb_product_id, ' +
-        'pdt.description name_product, ' +
-        'sb.quantity stock_balance ' +
-        'from tb_product pdt ' +
-        '   inner join tb_stock_balance sb ' +
-        '   on (sb.tb_merchandise_id = pdt.id) ' +
-        '      and (pdt.tb_institution_id = sb.tb_institution_id) ' +
-        '   inner join tb_entity_has_stock_list ehsl ' +
-        '   on (ehsl.tb_stock_list_id = sb.tb_stock_list_id) ' +
-        '      and (ehsl.tb_institution_id = sb.tb_institution_id) ' +
-        'where (pdt.tb_institution_id  =?) ' +
-        'and (tb_entity_id = ?)  ',
-        {
-          replacements: [tb_institution_id, tb_user_id],
-          type: Tb.sequelize.QueryTypes.SELECT
-        }).then(async data => {
-          var resData = [];
-          for (var item of data) {
-            resData.push(
-              {
-                tb_product_id: parseInt(item.tb_product_id),
-                name_product: item.name_product,
-                stock_balance: Number(item.stock_balance),
-                sale: await OrderSaleController.getQttyByDay(tb_institution_id, tb_user_id, dt_record, item.tb_product_id),
-                bonus: await OrderBonusController.getQttyByDay(tb_institution_id, tb_user_id, dt_record, item.tb_product_id),
-                adjust: Number(0),
-                new_load: Number(0),
-              }
-            )
-          }
-          resolve(resData);
-        })
-        .catch(err => {
-          reject("OrderLoadCard.getNewOrderLoadCard: " + err);
-        });
+    const promise = new Promise(async (resolve, reject) => {
+
+
+      try {
+        var data = await StockBalanceControler.getAllBySalesman(tb_institution_id, tb_user_id);
+        var resData = [];
+        for (var item of data.items) {
+          resData.push(
+            {
+              tb_product_id: parseInt(item.tb_merchandise_id),
+              name_product: item.name_merchandise,
+              stock_balance: Number(item.quantity),
+              sale: await OrderSaleController.getQttyByDay(tb_institution_id, tb_user_id, dt_record, item.tb_merchandise_id),
+              bonus: await OrderBonusController.getQttyByDay(tb_institution_id, tb_user_id, dt_record, item.tb_merchandise_id),
+              adjust: Number(0),
+              new_load: Number(0),
+            }
+          )
+        }
+        resolve(resData);
+      } catch (err) {
+        reject("OrderLoadCard.getNewOrderLoadCard: " + err);
+      }
+
     });
     return promise;
   }
