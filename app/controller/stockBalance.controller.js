@@ -253,8 +253,8 @@ class StockBalanceController extends Base {
         '     inner join tb_collaborator c  ' +
         '     on (c.id = ehs.tb_entity_id)  ' +
         '       and (c.tb_institution_id = ehs.tb_institution_id) ' +
-        '   where stb.tb_institution_id =1   ' +
-        '   and ehs.tb_entity_id =2 ' +
+        '   where stb.tb_institution_id =?   ' +
+        '   and ehs.tb_entity_id =? ' +
         ' ) tb_stock_by_salesman ' +
         ' group by 1,2  ',
         {
