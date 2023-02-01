@@ -221,7 +221,7 @@ class StockBalanceController extends Base {
         '  select  ' +
         '  stb.tb_merchandise_id,  ' +
         '  prd.description name_merchandise,  ' +
-        '  stb.quantity ' +
+        '  sum(stb.quantity) quantity ' +
         '  from tb_stock_balance stb  ' +
         '    inner join tb_stock_list stl    ' +
         '    on (stl.id = stb.tb_stock_list_id)  ' +
@@ -236,6 +236,7 @@ class StockBalanceController extends Base {
         '      and (ct.tb_institution_id = ehs.tb_institution_id)  ' +
         '  where stb.tb_institution_id =? ' +
         '  and ct.tb_salesman_id =? ' +
+        '  group by 1,2 '+
         '   union ' +
         '   select  ' +
         '   stb.tb_merchandise_id,  ' +
