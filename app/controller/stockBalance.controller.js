@@ -150,9 +150,6 @@ class StockBalanceController extends Base {
     const promise = new Promise((resolve, reject) => {
       Tb.sequelize.query(
         'select ' +
-        'stb.tb_institution_id,' +
-        'stb.tb_stock_list_id,' +
-        'stl.description name_stock_list, ' +
         'stb.tb_merchandise_id, ' +
         'prd.description name_merchandise, ' +
         'sum(stb.quantity) quantity ' +
@@ -170,7 +167,7 @@ class StockBalanceController extends Base {
         '    and (ct.tb_institution_id = ehs.tb_institution_id) ' +
         'where stb.tb_institution_id =?  ' +
         'and ct.tb_salesman_id =?  ' +
-        'group by 1,2,3,4,5 ',
+        'group by 1,2 ',
         {
           replacements: [tb_institution_id, tb_salesman_id],
           type: Tb.sequelize.QueryTypes.SELECT
