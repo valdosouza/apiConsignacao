@@ -258,7 +258,7 @@ class StockBalanceController extends Base {
         ' ) tb_stock_by_salesman ' +
         ' group by 1,2  ',
         {
-          replacements: [tb_institution_id, tb_salesman_id],
+          replacements: [tb_institution_id, tb_salesman_id,tb_institution_id, tb_salesman_id],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           if (data.length > 0) {
