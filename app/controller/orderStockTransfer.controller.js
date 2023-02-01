@@ -389,7 +389,7 @@ class OrderStockTransferController extends Base {
               direction: "S",
               tb_merchandise_id: item.tb_product_id,
               quantity: item.quantity,
-              operation: "Transfer"
+              operation: "StockTransfer"
             };
             //Origen
             dataItem['tb_stock_list_id'] = dataOrder.tb_stock_list_id_ori;
@@ -433,7 +433,7 @@ class OrderStockTransferController extends Base {
               direction: "S",
               tb_merchandise_id: item.tb_product_id,
               quantity: item.quantity,
-              operation: "Transfer"
+              operation: "StockTransfer"
             };
             //Origen - Inverte direção ao reabrir
             dataItem['tb_stock_list_id'] = dataOrder.tb_stock_list_id_ori;
@@ -483,7 +483,7 @@ class OrderStockTransferController extends Base {
           var _body = {};
           _body["Order"] = _order;
           await this.insertOrder(_body);
-          await this.insertOrderItemByCard(body,"StockTransfer");
+          await this.insertOrderItemDevolutionByCard(body,"StockTransfer");
           await this.closurebyCard(body,"StockTransfer");
         }
         resolve(body);
@@ -519,7 +519,7 @@ class OrderStockTransferController extends Base {
           var _body = {};
           _body["Order"] = _order;
           await this.insertOrder(_body);
-          await this.insertOrderItemByCard(body,"StockTransfer");
+          await this.insertOrderItemLoadCardByCard(body,"StockTransfer");
           await this.closurebyCard(body,"StockTransfer");
         }
         resolve(body);
@@ -530,7 +530,42 @@ class OrderStockTransferController extends Base {
     return promise;
   }
 
-  static async insertOrderItemByCard(body,kind) {
+  static async insertOrderItemDevolutionByCard(body,kind) {
+    const promise = new Promise(async (resolve, reject) => {
+      try {
+        
+        var dataItem = {};
+        var quantity = 0;
+        for (var item of body.Items) {
+          if (item.devolution > 0) {
+            quantity = item.devolution
+          }
+          if (quantity > 0) {
+            dataItem = {
+              id: 0,
+              tb_institution_id: body.Order.tb_institution_id,
+              tb_order_id: body.Order.id,
+              terminal: 0,
+              tb_stock_list_id: body.Order.tb_stock_list_id_ori,
+              tb_product_id: item.tb_product_id,
+              quantity: quantity,
+              unit_value: item.unit_value,
+              kind: kind,
+            };
+            //Quanto o insert é mais complexo como getNext precisa do await no loop          
+            await orderItem.insert(dataItem);
+          }
+        };
+        resolve("Items Adicionados");
+      } catch (err) {
+        reject("orderTransfer.insertOrderItem:" + err);
+      }
+
+    });
+    return promise;
+  }
+
+  static async insertOrderItemLoadCardByCard(body,kind) {
     const promise = new Promise(async (resolve, reject) => {
       try {
         

@@ -387,11 +387,8 @@ class OrderConsignmentController extends Base {
         '   on (ctm.id = orc.tb_customer_id) ' +
         '   inner join tb_entity slm  ' +
         '   on (slm.id = orc.tb_salesman_id) ' +
-        'where (ord.tb_institution_id =? )  ' +
-        ' and (orc.tb_customer_id =? ) ' +
-        ' and (orc.kind ="supplying") ' +
-        ' and (ord.dt_record  = ( ' +
-        '    select max(ord.dt_record) dt_record ' +
+        'where  (ord.id  = ( ' +
+        '    select max(ord.id) id ' +
         '    from tb_order ord  ' +
         '       inner join tb_order_consignment orc  ' +
         '       on (orc.id = ord.id)  ' +
@@ -403,7 +400,7 @@ class OrderConsignmentController extends Base {
         '    )) ' +
         'limit 1 ',
         {
-          replacements: [tb_institution_id, tb_customer_id, tb_institution_id, tb_customer_id],
+          replacements: [tb_institution_id, tb_customer_id],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve(data[0]);
