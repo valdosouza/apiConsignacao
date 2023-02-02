@@ -64,7 +64,7 @@ class FinancialStatementController extends Base {
         '  inner join tb_product prd ' +
         '  on (prd.id = ori.tb_product_id)  and (ori.tb_institution_id = prd.tb_institution_id) ' +
         'where (ord.tb_institution_id =? ) ' +
-        ' and (ors.tb_salesman_id =?)';        
+        ' and (ors.tb_salesman_id =?)';
 
       if (tb_customer_id == 0) {
         sqltxt = sqltxt + ' and (ors.tb_customer_id <> ?) ';
@@ -74,14 +74,14 @@ class FinancialStatementController extends Base {
 
       sqltxt = sqltxt +
         '  and (ord.dt_record between ? and ?) ' +
-        ' and (ori.kind =?) '+
+        ' and (ori.kind =?) ' +
         'group by 1 ';
 
 
       Tb.sequelize.query(
         sqltxt,
         {
-          replacements: [tb_institution_id, tb_salesman_id, tb_customer_id, dataini, datafim,'sale'],
+          replacements: [tb_institution_id, tb_salesman_id, tb_customer_id, dataini, datafim, 'sale'],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           var dataResult = [];
@@ -97,7 +97,7 @@ class FinancialStatementController extends Base {
           dataResult.push({
             "description": "Total de Vendas",
             "tag_value": Number(totalvalue.toFixed(2)),
-            "kind": "Total de Vendas",
+            "kind": "summarized",
           });
           resolve(dataResult);
         })
@@ -117,11 +117,11 @@ class FinancialStatementController extends Base {
         '   on (fnl.tb_order_id = ors.id) and (fnl.tb_institution_id = ors.tb_institution_id)  ' +
         '   left outer join tb_financial_payment fnp  ' +
         '   on (fnp.tb_order_id = ors.id) and (fnp.tb_institution_id = ors.tb_institution_id)   ' +
-     
+
         '   inner join tb_payment_types pmt ' +
         '   on (pmt.id = fnl.tb_payment_types_id)  ' +
         'where (ors.tb_institution_id =? ) ' +
-        ' and (ors.tb_salesman_id =?)'+
+        ' and (ors.tb_salesman_id =?)' +
         ' and (fnp.tb_order_id is null) ';
 
       if (tb_customer_id == 0) {
@@ -154,7 +154,7 @@ class FinancialStatementController extends Base {
           dataResult.push({
             "description": "Total a Receber",
             "tag_value": Number(totalvalue),
-            "kind": "Total a Receber",
+            "kind": "summarized",
           });
           resolve(dataResult);
         })
@@ -212,7 +212,7 @@ class FinancialStatementController extends Base {
           dataResult.push({
             description: "Total Recebido",
             tag_value: Number(totalvalue),
-            kind: "Total Recebido",
+            kind: "summarized",
           });
 
           resolve(dataResult);
@@ -369,11 +369,15 @@ class FinancialStatementController extends Base {
           tb_financial_plans_id_deb: 0,
         }
         for (var item of body.Payments) {
-          if ((item.value > 0) && (item.name_payment_type != 'BOLETO')) {
-            dataFinancial.tb_payment_types_id = item.tb_payment_type_id,
-              dataFinancial.credit_value = item.value,
-              dataFinancial.settled_code = item.settled_code,
-              await this.insert(dataFinancial);
+          if (item.value > 0) {
+            dataFinancial.tb_payment_types_id = item.tb_payment_type_id;
+            if ((item.name_payment_type = 'DINHEIRO') && (body.Order.change_value > 0)) {
+              dataFinancial.credit_value = item.value - body.Order.change_value;
+            } else {
+              dataFinancial.credit_value = item.value;
+            }
+            dataFinancial.settled_code = item.settled_code;
+            await this.insert(dataFinancial);
           }
         }
         resolve(body);

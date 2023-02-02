@@ -642,6 +642,7 @@ class OrderSaleController extends Base {
           await stockStatement.insert(dataItem);
 
         };
+        await order.updateStatus(body.Order.tb_institution_id, body.Order.id, 'F');
         resolve("200");
       } catch (err) {
         reject(err);

@@ -520,7 +520,8 @@ class OrderStockTransferController extends Base {
           _body["Order"] = _order;
           await this.insertOrder(_body);
           await this.insertOrderItemLoadCardByCard(body,"StockTransfer");
-          await this.closurebyCard(body,"StockTransfer");
+          //foi desativado para que o usuario adm faça o fechamento
+          //await this.closurebyCard(body,"StockTransfer");
         }
         resolve(body);
       } catch (err) {
@@ -631,6 +632,7 @@ class OrderStockTransferController extends Base {
           await stockStatement.insert(dataItem);
 
         };
+        await order.updateStatus(body.Order.tb_institution_id, body.Order.id, 'F');
         resolve("200");
       } catch (err) {
         reject(err);

@@ -113,11 +113,15 @@ class FinancialController extends Base {
           operation: "C",
         }
         for (var item of body.Payments) {
-          if ((item.value > 0) || (item.name_payment_type == 'BOLETO')) {
-            dataFinancial.parcel += dataFinancial.parcel,
-              dataFinancial.tb_payment_types_id = item.tb_payment_type_id,
-              dataFinancial.tag_value = item.value,
-              await this.insert(dataFinancial);
+          if (item.value > 0) {
+            dataFinancial.parcel += dataFinancial.parcel;
+            dataFinancial.tb_payment_types_id = item.tb_payment_type_id;
+            if ((item.name_payment_type = 'DINHEIRO') && (body.Order.change_value > 0)) {
+              dataFinancial.tag_value = item.value - body.Order.change_value;
+            } else {
+              dataFinancial.tag_value = item.value;
+            }
+            await this.insert(dataFinancial);
           }
         }
         resolve(body);

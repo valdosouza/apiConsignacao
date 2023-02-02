@@ -479,7 +479,8 @@ class OrderStockAdjustController extends Base {
           _body["Order"] = _order;
           await this.insertOrder(_body);          
           await this.insertOrderItemByCard(body, "StockAdjustment");
-          await this.closurebyCard(body, "StockAdjustment");
+          //foi desativado para que o usuario adm faça o fechamento
+          //await this.closurebyCard(body, "StockAdjustment");
         }
         resolve(body);
       } catch (err) {
