@@ -281,16 +281,17 @@ class FinancialStatementController extends Base {
     const promise = new Promise((resolve, reject) => {
 
       var sqltxt =
-        'select etd.id, etd.name_company  name_customer, SUBSTRING(time(ora.createdAt), 1, 5) time_attendace, sum(fnp.paid_value) value_charged ' +
+        'select etd.id, etd.name_company  name_customer, SUBSTRING(time(ora.createdAt), 1, 5) time_attendace, sum(fnl.tag_value) value_charged ' +
         'from tb_order_sale ors  ' +
         '  inner join tb_financial fnl  ' +
         '  on (fnl.tb_order_id = ors.id)  ' +
         '    and (fnl.tb_institution_id = ors.tb_institution_id) ' +
 
-        '    inner join tb_financial_payment fnp  ' +
-        '    on (fnl.tb_order_id = fnp.tb_order_id)  ' +
-        '    and (fnl.tb_institution_id = fnp.tb_institution_id)  ' +
-        '    and (fnl.parcel = fnp.parcel)  ' +
+        //cliente pediu para retirar o processo de pagamento - tudo é considerado com recebido.
+        // '    inner join tb_financial_payment fnp  ' +
+        // '    on (fnl.tb_order_id = fnp.tb_order_id)  ' +
+        // '    and (fnl.tb_institution_id = fnp.tb_institution_id)  ' +
+        // '    and (fnl.parcel = fnp.parcel)  ' +
 
         '  inner join tb_entity etd ' +
         '  on (etd.id = fnl.tb_entity_id)  ' +
@@ -321,17 +322,20 @@ class FinancialStatementController extends Base {
     const promise = new Promise(async (resolve, reject) => {
       try {
         Tb.sequelize.query(
-          '  select ' +
-          '  fs.dt_record, ' +
-          '  pt.description name_payment_type, ' +
-          '  sum(fs.credit_value - debit_value) balance_value ' +
-          'From tb_financial_statement fs ' +
-          '   inner join tb_payment_types pt ' +
-          '   on (pt.id = fs.tb_payment_types_id) ' +
-          'where ( fs.tb_institution_id =? ) ' +
-          'and ( fs.tb_user_id =? ) ' +
-          'and ( fs.dt_record =? ) ' +
-          'group by 1,2 ',
+          'select '+
+          'fnl.dt_record,  '+
+          'pt.description name_payment_type,  '+
+          'sum(fnl.tag_value) balance_value  '+
+          'From tb_financial fnl '+
+          '  inner join tb_order ord  '+
+          '  on (ord.id = fnl.tb_order_id) '+
+          '  and (ord.tb_institution_id = fnl.tb_institution_id) '+
+          '  inner join tb_payment_types pt  '+
+          '  on (pt.id = fnl.tb_payment_types_id)  '+
+          'where ( fnl.tb_institution_id =? )  '+
+          'and ( ord.tb_user_id =? )  '+
+          'and ( fnl.dt_record =? )  '+
+          'group by 1,2  ',
           {
             replacements: [tb_institution_id, tb_user_id, dt_record],
             type: Tb.sequelize.QueryTypes.SELECT
