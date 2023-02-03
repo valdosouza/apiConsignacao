@@ -44,7 +44,7 @@ class OrderStockAdjustController extends Base {
         tb_entity_id: body.Order.tb_entity_id,
         direction: body.Order.direction
       }
-      console.log(dataOrder);
+
       Tb.create(dataOrder)
         .then(() => {
           resolve(body);
@@ -147,7 +147,7 @@ class OrderStockAdjustController extends Base {
     return promise;
   }
 
-  static getItemList(tb_institution_id, id,kind) {
+  static getItemList(tb_institution_id, id, kind) {
     const promise = new Promise((resolve, reject) => {
       Tb.sequelize.query(
         'select ' +
@@ -165,7 +165,7 @@ class OrderStockAdjustController extends Base {
         ' and ( ora.id = ? )  ' +
         ' and ( ori.kind =? )  ',
         {
-          replacements: [tb_institution_id, id,kind],
+          replacements: [tb_institution_id, id, kind],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve(data);
@@ -473,11 +473,11 @@ class OrderStockAdjustController extends Base {
             dt_record: body.Order.dt_record,
             tb_stock_list_id_ori: body.StockOrigen.tb_stock_list_id,
             tb_stock_list_id_des: body.StockDestiny.tb_stock_list_id,
-            direction : body.Order.direction,
+            direction: body.Order.direction,
           }
           var _body = {};
           _body["Order"] = _order;
-          await this.insertOrder(_body);          
+          await this.insertOrder(_body);
           await this.insertOrderItemByCard(body, "StockAdjustment");
           //foi desativado para que o usuario adm faça o fechamento
           //await this.closurebyCard(body, "StockAdjustment");
@@ -528,10 +528,10 @@ class OrderStockAdjustController extends Base {
     return promise;
   }
 
-  static async closurebyCard(body,operation) {
+  static async closurebyCard(body, operation) {
     const promise = new Promise(async (resolve, reject) => {
       try {
-        var items = await this.getItemList(body.Order.tb_institution_id, body.Order.id,operation);
+        var items = await this.getItemList(body.Order.tb_institution_id, body.Order.id, operation);
         var dataItem = {};
         for (var item of items) {
           dataItem = {

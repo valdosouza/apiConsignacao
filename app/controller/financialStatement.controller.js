@@ -3,6 +3,7 @@ const db = require("../model");
 const { DOUBLE } = require('sequelize');
 const Tb = db.financialStatement;
 const DateFunction = require('../util/dateFunction.js');
+const OrderConsigngmentController = require('../controller/orderConsignment.controller.js');
 
 class FinancialStatementController extends Base {
 
@@ -20,32 +21,66 @@ class FinancialStatementController extends Base {
   }
 
 
-  static get(tb_institution_id, tb_salesman_id, tb_customer_id, date, kind_date) {
+  static get(tb_institution_id, tb_salesman_id, tb_customer_id, dt_record, kind_date) {
     const promise = new Promise(async (resolve, reject) => {
       try {
-        var dataini = DateFunction.newDate();
-        var datafim = DateFunction.newDate();
+        var dataini = dt_record;
+        var datafim = dt_record;
+        var dataResult = [];
 
         if (kind_date != 'D') {
+          dataini = DateFunction.newDate();
+          datafim = DateFunction.newDate();
           dataini = DateFunction.firtDayMonth(dataini);
           datafim = DateFunction.lastDayMonth(datafim);
         }
-        var dataResult = [];
-
         var dataOrdersale = [];
-        dataOrdersale = await this.getOrderSales(tb_institution_id, tb_salesman_id, tb_customer_id, dataini, datafim);
+        dataOrdersale = await FinancialStatementController.getOrderSales(tb_institution_id, tb_salesman_id, 0, dataini, datafim);
+
+        var dataTotalVenda = {
+          description: "Total de Vendas",
+          tag_value: dataOrdersale[dataOrdersale.length - 1].tag_value,
+          kind: "totais",
+          color: "green",
+        };
+
+        var dataDividaVelha = {};
+        dataDividaVelha = await OrderConsigngmentController.getDividaVelhabySalesman(tb_institution_id, tb_salesman_id);
+
+        var dataTotalReceber = {
+          description: "Total à receber",
+          tag_value: dataDividaVelha.tag_value + dataTotalVenda.tag_value,
+          kind: "totais",
+          color: "black",
+        };
 
         var dataFinancialReceived = [];
-        dataFinancialReceived = await this.getFinancialReceived(tb_institution_id, tb_salesman_id, tb_customer_id, dataini, datafim);
+        dataFinancialReceived = await FinancialStatementController.getFinancialReceived(tb_institution_id, tb_salesman_id, 0, dataini, datafim);
 
-        var dataFinancialToReceived = []
-        dataFinancialToReceived = await this.getFinancialToReceive(tb_institution_id, tb_salesman_id, tb_customer_id, dataini, datafim);
+        var dataTotalRecebido = {
+          description: "Total Recebido",
+          tag_value: dataFinancialReceived[dataFinancialReceived.length - 1].tag_value,
+          kind: "totais",
+          color: "blue",
+        };
 
-        dataResult = dataOrdersale.concat(dataFinancialReceived, dataFinancialToReceived);
+        var dataSaldoDevedor = {
+          description: "Saldo devedor",
+          tag_value: dataTotalReceber.tag_value - dataTotalRecebido.tag_value,
+          kind: "totais",
+          color: "red",
+        };
+
+
+        //cliente definiu que tudo será condiderado como recebido
+        //var dataFinancialToReceived = []
+        //dataFinancialToReceived = await FinancialStatementController.getFinancialToReceive(tb_institution_id, tb_user_id, 0, dataini, datafim);
+
+        dataResult = dataOrdersale.concat(dataFinancialReceived, dataTotalVenda, dataDividaVelha, dataTotalReceber, dataTotalRecebido, dataSaldoDevedor);//, dataFinancialToReceived);
 
         resolve(dataResult);
       } catch (err) {
-        reject("financialStatenebt.getOrderSale: " + err);
+        reject("financialStatement.getOrderSale: " + err);
       }
     });
     return promise;
@@ -104,7 +139,7 @@ class FinancialStatementController extends Base {
           resolve(dataResult);
         })
         .catch(err => {
-          reject("financialStatenebt.getOrderSale: " + err);
+          reject("financialStatement.getOrderSale: " + err);
         });
     });
     return promise;
@@ -161,7 +196,7 @@ class FinancialStatementController extends Base {
           resolve(dataResult);
         })
         .catch(err => {
-          reject("financialStatenebt.getOrderSale: " + err);
+          reject("financialStatement.getOrderSale: " + err);
         });
     });
     return promise;
@@ -215,7 +250,7 @@ class FinancialStatementController extends Base {
           resolve(dataResult);
         })
         .catch(err => {
-          reject("financialStatenebt.getOrderSale: " + err);
+          reject("financialStatement.getOrderSale: " + err);
         });
     });
     return promise;
@@ -275,7 +310,7 @@ class FinancialStatementController extends Base {
           resolve(data);
         })
         .catch(err => {
-          reject("financialStatenebt.getOrderSale: " + err);
+          reject("financialStatement.getOrderSale: " + err);
         });
     });
     return promise;
