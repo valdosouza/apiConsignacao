@@ -29,10 +29,8 @@ class FinancialStatementController extends Base {
         var dataResult = [];
 
         if (kind_date != 'D') {
-          dataini = DateFunction.newDate();
-          datafim = DateFunction.newDate();
-          dataini = DateFunction.firtDayMonth(dataini);
-          datafim = DateFunction.lastDayMonth(datafim);
+          dataini = DateFunction.firtDayMonth(dt_record);
+          datafim = DateFunction.lastDayMonth(dt_record);
         }
         var dataOrdersale = [];
         dataOrdersale = await FinancialStatementController.getOrderSales(tb_institution_id, tb_salesman_id, tb_customer_id, dataini, datafim);
