@@ -245,6 +245,7 @@ class FinancialStatementController extends Base {
             description: "Total Recebido",
             tag_value: Number(totalvalue),
             kind: "summarized",
+            color: "blue"
           });
 
           resolve(dataResult);
