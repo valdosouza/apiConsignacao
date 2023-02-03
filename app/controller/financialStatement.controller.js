@@ -35,7 +35,7 @@ class FinancialStatementController extends Base {
           datafim = DateFunction.lastDayMonth(datafim);
         }
         var dataOrdersale = [];
-        dataOrdersale = await FinancialStatementController.getOrderSales(tb_institution_id, tb_salesman_id, 0, dataini, datafim);
+        dataOrdersale = await FinancialStatementController.getOrderSales(tb_institution_id, tb_salesman_id, tb_customer_id, dataini, datafim);
 
         var dataTotalVenda = {
           description: "Total de Vendas",
@@ -45,7 +45,7 @@ class FinancialStatementController extends Base {
         };
 
         var dataDividaVelha = {};
-        dataDividaVelha = await OrderConsigngmentController.getDividaVelhabySalesman(tb_institution_id, tb_salesman_id);
+        dataDividaVelha = await OrderConsigngmentController.getDividaVelhabySalesman(tb_institution_id, tb_salesman_id,tb_customer_id);
 
         var dataTotalReceber = {
           description: "Total à receber",
@@ -55,7 +55,7 @@ class FinancialStatementController extends Base {
         };
 
         var dataFinancialReceived = [];
-        dataFinancialReceived = await FinancialStatementController.getFinancialReceived(tb_institution_id, tb_salesman_id, 0, dataini, datafim);
+        dataFinancialReceived = await FinancialStatementController.getFinancialReceived(tb_institution_id, tb_salesman_id, tb_customer_id, dataini, datafim);
 
         var dataTotalRecebido = {
           description: "Total Recebido",
