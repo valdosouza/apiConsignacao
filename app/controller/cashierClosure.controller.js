@@ -4,6 +4,7 @@ const Tb = db.cashierclosure;
 const CashierController = require("../controller/cashier.controller.js");
 const DateFunction = require('../util/dateFunction.js');
 const FinancialStatementController = require("../controller/financialStatement.controller.js");
+const OrderConsigngmentController = require('../controller/orderConsignment.controller.js');
 
 class CashierClosureController extends Base {
   static async create(body) {
@@ -112,7 +113,7 @@ class CashierClosureController extends Base {
           '  c.dt_record ' +
           'from tb_cashier c ' +
           'where ( c.tb_institution_id =? ) ' +
-          'and ( c.tb_user_id = ? ) '+
+          'and ( c.tb_user_id = ? ) ' +
           ' and ( hr_end is not null)',
           {
             replacements: [tb_institution_id, tb_user_id, dt_record],
@@ -139,14 +140,37 @@ class CashierClosureController extends Base {
         var dataOrdersale = [];
         dataOrdersale = await FinancialStatementController.getOrderSales(tb_institution_id, tb_user_id, 0, dataini, datafim);
 
+        var dataTotalVenda = {
+          description: "Total de Vendas",
+          tag_value: dataOrdersale[dataOrdersale.length - 1].tag_value,
+          kind: "totais",
+        };
+
+        var dataDividaVelha = {};
+        dataDividaVelha = await OrderConsigngmentController.getDividaVelhabySalesman(tb_institution_id, tb_user_id);
+        console.log(dataDividaVelha);
+
+        var dataTotalReceber = {
+          description: "Total à receber",
+          tag_value: dataDividaVelha.tag_value + dataTotalVenda.tag_value,
+          kind: "totais",
+        };
+
         var dataFinancialReceived = [];
         dataFinancialReceived = await FinancialStatementController.getFinancialReceived(tb_institution_id, tb_user_id, 0, dataini, datafim);
+
+        var dataSaldoDevedor = {
+          description: "Saldo devedor",
+          tag_value: dataTotalReceber.tag_value - dataFinancialReceived[dataFinancialReceived.length - 1].tag_value,
+          kind: "totais",
+        };
+
 
         //cliente definiu que tudo será condiderado como recebido
         //var dataFinancialToReceived = []
         //dataFinancialToReceived = await FinancialStatementController.getFinancialToReceive(tb_institution_id, tb_user_id, 0, dataini, datafim);
 
-        dataResult = dataOrdersale.concat(dataFinancialReceived);//, dataFinancialToReceived);
+        dataResult = dataOrdersale.concat(dataFinancialReceived, dataDividaVelha, dataTotalReceber, dataSaldoDevedor);//, dataFinancialToReceived);
 
 
         var DataGeral = {
