@@ -99,7 +99,7 @@ class FinancialStatementController extends Base {
             description: "Total de Vendas",
             tag_value: Number(totalvalue.toFixed(2)),
             kind: "summarized",
-            kind: "green",
+            color: "green",
           });
           resolve(dataResult);
         })
