@@ -31,27 +31,38 @@ class OrderConsignmentController extends Base {
   };
   static async getDividaVelhabySalesman(tb_institution_id, tb_salesman_id) {
     const promise = new Promise((resolve, reject) => {
+      var sqltxt =
+      'select sum(current_debit_balance) dividaVelha ' +
+      'from ( ' +
+      'SELECT DISTINCT orc.tb_customer_id, orc.current_debit_balance, orc.id,orc.dt_record ' +
+      'FROM tb_order_consignment orc ' +
+      '   inner join tb_order ord ' +
+      '   on (ord.id = orc.id) ' +
+      '   and (ord.tb_institution_id = orc.tb_institution_id) ' +
+      'WHERE orc.id = ( ' +
+      '        SELECT MAX(orc.id)  ' +
+      '        FROM tb_order_consignment orca ' +
+      '         inner join tb_order orda ' +
+      '         on (orda.id = orca.id) ' +
+      '         and (orda.tb_institution_id = orca.tb_institution_id) ' +
+      '        WHERE ( orca.tb_institution_id = orc.tb_institution_id ) ' +
+      '        and ( orca.tb_customer_id = orc.tb_customer_id ) ' +
+      '        and ( orda.tb_user_id = ord.tb_user_id ) ' +
+      '        GROUP BY orca.tb_customer_id ' +
+      ') and (orc.tb_institution_id = ?) ' +
+      '  and (ord.tb_user_id = ?) ' ;
+
+      if (tb_customer_id == 0) {
+        sqltxt = sqltxt + ' and (orca.tb_customer_id <> ?) ';
+      } else {
+        sqltxt = sqltxt + ' and (orca.tb_customer_id = ?) ';
+      };
+
+      sqltxt = sqltxt +        
+      ') current_debit_balance ';
+
       Tb.sequelize.query(
-        'select sum(current_debit_balance) dividaVelha ' +
-        'from ( ' +
-        'SELECT DISTINCT orc.tb_customer_id, orc.current_debit_balance, orc.id,orc.dt_record ' +
-        'FROM tb_order_consignment orc ' +
-        '   inner join tb_order ord ' +
-        '   on (ord.id = orc.id) ' +
-        '   and (ord.tb_institution_id = orc.tb_institution_id) ' +
-        'WHERE orc.id = ( ' +
-        '        SELECT MAX(orc.id)  ' +
-        '        FROM tb_order_consignment orca ' +
-        '         inner join tb_order orda ' +
-        '         on (orda.id = orca.id) ' +
-        '         and (orda.tb_institution_id = orca.tb_institution_id) ' +
-        '        WHERE ( orca.tb_institution_id = orc.tb_institution_id ) ' +
-        '        and ( orca.tb_customer_id = orc.tb_customer_id ) ' +
-        '        and ( orda.tb_user_id = ord.tb_user_id ) ' +
-        '        GROUP BY orca.tb_customer_id ' +
-        ') and (orc.tb_institution_id = ?) ' +
-        '  and (ord.tb_user_id = ?) ' +
-        ') current_debit_balance ',
+        sqltxt,
         {
           replacements: [tb_institution_id, tb_salesman_id],
           type: Tb.sequelize.QueryTypes.SELECT
