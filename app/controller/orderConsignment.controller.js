@@ -60,6 +60,7 @@ class OrderConsignmentController extends Base {
             description: "Dívida velha",
             tag_value: Number(data[0].dividaVelha),
             kind: "totais",
+            color: "red",
           },);
         })
         .catch(err => {

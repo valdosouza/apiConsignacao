@@ -144,6 +144,7 @@ class CashierClosureController extends Base {
           description: "Total de Vendas",
           tag_value: dataOrdersale[dataOrdersale.length - 1].tag_value,
           kind: "totais",
+          color: "green",
         };
 
         var dataDividaVelha = {};
@@ -154,6 +155,7 @@ class CashierClosureController extends Base {
           description: "Total à receber",
           tag_value: dataDividaVelha.tag_value + dataTotalVenda.tag_value,
           kind: "totais",
+          color : "black",
         };
 
         var dataFinancialReceived = [];
@@ -163,12 +165,14 @@ class CashierClosureController extends Base {
           description: "Total Recebido",
           tag_value: dataFinancialReceived[dataFinancialReceived.length - 1].tag_value,
           kind: "totais",
+          color : "blue",
         };
 
         var dataSaldoDevedor = {
           description: "Saldo devedor",
           tag_value: dataTotalReceber.tag_value - dataTotalRecebido.tag_value,
           kind: "totais",
+          color : "red",
         };
 
 

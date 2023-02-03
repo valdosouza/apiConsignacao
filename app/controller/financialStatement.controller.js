@@ -55,7 +55,7 @@ class FinancialStatementController extends Base {
     const promise = new Promise((resolve, reject) => {
 
       var sqltxt =
-        'select prd.description name_product, sum((ori.quantity * ori.unit_value)) subtotal, "Total de Vendas" kind ' +
+        'select prd.description name_product, sum((ori.quantity * ori.unit_value)) subtotal, "Total de Vendas" kind, "green" color ' +
         'from tb_order ord ' +
         '  inner join tb_order_sale ors ' +
         '  on (ord.id = ors.id) and (ord.tb_institution_id = ors.tb_institution_id)  ' +
@@ -89,15 +89,17 @@ class FinancialStatementController extends Base {
           for (var item of data) {
             totalvalue += Number(item.subtotal),
               dataResult.push({
-                "description": item.name_product,
-                "tag_value": Number(item.subtotal),
-                "kind": item.kind,
+                description: item.name_product,
+                tag_value: Number(item.subtotal),
+                kind: item.kind,
+                color: item.color
               });
           }
           dataResult.push({
-            "description": "Total de Vendas",
-            "tag_value": Number(totalvalue.toFixed(2)),
-            "kind": "summarized",
+            description: "Total de Vendas",
+            tag_value: Number(totalvalue.toFixed(2)),
+            kind: "summarized",
+            kind: "green",
           });
           resolve(dataResult);
         })
@@ -168,7 +170,7 @@ class FinancialStatementController extends Base {
   static getFinancialReceived(tb_institution_id, tb_salesman_id, tb_customer_id, dataini, datafim) {
     const promise = new Promise((resolve, reject) => {
       var sqltxt =
-        'select pmt.description name_payment_type, sum(fnl.tag_value) subtotal, "Total Recebido" kind ' +
+        'select pmt.description name_payment_type, sum(fnl.tag_value) subtotal, "Total Recebido" kind, "blue" color ' +
         'from tb_order_sale ors ' +
         '   inner join tb_financial fnl ' +
         '   on (fnl.tb_order_id = ors.id) ' +
@@ -197,9 +199,10 @@ class FinancialStatementController extends Base {
           for (var item of data) {
             totalvalue += Number(item.subtotal),
               dataResult.push({
-                "description": item.name_payment_type,
-                "tag_value": Number(item.subtotal),
-                "kind": item.kind,
+                description: item.name_payment_type,
+                tag_value: Number(item.subtotal),
+                kind: item.kind,
+                color: "blue",
               });
           }
 
