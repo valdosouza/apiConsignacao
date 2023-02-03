@@ -168,17 +168,11 @@ class FinancialStatementController extends Base {
   static getFinancialReceived(tb_institution_id, tb_salesman_id, tb_customer_id, dataini, datafim) {
     const promise = new Promise((resolve, reject) => {
       var sqltxt =
-        'select pmt.description name_payment_type, sum(fnp.paid_value) subtotal, "Total Recebido" kind ' +
+        'select pmt.description name_payment_type, sum(fnl.tag_value) subtotal, "Total Recebido" kind ' +
         'from tb_order_sale ors ' +
         '   inner join tb_financial fnl ' +
         '   on (fnl.tb_order_id = ors.id) ' +
         '     and (fnl.tb_institution_id = ors.tb_institution_id)  ' +
-
-        'inner join tb_financial_payment fnp ' +
-        'on (fnl.tb_order_id = fnp.tb_order_id)  ' +
-        '     and (fnl.tb_institution_id = fnp.tb_institution_id) ' +
-        '     and (fnl.parcel = fnp.parcel)  ' +
-
         '   inner join tb_payment_types pmt ' +
         '   on (pmt.id = fnl.tb_payment_types_id)  ' +
         'where (ors.tb_institution_id =? ) ' +

@@ -142,10 +142,11 @@ class CashierClosureController extends Base {
         var dataFinancialReceived = [];
         dataFinancialReceived = await FinancialStatementController.getFinancialReceived(tb_institution_id, tb_user_id, 0, dataini, datafim);
 
-        var dataFinancialToReceived = []
-        dataFinancialToReceived = await FinancialStatementController.getFinancialToReceive(tb_institution_id, tb_user_id, 0, dataini, datafim);
+        //cliente definiu que tudo será condiderado como recebido
+        //var dataFinancialToReceived = []
+        //dataFinancialToReceived = await FinancialStatementController.getFinancialToReceive(tb_institution_id, tb_user_id, 0, dataini, datafim);
 
-        dataResult = dataOrdersale.concat(dataFinancialReceived, dataFinancialToReceived);
+        dataResult = dataOrdersale.concat(dataFinancialReceived);//, dataFinancialToReceived);
 
 
         var DataGeral = {

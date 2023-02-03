@@ -30,10 +30,12 @@ class OrderSaleEndPoint {
         await OrderSaleController.saveByCard(req.body);
 
         await FinancialController.saveByCard(req.body);
-
-        await FinancialPaymentController.saveByCard(req.body);
-
-        await FinancialStatementController.saveByCard(req.body);
+        
+        //cliente definiu que tudo será condiderado como recebido
+        //await FinancialPaymentController.saveByCard(req.body);
+      
+        //cliente definiu que tudo será condiderado como recebido
+        //await FinancialStatementController.saveByCard(req.body);
 
         res.send(data);
       })
