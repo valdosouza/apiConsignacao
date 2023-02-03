@@ -29,7 +29,7 @@ class OrderConsignmentController extends Base {
     });
     return promise;
   };
-  static async getDividaVelhabySalesman(tb_institution_id, tb_salesman_id) {
+  static async getDividaVelhabySalesman(tb_institution_id, tb_salesman_id,tb_customer_id) {
     const promise = new Promise((resolve, reject) => {
       var sqltxt =
       'select sum(current_debit_balance) dividaVelha ' +
@@ -47,24 +47,23 @@ class OrderConsignmentController extends Base {
       '         and (orda.tb_institution_id = orca.tb_institution_id) ' +
       '        WHERE ( orca.tb_institution_id = orc.tb_institution_id ) ' +
       '        and ( orca.tb_customer_id = orc.tb_customer_id ) ' +
-      '        and ( orda.tb_user_id = ord.tb_user_id ) ' +
-      '        GROUP BY orca.tb_customer_id ' +
-      ') and (orc.tb_institution_id = ?) ' +
-      '  and (ord.tb_user_id = ?) ' ;
+      '        and ( orda.tb_user_id = ord.tb_user_id ) ' ;
 
       if (tb_customer_id == 0) {
         sqltxt = sqltxt + ' and (orca.tb_customer_id <> ?) ';
       } else {
         sqltxt = sqltxt + ' and (orca.tb_customer_id = ?) ';
       };
-
       sqltxt = sqltxt +        
+      '        GROUP BY orca.tb_customer_id ' +
+      ') and (orc.tb_institution_id = ?) ' +
+      '  and (ord.tb_user_id = ?) ' +
       ') current_debit_balance ';
 
       Tb.sequelize.query(
         sqltxt,
         {
-          replacements: [tb_institution_id, tb_salesman_id],
+          replacements: [tb_institution_id, tb_salesman_id, tb_customer_id],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve({
