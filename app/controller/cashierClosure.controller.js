@@ -24,6 +24,7 @@ class CashierClosureController extends Base {
               description: item.description,
               kind: item.kind,
               tag_value: item.tag_value,
+              color : item.color,
             };
             await Tb.create(dataClosure);
           }
@@ -50,7 +51,8 @@ class CashierClosureController extends Base {
           '  c.tb_user_id, ' +
           '  cc.description, ' +
           '  cc.tag_value, ' +
-          '  cc.kind ' +
+          '  cc.kind, ' +
+          '  cc.color '+
           'from tb_cashier_closure cc ' +
           '   inner join tb_cashier c ' +
           '   on (c.id = cc.tb_cashier_id) ' +
@@ -76,7 +78,8 @@ class CashierClosureController extends Base {
                 itemResult = {
                   description: item.description,
                   tag_value: Number(item.tag_value),
-                  kind: item.kind
+                  kind: item.kind,
+                  color: item.color,
                 }
                 items.push(itemResult);
               }
@@ -91,6 +94,7 @@ class CashierClosureController extends Base {
                 description: "Nenhum movimento",
                 tag_value: 0.0,
                 kind: "Info",
+                color: "black"
               }];
               dataResult.items = items;
             }

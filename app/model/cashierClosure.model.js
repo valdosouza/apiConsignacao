@@ -67,7 +67,15 @@ const {
         comment: null,
         field: "tag_value"
       },
-  
+      color: {
+        type: DataTypes.STRING(25),
+        allowNull: true,
+        defaultValue: null,
+        primaryKey: false,
+        autoIncrement: false,
+        comment: null,
+        field: "color"
+      },
       createdAt: {
         type: DataTypes.DATE,
         allowNull: true,
