@@ -159,9 +159,15 @@ class CashierClosureController extends Base {
         var dataFinancialReceived = [];
         dataFinancialReceived = await FinancialStatementController.getFinancialReceived(tb_institution_id, tb_user_id, 0, dataini, datafim);
 
+        var dataTotalRecebido = {
+          description: "Total Recebido",
+          tag_value: dataFinancialReceived[dataFinancialReceived.length - 1].tag_value,
+          kind: "totais",
+        };
+
         var dataSaldoDevedor = {
           description: "Saldo devedor",
-          tag_value: dataTotalReceber.tag_value - dataFinancialReceived[dataFinancialReceived.length - 1].tag_value,
+          tag_value: dataTotalReceber.tag_value - dataTotalRecebido.tag_value,
           kind: "totais",
         };
 
@@ -170,7 +176,7 @@ class CashierClosureController extends Base {
         //var dataFinancialToReceived = []
         //dataFinancialToReceived = await FinancialStatementController.getFinancialToReceive(tb_institution_id, tb_user_id, 0, dataini, datafim);
 
-        dataResult = dataOrdersale.concat(dataFinancialReceived, dataDividaVelha, dataTotalReceber, dataSaldoDevedor);//, dataFinancialToReceived);
+        dataResult = dataOrdersale.concat(dataFinancialReceived,dataTotalVenda, dataDividaVelha, dataTotalReceber,dataTotalRecebido, dataSaldoDevedor);//, dataFinancialToReceived);
 
 
         var DataGeral = {
