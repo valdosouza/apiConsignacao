@@ -109,7 +109,7 @@ class OrderLoadCardController extends Base {
                 id: item.id,
                 tb_product_id: parseInt(item.tb_product_id),
                 name_product: item.name_product,
-                stock_balance: Number(item.quantity),
+                stock_balance: Number(item.stock_balance),
                 sale: Number(item.sale),
                 bonus: Number(item.bonus),
                 adjust: Number(item.adjust),
@@ -117,11 +117,8 @@ class OrderLoadCardController extends Base {
               }
             )
           }
-
         } else {
-
           var data = await StockBalanceControler.getAllBySalesman(tb_institution_id, tb_user_id);
-
           for (var item of data.items) {
             resData.push(
               {
