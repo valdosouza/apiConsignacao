@@ -23,6 +23,8 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *           type: integer
  *         tb_user_id:
  *           type: integer
+ *         user_name:
+ *           type: String  
  *         dt_record:
  *           type: string 
  *         items:
@@ -77,6 +79,49 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         description: Some server error
  */
  router.post("/", orderloadcard.create);
+
+ /**
+ * @swagger
+ * /orderloadcard/closure:
+ *   post:
+ *     summary: Closure the status orderloadcard
+ *     tags: [OrderLoadCard]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/OrderLoadCardMain'
+ *     responses:
+ *       200:
+ *         description: The OrderLoadCard was successfully closured
+ *       500:
+ *         description: Some server error
+ */
+router.post("/closure/", orderloadcard.closure);
+
+/**
+ * @swagger
+ * /orderloadcard/getlist/{tb_institution_id}:
+ *   get:
+ *     summary: Returns the list of items of locad card
+ *     tags: [OrderLoadCard]
+ *     parameters:
+ *      - in: path
+ *        name: tb_institution_id
+ *        required: true 
+ *     responses:
+ *       200:
+ *         description: The list of Items of card
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/OrderLoadCardMain'
+ */
+
+router.get("/getlist/:tb_institution_id", orderloadcard.getlist);
 
 
  /**

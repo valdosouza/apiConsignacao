@@ -8,19 +8,35 @@ const StockBalanceControler = require('../controller/stockBalance.controller.js'
 
 class OrderLoadCardController extends Base {
 
-  static async getById(id, tb_institution_id, tb_product_id) {
+  static async getById(tb_institution_id, id) {
     const promise = new Promise((resolve, reject) => {
       Tb.sequelize.query(
-        'Select * ' +
+        'Select ' +
+        'ord.id, ' +
+        'ord.tb_institution_id,'+
+        'ord.tb_user_id,'+
+        'occ.tb_product_id, ' +
+        'pd.description name_product, ' +
+        'occ.stock_balance, ' +
+        'occ.sale, ' +
+        'occ.bonus, ' +
+        'occ.adjust, ' +
+        'occ.new_load ' +
         'from tb_order_load_card  occ ' +
-        'where ( id =?) ' +
-        ' and (tb_institution_id =?)' +
-        ' and (tb_product_id =?)',
+        '  inner join tb_product pd ' +
+        '    on (pd.id = occ.tb_product_id) ' +
+        '    and (pd.tb_institution_id = occ.tb_institution_id)' +
+        '  inner join tb_order ord ' +
+        '  on (occ.id = ord.id)' +
+        '    and (occ.tb_institution_id = ord.tb_institution_id)' +
+        'where ( ord.id =?) ' +
+        ' and (ord.tb_institution_id =?)' ,
         {
-          replacements: [id, tb_institution_id, tb_product_id],
+          replacements: [id, tb_institution_id],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
-          resolve(data[0]);
+          
+          resolve( data);
         })
         .catch(err => {
           reject('getById: ' + err);
@@ -53,6 +69,36 @@ class OrderLoadCardController extends Base {
         ' and ( ord.status=?) ',
         {
           replacements: [tb_institution_id, tb_user_id, 'A'],
+          type: Tb.sequelize.QueryTypes.SELECT
+        }).then(data => {
+          resolve(data);
+        })
+        .catch(err => {
+          reject('getById: ' + err);
+        });
+    });
+    return promise;
+  };
+
+  static async getList(tb_institution_id) {
+    const promise = new Promise((resolve, reject) => {
+      Tb.sequelize.query(
+        'Select distinct '+
+        'ord.tb_institution_id, '+
+        'ord.id,  '+
+        'ord.dt_record,  '+
+        'ord.tb_user_id, '+
+        'etd.name_company name_user '+
+        'from tb_order_load_card  occ  '+
+        '  inner join tb_order ord  '+
+        '  on (occ.id = ord.id) '+
+        '    and (occ.tb_institution_id = ord.tb_institution_id) '+
+        '  inner join tb_entity etd '+
+        '  on (etd.id = ord.tb_user_id) '+
+        'where  (ord.tb_institution_id =?) '+
+        ' and (ord.status =?) ',
+        {
+          replacements: [tb_institution_id, 'A'],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve(data);

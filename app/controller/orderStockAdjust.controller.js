@@ -463,6 +463,13 @@ class OrderStockAdjustController extends Base {
         for (var item of body.Items) {
           qtde += item.adjust;
         }
+        console.log(qtde);
+          /*
+            Aqui muito cuidado por que o estoque é invertido mesmo...
+            O ajuste é uma devolução do vendedor que deve sair do Estoque do vendedor
+            Mas como temos outra operação de transferencia onde o esoque fabrica é a origem e o vendedor é o destino.
+            Precisamos aqui informar que o estoque vendedor é a origem para que o produto seja retirado do estoque dele.
+          */
         if (qtde > 0) {
           var _order = {
             id: body.Order.id,
@@ -471,16 +478,19 @@ class OrderStockAdjustController extends Base {
             number: 0,
             tb_entity_id: body.Order.tb_entity_id,
             dt_record: body.Order.dt_record,
-            tb_stock_list_id_ori: body.StockOrigen.tb_stock_list_id,
-            tb_stock_list_id_des: body.StockDestiny.tb_stock_list_id,
+            tb_stock_list_id_ori: body.StockDestiny.tb_stock_list_id,
+            tb_stock_list_id_des: body.StockOrigen.tb_stock_list_id,
             direction: body.Order.direction,
           }
+
+          body.Order['tb_stock_list_id_ori'] = body.StockDestiny.tb_stock_list_id;
+          body.Order['tb_stock_list_id_des'] = body.StockOrigen.tb_stock_list_id;
           var _body = {};
           _body["Order"] = _order;
           await this.insertOrder(_body);
           await this.insertOrderItemByCard(body, "StockAdjustment");
-          //foi desativado para que o usuario adm faça o fechamento
-          //await this.closurebyCard(body, "StockAdjustment");
+
+          await this.closurebyCard(body, "StockAdjustment");
         }
         resolve(body);
       } catch (err) {
@@ -499,6 +509,7 @@ class OrderStockAdjustController extends Base {
         var dataItem = {};
         var quantity = 0;
         for (var item of body.Items) {
+          quantity = 0;
           if (item.adjust > 0) {
             quantity = item.adjust
 
