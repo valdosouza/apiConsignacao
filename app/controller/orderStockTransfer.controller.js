@@ -495,7 +495,7 @@ class OrderStockTransferController extends Base {
   }
 
 
-  static async saveLoadCarByCard(body) {
+  static async saveLoadCardByCard(body) {
     const promise = new Promise(async (resolve, reject) => {
       try {
         var qtde = 0;

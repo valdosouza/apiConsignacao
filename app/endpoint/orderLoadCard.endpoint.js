@@ -28,7 +28,7 @@ class OrderLoadEndPoint {
           direction : "S",
         };
         await OrderStockAdjustController.saveByCard(req.body);
-        await OrderStockTransferController.saveLoadCarByCard(req.body);
+        await OrderStockTransferController.saveLoadCardByCard(req.body);
         res.send({ result: "LoadCard saved" });       
       })
   }

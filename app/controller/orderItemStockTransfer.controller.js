@@ -32,9 +32,10 @@ class OrderItemStockTransferController extends Base {
             '  inner join tb_product pdt '+
             '  on (pdt.id = ori.tb_product_id)'+
             'where (ori.tb_institution_id =? ) '+
-            ' and (ori.tb_order_id =?) ',                       
+            ' and (ori.tb_order_id =?) '+
+            ' and (ori.kind =?)',                      
             {
-              replacements: [tb_institution_id,tb_order_id],
+              replacements: [tb_institution_id,tb_order_id,'StockTransfer'],
               type: Tb.sequelize.QueryTypes.SELECT
             }).then(data => {              
               resolve(data);
