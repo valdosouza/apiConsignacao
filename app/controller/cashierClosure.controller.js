@@ -152,7 +152,8 @@ class CashierClosureController extends Base {
         };
 
         var dataDividaVelha = {};
-        dataDividaVelha = await OrderConsigngmentController.getDividaVelhabySalesman(tb_institution_id, 0, tb_user_id);
+        console.log(dt_record);
+        dataDividaVelha = await OrderConsigngmentController.getDividaVelhabySalesman(tb_institution_id, tb_user_id,0, dt_record);
 
         var dataTotalReceber = {
           description: "Total à receber",

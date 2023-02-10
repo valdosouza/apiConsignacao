@@ -12,6 +12,7 @@ class OrderLoadCardController extends Base {
     const promise = new Promise((resolve, reject) => {
       Tb.sequelize.query(
         'Select ' +
+        'ord.status, '+
         'ord.id, ' +
         'ord.tb_institution_id,'+
         'ord.tb_user_id,'+

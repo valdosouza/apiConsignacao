@@ -43,7 +43,7 @@ class FinancialStatementController extends Base {
         };
 
         var dataDividaVelha = {};
-        dataDividaVelha = await OrderConsigngmentController.getDividaVelhabySalesman(tb_institution_id, tb_salesman_id,tb_customer_id);
+        dataDividaVelha = await OrderConsigngmentController.getDividaVelhabySalesman(tb_institution_id, tb_salesman_id,tb_customer_id,dt_record);
 
         var dataTotalReceber = {
           description: "Total à receber",
