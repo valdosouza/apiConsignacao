@@ -41,9 +41,9 @@ class FinancialStatementController extends Base {
           kind: "totais",
           color: "green",
         };
-
+        //Divida Velha é toda divida anterior a data Informada, no caso dt_record ou se a consulta for mensal dataini
         var dataDividaVelha = {};
-        dataDividaVelha = await OrderConsigngmentController.getDividaVelhabySalesman(tb_institution_id, tb_salesman_id,tb_customer_id,dt_record);
+        dataDividaVelha = await OrderConsigngmentController.getDividaVelhabySalesman(tb_institution_id, tb_salesman_id,tb_customer_id,dataini);
 
         var dataTotalReceber = {
           description: "Total à receber",
@@ -258,8 +258,8 @@ class FinancialStatementController extends Base {
   static getListCustomerCharged(tb_institution_id, tb_salesman_id, date, kind_date) {
     const promise = new Promise(async (resolve, reject) => {
       try {
-        var dataini = DateFunction.newDate();
-        var datafim = DateFunction.newDate();
+        var dataini = date;
+        var datafim = date;
 
         if (kind_date != 'D') {
           dataini = DateFunction.firtDayMonth(dataini);

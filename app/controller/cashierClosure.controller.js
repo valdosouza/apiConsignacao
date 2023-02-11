@@ -150,9 +150,8 @@ class CashierClosureController extends Base {
           kind: "totais",
           color: "green",
         };
-
-        var dataDividaVelha = {};
-        console.log(dt_record);
+        //Divida Velha é toda divida anterior a data Informada, no caso dt_record ou se a consulta for mensal dataini
+        var dataDividaVelha = {};        
         dataDividaVelha = await OrderConsigngmentController.getDividaVelhabySalesman(tb_institution_id, tb_user_id,0, dt_record);
 
         var dataTotalReceber = {

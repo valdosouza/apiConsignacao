@@ -76,6 +76,15 @@ module.exports = sequelize => {
       comment: null,
       field: "charged"
     },
+    recall: {
+      type: DataTypes.STRING(1),
+      allowNull: true,
+      defaultValue: "N",
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "recall"
+    },
     latitude: {
       type: DataTypes.STRING(20),
       allowNull: true,

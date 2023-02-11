@@ -462,8 +462,7 @@ class OrderStockAdjustController extends Base {
         var qtde = 0;
         for (var item of body.Items) {
           qtde += item.adjust;
-        }
-        console.log(qtde);
+        }        
           /*
             Aqui muito cuidado por que o estoque é invertido mesmo...
             O ajuste é uma devolução do vendedor que deve sair do Estoque do vendedor
