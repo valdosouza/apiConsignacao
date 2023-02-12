@@ -10,8 +10,8 @@ class CashierClosureController extends Base {
   static async create(body) {
     const promise = new Promise(async (resolve, reject) => {
       try {
-        var idCashier = await CashierController.getLastIdOpen(body.tb_institution_id, body.tb_user_id);
-        if (idCashier > 0) {
+        var cashier = await CashierController.getLastIdOpen(body.tb_institution_id, body.tb_user_id);
+        if (cashier.status =="A") {
           var dataClosure = {};
           var idCashierClosure = 0;
           for (var item of body.items) {
