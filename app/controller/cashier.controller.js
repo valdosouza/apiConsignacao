@@ -32,7 +32,7 @@ class CashierController extends Base {
   static async getLastIdOpen(tb_institution_id, tb_user_id) {
     const promise = new Promise((resolve, reject) => {
       Tb.sequelize.query(
-        'select tb_institution_id,tb_user_id, dt_record, hr_end ' +
+        'select id,tb_institution_id,tb_user_id, dt_record, hr_end ' +
         'from tb_cashier ' +
         'WHERE ( tb_institution_id =? ) ' +
         'and id = ( ' +
@@ -47,17 +47,19 @@ class CashierController extends Base {
           if (data.length > 0) {
             if (data[0].hr_end) { var status = "F" } else { var status = "A" };
             resolve({
-              "tb_institution_id": data[0].tb_institution_id,
-              "tb_user_id": data[0].tb_user_id,
-              "dt_record": data[0].dt_record,
-              "status": status,
+              id:data[0].id,
+              tb_institution_id: data[0].tb_institution_id,
+              tb_user_id: data[0].tb_user_id,
+              dt_record: data[0].dt_record,
+              status: status,
             });
           } else {
             resolve({
-              "tb_institution_id": parseInt(tb_institution_id),
-              "tb_user_id": parseInt(tb_user_id),
-              "dt_record": "",
-              "status": "I",
+              id: 0,
+              tb_institution_id: parseInt(tb_institution_id),
+              tb_user_id: parseInt(tb_user_id),
+              dt_record: "",
+              status: "I",
             });
           }
         })
