@@ -19,6 +19,18 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         tb_user_id:
  *           type: integer
  * 
+ *     CashierStatus:
+ *       type: object
+ *       properties:
+ *         tb_institution_id:
+ *           type: integer
+ *         tb_user_id:
+ *           type: integer
+ *         dt_record:
+ *           type: string
+ *         open:
+ *           type: string
+ * 
  *     CashierAnswer:
  *       type: object
  *       properties:
@@ -102,7 +114,11 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *        required: true  
  *     responses:
  *       200:
- *         description: True or False
+ *         description: The cashier Status
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/CashierStatus'
  */
 
 router.get("/isopen/:tb_institution_id/:tb_user_id/", cashier.isOpen);
