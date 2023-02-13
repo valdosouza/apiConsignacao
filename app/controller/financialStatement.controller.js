@@ -289,7 +289,7 @@ class FinancialStatementController extends Base {
       '   on (fnl.tb_order_id = ora.id)  '+
       '     and (fnl.tb_institution_id = ora.tb_institution_id)  '+
       ' where (fnl.tb_institution_id = ? ) ' +
-      '  and (fnl.tb_salesman_id = ?) ' +
+      '  and (ct.tb_salesman_id = ?) ' +
       '  and (fnl.dt_record between ? and ?) ' +
       'group by 1,2,3 '+
       ' order by 3';
