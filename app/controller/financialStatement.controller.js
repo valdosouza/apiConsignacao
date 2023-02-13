@@ -203,19 +203,18 @@ class FinancialStatementController extends Base {
   static getFinancialReceived(tb_institution_id, tb_salesman_id, tb_customer_id, dataini, datafim) {
     const promise = new Promise((resolve, reject) => {
       var sqltxt =
-        'select pmt.description name_payment_type, sum(fnl.tag_value) subtotal, "Total Recebido" kind, "blue" color ' +
-        'from tb_order_sale ors ' +
-        '   inner join tb_financial fnl ' +
-        '   on (fnl.tb_order_id = ors.id) ' +
-        '     and (fnl.tb_institution_id = ors.tb_institution_id)  ' +
-        '   inner join tb_payment_types pmt ' +
-        '   on (pmt.id = fnl.tb_payment_types_id)  ' +
-        'where (ors.tb_institution_id =? ) ' +
-        ' and (ors.tb_salesman_id =?) ';
+      'select pmt.description name_payment_type, sum(fnl.tag_value) subtotal, "Total Recebido" kind, "blue" color  '+
+      'from tb_financial fnl  '+
+      '   inner join tb_customer ct '+
+      '   on (fnl.tb_entity_id = ct.id) '+
+      '   inner join tb_payment_types pmt  '+
+      '   on (pmt.id = fnl.tb_payment_types_id)  '+
+      'where (fnl.tb_institution_id =? )  '+
+      ' and (ct.tb_salesman_id =?) ';
       if (tb_customer_id == 0) {
-        sqltxt = sqltxt + ' and (ors.tb_customer_id <> ?) ';
+        sqltxt = sqltxt + ' and (fnl.tb_entity_id <> ?) ';
       } else {
-        sqltxt = sqltxt + ' and (ors.tb_customer_id = ?) ';
+        sqltxt = sqltxt + ' and (fnl.tb_entity_id = ?) ';
       }
       sqltxt = sqltxt +
         ' and (fnl.dt_record between ? and ?) ' +
