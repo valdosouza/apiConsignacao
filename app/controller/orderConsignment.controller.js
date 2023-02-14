@@ -373,7 +373,7 @@ class OrderConsignmentController extends Base {
         'ord.tb_institution_id, ' +
         'ord.tb_user_id, ' +
         'orc.tb_customer_id, ' +
-        'ctm.name_company name_customer, ' +
+        'ctm.nick_trade name_customer, ' +
         'orc.tb_salesman_id, ' +
         'slm.name_company name_salesman, ' +
         'orc.dt_record, ' +
@@ -420,7 +420,7 @@ class OrderConsignmentController extends Base {
         'ord.tb_institution_id, ' +
         'ord.tb_user_id, ' +
         'orc.tb_customer_id, ' +
-        'ctm.name_company name_customer, ' +
+        'ctm.nick_trade name_customer, ' +
 
         'orc.tb_salesman_id, ' +
         'slm.name_company name_salesman, ' +
@@ -582,7 +582,7 @@ class OrderConsignmentController extends Base {
                     id: 0,
                     tb_institution_id: parseInt(tb_institution_id),
                     tb_customer_id: data.id,
-                    name_customer: data.name_company,
+                    name_customer: data.nick_trade,
                     tb_salesman_id: 0,
                     name_salesman: "",
                     current_debit_balance: "0.00",
