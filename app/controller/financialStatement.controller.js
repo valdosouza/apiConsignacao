@@ -208,6 +208,9 @@ class FinancialStatementController extends Base {
       var sqltxt =
       'select pmt.description name_payment_type, sum(fnl.tag_value) subtotal, "Total Recebido" kind, "blue" color  '+
       'from tb_financial fnl  '+
+      '  inner join tb_order ord '+
+      '  on (ord.id = fnl.tb_order_id) '+
+   
       '   inner join tb_customer ct '+
       '   on (fnl.tb_entity_id = ct.id) '+
       '   inner join tb_payment_types pmt  '+
