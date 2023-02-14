@@ -43,11 +43,14 @@ class FinancialStatementController extends Base {
         };
         //Divida Velha é toda divida anterior a data Informada, no caso dt_record ou se a consulta for mensal dataini
         var dataDividaVelha = {};
-        dataDividaVelha = await OrderConsigngmentController.getDividaVelhabySalesman(tb_institution_id, tb_salesman_id,tb_customer_id,dataini);
+        dataDividaVelha = await OrderConsigngmentController.getDividaVelhaBySalesman(tb_institution_id, tb_salesman_id,tb_customer_id,dataini);
+
+        var dataDividaAtual = {};        
+        dataDividaAtual = await OrderConsigngmentController.getDividaAtualBySalesman(tb_institution_id, tb_salesman_id,0, dt_record);
 
         var dataTotalReceber = {
           description: "Total à receber",
-          tag_value: dataDividaVelha.tag_value + dataTotalVenda.tag_value,
+          tag_value: dataDividaVelha.tag_value + dataTotalVenda.tag_value + dataDividaAtual.tag_value,
           kind: "totais",
           color: "black",
         };
@@ -298,7 +301,7 @@ class FinancialStatementController extends Base {
       '  and (ct.tb_salesman_id = ?)'+
       '  and (ord.dt_record between ? and ?) '+
       ' group by 1,2,3 ,4'+
-      ' order by 4';
+      ' order by 4 ';
 
 
       // 'select etd.id, etd.name_company  name_customer, SUBSTRING(time(ora.createdAt), 1, 5) time_attendace, sum(fnl.tag_value) value_charged  '+
