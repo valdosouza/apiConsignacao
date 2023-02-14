@@ -298,7 +298,7 @@ class FinancialStatementController extends Base {
       '  and (ct.tb_salesman_id = ?)'+
       '  and (ord.dt_record between ? and ?) '+
       ' group by 1,2,3 ,4'+
-      ' order by 3';
+      ' order by 4';
 
 
       // 'select etd.id, etd.name_company  name_customer, SUBSTRING(time(ora.createdAt), 1, 5) time_attendace, sum(fnl.tag_value) value_charged  '+
