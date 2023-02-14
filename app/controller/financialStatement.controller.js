@@ -45,12 +45,12 @@ class FinancialStatementController extends Base {
         var dataDividaVelha = {};
         dataDividaVelha = await OrderConsigngmentController.getDividaVelhaBySalesman(tb_institution_id, tb_salesman_id,tb_customer_id,dataini);
 
-        var dataDividaAtual = {};        
-        dataDividaAtual = await OrderConsigngmentController.getDividaAtualBySalesman(tb_institution_id, tb_salesman_id,0, dt_record);
+        //var dataDividaAtual = {};        
+        //dataDividaAtual = await OrderConsigngmentController.getDividaAtualBySalesman(tb_institution_id, tb_salesman_id,0, dt_record);
 
         var dataTotalReceber = {
           description: "Total à receber",
-          tag_value: dataDividaVelha.tag_value + dataTotalVenda.tag_value + dataDividaAtual.tag_value,
+          tag_value: dataDividaVelha.tag_value + dataTotalVenda.tag_value,// + dataDividaAtual.tag_value,
           kind: "totais",
           color: "black",
         };
