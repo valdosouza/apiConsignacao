@@ -278,21 +278,44 @@ class FinancialStatementController extends Base {
     const promise = new Promise((resolve, reject) => {
 
       var sqltxt =
-      'select etd.id, etd.name_company  name_customer, SUBSTRING(time(ora.createdAt), 1, 5) time_attendace, sum(fnl.tag_value) value_charged  '+
-      'from  tb_financial fnl '+
-      '   inner join tb_customer ct '+
-      '   on (ct.id = fnl.tb_entity_id) '+
+      ' select etd.id, etd.nick_trade  name_customer, CAST(ord.note AS CHAR(1000) CHARACTER SET utf8) note,'+  
+      ' SUBSTRING(time(ora.createdAt), 1, 5) time_attendace, coalesce(sum(fnl.tag_value),0) as  value_charged '+
+      ' from tb_order_attendance ora  '+
+      '   inner join tb_order ord'+
+      '   on (ord.id = ora.id)  '+
+      '     and (ord.tb_institution_id = ora.tb_institution_id)  '+
       
+      '   inner join tb_customer ct '+
+      '   on (ct.id = ora.tb_customer_id) '+
+           
       '   inner join tb_entity etd  '+
-      '   on (etd.id = fnl.tb_entity_id)   '+
-      '   inner join tb_order_attendance ora  '+
-      '   on (fnl.tb_order_id = ora.id)  '+
-      '     and (fnl.tb_institution_id = ora.tb_institution_id)  '+
-      ' where (fnl.tb_institution_id = ? ) ' +
-      '  and (ct.tb_salesman_id = ?) ' +
-      '  and (fnl.dt_record between ? and ?) ' +
-      'group by 1,2,3 '+
+      '   on (etd.id = ora.tb_customer_id)   '+
+      
+      '   left outer join  tb_financial fnl'+
+      '   on (fnl.tb_order_id = ora.id) '+
+      '     and (fnl.tb_institution_id = ora.tb_institution_id) '+
+      ' where (ora.tb_institution_id = ? )'+
+      '  and (ct.tb_salesman_id = ?)'+
+      '  and (ord.dt_record between ? and ?) '+
+      ' group by 1,2,3 ,4'+
       ' order by 3';
+
+
+      // 'select etd.id, etd.name_company  name_customer, SUBSTRING(time(ora.createdAt), 1, 5) time_attendace, sum(fnl.tag_value) value_charged  '+
+      // 'from  tb_financial fnl '+
+      // '   inner join tb_customer ct '+
+      // '   on (ct.id = fnl.tb_entity_id) '+
+      
+      // '   inner join tb_entity etd  '+
+      // '   on (etd.id = fnl.tb_entity_id)   '+
+      // '   inner join tb_order_attendance ora  '+
+      // '   on (fnl.tb_order_id = ora.id)  '+
+      // '     and (fnl.tb_institution_id = ora.tb_institution_id)  '+
+      // ' where (fnl.tb_institution_id = ? ) ' +
+      // '  and (ct.tb_salesman_id = ?) ' +
+      // '  and (fnl.dt_record between ? and ?) ' +
+      // 'group by 1,2,3 '+
+      // ' order by 3';
 
       Tb.sequelize.query(
         sqltxt,
