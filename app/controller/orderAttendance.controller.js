@@ -1,7 +1,8 @@
 const Base = require('./base.controller.js');
 const db = require("../model");
 const Tb = db.orderattendance;
-const order = require('./order.controller.js');
+const OrderController = require("../controller/order.controller.js");
+
 
 class OrderStockTransferController extends Base {
   static async getNextNumber(tb_institution_id) {
@@ -69,7 +70,7 @@ class OrderStockTransferController extends Base {
         dt_record: body.dt_record,
         note: body.note
       }
-      order.insert(dataOrder)
+      OrderController.insert(dataOrder)
         .then(async (data) => {
           body.id = data.id;
           this.insertOrder(body)
@@ -223,7 +224,7 @@ class OrderStockTransferController extends Base {
         dt_record: body.dt_record,
         note: body.note
       }
-      order.update(dataOrder)
+      OrderController.update(dataOrder)
         .then(() => {
           this.updateOrder(body)
             .then(() => {
@@ -233,6 +234,30 @@ class OrderStockTransferController extends Base {
         })
         .catch(err => {
           reject("orderAttendance.update:" + err);
+        });
+    });
+    return promise;
+  }
+
+  static async finished(body) {
+    const promise = new Promise(async (resolve, reject) => {
+      if (body.Order.recall == "S")  {
+        await OrderController.updateNote(body.Order.tb_institution_id,body.Order.id,body.Order.note);
+      }
+      
+
+      Tb.update({ finished: "S" }, {
+        where: {
+          id: body.Order.id,
+          tb_institution_id: body.Order.tb_institution_id,
+          terminal: 0
+        }
+      })
+        .then((data) => {
+          resolve(data);
+        })
+        .catch(err => {
+          reject("orderAttendance.finished:" + err);
         });
     });
     return promise;
@@ -259,7 +284,7 @@ class OrderStockTransferController extends Base {
       try {
         var dataOrder = await this.getOrder(body.tb_institution_id, body.id);
         if (dataOrder.status == 'A') {
-          await order.updateStatus(body.tb_institution_id, body.id, 'F');
+          await OrderController.updateStatus(body.tb_institution_id, body.id, 'F');
           resolve("200");
         } else {
           resolve("201");
@@ -276,7 +301,7 @@ class OrderStockTransferController extends Base {
       try {
         var dataOrder = await this.getOrder(body.tb_institution_id, body.id);
         if (dataOrder.status == 'F') {
-          await order.updateStatus(body.tb_institution_id, body.id, 'A');
+          await OrderController.updateStatus(body.tb_institution_id, body.id, 'A');
           resolve("200");
         } else {
           resolve("201");

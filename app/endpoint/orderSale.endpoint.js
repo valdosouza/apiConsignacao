@@ -3,6 +3,7 @@ const OrderSaleController = require("../controller/orderSale.controller.js");
 const OrderSaleCardController = require("../controller/orderSaleCard.controller.js");
 const entityHasStockList = require("../controller/entityHasStockList.controller.js");
 const FinancialController = require('../controller/financial.controller.js');
+const OrderAttendaceController = require('../controller/orderAttendance.controller.js');
 const FinancialPaymentController = require('../controller/financialPayment.controller.js');
 const FinancialStatementController = require('../controller/financialStatement.controller.js');
 
@@ -37,6 +38,7 @@ class OrderSaleEndPoint {
         //cliente definiu que tudo será condiderado como recebido
         //await FinancialStatementController.saveByCard(req.body);
 
+        await OrderAttendaceController.finished(req.body);
         res.send(data);
       })
   }

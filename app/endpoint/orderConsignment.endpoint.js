@@ -3,9 +3,12 @@ const entityHasStockList = require("../controller/entityHasStockList.controller.
 const OrderBonusController = require('../controller/orderBonus.controller.js');
 const OrderStockTransferController = require('../controller/orderStockTransfer.controller.js');
 const OrderSaleController = require('../controller/orderSale.controller.js');
+const OrderAttendaceController = require('../controller/orderAttendance.controller.js');
 const FinancialController = require('../controller/financial.controller.js');
 const FinancialPaymentController = require('../controller/financialPayment.controller.js');
 const FinancialStatementController = require('../controller/financialStatement.controller.js');
+const { order } = require("../model/index.js");
+
 class OrderConsignmentEndPoint {
 
   static saveCheckpoint = (req, res) => {
@@ -44,7 +47,7 @@ class OrderConsignmentEndPoint {
         var StockDestiny = await entityHasStockList.createAuto(dataEntityHasStockList)
         req.body['StockDestiny'] = StockDestiny;          
         //Retorna do estoque do vendedor
-        var stockSalesman = await entityHasStockList.getByEntity(req.body.Order.tb_institution_id,req.body.Order.tb_salesman_id);        
+        var stockSalesman = await entityHasStockList.getByEntity(req.body.Order.tb_institution_id,req.body.Order.tb_salesman_id);
         req.body['StockOrigen'] = stockSalesman[0];          
 
         await OrderBonusController.saveByCard(req.body);
@@ -53,6 +56,8 @@ class OrderConsignmentEndPoint {
 
         await OrderStockTransferController.saveDevolutionByCard(req.body);
         
+        await OrderAttendaceController.finished(req.body);
+
         res.send("Supplying recorded successfully.");
       })
   }
