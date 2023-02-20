@@ -52,13 +52,13 @@ class CustomerController extends Base {
         var resultCustomer  = [];                
         if (body.customer.id > 0)
           resultCustomer  = await this.getById(body.customer.tb_institution_id,body.customer.id);        
+        
         if (resultCustomer.length == 0){
           this.insert(body)
           .then(data => {
             resolve(data);
           })
-        }else{ 
-          
+        }else{           
           this.update(body)
           .then(() => {
             resolve(body);
@@ -170,7 +170,7 @@ class CustomerController extends Base {
     const promise = new Promise(async (resolve, reject) => {
       try{        
         //Insere o customer
-        const existCustomer = await this.getById(body.customer.id);
+        const existCustomer = await this.getById(body.customer.tb_institution_id,body.customer.id);
         if (existCustomer.length == 0){
           Tb.create(body.customer);
         }else{
@@ -178,6 +178,7 @@ class CustomerController extends Base {
             where:{ id: body.customer.id}
           });
         }
+        
         //Atualiza Entidade    
         body.entity.id = body.customer.id;
         entity.update(body.entity)
@@ -207,11 +208,11 @@ class CustomerController extends Base {
           .catch(err => {
             reject("Erro:"+ err);
           });
-
+        
         //REtornogeral              
-        resolve(body.customer);        
+        resolve(body);        
       } catch(err) {            
-        reject('Customer InsertParcsabe: '+err);
+        reject('Customer InsertParc: '+err);
       }                  
     });
     return promise;
