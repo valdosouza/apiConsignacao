@@ -451,7 +451,7 @@ class UserController extends Base {
           )
             .then(() => {
               const dataResult = {
-                tbUserId: tbUserId,
+                tb_user_id: tbUserId,
                 email: email,
                 salt: hashSalt
               }
