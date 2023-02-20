@@ -297,7 +297,7 @@ class FinancialStatementController extends Base {
     const promise = new Promise((resolve, reject) => {
 
       var sqltxt =
-      ' select etd.id, etd.nick_trade  name_customer, CAST(ord.note AS CHAR(1000) CHARACTER SET utf8) note,'+  
+      ' select ora.id tb_order_id, etd.id, etd.nick_trade  name_customer, CAST(ord.note AS CHAR(1000) CHARACTER SET utf8) note,'+  
       ' SUBSTRING(time(ora.createdAt), 1, 5) time_attendace, coalesce(sum(fnl.tag_value),0) as  value_charged '+
       ' from tb_order_attendance ora  '+
       '   inner join tb_order ord'+
@@ -316,7 +316,7 @@ class FinancialStatementController extends Base {
       ' where (ora.tb_institution_id = ? )'+
       '  and (ct.tb_salesman_id = ?)'+
       '  and (ord.dt_record between ? and ?) '+
-      ' group by 1,2,3 ,4'+
+      ' group by 1,2,3 ,4,5'+
       ' order by 4 ';
 
 
