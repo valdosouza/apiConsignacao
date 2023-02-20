@@ -41,7 +41,7 @@ class FinancialEndPoint {
   static getbyDaybyOrder(req, res) {    
     FinancialStatemenController.get(req.params.tb_institution_id,
                                     req.params.tb_user_id,                                    
-                                    req.params.tb_customer_id,
+                                    0,
                                     req.params.date,
                                     'D',
                                     req.params.tb_order_id )

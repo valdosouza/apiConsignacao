@@ -33,6 +33,7 @@ class FinancialStatementController extends Base {
           datafim = DateFunction.lastDayMonth(dt_record);
         }
         var dataOrdersale = [];
+        
         dataOrdersale = await FinancialStatementController.getOrderSales(tb_institution_id, tb_salesman_id, tb_customer_id, dataini, datafim,tb_order_id);
 
         var dataTotalVenda = {
@@ -107,7 +108,7 @@ class FinancialStatementController extends Base {
       } else {
         sqltxt = sqltxt + ' and (ors.tb_customer_id = ?) ';
       };
-
+      console.log("orderId " + tb_order_id);
       if (tb_order_id == 0) {
         sqltxt = sqltxt + ' and (ors.id <> ?) ';
       } else {
@@ -209,7 +210,7 @@ class FinancialStatementController extends Base {
     return promise;
   }
 
-  static getFinancialReceived(tb_institution_id, tb_salesman_id, tb_customer_id, dataini, datafim) {
+  static getFinancialReceived(tb_institution_id, tb_salesman_id, tb_customer_id, dataini, datafim,tb_order_id) {
     const promise = new Promise((resolve, reject) => {
       var sqltxt =
       'select pmt.description name_payment_type, sum(fnl.tag_value) subtotal, "Total Recebido" kind, "blue" color  '+
