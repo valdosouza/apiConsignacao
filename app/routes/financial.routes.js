@@ -138,6 +138,38 @@ router.get("/statement/getbycustomer/:tb_institution_id/:tb_user_id/:tb_customer
 
 /**
  * @swagger
+ * /financial/statement/getbyorder/{tb_institution_id}/{tb_user_id}/{tb_order_id}/{date}:
+ *   get:
+ *     summary: Returns the statement by day/user/customer
+ *     tags: [Financial]
+ *     parameters:
+ *      - in: path
+ *        name: tb_institution_id
+ *        required: true 
+ *      - in: path
+ *        name: tb_user_id
+ *        required: true  
+ *      - in: path
+ *        name: tb_order_id
+ *        required: true
+ *      - in: path
+ *        name: date
+ *        required: true
+ *     responses:
+ *       200:
+ *         description: The list of the Financial Statement
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/FinancialStatement'
+ */
+
+router.get("/statement/getbyorder/:tb_institution_id/:tb_user_id/:tb_order_id/:date", financial.getbyDaybyOrder);
+
+/**
+ * @swagger
  * /financial/customer/charged/getlist/{tb_institution_id}/{tb_user_id}/{date}:
  *   get:
  *     summary: Returns the list of customers charged

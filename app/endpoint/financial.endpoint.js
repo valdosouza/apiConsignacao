@@ -7,7 +7,8 @@ class FinancialEndPoint {
                                     req.params.tb_user_id,
                                     0,
                                     req.params.date,
-                                    'D')
+                                    'D',
+                                    0)
       .then(data => {
         res.send(data);
       })
@@ -18,7 +19,8 @@ class FinancialEndPoint {
                                     req.params.tb_user_id,
                                     0,
                                     req.params.date,                                    
-                                    'M' )
+                                    'M',
+                                    0 )
       .then(data => {
         res.send(data);
       })
@@ -29,12 +31,25 @@ class FinancialEndPoint {
                                     req.params.tb_user_id,                                    
                                     req.params.tb_customer_id,
                                     req.params.date,
-                                    'D' )
+                                    'D',
+                                    0 )
       .then(data => {
         res.send(data);
       })
   }
   
+  static getbyDaybyOrder(req, res) {    
+    FinancialStatemenController.get(req.params.tb_institution_id,
+                                    req.params.tb_user_id,                                    
+                                    req.params.tb_customer_id,
+                                    req.params.date,
+                                    'D',
+                                    req.params.tb_order_id )
+      .then(data => {
+        res.send(data);
+      })
+  }
+
   static getlistCustomercharge(req, res) {    
     FinancialStatemenController.getListCustomerCharged(req.params.tb_institution_id,
                                     req.params.tb_user_id,                                                                        

@@ -434,7 +434,7 @@ class CustomerController extends Base {
         '  on (clb.id = ct.tb_salesman_id) '+
         'where (ct.tb_institution_id =?) '+
         '  and ( ct.tb_salesman_id =?)'+
-        'order by 4 ',
+        'order by 5 asc ',
         {
           replacements: [tb_institution_id,tb_salesman_id,tb_institution_id,tb_salesman_id],
           type: Tb.sequelize.QueryTypes.SELECT

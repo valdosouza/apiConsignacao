@@ -30,7 +30,7 @@ class OrderConsignmentController extends Base {
     return promise;
   };
 
-  static async getDividaVelhaBySalesman(tb_institution_id, tb_salesman_id,tb_customer_id,dt_record) {
+  static async getDividaVelhaBySalesman(tb_institution_id, tb_salesman_id,tb_customer_id,dt_record,tb_order_id) {
     const promise = new Promise((resolve, reject) => {
       var sqltxt =
       'select sum(current_debit_balance) dividaVelha ' +
@@ -51,6 +51,12 @@ class OrderConsignmentController extends Base {
       '        and ( orda.tb_user_id = ord.tb_user_id ) ' +
       '        and (orda.dt_record < ?) ';
 
+      if (tb_order_id == 0) {
+        sqltxt = sqltxt + ' and (orca.id <> ?) ';
+      } else {
+        sqltxt = sqltxt + ' and (orca.id = ?) ';
+      }
+
       if (tb_customer_id == 0) {
         sqltxt = sqltxt + ' and (orca.tb_customer_id <> ?) '+
                           ' GROUP BY orda.tb_user_id ' ;
@@ -58,8 +64,10 @@ class OrderConsignmentController extends Base {
         sqltxt = sqltxt + ' and (orca.tb_customer_id = ?) '+
                           ' GROUP BY orca.tb_customer_id ' ;
       }
-      sqltxt = sqltxt +        
+
       
+      
+      sqltxt = sqltxt +             
       ') and (orc.tb_institution_id = ?) ' +
       '  and (ord.tb_user_id = ?) ' +
       ') current_debit_balance ';
@@ -67,7 +75,7 @@ class OrderConsignmentController extends Base {
       Tb.sequelize.query(
         sqltxt,
         {
-          replacements: [dt_record,tb_customer_id,tb_institution_id, tb_salesman_id],
+          replacements: [dt_record,tb_order_id,tb_customer_id,tb_institution_id, tb_salesman_id],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve({

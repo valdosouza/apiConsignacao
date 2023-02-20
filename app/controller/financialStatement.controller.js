@@ -21,7 +21,7 @@ class FinancialStatementController extends Base {
   }
 
 
-  static get(tb_institution_id, tb_salesman_id, tb_customer_id, dt_record, kind_date) {
+  static get(tb_institution_id, tb_salesman_id, tb_customer_id, dt_record, kind_date,tb_order_id) {
     const promise = new Promise(async (resolve, reject) => {
       try {
         var dataini = dt_record;
@@ -33,7 +33,7 @@ class FinancialStatementController extends Base {
           datafim = DateFunction.lastDayMonth(dt_record);
         }
         var dataOrdersale = [];
-        dataOrdersale = await FinancialStatementController.getOrderSales(tb_institution_id, tb_salesman_id, tb_customer_id, dataini, datafim);
+        dataOrdersale = await FinancialStatementController.getOrderSales(tb_institution_id, tb_salesman_id, tb_customer_id, dataini, datafim,tb_order_id);
 
         var dataTotalVenda = {
           description: "Total de Vendas",
@@ -43,7 +43,7 @@ class FinancialStatementController extends Base {
         };
         //Divida Velha é toda divida anterior a data Informada, no caso dt_record ou se a consulta for mensal dataini
         var dataDividaVelha = {};
-        dataDividaVelha = await OrderConsigngmentController.getDividaVelhaBySalesman(tb_institution_id, tb_salesman_id,tb_customer_id,dataini);
+        dataDividaVelha = await OrderConsigngmentController.getDividaVelhaBySalesman(tb_institution_id, tb_salesman_id,tb_customer_id,dataini,tb_order_id);
 
         //var dataDividaAtual = {};        
         //dataDividaAtual = await OrderConsigngmentController.getDividaAtualBySalesman(tb_institution_id, tb_salesman_id,0, dt_record);
@@ -56,7 +56,7 @@ class FinancialStatementController extends Base {
         };
 
         var dataFinancialReceived = [];
-        dataFinancialReceived = await FinancialStatementController.getFinancialReceived(tb_institution_id, tb_salesman_id, tb_customer_id, dataini, datafim);
+        dataFinancialReceived = await FinancialStatementController.getFinancialReceived(tb_institution_id, tb_salesman_id, tb_customer_id, dataini, datafim,tb_order_id);
 
         var dataTotalRecebido = {
           description: "Total Recebido",
@@ -87,7 +87,7 @@ class FinancialStatementController extends Base {
     return promise;
   }
 
-  static getOrderSales(tb_institution_id, tb_salesman_id, tb_customer_id, dataini, datafim) {
+  static getOrderSales(tb_institution_id, tb_salesman_id, tb_customer_id, dataini, datafim,tb_order_id) {
     const promise = new Promise((resolve, reject) => {
 
       var sqltxt =
@@ -108,6 +108,12 @@ class FinancialStatementController extends Base {
         sqltxt = sqltxt + ' and (ors.tb_customer_id = ?) ';
       };
 
+      if (tb_order_id == 0) {
+        sqltxt = sqltxt + ' and (ors.id <> ?) ';
+      } else {
+        sqltxt = sqltxt + ' and (ors.id = ?) ';
+      };
+
       sqltxt = sqltxt +
         '  and (ord.dt_record between ? and ?) ' +
         ' and (ori.kind =?) ' +
@@ -117,7 +123,7 @@ class FinancialStatementController extends Base {
       Tb.sequelize.query(
         sqltxt,
         {
-          replacements: [tb_institution_id, tb_salesman_id, tb_customer_id, dataini, datafim, 'sale'],
+          replacements: [tb_institution_id, tb_salesman_id, tb_customer_id, tb_order_id,dataini, datafim, 'sale'],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           var dataResult = [];
@@ -222,6 +228,13 @@ class FinancialStatementController extends Base {
       } else {
         sqltxt = sqltxt + ' and (fnl.tb_entity_id = ?) ';
       }
+
+      if (tb_order_id == 0) {
+        sqltxt = sqltxt + ' and (fnl.tb_order_id <> ?) ';
+      } else {
+        sqltxt = sqltxt + ' and (fnl.tb_order_id = ?) ';
+      }
+
       sqltxt = sqltxt +
         ' and (fnl.dt_record between ? and ?) ' +
         'group by 1 ';
@@ -229,7 +242,7 @@ class FinancialStatementController extends Base {
       Tb.sequelize.query(
         sqltxt,
         {
-          replacements: [tb_institution_id, tb_salesman_id, tb_customer_id, dataini, datafim],
+          replacements: [tb_institution_id, tb_salesman_id, tb_customer_id,tb_order_id, dataini, datafim],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           var dataResult = [];

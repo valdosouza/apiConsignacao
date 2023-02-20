@@ -73,8 +73,9 @@ class CashierController extends Base {
   static async autoCreate(tb_institution_id, tb_user_id) {
     const promise = new Promise(async (resolve, reject) => {
 
-      var cashier = await this.getLastIdOpen(tb_institution_id, tb_user_id);      
-      if (cashier.id == 0) {
+      var cashier = await this.getLastIdOpen(tb_institution_id, tb_user_id);   
+      console.log(cashier)   ;
+      if (cashier.status != 'A') {
         try {
           await this.open(tb_institution_id, tb_user_id);
           resolve("Caixa foi aberto");
