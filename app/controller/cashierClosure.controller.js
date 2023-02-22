@@ -142,7 +142,8 @@ class CashierClosureController extends Base {
         var dataResult = [];
 
         var dataOrdersale = [];
-        dataOrdersale = await FinancialStatementController.getOrderSales(tb_institution_id, tb_user_id, 0, dataini, datafim);
+        
+        dataOrdersale = await FinancialStatementController.getOrderSales(tb_institution_id, tb_user_id, 0, dataini, datafim,0);
 
         var dataTotalVenda = {
           description: "Total de Vendas",
@@ -150,9 +151,11 @@ class CashierClosureController extends Base {
           kind: "totais",
           color: "green",
         };
+        
         //Divida Velha é toda divida anterior a data Informada, no caso dt_record ou se a consulta for mensal dataini
         var dataDividaVelha = {};        
-        dataDividaVelha = await OrderConsigngmentController.getDividaVelhaBySalesman(tb_institution_id, tb_user_id,0, dt_record);
+        
+        dataDividaVelha = await OrderConsigngmentController.getDividaVelhaBySalesman(tb_institution_id, tb_user_id,0, dt_record,0);
 
         //var dataDividaAtual = {};        
         //dataDividaAtual = await OrderConsigngmentController.getDividaAtualBySalesman(tb_institution_id, tb_user_id,0, dt_record);
@@ -163,10 +166,10 @@ class CashierClosureController extends Base {
           kind: "totais",
           color : "black",
         };
-
+        
 
         var dataFinancialReceived = [];
-        dataFinancialReceived = await FinancialStatementController.getFinancialReceived(tb_institution_id, tb_user_id, 0, dataini, datafim);
+        dataFinancialReceived = await FinancialStatementController.getFinancialReceived(tb_institution_id, tb_user_id, 0, dataini, datafim,0);
 
         var dataTotalRecebido = {
           description: "Total Recebido",

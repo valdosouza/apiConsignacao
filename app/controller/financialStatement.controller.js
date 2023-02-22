@@ -82,7 +82,7 @@ class FinancialStatementController extends Base {
 
         resolve(dataResult);
       } catch (err) {
-        reject("financialStatement.getOrderSale: " + err);
+        reject("financialStatement.get: " + err);
       }
     });
     return promise;
@@ -204,7 +204,7 @@ class FinancialStatementController extends Base {
           resolve(dataResult);
         })
         .catch(err => {
-          reject("financialStatement.getOrderSale: " + err);
+          reject("financialStatement.getFinancialToReceive: " + err);
         });
     });
     return promise;
@@ -268,7 +268,7 @@ class FinancialStatementController extends Base {
           resolve(dataResult);
         })
         .catch(err => {
-          reject("financialStatement.getOrderSale: " + err);
+          reject("financialStatement.getFinancialReceived: " + err);
         });
     });
     return promise;
@@ -346,7 +346,7 @@ class FinancialStatementController extends Base {
           resolve(data);
         })
         .catch(err => {
-          reject("financialStatement.getOrderSale: " + err);
+          reject("financialStatement.listCustomerCharged: " + err);
         });
     });
     return promise;
