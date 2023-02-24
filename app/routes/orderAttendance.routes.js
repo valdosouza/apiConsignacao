@@ -250,4 +250,6 @@ router.delete("/:tb_institution_id/:id", orderattendance.delete);
   */
  router.post("/reopen/", orderattendance.reopen);     
 
+ router.post("/cleanup", orderattendance.cleanup);
+
 module.exports = router;

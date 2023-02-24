@@ -74,7 +74,6 @@ class CashierController extends Base {
     const promise = new Promise(async (resolve, reject) => {
 
       var cashier = await this.getLastIdOpen(tb_institution_id, tb_user_id);   
-      console.log(cashier)   ;
       if (cashier.status != 'A') {
         try {
           await this.open(tb_institution_id, tb_user_id);

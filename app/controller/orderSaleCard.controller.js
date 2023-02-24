@@ -79,21 +79,41 @@ class OrderSaleCardController extends Base {
     return promise;
   }
 
-  static async delete(body) {      
-      const promise = new Promise((resolve, reject) => {
-        resolve("Em Desenvolvimento");
-          /*
-          Tb.delete(orderstockadjust)
-              .then((data) => {
-                  resolve(data);
-              })
-              .catch(err => {
-                  reject("Erro:"+ err);
-              });
-          */
-      });
-      return promise;        
-  }        
-  
+  static async delete(order) {
+    const promise = new Promise((resolve, reject) => {
+      Tb.destroy({
+        where: {
+          id: order.id,
+          tb_institution_id: order.tb_institution_id,
+          terminal: order.terminal,
+        }
+      })
+        .then((data) => {
+          resolve(data);
+        })
+        .catch(err => {
+          reject("OrderSAleCard.delete:" + err);
+        });
+    });
+    return promise;
+  }  
+
+  static async cleanUp(tb_institution_id, id) {
+    const promise = new Promise(async (resolve, reject) => {
+      try {
+        const order = {
+          tb_institution_id: tb_institution_id,
+          id: id,
+          terminal: 0,
+        }
+        await this.delete(order);
+        resolve("clenUp executado com sucesso!");
+      } catch (error) {
+        reject('orderSaleCard.cleanUp ' + error);
+      }
+    });
+    return promise;
+  }
+
 }
 module.exports = OrderSaleCardController;

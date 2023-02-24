@@ -354,22 +354,24 @@ class OrderStockAdjustController extends Base {
     return promise;
   }
 
-  static async delete(body) {
+  static async delete(order) {
     const promise = new Promise((resolve, reject) => {
-      resolve("Em Desenvolvimento");
-      /*
-      Tb.delete(orderstockadjust)
-          .then((data) => {
-              resolve(data);
-          })
-          .catch(err => {
-              reject("Erro:"+ err);
-          });
-      */
+      Tb.destroy({
+        where: {
+          id: order.id,
+          tb_institution_id: order.tb_institution_id,
+          terminal: order.terminal,
+        }
+      })
+        .then((data) => {
+          resolve(data);
+        })
+        .catch(err => {
+          reject("OrderStockAdjust.delete:" + err);
+        });
     });
     return promise;
   }
-
 
   static async closure(body) {
     const promise = new Promise(async (resolve, reject) => {
@@ -462,13 +464,13 @@ class OrderStockAdjustController extends Base {
         var qtde = 0;
         for (var item of body.Items) {
           qtde += item.adjust;
-        }        
-          /*
-            Aqui muito cuidado por que o estoque é invertido mesmo...
-            O ajuste é uma devolução do vendedor que deve sair do Estoque do vendedor
-            Mas como temos outra operação de transferencia onde o esoque fabrica é a origem e o vendedor é o destino.
-            Precisamos aqui informar que o estoque vendedor é a origem para que o produto seja retirado do estoque dele.
-          */
+        }
+        /*
+          Aqui muito cuidado por que o estoque é invertido mesmo...
+          O ajuste é uma devolução do vendedor que deve sair do Estoque do vendedor
+          Mas como temos outra operação de transferencia onde o esoque fabrica é a origem e o vendedor é o destino.
+          Precisamos aqui informar que o estoque vendedor é a origem para que o produto seja retirado do estoque dele.
+        */
         if (qtde > 0) {
           var _order = {
             id: body.Order.id,
@@ -567,6 +569,23 @@ class OrderStockAdjustController extends Base {
         resolve("200");
       } catch (err) {
         reject(err);
+      }
+    });
+    return promise;
+  }
+
+  static async cleanUp(tb_institution_id, id) {
+    const promise = new Promise(async (resolve, reject) => {
+      try {
+        const order = {
+          tb_institution_id: tb_institution_id,
+          id: id,
+          terminal: 0,
+        }
+        await this.delete(order);
+        resolve("clenUp executado com sucesso!");
+      } catch (error) {
+        reject('orderStockadjust.cleanUp ' + error);
       }
     });
     return promise;

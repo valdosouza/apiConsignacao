@@ -77,18 +77,41 @@ class FinancialController extends Base {
     return promise;
   }
 
-  static async delete(order) {
+  static async delete(financial) {
     const promise = new Promise((resolve, reject) => {
-      resolve("Em Desenvolvimento");
-      /*
-      Tb.delete(order)
-          .then((data) => {
-              resolve(data);
-          })
-          .catch(err => {
-              reject("Erro:"+ err);
-          });
-      */
+      Tb.destroy({
+        where: {
+          parcel: financial.parcel,
+          tb_order_id: financial.tb_order_id,
+          tb_institution_id: financial.tb_institution_id,
+          terminal: financial.terminal,
+        }
+      })
+        .then((data) => {
+          resolve(data);
+        })
+        .catch(err => {
+          reject("Financial.delete:" + err);
+        });
+    });
+    return promise;
+  }
+
+  static async deletebyOrder(financial) {
+    const promise = new Promise((resolve, reject) => {
+      Tb.destroy({
+        where: {
+          tb_order_id: financial.tb_order_id,
+          tb_institution_id: financial.tb_institution_id,
+          terminal: financial.terminal,
+        }
+      })
+        .then((data) => {
+          resolve(data);
+        })
+        .catch(err => {
+          reject("Financial.delete:" + err);
+        });
     });
     return promise;
   }
@@ -133,6 +156,21 @@ class FinancialController extends Base {
     return promise;
   }
 
-
+  static async cleanUp(tb_institution_id, id) {
+    const promise = new Promise(async (resolve, reject) => {
+      try {
+        const financial = {
+          tb_institution_id: tb_institution_id,
+          tb_order_id: id,
+          terminal: 0,
+        }
+        await this.deletebyOrder(financial);
+        resolve("clenUp executado com sucesso!");
+      } catch (error) {
+        reject('financial.cleanUp ' + error);
+      }
+    });
+    return promise;
+  }
 }
 module.exports = FinancialController;

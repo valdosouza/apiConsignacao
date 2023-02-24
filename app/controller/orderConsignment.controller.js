@@ -30,26 +30,26 @@ class OrderConsignmentController extends Base {
     return promise;
   };
 
-  static async getDividaVelhaBySalesman(tb_institution_id, tb_salesman_id,tb_customer_id,dt_record,tb_order_id) {
+  static async getDividaVelhaBySalesman(tb_institution_id, tb_salesman_id, tb_customer_id, dt_record, tb_order_id) {
     const promise = new Promise((resolve, reject) => {
       var sqltxt =
-      'select sum(current_debit_balance) dividaVelha ' +
-      'from ( ' +
-      'SELECT DISTINCT orc.tb_customer_id, orc.current_debit_balance, orc.id,orc.dt_record ' +
-      'FROM tb_order_consignment orc ' +
-      '   inner join tb_order ord ' +
-      '   on (ord.id = orc.id) ' +
-      '   and (ord.tb_institution_id = orc.tb_institution_id) ' +
-      'WHERE orc.id = ( ' +
-      '        SELECT MAX(orc.id)  ' +
-      '        FROM tb_order_consignment orca ' +
-      '         inner join tb_order orda ' +
-      '         on (orda.id = orca.id) ' +
-      '         and (orda.tb_institution_id = orca.tb_institution_id) ' +
-      '        WHERE ( orca.tb_institution_id = orc.tb_institution_id ) ' +
-      '        and ( orca.tb_customer_id = orc.tb_customer_id ) ' +
-      '        and ( orda.tb_user_id = ord.tb_user_id ) ' +
-      '        and (orda.dt_record < ?) ';
+        'select sum(current_debit_balance) dividaVelha ' +
+        'from ( ' +
+        'SELECT DISTINCT orc.tb_customer_id, orc.current_debit_balance, orc.id,orc.dt_record ' +
+        'FROM tb_order_consignment orc ' +
+        '   inner join tb_order ord ' +
+        '   on (ord.id = orc.id) ' +
+        '   and (ord.tb_institution_id = orc.tb_institution_id) ' +
+        'WHERE orc.id = ( ' +
+        '        SELECT MAX(orca.id)  ' +
+        '        FROM tb_order_consignment orca ' +
+        '         inner join tb_order orda ' +
+        '         on (orda.id = orca.id) ' +
+        '         and (orda.tb_institution_id = orca.tb_institution_id) ' +
+        '        WHERE ( orca.tb_institution_id = orc.tb_institution_id ) ' +
+        '        and ( orca.tb_customer_id = orc.tb_customer_id ) ' +
+        '        and ( orda.tb_user_id = ord.tb_user_id ) ' +
+        '        and (orda.dt_record < ?) ';
 
       if (tb_order_id == 0) {
         sqltxt = sqltxt + ' and (orca.id <> ?) ';
@@ -58,24 +58,26 @@ class OrderConsignmentController extends Base {
       }
 
       if (tb_customer_id == 0) {
-        sqltxt = sqltxt + ' and (orca.tb_customer_id <> ?) '+
-                          ' GROUP BY orda.tb_user_id ' ;
+        sqltxt = sqltxt + ' and (orca.tb_customer_id <> ?) ' +
+          ' GROUP BY orda.tb_user_id ';
       } else {
-        sqltxt = sqltxt + ' and (orca.tb_customer_id = ?) '+
-                          ' GROUP BY orca.tb_customer_id ' ;
+        sqltxt = sqltxt + ' and (orca.tb_customer_id = ?) ' +
+          ' GROUP BY orca.tb_customer_id ';
       }
 
-      
-      
-      sqltxt = sqltxt +             
-      ') and (orc.tb_institution_id = ?) ' +
-      '  and (ord.tb_user_id = ?) ' +
-      ') current_debit_balance ';
+
+
+      sqltxt = sqltxt +
+        ') and (orc.tb_institution_id = ?) ' +
+        '  and (ord.tb_user_id = ?) ' +
+        '  and orc.current_debit_balance > 0  ' +
+        '  and (orc.kind = ? ) ' +
+        ') current_debit_balance ';
 
       Tb.sequelize.query(
         sqltxt,
         {
-          replacements: [dt_record,tb_order_id,tb_customer_id,tb_institution_id, tb_salesman_id],
+          replacements: [dt_record, tb_order_id, tb_customer_id, tb_institution_id, tb_salesman_id,'supplying'],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve({
@@ -92,44 +94,44 @@ class OrderConsignmentController extends Base {
     return promise;
   };
 
-  static async getDividaAtualBySalesman(tb_institution_id, tb_salesman_id,tb_customer_id,dt_record) {
+  static async getDividaAtualBySalesman(tb_institution_id, tb_salesman_id, tb_customer_id, dt_record) {
     const promise = new Promise((resolve, reject) => {
       var sqltxt =
-      'select sum(current_debit_balance) dividaAtual ' +
-      'from ( ' +
-      'SELECT DISTINCT orc.tb_customer_id, orc.current_debit_balance, orc.id,orc.dt_record ' +
-      'FROM tb_order_consignment orc ' +
-      '   inner join tb_order ord ' +
-      '   on (ord.id = orc.id) ' +
-      '   and (ord.tb_institution_id = orc.tb_institution_id) ' +
-      'WHERE orc.id = ( ' +
-      '        SELECT MAX(orc.id)  ' +
-      '        FROM tb_order_consignment orca ' +
-      '         inner join tb_order orda ' +
-      '         on (orda.id = orca.id) ' +
-      '         and (orda.tb_institution_id = orca.tb_institution_id) ' +
-      '        WHERE ( orca.tb_institution_id = orc.tb_institution_id ) ' +
-      '        and ( orca.tb_customer_id = orc.tb_customer_id ) ' +
-      '        and ( orda.tb_user_id = ord.tb_user_id ) ' +
-      '        and (orda.dt_record = ?) ';
+        'select sum(current_debit_balance) dividaAtual ' +
+        'from ( ' +
+        'SELECT DISTINCT orc.tb_customer_id, orc.current_debit_balance, orc.id,orc.dt_record ' +
+        'FROM tb_order_consignment orc ' +
+        '   inner join tb_order ord ' +
+        '   on (ord.id = orc.id) ' +
+        '   and (ord.tb_institution_id = orc.tb_institution_id) ' +
+        'WHERE orc.id = ( ' +
+        '        SELECT MAX(orc.id)  ' +
+        '        FROM tb_order_consignment orca ' +
+        '         inner join tb_order orda ' +
+        '         on (orda.id = orca.id) ' +
+        '         and (orda.tb_institution_id = orca.tb_institution_id) ' +
+        '        WHERE ( orca.tb_institution_id = orc.tb_institution_id ) ' +
+        '        and ( orca.tb_customer_id = orc.tb_customer_id ) ' +
+        '        and ( orda.tb_user_id = ord.tb_user_id ) ' +
+        '        and (orda.dt_record = ?) ';
 
       if (tb_customer_id == 0) {
-        sqltxt = sqltxt + ' and (orca.tb_customer_id <> ?) '+
-                          ' GROUP BY orda.tb_user_id ' ;
+        sqltxt = sqltxt + ' and (orca.tb_customer_id <> ?) ' +
+          ' GROUP BY orda.tb_user_id ';
       } else {
-        sqltxt = sqltxt + ' and (orca.tb_customer_id = ?) '+
-                          ' GROUP BY orca.tb_customer_id ' ;
+        sqltxt = sqltxt + ' and (orca.tb_customer_id = ?) ' +
+          ' GROUP BY orca.tb_customer_id ';
       }
-      sqltxt = sqltxt +        
-      
-      ') and (orc.tb_institution_id = ?) ' +
-      '  and (ord.tb_user_id = ?) ' +
-      ') current_debit_balance ';
+      sqltxt = sqltxt +
+
+        ') and (orc.tb_institution_id = ?) ' +
+        '  and (ord.tb_user_id = ?) ' +
+        ') current_debit_balance ';
 
       Tb.sequelize.query(
         sqltxt,
         {
-          replacements: [dt_record,tb_customer_id,tb_institution_id, tb_salesman_id],
+          replacements: [dt_record, tb_customer_id, tb_institution_id, tb_salesman_id],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve({
@@ -759,18 +761,21 @@ class OrderConsignmentController extends Base {
   }
 
 
-  static async delete(body) {
+  static async delete(order) {
     const promise = new Promise((resolve, reject) => {
-      resolve("Em Desenvolvimento");
-      /*
-      Tb.delete(orderstockadjust)
-          .then((data) => {
-              resolve(data);
-          })
-          .catch(err => {
-              reject("Erro:"+ err);
-          });
-      */
+      Tb.destroy({
+        where: {
+          id: order.id,
+          tb_institution_id: order.tb_institution_id,
+          terminal: order.terminal,
+        }
+      })
+        .then((data) => {
+          resolve(data);
+        })
+        .catch(err => {
+          reject("OrderConsignemnt.delete:" + err);
+        });
     });
     return promise;
   }
@@ -949,5 +954,23 @@ class OrderConsignmentController extends Base {
     });
     return promise;
   }
+
+  static async cleanUp(tb_institution_id, id) {
+    const promise = new Promise(async (resolve, reject) => {
+      try {
+        const order = {
+          tb_institution_id: tb_institution_id,
+          id: id,
+          terminal: 0,
+        }
+        await this.delete(order);
+        resolve("clenUp executado com sucesso!");
+      } catch (error) {
+        reject('orderConsignment.cleanUp ' + error);
+      }
+    });
+    return promise;
+  }
+
 }
 module.exports = OrderConsignmentController;

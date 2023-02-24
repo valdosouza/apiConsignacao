@@ -350,18 +350,21 @@ class OrderStockTransferController extends Base {
     return promise;
   }
 
-  static async delete(body) {
+  static async delete(order) {
     const promise = new Promise((resolve, reject) => {
-      resolve("Em Desenvolvimento");
-      /*
-      Tb.delete(orderstocktransfer)
-          .then((data) => {
-              resolve(data);
-          })
-          .catch(err => {
-              reject("Erro:"+ err);
-          });
-      */
+      Tb.destroy({
+        where: {
+          id: order.id,
+          tb_institution_id: order.tb_institution_id,
+          terminal: order.terminal,
+        }
+      })
+        .then((data) => {
+          resolve(data);
+        })
+        .catch(err => {
+          reject("OrderStockTransfer.delete:" + err);
+        });
     });
     return promise;
   }
@@ -632,5 +635,22 @@ class OrderStockTransferController extends Base {
     });
     return promise;
   }
+  
+  static async cleanUp(tb_institution_id, id) {
+    const promise = new Promise(async (resolve, reject) => {
+      try {
+        const order = {
+          tb_institution_id: tb_institution_id,
+          id: id,
+          terminal: 0,
+        }
+        await this.delete(order);
+        resolve("clenUp executado com sucesso!");
+      } catch (error) {
+        reject('orderStockTransfer.cleanUp ' + error);
+      }
+    });
+    return promise;
+  }  
 }
 module.exports = OrderStockTransferController;

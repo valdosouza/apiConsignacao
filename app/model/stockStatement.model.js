@@ -121,6 +121,15 @@ module.exports = sequelize => {
       comment: null,
       field: "operation"
     },
+    note: {
+      type: DataTypes.STRING(100),
+      allowNull: true,
+      defaultValue: null,
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "note"
+    },    
     createdAt: {
       type: DataTypes.DATE,
       allowNull: true,

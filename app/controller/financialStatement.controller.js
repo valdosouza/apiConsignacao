@@ -108,7 +108,7 @@ class FinancialStatementController extends Base {
       } else {
         sqltxt = sqltxt + ' and (ors.tb_customer_id = ?) ';
       };
-      console.log("orderId " + tb_order_id);
+      
       if (tb_order_id == 0) {
         sqltxt = sqltxt + ' and (ors.id <> ?) ';
       } else {
