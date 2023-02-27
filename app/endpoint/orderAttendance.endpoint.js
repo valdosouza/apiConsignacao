@@ -6,6 +6,7 @@ class OrderAttendanceEndPoint {
   static create = (req, res) => {
     OrderAttendanceController.getNotFinished(req.body)
       .then(async data => {
+        console.log(data);
         if(data) {
           console.log("return getNoFinished");
           console.log(data);
@@ -14,13 +15,13 @@ class OrderAttendanceEndPoint {
           req.body.id = data.id;          
           await OrderAttendanceController.update(req.body)
           .then(async data=>{            
-            //await CashierController.autoCreate(req.body.tb_institution_id, req.body.tb_user_id);
+            await CashierController.autoCreate(req.body.tb_institution_id, req.body.tb_user_id);
             res.send(data);  
           })
         }else{
           OrderAttendanceController.insert(req.body)
             .then(async data => {
-              //await CashierController.autoCreate(req.body.tb_institution_id, req.body.tb_user_id);
+              await CashierController.autoCreate(req.body.tb_institution_id, req.body.tb_user_id);
               res.send(data);
             })
         }
