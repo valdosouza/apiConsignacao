@@ -45,6 +45,42 @@ class CustomerController extends Base {
     return promise;
   };
 
+  static async getByDocNumber(tb_institution_id,docNumber) {    
+    const promise = new Promise((resolve, reject) => {
+      Tb.sequelize.query(
+        'Select '+
+        'ct.id,  '+
+        'ct.tb_salesman_id '+
+        'from tb_customer  ct  '+
+        '  inner join tb_person prs  '+
+        '  on (prs.id = ct.id)  '+
+        'where (ct.tb_institution_id =?)  '+
+        ' and  ( prs.cpf = ?)  '+
+        'union '+
+        'Select  '+
+        'ct.id,  '+
+        'ct.tb_salesman_id '+
+        'from tb_customer  ct  '+
+        '  inner join tb_company cpn  '+
+        '  on (cpn.id = ct.id)  '+
+        'where (ct.tb_institution_id =?)  '+
+        ' and  ( cpn.cnpj = ?)  ',
+        {
+          replacements: [tb_institution_id,docNumber,tb_institution_id,docNumber],
+          type: Tb.sequelize.QueryTypes.SELECT
+        }).then(data => {
+          if (data.length > 0)          
+          resolve(data[0])
+        else
+          resolve(data);
+        })
+        .catch(err => {
+          reject('getByDocNumber: ' + err);
+        });
+    });
+    return promise;
+  };
+
   static async save(body) {
     const promise = new Promise(async (resolve, reject) => {
       try{        
@@ -75,9 +111,12 @@ class CustomerController extends Base {
     const promise = new Promise(async (resolve, reject) => {
       try{
         var resultDoc = [];
-        if (body.person.cpf != ""){          
-          resultDoc  = await person.getByCPF(body.person.cpf);
-        }else{
+        
+        if (body.person){          
+          if (body.person.cpf != ""){          
+            resultDoc  = await person.getByCPF(body.person.cpf);
+          }
+        }else{          
           resultDoc  = await company.getByCNPJ(body.company.cnpj);
         }              
         if (resultDoc.length == 0){                    

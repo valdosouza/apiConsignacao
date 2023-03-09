@@ -25,8 +25,7 @@ const sequelize = new Sequelize(
                           }
                         },
         timezone: "-03:00",
-        seederStorage: "sequelize",
-        operatorsAliases: false
+        seederStorage: "sequelize",        
       }
 );
 

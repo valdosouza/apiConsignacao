@@ -5,11 +5,8 @@ class OrderAttendanceEndPoint {
 
   static create = (req, res) => {
     OrderAttendanceController.getNotFinished(req.body)
-      .then(async data => {
-        console.log(data);
-        if(data) {
-          console.log("return getNoFinished");
-          console.log(data);
+      .then(async data => {        
+        if(data) {        
           //Como a Order não foi finalizara realizar um "rollback/cleanUp"
           await OrderAttendanceController.cleanUp(data.tb_institution_id,data.id)
           req.body.id = data.id;          
