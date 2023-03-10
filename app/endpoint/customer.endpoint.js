@@ -14,11 +14,11 @@ class CustomerEndPoint {
         docNumber = req.body.company.cnpj;
         docKind = "J";
       }
-      console.log(docNumber);
+      
       CustomerController.getByDocNumber(req.body.customer.tb_institution_id, docNumber)
         .then(dataDocnumber => {
           console.log(dataDocnumber);
-          if (dataDocnumber.tb_salesman_id == req.body.customer.tb_salesman_id) {
+          if ((dataDocnumber.length == 0) || (dataDocnumber.tb_salesman_id == req.body.customer.tb_salesman_id)) {
             
             CustomerController.save(req.body)
               .then(data => {
