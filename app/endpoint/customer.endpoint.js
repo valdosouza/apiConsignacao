@@ -5,11 +5,14 @@ class CustomerEndPoint {
   static save = (req, res) => {
     try {
       var docNumber = "";
+      var docKind = "";
       if (req.body.person) {
         docNumber = req.body.person.cpf;
+        docKind = "F";
       }
       if (docNumber == "") {
         docNumber = req.body.company.cnpj;
+        docKind = "J";
       }
       console.log(docNumber);
       CustomerController.getByDocNumber(req.body.customer.tb_institution_id, docNumber)
@@ -25,6 +28,7 @@ class CustomerEndPoint {
                   nick_trade: data.entity.nick_trade,
                   doc_kind: "",
                   doc_number: "",
+                  error:"",
                 };
                 if (data.person) {
                   if (data.person.id > 0) {
@@ -41,7 +45,15 @@ class CustomerEndPoint {
                 res.send(dataRes);
               })
           } else {
-            res.status(201).json({ response: "Este Cliente pertence a outro vendedor."});
+            var dataRes = {
+              id: 0,
+              name_company: req.body.entity.name_company,
+              nick_trade: req.body.entity.nick_trade,
+              doc_kind: docKind,
+              doc_number: docNumber,
+              error:"Este Cliente pertence a outro vendedor",
+            };            
+            res.status(201).json(dataRes);
             
           }
         });
