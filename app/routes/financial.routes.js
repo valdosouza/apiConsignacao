@@ -33,7 +33,16 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         value_charged:
  *           type: number   
  * 
- * 
+ *     FinancialListSalesmanCustomerCharged:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *         name_salesman:
+ *           type: string
+ *         value_charged:
+ *           type: number   
+ *  
  */
  
 
@@ -197,6 +206,29 @@ router.get("/statement/getbyorder/:tb_institution_id/:tb_user_id/:tb_order_id/:d
 
 router.get("/customer/charged/getlist/:tb_institution_id/:tb_user_id/:date", financial.getlistCustomercharge);
 
+/**
+ * @swagger
+ * /financial/salesman/customer/charged/getlist/{tb_institution_id}/{date}:
+ *   get:
+ *     summary: Returns the list of customers charged
+ *     tags: [Financial]
+ *     parameters:
+ *      - in: path
+ *        name: tb_institution_id
+ *      - in: path
+ *        name: date
+ *     responses:
+ *       200:
+ *         description: The list of customer that was charged
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/FinancialListSalesmanCustomerCharged'
+ */
+
+router.get("/salesman/customer/charged/getlist/:tb_institution_id/:date", financial.getlistSalesmanCustomercharge);
 
 
 module.exports = router;
