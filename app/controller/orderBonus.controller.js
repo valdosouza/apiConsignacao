@@ -363,8 +363,6 @@ class OrderBonusController extends Base {
 
   static async delete(order) {
     const promise = new Promise((resolve, reject) => {
-      console.log("delete");
-      console.log(order);
       Tb.destroy({
         where: {
           id: order.id,
@@ -549,9 +547,7 @@ class OrderBonusController extends Base {
           id : id,
           terminal:0,
         }        
-        console.log("cleanUp");
-        console.log(order);
-          
+         
         await this.delete(order);  
         resolve("clenUp executado com sucesso!");
       } catch (error) {

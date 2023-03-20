@@ -304,8 +304,6 @@ class FinancialStatementController extends Base {
           dataini = DateFunction.firtDayMonth(dataini);
           datafim = DateFunction.lastDayMonth(datafim);
         }
-        console.log(dataini);
-        console.log(datafim);
         var dataResult = await this.listSalesmanCustomerCharged(tb_institution_id, dataini, datafim);
 
         resolve(dataResult);

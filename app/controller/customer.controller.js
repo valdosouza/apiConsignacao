@@ -118,7 +118,8 @@ class CustomerController extends Base {
           }
         }else{          
           resultDoc  = await company.getByCNPJ(body.company.cnpj);
-        }              
+        }          
+        console.log(resultDoc);
         if (resultDoc.length == 0){                    
           this.insertComplete(body)
           .then(data => {

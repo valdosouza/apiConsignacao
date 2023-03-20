@@ -1,6 +1,51 @@
 const CustomerController = require("../controller/customer.controller.js");
 
 class CustomerEndPoint {
+  static _saveReturn (data)  {
+    var dataRes = {
+      id: data.entity.id,
+      name_company: data.entity.name_company,
+      nick_trade: data.entity.nick_trade,
+      doc_kind: "",
+      doc_number: "",
+      error: "",
+    };
+    if (data.person) {
+      if (data.person.id > 0) {
+        dataRes.doc_kind = "F";
+        dataRes.doc_number = data.person.cpf;
+      }
+    }
+    if (data.company) {
+      if (data.company.id > 0) {
+        dataRes.doc_kind = "J";
+        dataRes.doc_number = data.company.cnpj;
+      }
+    }
+    return dataRes;
+  }
+
+  static _saveWithoutReturn (data) {
+    var docNumber = "";
+    var docKind = "";
+    if (data.person) {
+      docNumber = data.person.cpf;
+      docKind = "F";
+    }
+    if (docNumber == "") {
+      docNumber = data.company.cnpj;
+      docKind = "J";
+    }
+    var dataRes = {
+      id: 0,
+      name_company: data.entity.name_company,
+      nick_trade: data.entity.nick_trade,
+      doc_kind: docKind,
+      doc_number: docNumber,
+      error: "Este Cliente pertence a outro vendedor",
+    };
+    return dataRes;
+  }
 
   static save = (req, res) => {
     try {
@@ -14,49 +59,31 @@ class CustomerEndPoint {
         docNumber = req.body.company.cnpj;
         docKind = "J";
       }
-      
-      CustomerController.getByDocNumber(req.body.customer.tb_institution_id, docNumber)
-        .then(dataDocnumber => {
-          console.log(dataDocnumber);
-          if ((dataDocnumber.length == 0) || (dataDocnumber.tb_salesman_id == req.body.customer.tb_salesman_id)) {
-            
-            CustomerController.save(req.body)
-              .then(data => {
-                var dataRes = {
-                  id: data.entity.id,
-                  name_company: data.entity.name_company,
-                  nick_trade: data.entity.nick_trade,
-                  doc_kind: "",
-                  doc_number: "",
-                  error:"",
-                };
-                if (data.person) {
-                  if (data.person.id > 0) {
-                    dataRes.doc_kind = "F";
-                    dataRes.doc_number = data.person.cpf;
-                  }
-                }
-                if (data.company) {
-                  if (data.company.id > 0) {
-                    dataRes.doc_kind = "J";
-                    dataRes.doc_number = data.company.cnpj;
-                  }
-                }
-                res.send(dataRes);
-              })
-          } else {
-            var dataRes = {
-              id: 0,
-              name_company: req.body.entity.name_company,
-              nick_trade: req.body.entity.nick_trade,
-              doc_kind: docKind,
-              doc_number: docNumber,
-              error:"Este Cliente pertence a outro vendedor",
-            };            
-            res.status(201).json(dataRes);
-            
-          }
-        });
+      if (req.body.customer.id > 0) {
+        CustomerController.getByDocNumber(req.body.customer.tb_institution_id, docNumber)
+          .then(dataDocnumber => {
+            if ((dataDocnumber.length == 0) || (dataDocnumber.tb_salesman_id == req.body.customer.tb_salesman_id)) {
+              CustomerController.update(req.body)
+                .then(data => {
+                  res.send(this._saveReturn(data));
+                })
+            } else {
+              res.status(201).json(this._saveWithoutReturn(req.body));
+            }
+          });
+      } else {
+        CustomerController.getByDocNumber(req.body.customer.tb_institution_id, docNumber)
+          .then(dataDocnumber => {
+            if ((dataDocnumber.length == 0) || (dataDocnumber.tb_salesman_id == req.body.customer.tb_salesman_id)) {
+              CustomerController.insert(req.body)
+                .then(data => {
+                  res.send(this._saveReturn(data));
+                })
+            } else {
+              res.status(201).json(this._saveWithoutReturn(req.body));
+            }
+          });
+      }
 
     } catch (err) {
       res.send(err);
