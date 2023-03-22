@@ -82,7 +82,7 @@ class CompanyController extends Base {
           resolve(data);
         })
         .catch(err => {
-          reject("Companydelete:" + err);
+          reject("Company.delete:" + err);
         });
     });
     return promise;          
