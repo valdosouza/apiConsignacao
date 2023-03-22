@@ -73,18 +73,19 @@ class CompanyController extends Base {
 
   static async delete(company) {
     const promise = new Promise((resolve, reject) => {
-      resolve("Em Desenvolvimento");
-      /*
-        Tb.delete(company)
-            .then((data) => {
-                resolve(data);
-            })
-            .catch(err => {
-                reject("Erro:"+ err);
-            });
-      */
+      Tb.destroy({
+        where: {
+          id: company.id,
+        }
+      })
+        .then((data) => {
+          resolve(data);
+        })
+        .catch(err => {
+          reject("Companydelete:" + err);
+        });
     });
-    return promise;        
+    return promise;          
   }  
 
   static async getByCNPJ(cnpj) {

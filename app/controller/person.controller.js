@@ -79,18 +79,19 @@ class PersonController extends Base {
 
   static async delete(person) {
     const promise = new Promise((resolve, reject) => {
-      resolve("Em Desenvolvimento");
-      /*
-        Tb.delete(person)
-            .then((data) => {
-                resolve(data);
-            })
-            .catch(err => {
-                reject("Erro:"+ err);
-            });
-      */
-    });    
-    return promise;        
+      Tb.destroy({
+        where: {
+          id: person.id,
+        }
+      })
+        .then((data) => {
+          resolve(data);
+        })
+        .catch(err => {
+          reject("Person.delete:" + err);
+        });
+    });
+    return promise;       
   }  
 
   static getByCPF(cpf) {
