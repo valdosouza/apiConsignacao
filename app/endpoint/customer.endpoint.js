@@ -49,20 +49,10 @@ class CustomerEndPoint {
 
   static save = (req, res) => {
     try {
-      var docNumber = "";
-      var docKind = "";
-      if (req.body.person) {
-        docNumber = req.body.person.cpf;
-        docKind = "F";
-      }
-      if (docNumber == "") {
-        docNumber = req.body.company.cnpj;
-        docKind = "J";
-      }
-      if (req.body.customer.id > 0) {
-        CustomerController.getByDocNumber(req.body.customer.tb_institution_id, docNumber)
-          .then(dataDocnumber => {
-            if ((dataDocnumber.length == 0) || (dataDocnumber.tb_salesman_id == req.body.customer.tb_salesman_id)) {
+      if (req.body.customer.id > 0) {                                   
+        CustomerController.getById(req.body.customer.tb_institution_id,req.body.customer.id)
+          .then(dataById => {
+            if ((dataById.length == 0) || (dataById.tb_salesman_id == req.body.customer.tb_salesman_id)) {
               CustomerController.update(req.body)
                 .then(data => {
                   res.send(this._saveReturn(data));
@@ -72,6 +62,16 @@ class CustomerEndPoint {
             }
           });
       } else {
+        var docNumber = "";
+        var docKind = "";
+        if (req.body.person) {
+          docNumber = req.body.person.cpf;
+          docKind = "F";
+        }
+        if (docNumber == "") {
+          docNumber = req.body.company.cnpj;
+          docKind = "J";
+        }  
         CustomerController.getByDocNumber(req.body.customer.tb_institution_id, docNumber)
           .then(dataDocnumber => {
             if ((dataDocnumber.length == 0) || (dataDocnumber.tb_salesman_id == req.body.customer.tb_salesman_id)) {

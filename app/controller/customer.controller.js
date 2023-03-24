@@ -116,10 +116,13 @@ class CustomerController extends Base {
           if (body.person.cpf != "") {
             resultDoc = await person.getByCPF(body.person.cpf);
           }
-        } else {
-          resultDoc = await company.getByCNPJ(body.company.cnpj);
         }
-        console.log(resultDoc);
+        if (body.company) {
+          if (body.company.cnpj != "") {
+            resultDoc = await company.getByCNPJ(body.company.cnpj);
+          }
+        }
+
         if (resultDoc.length == 0) {
           this.insertComplete(body)
             .then(data => {
@@ -277,7 +280,7 @@ class CustomerController extends Base {
           if (body.company.cnpj.length == 14) {
             body.company.id = body.customer.id
             company.update(body.company);
-          } else { 
+          } else {
             company.delete(body.company);
           }
         }
