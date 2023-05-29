@@ -149,6 +149,68 @@ class FinancialStatementController extends Base {
     return promise;
   }
 
+  static getByCustomer(tb_institution_id, tb_salesman_id,tb_customer_id, dt_record,tb_order_id) {
+    const promise = new Promise(async (resolve, reject) => {
+      try {
+        var dataini = dt_record;
+        var datafim = dt_record;
+        var dataResult = [];
+
+        var dataOrdersale = [];
+        
+        dataOrdersale = await FinancialStatementController.getOrderSales(tb_institution_id, tb_salesman_id, tb_customer_id, dataini, datafim,tb_order_id);
+
+        var dataTotalVenda = {
+          description: "Total de Vendas",
+          tag_value: dataOrdersale[dataOrdersale.length - 1].tag_value,
+          kind: "totais",
+          color: "green",
+        };
+        //Divida Velha no extrato de atendimento por cliente
+        //      São todas as dividas velhas anteriores do cliente visualizado
+        var dataDividaVelha = {};
+        dataDividaVelha = await OrderConsigngmentController.getDividaVelhaByCustomer(tb_institution_id, tb_customer_id, dt_record);
+
+        var dataTotalReceber = {
+          description: "Total à receber",
+          tag_value: dataDividaVelha.tag_value + dataTotalVenda.tag_value,// + dataDividaAtual.tag_value,
+          kind: "totais",
+          color: "black",
+        };
+
+        var dataFinancialReceived = [];
+        dataFinancialReceived = await FinancialStatementController.getFinancialReceived(tb_institution_id, tb_salesman_id, tb_customer_id, dataini, datafim,tb_order_id);
+
+        var dataTotalRecebido = {
+          description: "Total Recebido",
+          tag_value: dataFinancialReceived[dataFinancialReceived.length - 1].tag_value,
+          kind: "totais",
+          color: "blue",
+        };
+
+        var dataSaldoDevedor = {
+          description: "Saldo devedor",
+          tag_value: dataTotalReceber.tag_value - dataTotalRecebido.tag_value,
+          kind: "totais",
+          color: "red",
+        };
+
+
+        //cliente definiu que tudo será condiderado como recebido
+        //var dataFinancialToReceived = []
+        //dataFinancialToReceived = await FinancialStatementController.getFinancialToReceive(tb_institution_id, tb_user_id, 0, dataini, datafim);
+
+        dataResult = dataOrdersale.concat(dataFinancialReceived, dataTotalVenda, dataDividaVelha, dataTotalReceber, dataTotalRecebido, dataSaldoDevedor);//, dataFinancialToReceived);
+
+        resolve(dataResult);
+      } catch (err) {
+        reject("financialStatement.get: " + err);
+      }
+    });
+    return promise;
+  }
+
+
   static getOrderSales(tb_institution_id, tb_salesman_id, tb_customer_id, dataini, datafim,tb_order_id) {
     const promise = new Promise((resolve, reject) => {
 

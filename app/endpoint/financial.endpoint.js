@@ -26,11 +26,10 @@ class FinancialEndPoint {
   }
 
   static getbyDaybyCustomer(req, res) {    
-    FinancialStatemenController.get(req.params.tb_institution_id,
+    FinancialStatemenController.getByCustomer(req.params.tb_institution_id,
                                     req.params.tb_user_id,
                                     req.params.tb_customer_id,
                                     req.params.date,
-                                    'D',
                                     0 )
       .then(data => {
         res.send(data);
@@ -38,7 +37,7 @@ class FinancialEndPoint {
   }
   
   static getbyDaybyOrder(req, res) {    
-    FinancialStatemenController.get(req.params.tb_institution_id,
+    FinancialStatemenController.getByDay(req.params.tb_institution_id,
                                     req.params.tb_user_id,
                                     0,
                                     req.params.date,
