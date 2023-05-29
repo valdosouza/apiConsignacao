@@ -36,12 +36,11 @@ class FinancialEndPoint {
       })
   }
   
-  static getbyDaybyOrder(req, res) {    
-    FinancialStatemenController.getByDay(req.params.tb_institution_id,
+  static getbyOrder(req, res) {    
+    FinancialStatemenController.getByOrder(req.params.tb_institution_id,
                                     req.params.tb_user_id,
                                     0,
-                                    req.params.date,
-                                    'D',
+                                    req.params.date,                                    
                                     req.params.tb_order_id )
       .then(data => {
         res.send(data);

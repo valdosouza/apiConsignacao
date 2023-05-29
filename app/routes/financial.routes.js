@@ -175,7 +175,7 @@ router.get("/statement/getbycustomer/:tb_institution_id/:tb_user_id/:tb_customer
  *                 $ref: '#/components/schemas/FinancialStatement'
  */
 
-router.get("/statement/getbyorder/:tb_institution_id/:tb_user_id/:tb_order_id/:date", financial.getbyDaybyOrder);
+router.get("/statement/getbyorder/:tb_institution_id/:tb_user_id/:tb_order_id/:date", financial.getbyOrder);
 
 /**
  * @swagger

@@ -21,7 +21,7 @@ class OrderConsignmentController extends Base {
           replacements: [id, tb_institution_id],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
-          resolve(data);
+          resolve(data[0]);
         })
         .catch(err => {
           reject('getById: ' + err);
