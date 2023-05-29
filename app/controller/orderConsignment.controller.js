@@ -200,6 +200,54 @@ class OrderConsignmentController extends Base {
     return promise;
   };
 
+  static async getDividaVelhaByOrder(tb_institution_id, tb_customer_id, tb_order_id) {
+    const promise = new Promise((resolve, reject) => {
+
+      var sqltxt =
+      'select sum(current_debit_balance) dividaVelha '+
+      'from (   '+
+      '    SELECT DISTINCT orc.tb_customer_id, orc.current_debit_balance, orc.id,orc.dt_record    '+
+      '    FROM tb_order_consignment orc '+
+      '        inner join tb_order ord  '+
+      '        on (ord.id = orc.id)  '+
+      '          and (ord.tb_institution_id = orc.tb_institution_id)  '+
+      '    WHERE orc.id = ( '+
+      '            SELECT MAX(orca.id)   '+
+      '            FROM tb_order_consignment orca  '+
+      '              inner join tb_order orda   '+
+      '              on (orda.id = orca.id)   '+
+      '                and (orda.tb_institution_id = orca.tb_institution_id)   '+
+      '            WHERE ( orca.tb_institution_id = orc.tb_institution_id )   '+
+      '              and ( orca.tb_customer_id = orc.tb_customer_id )   '+
+      '              and ( orda.tb_user_id = ord.tb_user_id )   '+
+      '              and (orda.id = ?)   '+
+      '            GROUP BY orda.tb_user_id )   '+
+      '      and (orc.tb_institution_id = ?)  '+
+      '      and (orc.tb_customer_id = ?)       '+
+      '      and orc.current_debit_balance > 0  '+
+      '      and (orc.kind = ? )   '+
+      ') current_debit_balance  ';
+      
+      Tb.sequelize.query(
+        sqltxt,
+        {
+          replacements: [tb_order_id, tb_institution_id,  tb_customer_id,'supplying'],
+          type: Tb.sequelize.QueryTypes.SELECT
+        }).then(data => {
+          resolve({
+            description: "Dívida velha",
+            tag_value: Number(data[0].dividaVelha),
+            kind: "totais",
+            color: "red",
+          },);
+        })
+        .catch(err => {
+          reject('getDividaVelhaByDay: ' + err);
+        });
+    });
+    return promise;
+  };
+
   static async getDividaAtualBySalesman(tb_institution_id, tb_salesman_id, tb_customer_id, dt_record) {
     const promise = new Promise((resolve, reject) => {
       var sqltxt =

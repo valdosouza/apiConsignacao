@@ -233,7 +233,7 @@ class FinancialStatementController extends Base {
         //Divida Velha no extrato de atendimento por cliente
         //      São todas as dividas velhas anteriores do cliente visualizado
         var dataDividaVelha = {};
-        dataDividaVelha = await OrderConsigngmentController.getDividaVelhaByCustomer(tb_institution_id, tb_customer_id, dt_record);
+        dataDividaVelha = await OrderConsigngmentController.getDividaVelhaByOrder(tb_institution_id,tb_customer_id, tb_order_id);
 
         var dataTotalReceber = {
           description: "Total à receber",
