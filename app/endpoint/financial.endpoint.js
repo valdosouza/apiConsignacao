@@ -2,13 +2,12 @@ const FinancialStatemenController = require("../controller/financialStatement.co
 
 class FinancialEndPoint {
 
-  static getbyday(req, res) {
-    FinancialStatemenController.get(req.params.tb_institution_id,
-                                    req.params.tb_user_id,
-                                    0,
-                                    req.params.date,
-                                    'D',
-                                    0)
+  static getbyday(req, res) {            
+    FinancialStatemenController.getByDay(req.params.tb_institution_id,
+                                          req.params.tb_user_id,
+                                          0,
+                                          req.params.date,
+                                          0)
       .then(data => {
         res.send(data);
       })

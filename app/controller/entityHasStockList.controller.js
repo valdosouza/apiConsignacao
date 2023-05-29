@@ -15,7 +15,7 @@ class EntityHasStockListController extends Base {
           var dataStockList = {
             id: 0,
             tb_institution_id: body.tb_institution_id,
-            description: body.name_entity.substr(0,body.name_entity.indexOf(" ")),
+            description: body.name_entity.substr(0,45),
             main: "N",
             active: "S",
           }
