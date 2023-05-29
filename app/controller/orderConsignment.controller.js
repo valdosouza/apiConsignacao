@@ -231,7 +231,7 @@ class OrderConsignmentController extends Base {
       Tb.sequelize.query(
         sqltxt,
         {
-          replacements: [tb_order_id, tb_institution_id,  tb_customer_id,'supplying'],
+          replacements: [tb_order_id, tb_institution_id,  tb_customer_id,'checkpoint'],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve({
