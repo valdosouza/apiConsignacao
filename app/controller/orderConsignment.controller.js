@@ -204,9 +204,9 @@ class OrderConsignmentController extends Base {
     const promise = new Promise((resolve, reject) => {
 
       var sqltxt =
-      'select sum(current_debit_balance) dividaVelha '+
+      'select sum(previous_debit_balance) dividaVelha '+
       'from (   '+
-      '    SELECT DISTINCT orc.tb_customer_id, orc.current_debit_balance, orc.id,orc.dt_record    '+
+      '    SELECT DISTINCT orc.tb_customer_id, orc.previous_debit_balance, orc.id,orc.dt_record    '+
       '    FROM tb_order_consignment orc '+
       '        inner join tb_order ord  '+
       '        on (ord.id = orc.id)  '+
