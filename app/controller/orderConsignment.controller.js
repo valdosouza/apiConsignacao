@@ -73,7 +73,7 @@ class OrderConsignmentController extends Base {
         '  and orc.current_debit_balance > 0  ' +
         '  and (orc.kind = ? ) ' +
         ') current_debit_balance ';
-      console.log( sqltxt);
+
       Tb.sequelize.query(
         sqltxt,
         {
@@ -131,7 +131,7 @@ class OrderConsignmentController extends Base {
       '      and (orc.kind = ? )  '+
       ') current_debit_balance ';
 
-      console.log( sqltxt);
+
       Tb.sequelize.query(
         sqltxt,
         {
@@ -224,7 +224,7 @@ class OrderConsignmentController extends Base {
       '            GROUP BY orda.tb_user_id )   '+
       '      and (orc.tb_institution_id = ?)  '+
       '      and (orc.tb_customer_id = ?)       '+
-      '      and orc.current_debit_balance > 0  '+
+      '      and orc.previous_debit_balance > 0  '+
       '      and (orc.kind = ? )   '+
       ') current_debit_balance  ';
       

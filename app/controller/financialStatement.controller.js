@@ -214,7 +214,7 @@ class FinancialStatementController extends Base {
     const promise = new Promise(async (resolve, reject) => {
       try {
         var orderConsignament = await OrderConsigngmentController.getById(tb_order_id,tb_institution_id);
-        console.log(orderConsignament);
+
         tb_customer_id = orderConsignament.tb_customer_id;
         var dataini = dt_record;
         var datafim = dt_record;
