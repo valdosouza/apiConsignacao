@@ -210,12 +210,15 @@ class FinancialStatementController extends Base {
     return promise;
   }
 
-  static getByOrder(tb_institution_id, tb_salesman_id,tb_customer_id, dt_record,tb_order_id) {
+  static getByOrder(tb_institution_id, tb_salesman_id, dt_record,tb_order_id) {
     const promise = new Promise(async (resolve, reject) => {
       try {
+        
         var orderConsignament = await OrderConsigngmentController.getById(tb_order_id,tb_institution_id);
-
-        tb_customer_id = orderConsignament.tb_customer_id;
+        var tb_customer_id = 0;
+        if (orderConsignament)
+           tb_customer_id = orderConsignament.tb_customer_id;
+           
         var dataini = dt_record;
         var datafim = dt_record;
         var dataResult = [];

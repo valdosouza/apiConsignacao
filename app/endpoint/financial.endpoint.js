@@ -36,10 +36,10 @@ class FinancialEndPoint {
       })
   }
   
-  static getbyOrder(req, res) {    
+  static getbyOrder(req, res) { 
+    console.log(req.params);   
     FinancialStatemenController.getByOrder(req.params.tb_institution_id,
                                     req.params.tb_user_id,
-                                    0,
                                     req.params.date,                                    
                                     req.params.tb_order_id )
       .then(data => {
