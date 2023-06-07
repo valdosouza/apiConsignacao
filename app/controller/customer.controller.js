@@ -419,8 +419,7 @@ class CustomerController extends Base {
         '  and  (src.tb_institution_id = sr.tb_institution_id) ' +
         'where ct.tb_institution_id =? ' +
         '  and ( (tb_sales_route_id =?) or (tb_sales_route_id =0))' +
-        ' and (ct.tb_salesman_id = ?)' +
-        'order by 3 ';
+        ' and (ct.tb_salesman_id = ?)';
     return sqltxt;
   }
 
@@ -463,7 +462,8 @@ class CustomerController extends Base {
         'where  (ord.dt_record is null) '+
         ') ate '+
         'where (ate.dt_record is null) '+
-        ' and ( ate.active = ?) ';
+        ' and ( ate.active = ?) '+
+        ' order by 4';
            
       Tb.sequelize.query(
         sqltxt,
