@@ -15,8 +15,8 @@ class CustomerController extends Base {
         'Select ' +
         'ct.id, ' +
         'ct.tb_institution_id, ' +
-        'ct.tb_salesman_id, ' +
-        'slm.nick_trade salesman_name, ' +
+        'ct.tb_region_id, ' +
+        'rg.description region_name, ' +
         'ct.tb_carrier_id, ' +
         'ct.credit_status, ' +
         'ct.credit_value, ' +
@@ -25,8 +25,8 @@ class CustomerController extends Base {
         'ct.multiplier, ' +
         'ct.active ' +
         'from tb_customer  ct ' +
-        '  left outer join tb_entity slm ' +
-        '  on (slm.id = ct.tb_salesman_id) ' +
+        '  left outer join tb_region rg ' +
+        '  on (rg.id = ct.tb_region_id) ' +
         'where (ct.tb_institution_id =?) ' +
         ' and  ( ct.id =?)',
         {
@@ -561,12 +561,12 @@ class CustomerController extends Base {
     return promise;
   }
 
-  static getListBySalesman = (tb_institution_id, tb_salesman_id) => {
+  static getListByRegion = (tb_institution_id, tb_region_id) => {
     const promise = new Promise((resolve, reject) => {
       Tb.sequelize.query(
         'Select ' +
-        'ct.tb_salesman_id, ' +
-        'clb.name_company name_salesman, ' +
+        'ct.tb_region_id, ' +
+        'rg.descripton name_region, ' +
         'et.id, ' +
         'et.name_company, ' +
         'et.nick_trade, ' +
@@ -582,14 +582,14 @@ class CustomerController extends Base {
         '  on (adr.id = et.id) ' +
         '  inner join tb_person pe ' +
         '  on (pe.id = et.id) ' +
-        '  inner join tb_entity clb ' +
-        '  on (clb.id = ct.tb_salesman_id) ' +
+        '  inner join tb_region rg ' +
+        '  on (rg.id = ct.tb_region_id) ' +
         'where ( ct.tb_institution_id =?) ' +
-        '  and ( ct.tb_salesman_id =?) ' +
+        '  and ( ct.tb_region_id =?) ' +
         'union ' +
         'Select ' +
-        'ct.tb_salesman_id, ' +
-        'clb.name_company name_salesman, ' +
+        'ct.tb_region_id, ' +
+        'rg.description name_region, ' +
         'et.id, ' +
         'et.name_company, ' +
         'et.nick_trade, ' +
@@ -605,19 +605,19 @@ class CustomerController extends Base {
         '  on (adr.id = et.id) ' +
         '  inner join tb_company co ' +
         '  on (co.id = et.id) ' +
-        '  inner join tb_entity clb ' +
-        '  on (clb.id = ct.tb_salesman_id) ' +
+        '  inner join tb_region rg' +
+        '  on (rg.id = ct.tb_region_id) ' +
         'where (ct.tb_institution_id =?) ' +
-        '  and ( ct.tb_salesman_id =?)' +
+        '  and ( ct.tb_region_id =?)' +
         'order by 5 asc ',
         {
-          replacements: [tb_institution_id, tb_salesman_id, tb_institution_id, tb_salesman_id],
+          replacements: [tb_institution_id, tb_region_id, tb_institution_id, tb_region_id],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve(data);
         })
         .catch(err => {
-          reject('Customer.getListBySalesman: ' + err);
+          reject('Customer.getListByRegion: ' + err);
         });
     });
     return promise;

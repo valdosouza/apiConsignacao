@@ -42,17 +42,17 @@ class CustomerEndPoint {
       nick_trade: data.entity.nick_trade,
       doc_kind: docKind,
       doc_number: docNumber,
-      error: "Este Cliente pertence a outro vendedor",
+      error: "Não foi possivel salva este Cliente.",
     };
     return dataRes;
   }
 
   static save = (req, res) => {
-    try {
+    try {      
       if (req.body.customer.id > 0) {
         CustomerController.getById(req.body.customer.tb_institution_id, req.body.customer.id)
-          .then(dataById => {
-            if ((dataById.length == 0) || (dataById.tb_salesman_id == req.body.customer.tb_salesman_id)) {
+          .then(dataById => {            
+            if ( dataById)  {
               CustomerController.update(req.body)
                 .then(data => {
                   res.send(this._saveReturn(data));
@@ -74,7 +74,7 @@ class CustomerEndPoint {
         }
         CustomerController.getByDocNumber(req.body.customer.tb_institution_id, docNumber)
           .then(dataDocnumber => {
-            if ((dataDocnumber.length == 0) || (dataDocnumber.tb_salesman_id == req.body.customer.tb_salesman_id)) {
+            if (dataDocnumber.length == 0)  {
               CustomerController.insert(req.body)
                 .then(data => {
                   res.send(this._saveReturn(data));
@@ -157,9 +157,9 @@ class CustomerEndPoint {
     }
   };
 
-  static getListBySalesman = (req, res) => {
+  static getListByRegion = (req, res) => {
 
-    CustomerController.getListBySalesman(req.params.tb_institution_id, req.params.tb_salesman_id)
+    CustomerController.getListByRegion(req.params.tb_institution_id, req.params.tb_region_id)
       .then(data => {
         res.send(data);
       })

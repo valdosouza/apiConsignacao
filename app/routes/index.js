@@ -93,4 +93,7 @@ routes.use("/cashier", cashier);
 const orderloadcard = require("../routes/orderLoadCard.routes");
 routes.use("/orderloadcard", orderloadcard);
 
+const region = require("../routes/region.routes");
+routes.use("/region", region);
+
 module.exports = routes;

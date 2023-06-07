@@ -21,16 +21,16 @@ module.exports = sequelize => {
       autoIncrement: false,
       comment: null,
       field: "tb_institution_id"
-    },
-    tb_salesman_id: {
+    },    
+    tb_region_id: {
       type: DataTypes.INTEGER(11),
       allowNull: true,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "tb_salesman_id"
-    },
+      field: "tb_region_id"
+    },    
     tb_carrier_id: {
       type: DataTypes.INTEGER(11),
       allowNull: true,
