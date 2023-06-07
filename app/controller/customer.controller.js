@@ -458,9 +458,9 @@ class CustomerController extends Base {
         '    and (vwsr.id = ora.tb_customer_id) '+
         '  left outer join tb_order ord '+
         '  on (ora.tb_institution_id = ord.tb_institution_id) '+
-        '    and (ora.id = ord.id)     '+      
+        '    and (ora.id = ord.id)     '+ 
+        '    and (ord.dt_record = ?)' +                     
         'where  (ord.dt_record is null) '+
-        ' or (ord.dt_record = ?)' +        
         ') ate '+
         'where (ate.dt_record is null) '+
         ' and ( ate.active = ?) ';
