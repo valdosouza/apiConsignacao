@@ -195,7 +195,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
 
  /**
  * @swagger
- * /customer/salesroute/getlist/{tb_institution_id}/{tb_sales_route_id}/{tb_salesman_id}:
+ * /customer/salesroute/getlist/{tb_institution_id}/{tb_sales_route_id}/{tb_salesman_id}/{kind}/{dt_record}:
  *   get:
  *     summary: Returns the list of all the Customer
  *     tags: [Customer]
@@ -209,6 +209,12 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *      - in: path
  *        name: tb_salesman_id
  *        required: true
+ *      - in: path
+ *        name: kind
+ *        required: true 
+ *      - in: path
+ *        name: dt_record
+ *        required: true 
  *     responses:
  *       200:
  *         description: The list of Customer by Route e by Salesman
@@ -221,7 +227,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *       500:
  *         description: Some server error 
  */
- router.get("/salesroute/getlist/:tb_institution_id/:tb_sales_route_id/:tb_salesman_id", customer.getListSalesRoute);
+ router.get("/salesroute/getlist/:tb_institution_id/:tb_sales_route_id/:tb_salesman_id/:kind/:dt_record", customer.getListSalesRoute);
 
 /**
  * @swagger

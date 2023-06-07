@@ -136,6 +136,35 @@ class SalesRouteController extends Base {
     return promise;
   }
 
+  static async setTurnBack(body) {
+    const promise = new Promise(async (resolve, reject) => {
+      try {
+        SalesRouteCustomerController.setTurnBack(body);
+        resolve("changed");
+      } catch (err) {
+        reject("salesroute.setTurnBack:" + err);
+      }
+    });
+    return promise;
+  }
+
+  static async setRecall(body) {
+    const promise = new Promise(async (resolve, reject) => {
+      try {
+        var dataRecall = {
+          tb_institution_id : body.Order.tb_institution_id,
+          tb_customer_id : body.Order.tb_customer_id,
+          recall : body.Order.recall,
+        }
+        SalesRouteCustomerController.setRecall(dataRecall);
+        resolve("changed");
+      } catch (err) {
+        reject("salesroute.setTurnBack:" + err);
+      }
+    });
+    return promise;
+  }
+
   static async delete(salesroute) {
     const promise = new Promise((resolve, reject) => {
       resolve("Em Desenvolvimento");

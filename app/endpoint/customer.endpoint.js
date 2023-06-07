@@ -1,7 +1,7 @@
 const CustomerController = require("../controller/customer.controller.js");
 
 class CustomerEndPoint {
-  static _saveReturn (data)  {
+  static _saveReturn(data) {
     var dataRes = {
       id: data.entity.id,
       name_company: data.entity.name_company,
@@ -25,7 +25,7 @@ class CustomerEndPoint {
     return dataRes;
   }
 
-  static _saveWithoutReturn (data) {
+  static _saveWithoutReturn(data) {
     var docNumber = "";
     var docKind = "";
     if (data.person) {
@@ -49,8 +49,8 @@ class CustomerEndPoint {
 
   static save = (req, res) => {
     try {
-      if (req.body.customer.id > 0) {                                   
-        CustomerController.getById(req.body.customer.tb_institution_id,req.body.customer.id)
+      if (req.body.customer.id > 0) {
+        CustomerController.getById(req.body.customer.tb_institution_id, req.body.customer.id)
           .then(dataById => {
             if ((dataById.length == 0) || (dataById.tb_salesman_id == req.body.customer.tb_salesman_id)) {
               CustomerController.update(req.body)
@@ -71,7 +71,7 @@ class CustomerEndPoint {
         if (docNumber == "") {
           docNumber = req.body.company.cnpj;
           docKind = "J";
-        }  
+        }
         CustomerController.getByDocNumber(req.body.customer.tb_institution_id, docNumber)
           .then(dataDocnumber => {
             if ((dataDocnumber.length == 0) || (dataDocnumber.tb_salesman_id == req.body.customer.tb_salesman_id)) {
@@ -105,11 +105,56 @@ class CustomerEndPoint {
   };
 
   static getListSalesRoute = (req, res) => {
+    switch (req.params.kind) {
+      case 'Todos':
+        CustomerController.getListSalesRouteTodos(
+          req.params.tb_institution_id,
+          req.params.tb_sales_route_id,
+          req.params.tb_salesman_id)
+          .then(data => {
+            res.send(data);
+          })
+        break;
+      case 'Atendidos':
+        CustomerController.getListSalesRouteAtendido(
+          req.params.tb_institution_id,
+          req.params.tb_sales_route_id,
+          req.params.tb_salesman_id,
+          req.params.dt_record)
+          .then(data => {
+            res.send(data);
+          })
+        break;
+      case 'Retorno':
+        CustomerController.getListSalesRouteRetorno(
+          req.params.tb_institution_id,
+          req.params.tb_sales_route_id,
+          req.params.tb_salesman_id)
+          .then(data => {
+            res.send(data);
+          })
+        break;
+      case 'Recolhido':
+        CustomerController.getListSalesRouteRecolhido(
+          req.params.tb_institution_id,
+          req.params.tb_sales_route_id,
+          req.params.tb_salesman_id)
+          .then(data => {
+            res.send(data);
+          })
+        break;
+      default://Atender
+        CustomerController.getListSalesRouteAtender(
+          req.params.tb_institution_id,
+          req.params.tb_sales_route_id,
+          req.params.tb_salesman_id,
+          req.params.dt_record)
+          .then(data => {
+            res.send(data);
+          })
 
-    CustomerController.getListSalesRoute(req.params.tb_institution_id, req.params.tb_sales_route_id, req.params.tb_salesman_id)
-      .then(data => {
-        res.send(data);
-      })
+        break;
+    }
   };
 
   static getListBySalesman = (req, res) => {

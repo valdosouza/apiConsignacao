@@ -49,6 +49,15 @@ module.exports = sequelize => {
       comment: null,
       field: "active"
     },    
+    turn_back: {
+      type: DataTypes.CHAR(1),
+      allowNull: true,
+      defaultValue: "N",
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "turn_back"
+    },        
     createdAt: {
       type: DataTypes.DATE,
       allowNull: true,

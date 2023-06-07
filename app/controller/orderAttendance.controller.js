@@ -13,6 +13,9 @@ const ControllerOrderStockAdjust = require("../controller/orderStockAdjust.contr
 const ControllerOrderStockTransfer = require("../controller/orderStockTransfer.controller.js");
 const ControllerStockStatement = require("../controller/stockStatement.controller.js");
 const ControllerFinancial = require("../controller/financial.controller.js");
+const SalesRouteCustomerController = require('./salesRouteCustomer.controller.js');
+const SalesRouteController = require("../controller/salesRoute.controller.js");
+
 
 class OrderStockTransferController extends Base {
   static async getNextNumber(tb_institution_id) {
@@ -320,10 +323,13 @@ class OrderStockTransferController extends Base {
     const promise = new Promise(async (resolve, reject) => {
       if (body.Order.recall == "S") {
         await OrderController.updateNote(body.Order.tb_institution_id, body.Order.id, body.Order.note);
+        await SalesRouteController.setRecall(body);
       }
 
 
-      Tb.update({ finished: "S" }, {
+      Tb.update({ 
+                recall : body.Order.recall,
+                finished: "S" }, {
         where: {
           id: body.Order.id,
           tb_institution_id: body.Order.tb_institution_id,

@@ -40,6 +40,14 @@ class SalesRouteEndPoint {
         res.send(req.body);
       })
   }
+  
+  static setTurnBack = (req, res) => {
+    console.log("entrei");
+    SalesRouteController.setTurnBack(req.body)
+      .then((data) => {        
+        res.send(data);
+      })
+  }
 
   static delete(req, res) {
 

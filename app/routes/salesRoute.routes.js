@@ -43,6 +43,23 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *           type: integer
  *         sequence:
  *           type: integer
+ * 
+ *     SalesRouteSetTurnBack:
+ *       type: object
+ *       required:
+ *         - tb_institution_id
+ *         - tb_sales_route_id
+ *         - tb_customer_id
+  *       properties: 
+ *         tb_institution_id:
+ *           type: integer
+ *         tb_sales_route_id:
+ *           type: integer  
+ *         tb_customer_id:
+ *           type: integer
+ *         turn_back:
+ *           type: string
+ * 
  
  */
 
@@ -134,6 +151,7 @@ router.get("/getlist/:tb_institution_id", salesroute.getList);
  */
 
  router.get("/get/:tb_institution_id/:id", salesroute.get);
+ 
  /**
  * @swagger
  * /salesroute:
@@ -156,8 +174,6 @@ router.get("/getlist/:tb_institution_id", salesroute.getList);
  */
  router.put("/", salesroute.update);
 
- router.get("/get/:tb_institution_id/:id", salesroute.get);
-
 /**
  * @swagger
  * /salesroute/sequence/:
@@ -179,6 +195,28 @@ router.get("/getlist/:tb_institution_id", salesroute.getList);
  *        description: Some error happened
  */
  router.post("/sequence/", salesroute.sequence);
+
+/**
+ * @swagger
+ * /salesroute/setTurnBack/:
+ *  put:
+ *    summary: Set the turn back to customer
+ *    tags: [SalesRoute]
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            $ref: '#/components/schemas/SalesRouteSetTurnBack'
+ *    responses:
+ *      200:
+ *        description: The TurnBack was updated
+ *      404:
+ *        description: The TurnBack was not found
+ *      500:
+ *        description: Some error happened
+ */
+router.put("/setTurnBack/", salesroute.setTurnBack);
 
 /**
  * @swagger

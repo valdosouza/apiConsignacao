@@ -344,7 +344,6 @@ class CustomerController extends Base {
   }
 
   static getList = (tb_institution_id) => {
-
     const promise = new Promise((resolve, reject) => {
       Tb.sequelize.query(
         'Select ' +
@@ -384,22 +383,9 @@ class CustomerController extends Base {
     });
     return promise;
   }
-
-  static getListSalesRoute = (tb_institution_id, tb_sales_route_id, tb_salesman_id) => {
-    const promise = new Promise((resolve, reject) => {
-      Tb.sequelize.query(
-        'Select ' +
-        'src.tb_sales_route_id, ' +
-        'sr.description name_sales_route, ' +
-        'src.sequence, ' +
-        'et.id,  ' +
-        'et.name_company,  ' +
-        'et.nick_trade, ' +
-        ' "F" doc_kind, ' +
-        'pe.cpf doc_number,' +
-        'adr. street,' +
-        'adr.nmbr,' +
-        'adr.complement ' +
+  static getSQLListSalesRouteTodos() {
+      var sqltxt = 
+      '  Select src.tb_institution_id, src.tb_sales_route_id, sr.description name_sales_route, src.sequence, et.id,  et.name_company,  et.nick_trade,  "F" doc_kind, pe.cpf doc_number,adr. street,adr.nmbr,adr.complement, src.active,src.turn_back ' +
         'from tb_customer ct  ' +
         '  inner join tb_entity et  ' +
         '  on (ct.id = et.id)  ' +
@@ -417,18 +403,7 @@ class CustomerController extends Base {
         '  and ( (tb_sales_route_id =?) or (tb_sales_route_id =0))' +
         ' and (ct.tb_salesman_id = ?)' +
         'union ' +
-        'Select  ' +
-        'src.tb_sales_route_id, ' +
-        'sr.description name_sales_route, ' +
-        'src.sequence, ' +
-        'et.id,  ' +
-        'et.name_company,  ' +
-        'et.nick_trade, ' +
-        ' "J" doc_kind, ' +
-        'co.cnpj doc_number,' +
-        'adr. street,' +
-        'adr.nmbr,' +
-        'adr.complement ' +
+        'Select src.tb_institution_id, src.tb_sales_route_id, sr.description name_sales_route, src.sequence, et.id,  et.name_company,  et.nick_trade,  "J" doc_kind, co.cnpj doc_number,adr. street,adr.nmbr,adr.complement , src.active,src.turn_back ' +
         'from tb_customer ct  ' +
         '  inner join tb_entity et  ' +
         '  on (ct.id = et.id)  ' +
@@ -445,9 +420,136 @@ class CustomerController extends Base {
         'where ct.tb_institution_id =? ' +
         '  and ( (tb_sales_route_id =?) or (tb_sales_route_id =0))' +
         ' and (ct.tb_salesman_id = ?)' +
-        'order by 3 ',
+        'order by 3 ';
+    return sqltxt;
+  }
+
+  static getListSalesRouteTodos = (tb_institution_id, tb_sales_route_id, tb_salesman_id) => {
+    const promise = new Promise(async (resolve, reject) => {
+
+      var sqltxt = this.getSQLListSalesRouteTodos();
+           
+      Tb.sequelize.query(
+        sqltxt,
         {
           replacements: [tb_institution_id, tb_sales_route_id, tb_salesman_id, tb_institution_id, tb_sales_route_id, tb_salesman_id],
+          type: Tb.sequelize.QueryTypes.SELECT
+        }).then(data => {
+          resolve(data);
+        })
+        .catch(err => {
+          reject('Customer.getListBySalesRoute: ' + err);
+        });
+    });
+    return promise;
+  }
+  static getListSalesRouteAtender = (tb_institution_id, tb_sales_route_id, tb_salesman_id,dt_record) => {
+    const promise = new Promise(async (resolve, reject) => {
+
+      var sqltxt = 
+      'select * '+
+      'from ( '+
+        'select distinct vwsr.*, ord.dt_record '+
+        'from ( '+
+          this.getSQLListSalesRouteTodos()+
+        '  ) vwsr '+
+        '  left outer join tb_order_attendance ora '+
+        '  on (vwsr.tb_institution_id = ora.tb_institution_id) '+
+        '    and (vwsr.id = ora.tb_customer_id) '+
+        '  left outer join tb_order ord '+
+        '  on (ora.tb_institution_id = ord.tb_institution_id) '+
+        '    and (ora.id = ord.id)     '+      
+        'where  (ord.dt_record is null) '+
+        ' or (ord.dt_record = ?)' +        
+        ') ate '+
+        'where (ate.dt_record is null) '+
+        ' and ( ate.active = ?) ';
+           
+      Tb.sequelize.query(
+        sqltxt,
+        {
+          replacements: [tb_institution_id, tb_sales_route_id, tb_salesman_id, tb_institution_id, tb_sales_route_id, tb_salesman_id,dt_record,'S'],
+          type: Tb.sequelize.QueryTypes.SELECT
+        }).then(data => {
+          resolve(data);
+        })
+        .catch(err => {
+          reject('Customer.getListBySalesRoute: ' + err);
+        });
+    });
+    return promise;
+  }
+
+  static getListSalesRouteAtendido = (tb_institution_id, tb_sales_route_id, tb_salesman_id,dt_record) => {
+    const promise = new Promise(async (resolve, reject) => {
+
+      var sqltxt = 
+      'select distinct vwsr.*, ord.dt_record '+
+      'from ( '+
+        this.getSQLListSalesRouteTodos()+
+      '  ) vwsr '+
+      '  inner join tb_order_attendance ora '+
+      '  on (vwsr.tb_institution_id = ora.tb_institution_id) '+
+      '    and (vwsr.id = ora.tb_customer_id) '+
+      '  inner join tb_order ord '+
+      '  on (ora.tb_institution_id = ord.tb_institution_id) '+
+      '    and (ora.id = ord.id)     '+
+      'where  (ord.dt_record = ?) ';
+           
+      Tb.sequelize.query(
+        sqltxt,
+        {
+          replacements: [tb_institution_id, tb_sales_route_id, tb_salesman_id, tb_institution_id, tb_sales_route_id, tb_salesman_id,dt_record],
+          type: Tb.sequelize.QueryTypes.SELECT
+        }).then(data => {
+          resolve(data);
+        })
+        .catch(err => {
+          reject('Customer.getListBySalesRoute: ' + err);
+        });
+    });
+    return promise;
+  }
+
+  static getListSalesRouteRetorno = (tb_institution_id, tb_sales_route_id, tb_salesman_id) => {
+    const promise = new Promise(async (resolve, reject) => {
+
+      var sqltxt = 
+      'select distinct vwsr.*, "" dt_record '+
+      'from ( '+
+        this.getSQLListSalesRouteTodos()+
+      '  ) vwsr '+
+      'where  (turn_back = ?) ';
+           
+      Tb.sequelize.query(
+        sqltxt,
+        {
+          replacements: [tb_institution_id, tb_sales_route_id, tb_salesman_id, tb_institution_id, tb_sales_route_id, tb_salesman_id,'S'],
+          type: Tb.sequelize.QueryTypes.SELECT
+        }).then(data => {
+          resolve(data);
+        })
+        .catch(err => {
+          reject('Customer.getListBySalesRoute: ' + err);
+        });
+    });
+    return promise;
+  }
+
+  static getListSalesRouteRecolhido = (tb_institution_id, tb_sales_route_id, tb_salesman_id) => {
+    const promise = new Promise(async (resolve, reject) => {
+
+      var sqltxt = 
+      'select distinct vwsr.*, "" dt_record '+
+      'from ( '+
+        this.getSQLListSalesRouteTodos()+
+      '  ) vwsr '+
+      'where  (active = ?) ';
+           
+      Tb.sequelize.query(
+        sqltxt,
+        {
+          replacements: [tb_institution_id, tb_sales_route_id, tb_salesman_id, tb_institution_id, tb_sales_route_id, tb_salesman_id,'N'],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve(data);
