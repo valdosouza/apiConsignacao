@@ -256,6 +256,35 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         description: Some server error 
  */
 router.get("/region/getlist/:tb_institution_id/:tb_region_id", customer.getListByRegion); 
+
+/**
+ * @swagger
+ * /customer/salesman/getlist/{tb_institution_id}/{tb_salesman_id}:
+ *   get:
+ *     summary: Returns the list of all the Customer
+ *     tags: [Customer]
+ *     parameters:
+ *      - in: path
+ *        name: tb_institution_id
+ *        required: true 
+ *      - in: path
+ *        name: tb_salesman_id
+ *        required: true
+ *        description: The Customer List by tb_institution_id tb_salesman_id
+ *     responses:
+ *       200:
+ *         description: The list of Customer
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/ListCustomerBySalesRoute'
+ *       500:
+ *         description: Some server error 
+ */
+router.get("/salesman/getlist/:tb_institution_id/:tb_salesman_id", customer.getListBySalesman); 
+
 /**
  * @swagger
  * /customer/{id}:

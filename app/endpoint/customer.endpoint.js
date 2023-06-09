@@ -109,8 +109,8 @@ class CustomerEndPoint {
       case 'Todos':
         CustomerController.getListSalesRouteTodos(
           req.params.tb_institution_id,
-          req.params.tb_sales_route_id,
-          req.params.tb_salesman_id)
+          req.params.tb_sales_route_id,          
+          req.params.tb_region_id)
           .then(data => {
             res.send(data);
           })
@@ -119,7 +119,7 @@ class CustomerEndPoint {
         CustomerController.getListSalesRouteAtendido(
           req.params.tb_institution_id,
           req.params.tb_sales_route_id,
-          req.params.tb_salesman_id,
+          req.params.tb_region_id,
           req.params.dt_record)
           .then(data => {
             res.send(data);
@@ -129,7 +129,7 @@ class CustomerEndPoint {
         CustomerController.getListSalesRouteRetorno(
           req.params.tb_institution_id,
           req.params.tb_sales_route_id,
-          req.params.tb_salesman_id)
+          req.params.tb_region_id)
           .then(data => {
             res.send(data);
           })
@@ -138,7 +138,7 @@ class CustomerEndPoint {
         CustomerController.getListSalesRouteRecolhido(
           req.params.tb_institution_id,
           req.params.tb_sales_route_id,
-          req.params.tb_salesman_id)
+          req.params.tb_region_id)
           .then(data => {
             res.send(data);
           })
@@ -147,7 +147,7 @@ class CustomerEndPoint {
         CustomerController.getListSalesRouteAtender(
           req.params.tb_institution_id,
           req.params.tb_sales_route_id,
-          req.params.tb_salesman_id,
+          req.params.tb_region_id,
           req.params.dt_record)
           .then(data => {
             res.send(data);
@@ -160,6 +160,14 @@ class CustomerEndPoint {
   static getListByRegion = (req, res) => {
 
     CustomerController.getListByRegion(req.params.tb_institution_id, req.params.tb_region_id)
+      .then(data => {
+        res.send(data);
+      })
+  };
+
+  static getListBySalesman = (req, res) => {
+
+    CustomerController.getListBySalesman(req.params.tb_institution_id, req.params.tb_salesman_id)
       .then(data => {
         res.send(data);
       })
