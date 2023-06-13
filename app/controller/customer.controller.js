@@ -463,12 +463,13 @@ class CustomerController extends Base {
         ') ate '+
         'where (ate.dt_record is null) '+
         ' and ( ate.active = ?) '+
+        ' and ( turn_back = ?) '+
         ' order by 4';
            
       Tb.sequelize.query(
         sqltxt,
         {
-          replacements: [tb_institution_id, tb_sales_route_id, tb_region_id, tb_institution_id, tb_sales_route_id, tb_region_id,dt_record,'S'],
+          replacements: [tb_institution_id, tb_sales_route_id, tb_region_id, tb_institution_id, tb_sales_route_id, tb_region_id,dt_record,'S','N'],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve(data);
