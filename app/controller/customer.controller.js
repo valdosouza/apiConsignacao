@@ -15,8 +15,8 @@ class CustomerController extends Base {
         'Select ' +
         'ct.id, ' +
         'ct.tb_institution_id, ' +
-        'ct.tb_salesman_id, ' +
-        'slm.nick_trade salesman_name, ' +
+        'ct.tb_region_id, ' +
+        'rg.description region_name, ' +
         'ct.tb_carrier_id, ' +
         'ct.credit_status, ' +
         'ct.credit_value, ' +
@@ -25,8 +25,8 @@ class CustomerController extends Base {
         'ct.multiplier, ' +
         'ct.active ' +
         'from tb_customer  ct ' +
-        '  left outer join tb_entity slm ' +
-        '  on (slm.id = ct.tb_salesman_id) ' +
+        '  left outer join tb_region rg ' +
+        '  on (rg.id = ct.tb_region_id) ' +
         'where (ct.tb_institution_id =?) ' +
         ' and  ( ct.id =?)',
         {
@@ -401,7 +401,7 @@ class CustomerController extends Base {
         '  and  (src.tb_institution_id = sr.tb_institution_id) ' +
         'where ct.tb_institution_id =? ' +
         '  and ( (tb_sales_route_id =?) or (tb_sales_route_id =0))' +
-        ' and (ct.tb_salesman_id = ?)' +
+        ' and (ct.tb_region_id = ?)' +
         'union ' +
         'Select src.tb_institution_id, src.tb_sales_route_id, sr.description name_sales_route, src.sequence, et.id,  et.name_company,  et.nick_trade,  "J" doc_kind, co.cnpj doc_number,adr. street,adr.nmbr,adr.complement , src.active,src.turn_back ' +
         'from tb_customer ct  ' +
@@ -419,11 +419,11 @@ class CustomerController extends Base {
         '  and  (src.tb_institution_id = sr.tb_institution_id) ' +
         'where ct.tb_institution_id =? ' +
         '  and ( (tb_sales_route_id =?) or (tb_sales_route_id =0))' +
-        ' and (ct.tb_salesman_id = ?)';
+        ' and (ct.tb_region_id = ?)';
     return sqltxt;
   }
 
-  static getListSalesRouteTodos = (tb_institution_id, tb_sales_route_id, tb_salesman_id) => {
+  static getListSalesRouteTodos = (tb_institution_id, tb_sales_route_id, tb_region_id) => {
     const promise = new Promise(async (resolve, reject) => {
 
       var sqltxt = this.getSQLListSalesRouteTodos();
@@ -431,18 +431,18 @@ class CustomerController extends Base {
       Tb.sequelize.query(
         sqltxt,
         {
-          replacements: [tb_institution_id, tb_sales_route_id, tb_salesman_id, tb_institution_id, tb_sales_route_id, tb_salesman_id],
+          replacements: [tb_institution_id, tb_sales_route_id, tb_region_id, tb_institution_id, tb_sales_route_id, tb_region_id],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve(data);
         })
         .catch(err => {
-          reject('Customer.getListBySalesRoute: ' + err);
+          reject('Customer.getListSalesRouteTodos: ' + err);
         });
     });
     return promise;
   }
-  static getListSalesRouteAtender = (tb_institution_id, tb_sales_route_id, tb_salesman_id,dt_record) => {
+  static getListSalesRouteAtender = (tb_institution_id, tb_sales_route_id, tb_region_id,dt_record) => {
     const promise = new Promise(async (resolve, reject) => {
 
       var sqltxt = 
@@ -463,24 +463,25 @@ class CustomerController extends Base {
         ') ate '+
         'where (ate.dt_record is null) '+
         ' and ( ate.active = ?) '+
+        ' and ( turn_back = ?) '+
         ' order by 4';
            
       Tb.sequelize.query(
         sqltxt,
         {
-          replacements: [tb_institution_id, tb_sales_route_id, tb_salesman_id, tb_institution_id, tb_sales_route_id, tb_salesman_id,dt_record,'S'],
+          replacements: [tb_institution_id, tb_sales_route_id, tb_region_id, tb_institution_id, tb_sales_route_id, tb_region_id,dt_record,'S','N'],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve(data);
         })
         .catch(err => {
-          reject('Customer.getListBySalesRoute: ' + err);
+          reject('Customer.getListSalesRouteAtender: ' + err);
         });
     });
     return promise;
   }
 
-  static getListSalesRouteAtendido = (tb_institution_id, tb_sales_route_id, tb_salesman_id,dt_record) => {
+  static getListSalesRouteAtendido = (tb_institution_id, tb_sales_route_id, tb_region_id,dt_record) => {
     const promise = new Promise(async (resolve, reject) => {
 
       var sqltxt = 
@@ -499,19 +500,19 @@ class CustomerController extends Base {
       Tb.sequelize.query(
         sqltxt,
         {
-          replacements: [tb_institution_id, tb_sales_route_id, tb_salesman_id, tb_institution_id, tb_sales_route_id, tb_salesman_id,dt_record],
+          replacements: [tb_institution_id, tb_sales_route_id, tb_region_id, tb_institution_id, tb_sales_route_id, tb_region_id,dt_record],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve(data);
         })
         .catch(err => {
-          reject('Customer.getListBySalesRoute: ' + err);
+          reject('Customer.getListSalesRouteAtendidos: ' + err);
         });
     });
     return promise;
   }
 
-  static getListSalesRouteRetorno = (tb_institution_id, tb_sales_route_id, tb_salesman_id) => {
+  static getListSalesRouteRetorno = (tb_institution_id, tb_sales_route_id, tb_region_id) => {
     const promise = new Promise(async (resolve, reject) => {
 
       var sqltxt = 
@@ -524,19 +525,19 @@ class CustomerController extends Base {
       Tb.sequelize.query(
         sqltxt,
         {
-          replacements: [tb_institution_id, tb_sales_route_id, tb_salesman_id, tb_institution_id, tb_sales_route_id, tb_salesman_id,'S'],
+          replacements: [tb_institution_id, tb_sales_route_id, tb_region_id, tb_institution_id, tb_sales_route_id, tb_region_id,'S'],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve(data);
         })
         .catch(err => {
-          reject('Customer.getListBySalesRoute: ' + err);
+          reject('Customer.getListSalesRouteRetorno: ' + err);
         });
     });
     return promise;
   }
 
-  static getListSalesRouteRecolhido = (tb_institution_id, tb_sales_route_id, tb_salesman_id) => {
+  static getListSalesRouteRecolhido = (tb_institution_id, tb_sales_route_id, tb_region_id) => {
     const promise = new Promise(async (resolve, reject) => {
 
       var sqltxt = 
@@ -549,24 +550,24 @@ class CustomerController extends Base {
       Tb.sequelize.query(
         sqltxt,
         {
-          replacements: [tb_institution_id, tb_sales_route_id, tb_salesman_id, tb_institution_id, tb_sales_route_id, tb_salesman_id,'N'],
+          replacements: [tb_institution_id, tb_sales_route_id, tb_region_id, tb_institution_id, tb_sales_route_id, tb_region_id,'N'],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve(data);
         })
         .catch(err => {
-          reject('Customer.getListBySalesRoute: ' + err);
+          reject('Customer.getListSalesRouteRecolhido: ' + err);
         });
     });
     return promise;
   }
 
-  static getListBySalesman = (tb_institution_id, tb_salesman_id) => {
+  static getListByRegion = (tb_institution_id, tb_region_id) => {
     const promise = new Promise((resolve, reject) => {
       Tb.sequelize.query(
         'Select ' +
-        'ct.tb_salesman_id, ' +
-        'clb.name_company name_salesman, ' +
+        'ct.tb_region_id, ' +
+        'rg.descripton name_region, ' +
         'et.id, ' +
         'et.name_company, ' +
         'et.nick_trade, ' +
@@ -582,14 +583,14 @@ class CustomerController extends Base {
         '  on (adr.id = et.id) ' +
         '  inner join tb_person pe ' +
         '  on (pe.id = et.id) ' +
-        '  inner join tb_entity clb ' +
-        '  on (clb.id = ct.tb_salesman_id) ' +
+        '  inner join tb_region rg ' +
+        '  on (rg.id = ct.tb_region_id) ' +
         'where ( ct.tb_institution_id =?) ' +
-        '  and ( ct.tb_salesman_id =?) ' +
+        '  and ( ct.tb_region_id =?) ' +
         'union ' +
         'Select ' +
-        'ct.tb_salesman_id, ' +
-        'clb.name_company name_salesman, ' +
+        'ct.tb_region_id, ' +
+        'rg.description name_region, ' +
         'et.id, ' +
         'et.name_company, ' +
         'et.nick_trade, ' +
@@ -605,10 +606,72 @@ class CustomerController extends Base {
         '  on (adr.id = et.id) ' +
         '  inner join tb_company co ' +
         '  on (co.id = et.id) ' +
-        '  inner join tb_entity clb ' +
-        '  on (clb.id = ct.tb_salesman_id) ' +
+        '  inner join tb_region rg' +
+        '  on (rg.id = ct.tb_region_id) ' +
         'where (ct.tb_institution_id =?) ' +
-        '  and ( ct.tb_salesman_id =?)' +
+        '  and ( ct.tb_region_id =?)' +
+        'order by 5 asc ',
+        {
+          replacements: [tb_institution_id, tb_region_id, tb_institution_id, tb_region_id],
+          type: Tb.sequelize.QueryTypes.SELECT
+        }).then(data => {
+          resolve(data);
+        })
+        .catch(err => {
+          reject('Customer.getListByRegion: ' + err);
+        });
+    });
+    return promise;
+  }
+
+  static getListBySalesman = (tb_institution_id, tb_salesman_id) => {
+    const promise = new Promise((resolve, reject) => {
+      Tb.sequelize.query(
+        'Select ' +
+        'ct.tb_region_id, ' +
+        'rg.description name_region, ' +
+        'et.id, ' +
+        'et.name_company, ' +
+        'et.nick_trade, ' +
+        ' "F" doc_kind, ' +
+        'pe.cpf doc_number,' +
+        'adr. street,' +
+        'adr.nmbr,' +
+        'adr.complement ' +
+        'from tb_customer ct ' +
+        '  inner join tb_entity et ' +
+        '  on (ct.id = et.id) ' +
+        '  inner join tb_address adr ' +
+        '  on (adr.id = et.id) ' +
+        '  inner join tb_person pe ' +
+        '  on (pe.id = et.id) ' +
+        '  inner join tb_region rg ' +
+        '  on (rg.id = ct.tb_region_id) ' +
+        'where ( ct.tb_institution_id =?) ' +
+        '  and ( rg.tb_salesman_id =?) ' +
+        'union ' +
+        'Select ' +
+        'ct.tb_region_id, ' +
+        'rg.description name_region, ' +
+        'et.id, ' +
+        'et.name_company, ' +
+        'et.nick_trade, ' +
+        ' "J" doc_kind, ' +
+        'co.cnpj doc_number,' +
+        'adr. street,' +
+        'adr.nmbr,' +
+        'adr.complement ' +
+        'from tb_customer ct ' +
+        '  inner join tb_entity et ' +
+        '  on (ct.id = et.id) ' +
+        '  inner join tb_address adr ' +
+        '  on (adr.id = et.id) ' +
+        '  inner join tb_company co ' +
+        '  on (co.id = et.id) ' +
+        '  inner join tb_region rg' +
+        '  on (rg.id = ct.tb_region_id) ' +
+        'where (ct.tb_institution_id =?) ' +
+        '  and ( rg.tb_salesman_id =?)' +
         'order by 5 asc ',
         {
           replacements: [tb_institution_id, tb_salesman_id, tb_institution_id, tb_salesman_id],
