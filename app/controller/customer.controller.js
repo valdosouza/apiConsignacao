@@ -402,6 +402,7 @@ class CustomerController extends Base {
         'where ct.tb_institution_id =? ' +
         '  and ( (tb_sales_route_id =?) or (tb_sales_route_id =0))' +
         ' and (ct.tb_region_id = ?)' +
+        ' and (ct.active = ?) '+
         'union ' +
         'Select src.tb_institution_id, src.tb_sales_route_id, sr.description name_sales_route, src.sequence, et.id,  et.name_company,  et.nick_trade,  "J" doc_kind, co.cnpj doc_number,adr. street,adr.nmbr,adr.complement , src.active,src.turn_back ' +
         'from tb_customer ct  ' +
@@ -419,7 +420,8 @@ class CustomerController extends Base {
         '  and  (src.tb_institution_id = sr.tb_institution_id) ' +
         'where ct.tb_institution_id =? ' +
         '  and ( (tb_sales_route_id =?) or (tb_sales_route_id =0))' +
-        ' and (ct.tb_region_id = ?)';
+        ' and (ct.tb_region_id = ?)'+
+        ' and (ct.active = ?) ';
     return sqltxt;
   }
 
@@ -431,7 +433,7 @@ class CustomerController extends Base {
       Tb.sequelize.query(
         sqltxt,
         {
-          replacements: [tb_institution_id, tb_sales_route_id, tb_region_id, tb_institution_id, tb_sales_route_id, tb_region_id],
+          replacements: [tb_institution_id, tb_sales_route_id, tb_region_id,'S', tb_institution_id, tb_sales_route_id, tb_region_id, 'S'],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve(data);
@@ -469,7 +471,7 @@ class CustomerController extends Base {
       Tb.sequelize.query(
         sqltxt,
         {
-          replacements: [tb_institution_id, tb_sales_route_id, tb_region_id, tb_institution_id, tb_sales_route_id, tb_region_id,dt_record,'S','N'],
+          replacements: [tb_institution_id, tb_sales_route_id, tb_region_id,'S', tb_institution_id, tb_sales_route_id, tb_region_id, 'S',dt_record,'S','N'],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve(data);
@@ -500,7 +502,7 @@ class CustomerController extends Base {
       Tb.sequelize.query(
         sqltxt,
         {
-          replacements: [tb_institution_id, tb_sales_route_id, tb_region_id, tb_institution_id, tb_sales_route_id, tb_region_id,dt_record],
+          replacements: [tb_institution_id, tb_sales_route_id, tb_region_id,'S', tb_institution_id, tb_sales_route_id, tb_region_id,'S', dt_record],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve(data);
@@ -525,7 +527,7 @@ class CustomerController extends Base {
       Tb.sequelize.query(
         sqltxt,
         {
-          replacements: [tb_institution_id, tb_sales_route_id, tb_region_id, tb_institution_id, tb_sales_route_id, tb_region_id,'S'],
+          replacements: [tb_institution_id, tb_sales_route_id, tb_region_id,'S', tb_institution_id, tb_sales_route_id, tb_region_id,'S','S'],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve(data);
@@ -550,7 +552,7 @@ class CustomerController extends Base {
       Tb.sequelize.query(
         sqltxt,
         {
-          replacements: [tb_institution_id, tb_sales_route_id, tb_region_id, tb_institution_id, tb_sales_route_id, tb_region_id,'N'],
+          replacements: [tb_institution_id, tb_sales_route_id, tb_region_id, 'S', tb_institution_id, tb_sales_route_id, tb_region_id,'S', 'N'],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve(data);
