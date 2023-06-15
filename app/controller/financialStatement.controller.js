@@ -409,10 +409,13 @@ class FinancialStatementController extends Base {
    
       '   inner join tb_customer ct '+
       '   on (fnl.tb_entity_id = ct.id) '+
+      '   inner join tb_region rg '+
+      '   on (rg.id = ct.tb_region_id) '+
+
       '   inner join tb_payment_types pmt  '+
       '   on (pmt.id = fnl.tb_payment_types_id)  '+
       'where (fnl.tb_institution_id =? )  '+
-      ' and (ct.tb_salesman_id =?) ';
+      ' and (rg.tb_salesman_id =?) ';
       if (tb_customer_id == 0) {
         sqltxt = sqltxt + ' and (fnl.tb_entity_id <> ?) ';
       } else {
@@ -524,7 +527,7 @@ class FinancialStatementController extends Base {
       '   on (fnl.tb_order_id = ora.id) '+
       '     and (fnl.tb_institution_id = ora.tb_institution_id) '+
       ' where (ora.tb_institution_id = ? )'+
-      '  and (ct.tb_salesman_id = ?)'+
+      '  and (ora.tb_salesman_id = ?)'+
       '  and (ord.dt_record between ? and ?) '+
       ' group by 1,2,3 ,4,5,6,7 '+
       ' order by 7 ';

@@ -164,9 +164,12 @@ class StockBalanceController extends Base {
         '    and (ehs.tb_institution_id = stb.tb_institution_id) ' +
         '  inner join tb_customer ct ' +
         '  on (ct.id = ehs.tb_entity_id) ' +
+        '   inner join tb_region rg '+
+        '   on (rg.id = ct.tb_region_id) '+
+
         '    and (ct.tb_institution_id = ehs.tb_institution_id) ' +
         'where stb.tb_institution_id =?  ' +
-        'and ct.tb_salesman_id =?  ' +
+        'and rg.tb_salesman_id =?  ' +
         'group by 1,2 ',
         {
           replacements: [tb_institution_id, tb_salesman_id],
