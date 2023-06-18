@@ -48,11 +48,11 @@ class CustomerEndPoint {
   }
 
   static save = (req, res) => {
-    try {      
+    try {
       if (req.body.customer.id > 0) {
         CustomerController.getById(req.body.customer.tb_institution_id, req.body.customer.id)
-          .then(dataById => {            
-            if ( dataById)  {
+          .then(dataById => {
+            if (dataById) {
               CustomerController.update(req.body)
                 .then(data => {
                   res.send(this._saveReturn(data));
@@ -73,14 +73,17 @@ class CustomerEndPoint {
           docKind = "J";
         }
         CustomerController.getByDocNumber(req.body.customer.tb_institution_id, docNumber)
-          .then(dataDocnumber => {
-            if (dataDocnumber.length == 0)  {
+          .then(dataDocnumber => {            
+            if (dataDocnumber.length == 0) {
               CustomerController.insert(req.body)
                 .then(data => {
                   res.send(this._saveReturn(data));
                 })
             } else {
-              res.status(201).json(this._saveWithoutReturn(req.body));
+              CustomerController.update(req.body)
+                .then(data => {
+                  res.send(this._saveReturn(data));
+                })
             }
           });
       }
@@ -109,7 +112,7 @@ class CustomerEndPoint {
       case 'Todos':
         CustomerController.getListSalesRouteTodos(
           req.params.tb_institution_id,
-          req.params.tb_sales_route_id,          
+          req.params.tb_sales_route_id,
           req.params.tb_region_id)
           .then(data => {
             res.send(data);

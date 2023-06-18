@@ -44,8 +44,9 @@ class AuthEndPoint {
   
   static authorization = (req, res) => {
     
-    return res.json({
-      "message": "Valid Token",      
+    return res.status(200).send({
+      "message": "Valid Token",  
+      "result": true    
     });          
     
   };
