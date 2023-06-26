@@ -322,7 +322,7 @@ class OrderConsignmentController extends Base {
           current_debit_balance: body.Order.current_debit_balance,
         };
 
-        this.insert(dataOrder)
+        await this.insert(dataOrder)
           .then(async () => {
             await this.insertCheckpointCard(body);
             await this.insertCheckpointPaid(body);

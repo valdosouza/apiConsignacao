@@ -12,26 +12,44 @@ const { order } = require("../model/index.js");
 class OrderConsignmentEndPoint {
 
   static saveCheckpoint = (req, res) => {
+    var valida = true;
+    if (req.body.Order.id == 0) {
+      valida = false;
+      res.status(400).send("Id não encontrado");
+    }
+    if (req.body.Order.tb_institution_id == 0) {
+      valida = false;
+      res.status(400).send("Estabelecimento não encontrado");
+    }
+    if (req.body.Order.tb_customer_id == 0) {
+      valida = false;
+      res.status(400).send("Cliente não encontrado não encontrado");
+    }
+    if (req.body.Order.tb_salesman_id == 0) {
+      valida = false;
+      res.status(400).send("Vendededor não encontrado");
+    }
+    if (valida) {
+      OrderConsignmentController.saveCheckpoint(req.body)
+        .then(async data => {
+          //Retorna do estoque do Cliente - Venda direta pelo estoque do Cliente ....lembrar da venda direta pelo estoque do Vendedor
+          var StockDestiny = await entityHasStockList.getByEntity(req.body.Order.tb_institution_id, req.body.Order.tb_customer_id);
+          //Usar o grupo estoque manager por que pode ser usado tanto customer quanto o salesman 
+          req.body['StockOrigen'] = StockDestiny[0];
 
-    OrderConsignmentController.saveCheckpoint(req.body)
-      .then( async data => {
-        //Retorna do estoque do Cliente - Venda direta pelo estoque do Cliente ....lembrar da venda direta pelo estoque do Vendedor
-        var StockDestiny = await entityHasStockList.getByEntity(req.body.Order.tb_institution_id,req.body.Order.tb_customer_id);
-        //Usar o grupo estoque manager por que pode ser usado tanto customer quanto o salesman 
-        req.body['StockOrigen'] = StockDestiny[0];                
+          await OrderSaleController.saveByCard(req.body);
 
-        await OrderSaleController.saveByCard(req.body);
-        
-        await FinancialController.saveByCard(req.body);
-        
-        //cliente definiu que tudo será condiderado como recebido
-        //await FinancialPaymentController.saveByCard(req.body);
-        
-        //cliente definiu que tudo será condiderado como recebido
-        //await FinancialStatementController.saveByCard(req.body);
+          await FinancialController.saveByCard(req.body);
 
-        res.send(data);
-      })
+          //cliente definiu que tudo será condiderado como recebido
+          //await FinancialPaymentController.saveByCard(req.body);
+
+          //cliente definiu que tudo será condiderado como recebido
+          //await FinancialStatementController.saveByCard(req.body);
+
+          res.send(data);
+        })
+    }
   }
 
   static saveSupplying = (req, res) => {
@@ -45,17 +63,17 @@ class OrderConsignmentEndPoint {
         }
         //Cria o estoque do cliente ou retorna o estoque do cliente
         var StockDestiny = await entityHasStockList.createAuto(dataEntityHasStockList)
-        req.body['StockDestiny'] = StockDestiny;          
+        req.body['StockDestiny'] = StockDestiny;
         //Retorna do estoque do vendedor
-        var stockSalesman = await entityHasStockList.getByEntity(req.body.Order.tb_institution_id,req.body.Order.tb_salesman_id);
-        req.body['StockOrigen'] = stockSalesman[0];          
+        var stockSalesman = await entityHasStockList.getByEntity(req.body.Order.tb_institution_id, req.body.Order.tb_salesman_id);
+        req.body['StockOrigen'] = stockSalesman[0];
 
         await OrderBonusController.saveByCard(req.body);
 
-        await OrderConsignmentController.saveByCard(req.body);       
+        await OrderConsignmentController.saveByCard(req.body);
 
         await OrderStockTransferController.saveDevolutionByCard(req.body);
-        
+
         await OrderAttendaceController.finished(req.body);
 
         res.send("Supplying recorded successfully.");
