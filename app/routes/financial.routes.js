@@ -81,7 +81,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *                 $ref: '#/components/schemas/FinancialStatement'
  */
 
-router.get("/statement/getbyday/:tb_institution_id/:tb_user_id/:date", financial.getbyday);
+router.get("/statement/getbyday/:tb_institution_id/:tb_user_id/:date", financial.getByday);
   
 /**
  * @swagger
@@ -111,7 +111,7 @@ router.get("/statement/getbyday/:tb_institution_id/:tb_user_id/:date", financial
  *                 $ref: '#/components/schemas/FinancialStatement'
  */
 
-router.get("/statement/getbymonth/:tb_institution_id/:tb_user_id/:date", financial.getbymonth);
+router.get("/statement/getbymonth/:tb_institution_id/:tb_user_id/:date", financial.getByMonth);
 
 /**
  * @swagger
@@ -143,7 +143,7 @@ router.get("/statement/getbymonth/:tb_institution_id/:tb_user_id/:date", financi
  *                 $ref: '#/components/schemas/FinancialStatement'
  */
 
-router.get("/statement/getbycustomer/:tb_institution_id/:tb_user_id/:tb_customer_id/:date", financial.getbyDaybyCustomer);
+router.get("/statement/getbycustomer/:tb_institution_id/:tb_user_id/:tb_customer_id/:date", financial.getByDayByCustomer);
 
 /**
  * @swagger
@@ -175,7 +175,7 @@ router.get("/statement/getbycustomer/:tb_institution_id/:tb_user_id/:tb_customer
  *                 $ref: '#/components/schemas/FinancialStatement'
  */
 
-router.get("/statement/getbyorder/:tb_institution_id/:tb_user_id/:tb_order_id/:date", financial.getbyOrder);
+router.get("/statement/getbyorder/:tb_institution_id/:tb_user_id/:tb_order_id/:date", financial.getByOrder);
 
 /**
  * @swagger
@@ -204,7 +204,7 @@ router.get("/statement/getbyorder/:tb_institution_id/:tb_user_id/:tb_order_id/:d
  *                 $ref: '#/components/schemas/FinancialListCustomerCharged'
  */
 
-router.get("/customer/charged/getlist/:tb_institution_id/:tb_user_id/:date", financial.getlistCustomercharge);
+router.get("/customer/charged/getlist/:tb_institution_id/:tb_user_id/:date", financial.getListCustomerCharge);
 
 /**
  * @swagger
@@ -228,7 +228,7 @@ router.get("/customer/charged/getlist/:tb_institution_id/:tb_user_id/:date", fin
  *                 $ref: '#/components/schemas/FinancialListSalesmanCustomerCharged'
  */
 
-router.get("/salesman/customer/charged/getlist/:tb_institution_id/:date", financial.getlistSalesmanCustomercharge);
+router.get("/salesman/customer/charged/getlist/:tb_institution_id/:date", financial.getListSalesmanCustomerCharge);
 
 
 module.exports = router;

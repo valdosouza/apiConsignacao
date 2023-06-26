@@ -2,7 +2,7 @@ const FinancialStatemenController = require("../controller/financialStatement.co
 
 class FinancialEndPoint {
 
-  static getbyday(req, res) {            
+  static getByday(req, res) {            
     FinancialStatemenController.getByDay(req.params.tb_institution_id,
                                           req.params.tb_user_id,
                                           0,
@@ -13,8 +13,8 @@ class FinancialEndPoint {
       })
   }
 
-  static getbymonth(req, res) {    
-    FinancialStatemenController.get(req.params.tb_institution_id,
+  static getByMonth(req, res) {    
+    FinancialStatemenController.getByMonth(req.params.tb_institution_id,
                                     req.params.tb_user_id,
                                     0,
                                     req.params.date,
@@ -25,7 +25,7 @@ class FinancialEndPoint {
       })
   }
 
-  static getbyDaybyCustomer(req, res) {    
+  static getByDayByCustomer(req, res) {    
     FinancialStatemenController.getByCustomer(req.params.tb_institution_id,
                                     req.params.tb_user_id,
                                     req.params.tb_customer_id,
@@ -36,7 +36,7 @@ class FinancialEndPoint {
       })
   }
   
-  static getbyOrder(req, res) {     
+  static getByOrder(req, res) {     
     FinancialStatemenController.getByOrder(req.params.tb_institution_id,
                                     req.params.tb_user_id,
                                     req.params.date,                                    
@@ -46,7 +46,7 @@ class FinancialEndPoint {
       })
   }
 
-  static getlistCustomercharge(req, res) {    
+  static getListCustomerCharge(req, res) {    
     FinancialStatemenController.getListCustomerCharged(req.params.tb_institution_id,
                                     req.params.tb_user_id,
                                     req.params.date,
@@ -56,7 +56,7 @@ class FinancialEndPoint {
       })
   }  
 
-  static getlistSalesmanCustomercharge(req, res) {    
+  static getListSalesmanCustomerCharge(req, res) {    
     FinancialStatemenController.getListSalesmanCustomerCharged(req.params.tb_institution_id,
                                     req.params.date,
                                     'D' )

@@ -99,43 +99,43 @@ class OrderConsignmentController extends Base {
 
       var sqltxt =
       'select sum(current_debit_balance) dividaVelha '+
-      'from (  '+
-      '    SELECT DISTINCT orc.tb_customer_id, orc.current_debit_balance, orc.id,orc.dt_record  '+
-      '    FROM tb_order_consignment orc     '+
-      '        inner join tb_order ord     '+
-      '        on (ord.id = orc.id)     '+
-      '          and (ord.tb_institution_id = orc.tb_institution_id)  '+
+      'from ( '+
+      '    SELECT DISTINCT orc.tb_customer_id, orc.tb_institution_id, orc.current_debit_balance, orc.id,orc.dt_record  '+
+      '    FROM tb_order_consignment orc '+
+      '        inner join tb_order ord '+
+      '        on (ord.id = orc.id)  '+
+      '            and (ord.tb_institution_id = orc.tb_institution_id)  '+
       '    WHERE orc.id = ( '+
-      '            SELECT MAX(orca.id)  '+
-      '            FROM tb_order_consignment orca '+
-      '              inner join tb_order orda  '+
-      '              on (orda.id = orca.id)  '+
-      '                and (orda.tb_institution_id = orca.tb_institution_id)  '+
-      '            WHERE ( orca.tb_institution_id = orc.tb_institution_id )  '+
-      '              and ( orca.tb_customer_id = orc.tb_customer_id )  '+
-      '              and ( orda.tb_user_id = ord.tb_user_id )  '+
-      '              and (orda.dt_record < ? )  '+
-      '              and (orca.tb_customer_id in ( '+
-      '                    select tb_customer_id '+
-      '                    from tb_order_attendance oat   '+
-      '                       inner join tb_order ord '+
-      '                       on (ord.id = oat.id) '+
-      '                          and (ord.tb_institution_id = oat.tb_institution_id) '+
-      '                    where oat.tb_institution_id = ? '+
-      '                    and tb_salesman_id = ? '+
-      '                    and ord.dt_record = ?)) '+
-      '            GROUP BY orda.tb_user_id )  '+
-      '      and (orc.tb_institution_id = ?) '+
-      '      and (ord.tb_user_id = ?) '+
-      '      and orc.current_debit_balance > 0 '+
-      '      and (orc.kind = ? )  '+
-      ') current_debit_balance ';
+      '                    SELECT MAX(orca.id) '+
+      '                    FROM tb_order_consignment orca '+
+      '                        inner join tb_order orda '+
+      '                        on (orda.id = orca.id) '+
+      '                            and (orda.tb_institution_id = orca.tb_institution_id) '+
+      '                    WHERE ( orca.tb_institution_id = orc.tb_institution_id ) '+
+      '                        and ( orca.tb_customer_id = orc.tb_customer_id ) '+
+      '                        and (orda.dt_record < ? ) '+
+      '                    GROUP BY orca.tb_customer_id  '+
+      '                    ) '+
+      '    and (orc.tb_institution_id = ?) '+
+      '    and orc.current_debit_balance > 0  '+
+      '    and (orc.kind = ? ) '+
+      '                        and (orc.tb_customer_id in ( '+
+      '                                                      select tb_customer_id '+
+      '                                                      from tb_order_attendance oat '+
+      '                                                          inner join tb_order ord  '+
+      '                                                          on (ord.id = oat.id)  '+
+      '                                                              and (ord.tb_institution_id = oat.tb_institution_id) '+
+      '                                                      where oat.tb_institution_id = ?  '+
+      '                                                            and ord.dt_record = ?  '+
+      '                                                            and (ord.tb_user_id = ?) '+
+      '                                                      ))  '+
+      ') current_debit_balance  ';
 
 
       Tb.sequelize.query(
         sqltxt,
         {
-          replacements: [dt_record, tb_institution_id, tb_salesman_id,dt_record, tb_institution_id, tb_salesman_id,'supplying'],
+          replacements: [dt_record, tb_institution_id, 'supplying', tb_institution_id, dt_record,tb_salesman_id  ],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve({

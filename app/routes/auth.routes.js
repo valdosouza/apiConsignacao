@@ -157,7 +157,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *       500:
  *         description: Some server error
  */
-router.get("/authorization", auth.authorization);
+protectedRouter.get("/authorization", auth.authorization);
 
 module.exports = router;  
 
