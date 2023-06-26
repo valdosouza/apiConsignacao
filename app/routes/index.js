@@ -33,7 +33,7 @@ routes.use("/phone", phone);
 const institution = require("../routes/institution.routes");
 routes.use("/institution", institution);
 
-const stockList = require("../routes/stocklist.routes");
+const stockList = require("../routes/stockList.routes");
 routes.use("/stocklist", stockList);
 
 const paymentType = require("../routes/paymentTypes.routes");
