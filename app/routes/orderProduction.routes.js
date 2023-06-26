@@ -1,6 +1,6 @@
 const { Router } = require("express");
   
-const orderproduction =  require("../endpoint/orderproduction.endpoint.js");
+const orderproduction =  require("../endpoint/orderProduction.endpoint.js");
 
 const { withJWTAuthMiddleware } = require("express-kun");
 const router = Router();

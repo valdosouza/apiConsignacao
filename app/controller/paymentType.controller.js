@@ -1,5 +1,5 @@
 const Base = require('../controller/base.controller.js');
-const ihPaymentType = require('../controller/institutionHasPaymentType.controller.js');
+const ihPaymentType = require('../controller/institutionHasPaymentType.controller.js');                                             
 const db = require("../model");
 const Tb = db.paymentTypes;
 
