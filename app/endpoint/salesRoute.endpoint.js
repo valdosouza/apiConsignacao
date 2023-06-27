@@ -42,7 +42,7 @@ class SalesRouteEndPoint {
   }
   
   static setTurnBack = (req, res) => {
-    console.log("entrei");
+    
     SalesRouteController.setTurnBack(req.body)
       .then((data) => {        
         res.send(data);

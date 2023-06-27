@@ -21,7 +21,11 @@ class OrderConsignmentController extends Base {
           replacements: [id, tb_institution_id],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
-          resolve(data[0]);
+          if (data.length > 0){            
+            resolve(data[0]);
+          }else{
+            resolve({'id':0});
+          }
         })
         .catch(err => {
           reject('getById: ' + err);
@@ -77,7 +81,7 @@ class OrderConsignmentController extends Base {
       Tb.sequelize.query(
         sqltxt,
         {
-          replacements: [dt_record, tb_order_id, tb_customer_id, tb_institution_id, tb_salesman_id,'supplying'],
+          replacements: [dt_record, tb_order_id, tb_customer_id, tb_institution_id, tb_salesman_id, 'supplying'],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve({
@@ -98,44 +102,44 @@ class OrderConsignmentController extends Base {
     const promise = new Promise((resolve, reject) => {
 
       var sqltxt =
-      'select sum(current_debit_balance) dividaVelha '+
-      'from ( '+
-      '    SELECT DISTINCT orc.tb_customer_id, orc.tb_institution_id, orc.current_debit_balance, orc.id,orc.dt_record  '+
-      '    FROM tb_order_consignment orc '+
-      '        inner join tb_order ord '+
-      '        on (ord.id = orc.id)  '+
-      '            and (ord.tb_institution_id = orc.tb_institution_id)  '+
-      '    WHERE orc.id = ( '+
-      '                    SELECT MAX(orca.id) '+
-      '                    FROM tb_order_consignment orca '+
-      '                        inner join tb_order orda '+
-      '                        on (orda.id = orca.id) '+
-      '                            and (orda.tb_institution_id = orca.tb_institution_id) '+
-      '                    WHERE ( orca.tb_institution_id = orc.tb_institution_id ) '+
-      '                        and ( orca.tb_customer_id = orc.tb_customer_id ) '+
-      '                        and (orda.dt_record < ? ) '+
-      '                    GROUP BY orca.tb_customer_id  '+
-      '                    ) '+
-      '    and (orc.tb_institution_id = ?) '+
-      '    and orc.current_debit_balance > 0  '+
-      '    and (orc.kind = ? ) '+
-      '                        and (orc.tb_customer_id in ( '+
-      '                                                      select tb_customer_id '+
-      '                                                      from tb_order_attendance oat '+
-      '                                                          inner join tb_order ord  '+
-      '                                                          on (ord.id = oat.id)  '+
-      '                                                              and (ord.tb_institution_id = oat.tb_institution_id) '+
-      '                                                      where oat.tb_institution_id = ?  '+
-      '                                                            and ord.dt_record = ?  '+
-      '                                                            and (ord.tb_user_id = ?) '+
-      '                                                      ))  '+
-      ') current_debit_balance  ';
+        'select sum(current_debit_balance) dividaVelha ' +
+        'from ( ' +
+        '    SELECT DISTINCT orc.tb_customer_id, orc.tb_institution_id, orc.current_debit_balance, orc.id,orc.dt_record  ' +
+        '    FROM tb_order_consignment orc ' +
+        '        inner join tb_order ord ' +
+        '        on (ord.id = orc.id)  ' +
+        '            and (ord.tb_institution_id = orc.tb_institution_id)  ' +
+        '    WHERE orc.id = ( ' +
+        '                    SELECT MAX(orca.id) ' +
+        '                    FROM tb_order_consignment orca ' +
+        '                        inner join tb_order orda ' +
+        '                        on (orda.id = orca.id) ' +
+        '                            and (orda.tb_institution_id = orca.tb_institution_id) ' +
+        '                    WHERE ( orca.tb_institution_id = orc.tb_institution_id ) ' +
+        '                        and ( orca.tb_customer_id = orc.tb_customer_id ) ' +
+        '                        and (orda.dt_record < ? ) ' +
+        '                    GROUP BY orca.tb_customer_id  ' +
+        '                    ) ' +
+        '    and (orc.tb_institution_id = ?) ' +
+        '    and orc.current_debit_balance > 0  ' +
+        '    and (orc.kind = ? ) ' +
+        '                        and (orc.tb_customer_id in ( ' +
+        '                                                      select tb_customer_id ' +
+        '                                                      from tb_order_attendance oat ' +
+        '                                                          inner join tb_order ord  ' +
+        '                                                          on (ord.id = oat.id)  ' +
+        '                                                              and (ord.tb_institution_id = oat.tb_institution_id) ' +
+        '                                                      where oat.tb_institution_id = ?  ' +
+        '                                                            and ord.dt_record = ?  ' +
+        '                                                            and (ord.tb_user_id = ?) ' +
+        '                                                      ))  ' +
+        ') current_debit_balance  ';
 
 
       Tb.sequelize.query(
         sqltxt,
         {
-          replacements: [dt_record, tb_institution_id, 'supplying', tb_institution_id, dt_record,tb_salesman_id  ],
+          replacements: [dt_record, tb_institution_id, 'supplying', tb_institution_id, dt_record, tb_salesman_id],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve({
@@ -156,34 +160,34 @@ class OrderConsignmentController extends Base {
     const promise = new Promise((resolve, reject) => {
 
       var sqltxt =
-      'select sum(current_debit_balance) dividaVelha '+
-      'from (   '+
-      '    SELECT DISTINCT orc.tb_customer_id, orc.current_debit_balance, orc.id,orc.dt_record    '+
-      '    FROM tb_order_consignment orc '+
-      '        inner join tb_order ord  '+
-      '        on (ord.id = orc.id)  '+
-      '          and (ord.tb_institution_id = orc.tb_institution_id)  '+
-      '    WHERE orc.id = ( '+
-      '            SELECT MAX(orca.id)   '+
-      '            FROM tb_order_consignment orca  '+
-      '              inner join tb_order orda   '+
-      '              on (orda.id = orca.id)   '+
-      '                and (orda.tb_institution_id = orca.tb_institution_id)   '+
-      '            WHERE ( orca.tb_institution_id = orc.tb_institution_id )   '+
-      '              and ( orca.tb_customer_id = orc.tb_customer_id )   '+
-      '              and ( orda.tb_user_id = ord.tb_user_id )   '+
-      '              and (orda.dt_record < ?)   '+
-      '            GROUP BY orda.tb_user_id )   '+
-      '      and (orc.tb_institution_id = ?)  '+
-      '      and (orc.tb_customer_id = ?)       '+
-      '      and orc.current_debit_balance > 0  '+
-      '      and (orc.kind = ? )   '+
-      ') current_debit_balance  ';
-      
+        'select sum(current_debit_balance) dividaVelha ' +
+        'from (   ' +
+        '    SELECT DISTINCT orc.tb_customer_id, orc.current_debit_balance, orc.id,orc.dt_record    ' +
+        '    FROM tb_order_consignment orc ' +
+        '        inner join tb_order ord  ' +
+        '        on (ord.id = orc.id)  ' +
+        '          and (ord.tb_institution_id = orc.tb_institution_id)  ' +
+        '    WHERE orc.id = ( ' +
+        '            SELECT MAX(orca.id)   ' +
+        '            FROM tb_order_consignment orca  ' +
+        '              inner join tb_order orda   ' +
+        '              on (orda.id = orca.id)   ' +
+        '                and (orda.tb_institution_id = orca.tb_institution_id)   ' +
+        '            WHERE ( orca.tb_institution_id = orc.tb_institution_id )   ' +
+        '              and ( orca.tb_customer_id = orc.tb_customer_id )   ' +
+        '              and ( orda.tb_user_id = ord.tb_user_id )   ' +
+        '              and (orda.dt_record < ?)   ' +
+        '            GROUP BY orda.tb_user_id )   ' +
+        '      and (orc.tb_institution_id = ?)  ' +
+        '      and (orc.tb_customer_id = ?)       ' +
+        '      and orc.current_debit_balance > 0  ' +
+        '      and (orc.kind = ? )   ' +
+        ') current_debit_balance  ';
+
       Tb.sequelize.query(
         sqltxt,
         {
-          replacements: [dt_record, tb_institution_id,  tb_customer_id,'supplying'],
+          replacements: [dt_record, tb_institution_id, tb_customer_id, 'supplying'],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve({
@@ -204,34 +208,34 @@ class OrderConsignmentController extends Base {
     const promise = new Promise((resolve, reject) => {
 
       var sqltxt =
-      'select sum(previous_debit_balance) dividaVelha '+
-      'from (   '+
-      '    SELECT DISTINCT orc.tb_customer_id, orc.previous_debit_balance, orc.id,orc.dt_record    '+
-      '    FROM tb_order_consignment orc '+
-      '        inner join tb_order ord  '+
-      '        on (ord.id = orc.id)  '+
-      '          and (ord.tb_institution_id = orc.tb_institution_id)  '+
-      '    WHERE orc.id = ( '+
-      '            SELECT MAX(orca.id)   '+
-      '            FROM tb_order_consignment orca  '+
-      '              inner join tb_order orda   '+
-      '              on (orda.id = orca.id)   '+
-      '                and (orda.tb_institution_id = orca.tb_institution_id)   '+
-      '            WHERE ( orca.tb_institution_id = orc.tb_institution_id )   '+
-      '              and ( orca.tb_customer_id = orc.tb_customer_id )   '+
-      '              and ( orda.tb_user_id = ord.tb_user_id )   '+
-      '              and (orda.id = ?)   '+
-      '            GROUP BY orda.tb_user_id )   '+
-      '      and (orc.tb_institution_id = ?)  '+
-      '      and (orc.tb_customer_id = ?)       '+
-      '      and orc.previous_debit_balance > 0  '+
-      '      and (orc.kind = ? )   '+
-      ') current_debit_balance  ';
-      
+        'select sum(previous_debit_balance) dividaVelha ' +
+        'from (   ' +
+        '    SELECT DISTINCT orc.tb_customer_id, orc.previous_debit_balance, orc.id,orc.dt_record    ' +
+        '    FROM tb_order_consignment orc ' +
+        '        inner join tb_order ord  ' +
+        '        on (ord.id = orc.id)  ' +
+        '          and (ord.tb_institution_id = orc.tb_institution_id)  ' +
+        '    WHERE orc.id = ( ' +
+        '            SELECT MAX(orca.id)   ' +
+        '            FROM tb_order_consignment orca  ' +
+        '              inner join tb_order orda   ' +
+        '              on (orda.id = orca.id)   ' +
+        '                and (orda.tb_institution_id = orca.tb_institution_id)   ' +
+        '            WHERE ( orca.tb_institution_id = orc.tb_institution_id )   ' +
+        '              and ( orca.tb_customer_id = orc.tb_customer_id )   ' +
+        '              and ( orda.tb_user_id = ord.tb_user_id )   ' +
+        '              and (orda.id = ?)   ' +
+        '            GROUP BY orda.tb_user_id )   ' +
+        '      and (orc.tb_institution_id = ?)  ' +
+        '      and (orc.tb_customer_id = ?)       ' +
+        '      and orc.previous_debit_balance > 0  ' +
+        '      and (orc.kind = ? )   ' +
+        ') current_debit_balance  ';
+
       Tb.sequelize.query(
         sqltxt,
         {
-          replacements: [tb_order_id, tb_institution_id,  tb_customer_id,'checkpoint'],
+          replacements: [tb_order_id, tb_institution_id, tb_customer_id, 'checkpoint'],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve({
@@ -321,13 +325,22 @@ class OrderConsignmentController extends Base {
           previous_debit_balance: body.Order.previous_debit_balance,
           current_debit_balance: body.Order.current_debit_balance,
         };
-		console.log(dataOrder);
-        await this.insert(dataOrder)
+        var dataRes = await this.getById(body.Order.id, body.Order.tb_institution_id);
+
+        console.log(dataRes);
+        if (dataRes.id == 0) {
+          await this.insert(dataOrder)
+            .then(async () => {
+              await this.insertCheckpointCard(body);
+              await this.insertCheckpointPaid(body);
+              resolve(body);
+            })
+        }else{
+          await this.update(dataOrder)
           .then(async () => {
-            await this.insertCheckpointCard(body);
-            await this.insertCheckpointPaid(body);
             resolve(body);
-          })
+          })          
+        }
       } catch (err) {
         if (err.name === 'SequelizeUniqueConstraintError') {
           console.error('Erro de violação de unicidade:');
@@ -337,19 +350,19 @@ class OrderConsignmentController extends Base {
           console.error('Erro desconhecido:', err);
         }
         if (err.name === 'SequelizeUniqueConstraintError') {
-            console.error('Erro de violação de unicidade:');
-            console.error(err.fields); // Exibe as colunas envolvidas na violação de unicidade
-            console.error(err.parent); // Exibe o erro original retornado pelo driver do banco de dados
-          } else {
-            console.error('Erro desconhecido:', err);
-          }        
+          console.error('Erro de violação de unicidade:');
+          console.error(err.fields); // Exibe as colunas envolvidas na violação de unicidade
+          console.error(err.parent); // Exibe o erro original retornado pelo driver do banco de dados
+        } else {
+          console.error('Erro desconhecido:', err);
+        }
         if (err.name === 'SequelizeUniqueConstraintError') {
-            console.error('Erro de violação de unicidade:');
-            console.error(err.fields); // Exibe as colunas envolvidas na violação de unicidade
-            console.error(err.parent); // Exibe o erro original retornado pelo driver do banco de dados
-          } else {
-            console.error('Erro desconhecido:', err);
-          }        
+          console.error('Erro de violação de unicidade:');
+          console.error(err.fields); // Exibe as colunas envolvidas na violação de unicidade
+          console.error(err.parent); // Exibe o erro original retornado pelo driver do banco de dados
+        } else {
+          console.error('Erro desconhecido:', err);
+        }
         reject('OrderConsignmentController.saveCheckpoint: ' + err);
       }
     });
@@ -384,30 +397,34 @@ class OrderConsignmentController extends Base {
 
   static async insert(data) {
     const promise = new Promise(async (resolve, reject) => {
-      if (data.number == 0)
-        data.number = await this.getNextNumber(data.tb_institution_id);
-      Tb.create(data)
-        .then((data) => {
-          resolve(data);
-        })
-        .catch(err => {
-          if (err.name === 'SequelizeUniqueConstraintError') {
-              console.error('Erro de violação de unicidade:');
-              console.error(err.fields); // Exibe as colunas envolvidas na violação de unicidade
-              console.error(err.parent); // Exibe o erro original retornado pelo driver do banco de dados
-            } else {
-              console.error('Erro desconhecido:', err);
-            }     
-            if (err.name === 'SequelizeUniqueConstraintError') {
-                console.error('Erro de violação de unicidade:');
-                console.error(err.fields); // Exibe as colunas envolvidas na violação de unicidade
-                console.error(err.parent); // Exibe o erro original retornado pelo driver do banco de dados
-              } else {
-                console.error('Erro desconhecido:', error);
-              }        
-          reject("OrderConsignmentController.insert:" + err);
-        })
-
+      try {
+        if (data.number == 0)
+          data.number = await this.getNextNumber(data.tb_institution_id);
+        Tb.create(data)
+          .then((data) => {
+            resolve(data);
+          })
+      }
+      catch (err) {
+        if (err.name === 'SequelizeUniqueConstraintError') {
+          console.error('Erro de violação de unicidade:');
+          console.error(err.fields); // Exibe as colunas envolvidas na violação de unicidade
+          console.error(err.parent); // Exibe o erro original retornado pelo driver do banco de dados
+        } else {
+          console.error('Erro desconhecido:', err);
+        }
+        if (err.name === 'SequelizeUniqueConstraintError') {
+          console.error('Erro de violação de unicidade:');
+          console.error(err.fields); // Exibe as colunas envolvidas na violação de unicidade
+          console.error(err.parent); // Exibe o erro original retornado pelo driver do banco de dados
+        } else {
+          console.error('Erro desconhecido:', error);
+        }
+        reject("OrderConsignmentController.insert:" + err);
+      }
+      finally {
+        resolve(data);
+      }
     });
     return promise;
   }

@@ -12,6 +12,7 @@ const { order } = require("../model/index.js");
 class OrderConsignmentEndPoint {
 
   static saveCheckpoint = (req, res) => {
+    console.log(req.body);
     var valida = true;
     if (req.body.Order.id == 0) {
       valida = false;
@@ -29,7 +30,9 @@ class OrderConsignmentEndPoint {
       valida = false;
       res.status(400).send("Vendededor não encontrado");
     }
+    
     if (valida) {
+      
       OrderConsignmentController.saveCheckpoint(req.body)
         .then(async data => {
           //Retorna do estoque do Cliente - Venda direta pelo estoque do Cliente ....lembrar da venda direta pelo estoque do Vendedor

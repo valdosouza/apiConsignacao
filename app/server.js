@@ -67,6 +67,7 @@ const server = {
   },
   stopServer() {
     shutDownServer();
+    launchServer() ;
   }
 };
 
