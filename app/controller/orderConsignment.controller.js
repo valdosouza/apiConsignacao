@@ -321,7 +321,7 @@ class OrderConsignmentController extends Base {
           previous_debit_balance: body.Order.previous_debit_balance,
           current_debit_balance: body.Order.current_debit_balance,
         };
-
+		console.log(dataOrder);
         await this.insert(dataOrder)
           .then(async () => {
             await this.insertCheckpointCard(body);
@@ -329,6 +329,27 @@ class OrderConsignmentController extends Base {
             resolve(body);
           })
       } catch (err) {
+        if (err.name === 'SequelizeUniqueConstraintError') {
+          console.error('Erro de violação de unicidade:');
+          console.error(err.fields); // Exibe as colunas envolvidas na violação de unicidade
+          console.error(err.parent); // Exibe o erro original retornado pelo driver do banco de dados
+        } else {
+          console.error('Erro desconhecido:', err);
+        }
+        if (err.name === 'SequelizeUniqueConstraintError') {
+            console.error('Erro de violação de unicidade:');
+            console.error(err.fields); // Exibe as colunas envolvidas na violação de unicidade
+            console.error(err.parent); // Exibe o erro original retornado pelo driver do banco de dados
+          } else {
+            console.error('Erro desconhecido:', err);
+          }        
+        if (err.name === 'SequelizeUniqueConstraintError') {
+            console.error('Erro de violação de unicidade:');
+            console.error(err.fields); // Exibe as colunas envolvidas na violação de unicidade
+            console.error(err.parent); // Exibe o erro original retornado pelo driver do banco de dados
+          } else {
+            console.error('Erro desconhecido:', err);
+          }        
         reject('OrderConsignmentController.saveCheckpoint: ' + err);
       }
     });
@@ -370,6 +391,20 @@ class OrderConsignmentController extends Base {
           resolve(data);
         })
         .catch(err => {
+          if (err.name === 'SequelizeUniqueConstraintError') {
+              console.error('Erro de violação de unicidade:');
+              console.error(err.fields); // Exibe as colunas envolvidas na violação de unicidade
+              console.error(err.parent); // Exibe o erro original retornado pelo driver do banco de dados
+            } else {
+              console.error('Erro desconhecido:', err);
+            }     
+            if (err.name === 'SequelizeUniqueConstraintError') {
+                console.error('Erro de violação de unicidade:');
+                console.error(err.fields); // Exibe as colunas envolvidas na violação de unicidade
+                console.error(err.parent); // Exibe o erro original retornado pelo driver do banco de dados
+              } else {
+                console.error('Erro desconhecido:', error);
+              }        
           reject("OrderConsignmentController.insert:" + err);
         })
 
@@ -1128,3 +1163,4 @@ class OrderConsignmentController extends Base {
 
 }
 module.exports = OrderConsignmentController;
+
