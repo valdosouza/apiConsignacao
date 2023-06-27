@@ -12,8 +12,7 @@ const { order } = require("../model/index.js");
 class OrderConsignmentEndPoint {
 
   static saveCheckpoint = (req, res) => {
-    console.log(req.body);
-    var valida = true;
+   var valida = true;
     if (req.body.Order.id == 0) {
       valida = false;
       res.status(400).send("Id não encontrado");

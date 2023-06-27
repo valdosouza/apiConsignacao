@@ -21,10 +21,10 @@ class OrderConsignmentController extends Base {
           replacements: [id, tb_institution_id],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
-          if (data.length > 0){            
+          if (data.length > 0) {
             resolve(data[0]);
-          }else{
-            resolve({'id':0});
+          } else {
+            resolve({ 'id': 0 });
           }
         })
         .catch(err => {
@@ -326,8 +326,6 @@ class OrderConsignmentController extends Base {
           current_debit_balance: body.Order.current_debit_balance,
         };
         var dataRes = await this.getById(body.Order.id, body.Order.tb_institution_id);
-
-        console.log(dataRes);
         if (dataRes.id == 0) {
           await this.insert(dataOrder)
             .then(async () => {
@@ -335,11 +333,11 @@ class OrderConsignmentController extends Base {
               await this.insertCheckpointPaid(body);
               resolve(body);
             })
-        }else{
+        } else {
           await this.update(dataOrder)
-          .then(async () => {
-            resolve(body);
-          })          
+            .then(async () => {
+              resolve(body);
+            })
         }
       } catch (err) {
         if (err.name === 'SequelizeUniqueConstraintError') {
@@ -905,35 +903,39 @@ class OrderConsignmentController extends Base {
   static async updateOrderItem(body) {
     const promise = new Promise(async (resolve, reject) => {
       try {
-        var dataItem = {};
-        for (var item of body.Items) {
-          dataItem = {
-            id: 0,
-            tb_institution_id: body.Order.tb_institution_id,
-            tb_order_id: body.Order.id,
-            terminal: 0,
-            tb_stock_list_id: item.tb_stock_list_id,
-            tb_product_id: item.tb_product_id,
-            quantity: item.quantity,
-            unit_value: item.unit_value
+        if (Array.isArray(body.Items)) {
+          var dataItem = {};
+          for (var item of body.Items) {
+            dataItem = {
+              id: 0,
+              tb_institution_id: body.Order.tb_institution_id,
+              tb_order_id: body.Order.id,
+              terminal: 0,
+              tb_stock_list_id: item.tb_stock_list_id,
+              tb_product_id: item.tb_product_id,
+              quantity: item.quantity,
+              unit_value: item.unit_value
+            };
+            //Quanto o insert é mais complexo como getNext precisa do await no loop          
+            switch (item.update_status) {
+              case "I":
+                await orderItem.insert(dataItem)
+                  .then(data => {
+                    item.id = data.id;
+                  });
+                break;
+              case "E":
+                await orderItem.update(dataItem);
+                break;
+              case "D":
+                await orderItem.delete(dataItem);
+                break;
+            }
           };
-          //Quanto o insert é mais complexo como getNext precisa do await no loop          
-          switch (item.update_status) {
-            case "I":
-              await orderItem.insert(dataItem)
-                .then(data => {
-                  item.id = data.id;
-                });
-              break;
-            case "E":
-              await orderItem.update(dataItem);
-              break;
-            case "D":
-              await orderItem.delete(dataItem);
-              break;
-          }
-        };
-        resolve("Items Alterados");
+          resolve("Items Alterados");
+        }else{
+          resolve("Item não informado");
+        }
       } catch (err) {
         reject("orderConsignment.updateOrderItem:" + err);
       }
