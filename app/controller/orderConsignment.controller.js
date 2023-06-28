@@ -381,11 +381,19 @@ class OrderConsignmentController extends Base {
           number: 0,
           current_debit_balance: body.Order.current_debit_balance,
         };
-        this.insert(dataOrder)
-          .then(async () => {
-            await this.insertSupplyngCard(body);
-          })
-        resolve(body);
+        var dataRes = await this.getById(body.Order.id, body.Order.tb_institution_id);
+        if (dataRes.id == 0) {
+          await this.insert(dataOrder)
+            .then(async () => {
+              await this.insertSupplyngCard(body);
+            })
+          resolve(body);
+        } else {
+          await this.update(dataOrder)
+            .then(async () => {
+              resolve(body);
+            })
+        }
       } catch (err) {
         reject('OrderConsignmentController.saveSupplying: ' + err);
       }
@@ -933,7 +941,7 @@ class OrderConsignmentController extends Base {
             }
           };
           resolve("Items Alterados");
-        }else{
+        } else {
           resolve("Item não informado");
         }
       } catch (err) {
