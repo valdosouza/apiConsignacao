@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "pm2 start index.js --watch --ignore-watch='node_modules'"
+    "start": "pm2 start index.js --watch --ignore-watch='node_modules'",
+    "start-dev": "node index.js'"
   },
   "author": "",
   "license": "ISC",

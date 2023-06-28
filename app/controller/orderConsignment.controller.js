@@ -183,7 +183,7 @@ class OrderConsignmentController extends Base {
         '      and orc.current_debit_balance > 0  ' +
         '      and (orc.kind = ? )   ' +
         ') current_debit_balance  ';
-
+      
       Tb.sequelize.query(
         sqltxt,
         {
@@ -198,7 +198,7 @@ class OrderConsignmentController extends Base {
           },);
         })
         .catch(err => {
-          reject('getDividaVelhaByDay: ' + err);
+          reject('getDividaVelhaByCustomer: ' + err);
         });
     });
     return promise;
@@ -246,7 +246,7 @@ class OrderConsignmentController extends Base {
           },);
         })
         .catch(err => {
-          reject('getDividaVelhaByDay: ' + err);
+          reject('getDividaVelhaByOrder: ' + err);
         });
     });
     return promise;

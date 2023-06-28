@@ -4,6 +4,7 @@ const { DOUBLE } = require('sequelize');
 const Tb = db.financialStatement;
 const DateFunction = require('../util/dateFunction.js');
 const OrderConsigngmentController = require('../controller/orderConsignment.controller.js');
+const OrderAttendaceController = require('../controller/orderAttendance.controller.js');
 
 class FinancialStatementController extends Base {
 
@@ -261,20 +262,26 @@ class FinancialStatementController extends Base {
   static getByOrder(tb_institution_id, tb_salesman_id, dt_record, tb_order_id) {
     const promise = new Promise(async (resolve, reject) => {
       try {
-
-        var orderConsignament = await OrderConsigngmentController.getById(tb_order_id, tb_institution_id);
+        console.log(tb_institution_id);
+        console.log(tb_order_id);
+        //Precisa ser o attendance
+        var orderConsignament = await OrderAttendaceController.getById(tb_order_id, tb_institution_id);
         var tb_customer_id = 0;
+        
         if (orderConsignament)
           tb_customer_id = orderConsignament.tb_customer_id;
-
+        console.log("-------------"  );
+        console.log(tb_customer_id);
+        console.log("-------------"  );
         var dataini = dt_record;
         var datafim = dt_record;
         var dataResult = [];
 
         var dataOrdersale = [];
 
-        dataOrdersale = await FinancialStatementController.getOrderSales(tb_institution_id, tb_salesman_id, tb_customer_id, dataini, datafim, tb_order_id);
 
+        dataOrdersale = await FinancialStatementController.getOrderSales(tb_institution_id, tb_salesman_id, tb_customer_id, dataini, datafim, tb_order_id);
+        console.log("passei")
         var dataTotalVenda = {
           description: "Total de Vendas",
           tag_value: dataOrdersale[dataOrdersale.length - 1].tag_value,
@@ -284,7 +291,8 @@ class FinancialStatementController extends Base {
         //Divida Velha no extrato de atendimento por cliente
         //      São todas as dividas velhas anteriores do cliente visualizado
         var dataDividaVelha = {};
-        dataDividaVelha = await OrderConsigngmentController.getDividaVelhaByOrder(tb_institution_id, tb_customer_id, tb_order_id);
+        dataDividaVelha = await OrderConsigngmentController.getDividaVelhaByCustomer(tb_institution_id, tb_customer_id, dt_record);
+        //dataDividaVelha = await OrderConsigngmentController.getDividaVelhaByOrder(tb_institution_id, tb_customer_id, tb_order_id);
 
         var dataTotalReceber = {
           description: "Total à receber",
