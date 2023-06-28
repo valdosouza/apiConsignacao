@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": " nodemon index.js"    
+    "start": "pm2 start index.js --watch --ignore-watch='node_modules'"
   },
   "author": "",
   "license": "ISC",
