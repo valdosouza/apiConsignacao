@@ -641,7 +641,7 @@ class CustomerController extends Base {
         'from tb_customer ct ' +
         '  inner join tb_entity et ' +
         '  on (ct.id = et.id) ' +
-        '  inner join tb_address adr ' +
+        '  left outer join tb_address adr ' +
         '  on (adr.id = et.id) ' +
         '  inner join tb_person pe ' +
         '  on (pe.id = et.id) ' +
@@ -664,7 +664,7 @@ class CustomerController extends Base {
         'from tb_customer ct ' +
         '  inner join tb_entity et ' +
         '  on (ct.id = et.id) ' +
-        '  inner join tb_address adr ' +
+        '  left outer join tb_address adr ' +
         '  on (adr.id = et.id) ' +
         '  inner join tb_company co ' +
         '  on (co.id = et.id) ' +

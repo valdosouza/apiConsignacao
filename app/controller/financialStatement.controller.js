@@ -130,7 +130,7 @@ class FinancialStatementController extends Base {
 
         var dataSaldoDevedor = {
           description: "Saldo devedor",
-          tag_value: dataTotalReceber.tag_value - dataTotalRecebido.tag_value,
+          tag_value: dataTotalReceber.tag_value - dataTotalRecebido.tag_value - dataDividaVelha.tag_value,
           kind: "totais",
           color: "red",
         };
@@ -396,22 +396,23 @@ class FinancialStatementController extends Base {
     const promise = new Promise((resolve, reject) => {
       var sqltxt =
         'select pmt.description name_payment_type, sum(fnl.tag_value) subtotal, "Total a Receber" kind ' +
-        'from tb_order_sale ors ' +
-        '   inner join tb_financial fnl ' +
-        '   on (fnl.tb_order_id = ors.id) and (fnl.tb_institution_id = ors.tb_institution_id)  ' +
+        'from tb_financial fnl ' +
+        '   inner join tb_order_attendance ora ' +
+        '   on (fnl.tb_order_id = ora.id) and (fnl.tb_institution_id = ora.tb_institution_id)  ' +
+
         '   left outer join tb_financial_payment fnp  ' +
-        '   on (fnp.tb_order_id = ors.id) and (fnp.tb_institution_id = ors.tb_institution_id)   ' +
+        '   on (fnp.tb_order_id = ora.id) and (fnp.tb_institution_id = ora.tb_institution_id)   ' +
 
         '   inner join tb_payment_types pmt ' +
         '   on (pmt.id = fnl.tb_payment_types_id)  ' +
-        'where (ors.tb_institution_id =? ) ' +
-        ' and (ors.tb_salesman_id =?)' +
+        'where (ora.tb_institution_id =? ) ' +
+        ' and (ora.tb_salesman_id =?)' +
         ' and (fnp.tb_order_id is null) ';
 
       if (tb_customer_id == 0) {
-        sqltxt = sqltxt + ' and (ors.tb_customer_id <> ?) ';
+        sqltxt = sqltxt + ' and (ora.tb_customer_id <> ?) ';
       } else {
-        sqltxt = sqltxt + ' and (ors.tb_customer_id = ?) ';
+        sqltxt = sqltxt + ' and (ora.tb_customer_id = ?) ';
       };
 
       sqltxt = sqltxt +
@@ -454,9 +455,9 @@ class FinancialStatementController extends Base {
       var sqltxt =
         'select pmt.description name_payment_type, sum(fnl.tag_value) subtotal, "Total Recebido" kind, "blue" color  ' +
         'from tb_financial fnl  ' +
-        '  inner join tb_order_sale ors ' +
-        '  on (ors.id = fnl.tb_order_id) ' +
-        '  and (ors.tb_institution_id  = fnl.tb_institution_id) '+
+        '  inner join tb_order_attendance ora ' +
+        '  on (ora.id = fnl.tb_order_id) ' +
+        '  and (ora.tb_institution_id  = fnl.tb_institution_id) '+
 
         '   inner join tb_customer ct ' +
         '   on (fnl.tb_entity_id = ct.id) ' +
@@ -466,7 +467,7 @@ class FinancialStatementController extends Base {
         '   inner join tb_payment_types pmt  ' +
         '   on (pmt.id = fnl.tb_payment_types_id)  ' +
         'where (fnl.tb_institution_id =? )  ' +
-        ' and (ors.tb_salesman_id =?) ';
+        ' and (ora.tb_salesman_id =?) ';
       if (tb_customer_id == 0) {
         sqltxt = sqltxt + ' and (fnl.tb_entity_id <> ?) ';
       } else {
