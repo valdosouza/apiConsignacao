@@ -262,26 +262,20 @@ class FinancialStatementController extends Base {
   static getByOrder(tb_institution_id, tb_salesman_id, dt_record, tb_order_id) {
     const promise = new Promise(async (resolve, reject) => {
       try {
-        console.log(tb_institution_id);
-        console.log(tb_order_id);
         //Precisa ser o attendance
         var orderConsignament = await OrderAttendaceController.getById(tb_order_id, tb_institution_id);
         var tb_customer_id = 0;
         
         if (orderConsignament)
           tb_customer_id = orderConsignament.tb_customer_id;
-        console.log("-------------"  );
-        console.log(tb_customer_id);
-        console.log("-------------"  );
         var dataini = dt_record;
         var datafim = dt_record;
         var dataResult = [];
 
         var dataOrdersale = [];
 
-
         dataOrdersale = await FinancialStatementController.getOrderSales(tb_institution_id, tb_salesman_id, tb_customer_id, dataini, datafim, tb_order_id);
-        console.log("passei")
+
         var dataTotalVenda = {
           description: "Total de Vendas",
           tag_value: dataOrdersale[dataOrdersale.length - 1].tag_value,
