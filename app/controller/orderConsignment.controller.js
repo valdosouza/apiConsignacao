@@ -10,15 +10,16 @@ const orderItem = require('./orderItemBonus.controller.js');
 const stockStatement = require('./stockStatement.controller.js');
 
 class OrderConsignmentController extends Base {
-  static async getById(id, tb_institution_id) {
+  static async getById(id, tb_institution_id, kind) {
     const promise = new Promise((resolve, reject) => {
       Tb.sequelize.query(
         'Select * ' +
         'from tb_order_consignment ' +
         'where ( id =?) ' +
-        ' and (tb_institution_id =?)',
+        ' and (tb_institution_id =?)'+
+        ' and (kind = ?) ',
         {
-          replacements: [id, tb_institution_id],
+          replacements: [id, tb_institution_id,kind],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           if (data.length > 0) {
@@ -325,7 +326,7 @@ class OrderConsignmentController extends Base {
           previous_debit_balance: body.Order.previous_debit_balance,
           current_debit_balance: body.Order.current_debit_balance,
         };
-        var dataRes = await this.getById(body.Order.id, body.Order.tb_institution_id);
+        var dataRes = await this.getById(body.Order.id, body.Order.tb_institution_id,'checkpoint');
         if (dataRes.id == 0) {
           await this.insert(dataOrder)
             .then(async () => {
@@ -340,27 +341,6 @@ class OrderConsignmentController extends Base {
             })
         }
       } catch (err) {
-        if (err.name === 'SequelizeUniqueConstraintError') {
-          console.error('Erro de violação de unicidade:');
-          console.error(err.fields); // Exibe as colunas envolvidas na violação de unicidade
-          console.error(err.parent); // Exibe o erro original retornado pelo driver do banco de dados
-        } else {
-          console.error('Erro desconhecido:', err);
-        }
-        if (err.name === 'SequelizeUniqueConstraintError') {
-          console.error('Erro de violação de unicidade:');
-          console.error(err.fields); // Exibe as colunas envolvidas na violação de unicidade
-          console.error(err.parent); // Exibe o erro original retornado pelo driver do banco de dados
-        } else {
-          console.error('Erro desconhecido:', err);
-        }
-        if (err.name === 'SequelizeUniqueConstraintError') {
-          console.error('Erro de violação de unicidade:');
-          console.error(err.fields); // Exibe as colunas envolvidas na violação de unicidade
-          console.error(err.parent); // Exibe o erro original retornado pelo driver do banco de dados
-        } else {
-          console.error('Erro desconhecido:', err);
-        }
         reject('OrderConsignmentController.saveCheckpoint: ' + err);
       }
     });
@@ -381,7 +361,7 @@ class OrderConsignmentController extends Base {
           number: 0,
           current_debit_balance: body.Order.current_debit_balance,
         };
-        var dataRes = await this.getById(body.Order.id, body.Order.tb_institution_id);
+        var dataRes = await this.getById(body.Order.id, body.Order.tb_institution_id,'supplying');
         if (dataRes.id == 0) {
           await this.insert(dataOrder)
             .then(async () => {
@@ -412,20 +392,6 @@ class OrderConsignmentController extends Base {
           })
       }
       catch (err) {
-        if (err.name === 'SequelizeUniqueConstraintError') {
-          console.error('Erro de violação de unicidade:');
-          console.error(err.fields); // Exibe as colunas envolvidas na violação de unicidade
-          console.error(err.parent); // Exibe o erro original retornado pelo driver do banco de dados
-        } else {
-          console.error('Erro desconhecido:', err);
-        }
-        if (err.name === 'SequelizeUniqueConstraintError') {
-          console.error('Erro de violação de unicidade:');
-          console.error(err.fields); // Exibe as colunas envolvidas na violação de unicidade
-          console.error(err.parent); // Exibe o erro original retornado pelo driver do banco de dados
-        } else {
-          console.error('Erro desconhecido:', error);
-        }
         reject("OrderConsignmentController.insert:" + err);
       }
       finally {

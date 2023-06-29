@@ -27,7 +27,7 @@ class OrderConsignmentEndPoint {
     }
     if (req.body.Order.tb_salesman_id == 0) {
       valida = false;
-      res.status(400).send("Vendededor não encontrado");
+      res.status(400).send("Vendedor não encontrado");
     }
     
     if (valida) {
@@ -57,6 +57,7 @@ class OrderConsignmentEndPoint {
   static saveSupplying = (req, res) => {
     OrderConsignmentController.saveSupplying(req.body)
       .then(async data => {
+        console.log("entrou  - saveSupllying");
         //Verificar se já existe um Estoque para o cliente
         var dataEntityHasStockList = {
           tb_institution_id: data.Order.tb_institution_id,
