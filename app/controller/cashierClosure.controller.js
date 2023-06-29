@@ -155,7 +155,7 @@ class CashierClosureController extends Base {
         //Divida Velha é toda divida anterior a data Informada, no caso dt_record ou se a consulta for mensal dataini
         var dataDividaVelha = {};        
         
-        dataDividaVelha = await OrderConsigngmentController.getDividaVelhaBySalesman(tb_institution_id, tb_user_id,0, dt_record,0);
+        dataDividaVelha = await OrderConsigngmentController.getDividaVelhaByDay(tb_institution_id, tb_user_id,dt_record);
 
         //var dataDividaAtual = {};        
         //dataDividaAtual = await OrderConsigngmentController.getDividaAtualBySalesman(tb_institution_id, tb_user_id,0, dt_record);
@@ -178,13 +178,14 @@ class CashierClosureController extends Base {
           color : "blue",
         };
 
+        var saldodevedor = dataTotalReceber.tag_value - dataTotalRecebido.tag_value  ;
+        if (saldodevedor < 0) saldodevedor = 0;
         var dataSaldoDevedor = {
           description: "Saldo devedor",
-          tag_value: dataTotalReceber.tag_value - dataTotalRecebido.tag_value,
+          tag_value: saldodevedor,
           kind: "totais",
-          color : "red",
-        };
-
+          color: "red",
+        }; 
 
         //cliente definiu que tudo será condiderado como recebido
         //var dataFinancialToReceived = []

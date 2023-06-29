@@ -67,13 +67,14 @@ class FinancialStatementController extends Base {
           color: "blue",
         };
 
+        var saldodevedor = dataTotalReceber.tag_value - dataTotalRecebido.tag_value  ;
+        if (saldodevedor < 0) saldodevedor = 0;
         var dataSaldoDevedor = {
           description: "Saldo devedor",
-          tag_value: dataTotalReceber.tag_value - dataTotalRecebido.tag_value,
+          tag_value: saldodevedor,
           kind: "totais",
           color: "red",
-        };
-
+        };          
 
         //cliente definiu que tudo será condiderado como recebido
         //var dataFinancialToReceived = []
@@ -127,10 +128,11 @@ class FinancialStatementController extends Base {
           kind: "totais",
           color: "blue",
         };
-
+        var saldodevedor = dataTotalReceber.tag_value - dataTotalRecebido.tag_value  ;
+        if (saldodevedor < 0) saldodevedor = 0;
         var dataSaldoDevedor = {
           description: "Saldo devedor",
-          tag_value: dataTotalReceber.tag_value - dataTotalRecebido.tag_value - dataDividaVelha.tag_value,
+          tag_value: saldodevedor,
           kind: "totais",
           color: "red",
         };
@@ -182,12 +184,16 @@ class FinancialStatementController extends Base {
           color: "blue",
         };
 
+        var saldodevedor = dataTotalVenda.tag_value - dataTotalRecebido.tag_value  ;
+        if (saldodevedor < 0) saldodevedor = 0;
         var dataSaldoDevedor = {
           description: "Saldo devedor",
-          tag_value: dataTotalVenda.tag_value - dataTotalRecebido.tag_value,
+          tag_value: saldodevedor,
           kind: "totais",
           color: "red",
         };        
+        
+
         dataResult = dataOrdersale.concat(dataFinancialReceived, dataTotalVenda,  dataTotalRecebido,dataSaldoDevedor );//, dataFinancialToReceived);
 
         resolve(dataResult);
@@ -237,13 +243,14 @@ class FinancialStatementController extends Base {
           color: "blue",
         };
 
+        var saldodevedor = dataTotalReceber.tag_value - dataTotalRecebido.tag_value  ;
+        if (saldodevedor < 0) saldodevedor = 0;
         var dataSaldoDevedor = {
           description: "Saldo devedor",
-          tag_value: dataTotalReceber.tag_value - dataTotalRecebido.tag_value,
+          tag_value: saldodevedor,
           kind: "totais",
           color: "red",
-        };
-
+        };             
 
         //cliente definiu que tudo será condiderado como recebido
         //var dataFinancialToReceived = []
@@ -305,13 +312,14 @@ class FinancialStatementController extends Base {
           color: "blue",
         };
 
+        var saldodevedor = dataTotalReceber.tag_value - dataTotalRecebido.tag_value  ;
+        if (saldodevedor < 0) saldodevedor = 0;
         var dataSaldoDevedor = {
           description: "Saldo devedor",
-          tag_value: dataTotalReceber.tag_value - dataTotalRecebido.tag_value,
+          tag_value: saldodevedor,
           kind: "totais",
           color: "red",
-        };
-
+        };  
 
         //cliente definiu que tudo será condiderado como recebido
         //var dataFinancialToReceived = []
