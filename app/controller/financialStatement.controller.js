@@ -171,7 +171,7 @@ class FinancialStatementController extends Base {
         };
                 
         var dataFinancialReceived = [];
-        dataFinancialReceived = await FinancialStatementController.getFinancialReceived(tb_institution_id, tb_salesman_id, 0, dataini, datafim, tb_order_id);
+        dataFinancialReceived = await FinancialStatementController.getFinancialReceived(tb_institution_id, tb_salesman_id, 0, dataini, datafim, 0);
 
         var dataTotalRecebido = {
           description: "Total Recebido",
