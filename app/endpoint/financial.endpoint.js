@@ -16,10 +16,7 @@ class FinancialEndPoint {
   static getByMonth(req, res) {    
     FinancialStatemenController.getByMonth(req.params.tb_institution_id,
                                     req.params.tb_user_id,
-                                    0,
-                                    req.params.date,
-                                    'M',
-                                    0 )
+                                    req.params.date )
       .then(data => {
         res.send(data);
       })

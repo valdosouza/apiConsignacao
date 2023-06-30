@@ -152,20 +152,16 @@ class FinancialStatementController extends Base {
     return promise;
   }
 
-  static getByMonth(tb_institution_id, tb_salesman_id, tb_customer_id, dt_record, kind_date, tb_order_id) {
+  static getByMonth(tb_institution_id, tb_salesman_id, dt_record) {
     const promise = new Promise(async (resolve, reject) => {
       try {
-        var dataini = dt_record;
-        var datafim = dt_record;
+        var dataini = DateFunction.firtDayMonth(dt_record);
+        var datafim = DateFunction.lastDayMonth(dt_record);
         var dataResult = [];
 
-        if (kind_date != 'D') {
-          dataini = DateFunction.firtDayMonth(dt_record);
-          datafim = DateFunction.lastDayMonth(dt_record);
-        }
         var dataOrdersale = [];
 
-        dataOrdersale = await FinancialStatementController.getOrderSales(tb_institution_id, tb_salesman_id, tb_customer_id, dataini, datafim, tb_order_id);
+        dataOrdersale = await FinancialStatementController.getOrderSales(tb_institution_id, tb_salesman_id, 0, dataini, datafim, 0);
 
         var dataTotalVenda = {
           description: "Total de Vendas",
@@ -173,9 +169,9 @@ class FinancialStatementController extends Base {
           kind: "totais",
           color: "green",
         };
-        
+                
         var dataFinancialReceived = [];
-        dataFinancialReceived = await FinancialStatementController.getFinancialReceived(tb_institution_id, tb_salesman_id, tb_customer_id, dataini, datafim, tb_order_id);
+        dataFinancialReceived = await FinancialStatementController.getFinancialReceived(tb_institution_id, tb_salesman_id, 0, dataini, datafim, tb_order_id);
 
         var dataTotalRecebido = {
           description: "Total Recebido",
@@ -184,15 +180,9 @@ class FinancialStatementController extends Base {
           color: "blue",
         };
 
-        var saldodevedor = dataTotalVenda.tag_value - dataTotalRecebido.tag_value  ;
-        if (saldodevedor < 0) saldodevedor = 0;
-        var dataSaldoDevedor = {
-          description: "Saldo devedor",
-          tag_value: saldodevedor,
-          kind: "totais",
-          color: "red",
-        };        
-        
+        var dataSaldoDevedor = {};                          
+        dataSaldoDevedor = await OrderConsigngmentController.getSaldoDevedor(tb_institution_id, tb_salesman_id, dt_record);
+       
 
         dataResult = dataOrdersale.concat(dataFinancialReceived, dataTotalVenda,  dataTotalRecebido,dataSaldoDevedor );//, dataFinancialToReceived);
 
@@ -275,6 +265,7 @@ class FinancialStatementController extends Base {
         
         if (orderConsignament)
           tb_customer_id = orderConsignament.tb_customer_id;
+        console.log(tb_customer_id)  ;
         var dataini = dt_record;
         var datafim = dt_record;
         var dataResult = [];
@@ -292,7 +283,7 @@ class FinancialStatementController extends Base {
         //Divida Velha no extrato de atendimento por cliente
         //      São todas as dividas velhas anteriores do cliente visualizado
         var dataDividaVelha = {};
-        dataDividaVelha = await OrderConsigngmentController.getDividaVelhaByCustomer(tb_institution_id, tb_customer_id, dt_record);
+        dataDividaVelha = await OrderConsigngmentController.getDividaVelhaByOrder(tb_institution_id, tb_customer_id, tb_order_id);
         //dataDividaVelha = await OrderConsigngmentController.getDividaVelhaByOrder(tb_institution_id, tb_customer_id, tb_order_id);
 
         var dataTotalReceber = {
