@@ -30,7 +30,7 @@ class AuthEndPoint {
           return res.json(dataReturn);
         }
         UserController.generateJWT(data)
-          .then(data => {
+          .then(data => {            
             return res.json(data);
           })  
           .catch(err => {

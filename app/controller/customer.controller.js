@@ -456,20 +456,26 @@ class CustomerController extends Base {
         '          from ('+
         this.getSQLListSalesRouteTodos()+
         ') vwsr '+
-        'left outer join tb_order_attendance ora  on (vwsr.tb_institution_id = ora.tb_institution_id)  and (vwsr.id = ora.tb_customer_id) '+
-        '    group by id '+
+        '   left outer join tb_order_attendance ora  '+
+        '   on (vwsr.tb_institution_id = ora.tb_institution_id)  '+
+        '     and (vwsr.id = ora.tb_customer_id) '+
+        '  where (ora.finished = ?)  '+
+        '  group by id '+
         ') vw_order '+
-        'left outer join tb_order ord  on (ord.tb_institution_id = vw_order.tb_institution_id) and (vw_order.order_id = ord.id)  and (ord.dt_record = ?) '+
+        '   left outer join tb_order ord '+
+        '    on (ord.tb_institution_id = vw_order.tb_institution_id) '+
+        '        and (vw_order.order_id = ord.id) '+
+        '        and (ord.dt_record = ?) '+
         ') ate  '+
         'where (ate.dt_record is null)  '+
-        'and ( ate.active = ?) '+
-        'and ( turn_back = ?) '+ 
+        '  and ( ate.active = ?) '+
+        '  and ( turn_back = ?)'+         
         'order by 4 ';
            
       Tb.sequelize.query(
         sqltxt,
         {
-          replacements: [tb_institution_id, tb_sales_route_id, tb_region_id,'S', tb_institution_id, tb_sales_route_id, tb_region_id, 'S',dt_record,'S','N'],
+          replacements: [tb_institution_id, tb_sales_route_id, tb_region_id,'S', tb_institution_id, tb_sales_route_id, tb_region_id, 'S','S',dt_record,'S','N'],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve(data);
@@ -495,12 +501,13 @@ class CustomerController extends Base {
       '  inner join tb_order ord '+
       '  on (ora.tb_institution_id = ord.tb_institution_id) '+
       '    and (ora.id = ord.id)     '+
-      'where  (ord.dt_record = ?) ';
+      'where  (ord.dt_record = ?) '+
+      ' and (ora.finished = ?) ';
            
       Tb.sequelize.query(
         sqltxt,
         {
-          replacements: [tb_institution_id, tb_sales_route_id, tb_region_id,'S', tb_institution_id, tb_sales_route_id, tb_region_id,'S', dt_record],
+          replacements: [tb_institution_id, tb_sales_route_id, tb_region_id,'S', tb_institution_id, tb_sales_route_id, tb_region_id,'S', dt_record,'S'],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve(data);
