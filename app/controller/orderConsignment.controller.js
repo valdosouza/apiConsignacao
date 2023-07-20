@@ -16,10 +16,10 @@ class OrderConsignmentController extends Base {
         'Select * ' +
         'from tb_order_consignment ' +
         'where ( id =?) ' +
-        ' and (tb_institution_id =?)'+
+        ' and (tb_institution_id =?)' +
         ' and (kind = ?) ',
         {
-          replacements: [id, tb_institution_id,kind],
+          replacements: [id, tb_institution_id, kind],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           if (data.length > 0) {
@@ -157,34 +157,34 @@ class OrderConsignmentController extends Base {
     return promise;
   };
 
-  
+
   static async getDividaVelhaByCustomer(tb_institution_id, tb_customer_id, dt_record) {
     const promise = new Promise((resolve, reject) => {
 
       var sqltxt =
-      'select sum(current_debit_balance) dividaVelha '+
-      'from ( '+
-      '    SELECT DISTINCT orc.tb_customer_id, orc.current_debit_balance, orc.id,orc.dt_record '+
-      '    FROM tb_order_consignment orc '+
-      '        inner join tb_order ord  '+
-      '        on (ord.id = orc.id)  '+
-      '          and (ord.tb_institution_id = orc.tb_institution_id)  '+
-      '    WHERE orc.id is not null '+
-      '      and orc.id in (  '+
-      '            SELECT MAX(orca.id) '+
-      '            FROM tb_order_consignment orca '+
-      '              inner join tb_order orda  '+
-      '              on (orda.id = orca.id) '+
-      '                and (orda.tb_institution_id = orca.tb_institution_id)  '+
-      '            WHERE ( orca.tb_institution_id = orc.tb_institution_id ) '+
-      '              and ( orca.tb_customer_id = orc.tb_customer_id )  '+
-      '            GROUP BY orca.tb_customer_id )  '+      
-      '      and (orc.tb_institution_id = ?)  '+
-      '      and (orc.tb_customer_id = ?)   '+
-      '      and orc.current_debit_balance > 0 '+
-      '      and (orc.kind = ? )  '+
-      ') current_debit_balance  ';
-      
+        'select sum(current_debit_balance) dividaVelha ' +
+        'from ( ' +
+        '    SELECT DISTINCT orc.tb_customer_id, orc.current_debit_balance, orc.id,orc.dt_record ' +
+        '    FROM tb_order_consignment orc ' +
+        '        inner join tb_order ord  ' +
+        '        on (ord.id = orc.id)  ' +
+        '          and (ord.tb_institution_id = orc.tb_institution_id)  ' +
+        '    WHERE orc.id is not null ' +
+        '      and orc.id in (  ' +
+        '            SELECT MAX(orca.id) ' +
+        '            FROM tb_order_consignment orca ' +
+        '              inner join tb_order orda  ' +
+        '              on (orda.id = orca.id) ' +
+        '                and (orda.tb_institution_id = orca.tb_institution_id)  ' +
+        '            WHERE ( orca.tb_institution_id = orc.tb_institution_id ) ' +
+        '              and ( orca.tb_customer_id = orc.tb_customer_id )  ' +
+        '            GROUP BY orca.tb_customer_id )  ' +
+        '      and (orc.tb_institution_id = ?)  ' +
+        '      and (orc.tb_customer_id = ?)   ' +
+        '      and orc.current_debit_balance > 0 ' +
+        '      and (orc.kind = ? )  ' +
+        ') current_debit_balance  ';
+
       Tb.sequelize.query(
         sqltxt,
         {
@@ -209,32 +209,32 @@ class OrderConsignmentController extends Base {
     const promise = new Promise((resolve, reject) => {
 
       var sqltxt =
-      'select sum(current_debit_balance) dividaVelha '+
-      'from (    '+
-      '    SELECT DISTINCT orc.tb_customer_id, orc.current_debit_balance, orc.id,orc.dt_record     '+
-      '    FROM tb_order_consignment orc  '+
-      '        inner join tb_order ord   '+
-      '        on (ord.id = orc.id)   '+
-      '          and (ord.tb_institution_id = orc.tb_institution_id)   '+
-      '    WHERE orc.id is not null       '+
-      '      and orc.id in (  '+
-      '            SELECT MAX(orca.id)    '+
-      '            FROM tb_order_consignment orca   '+
-      '              inner join tb_order orda    '+
-      '              on (orda.id = orca.id)    '+
-      '                and (orda.tb_institution_id = orca.tb_institution_id)    '+
-      '            WHERE ( orca.tb_institution_id = ? )    '+
-      '              and ( orca.tb_customer_id = ? )    '+
-      '              and ( orca.id < ?) '+
-      '              and (orca.kind = ? )    '+
-      '            GROUP BY orca.tb_customer_id  '+
-      '            ) '+
-      ') current_debit_balance ';
+        'select sum(current_debit_balance) dividaVelha ' +
+        'from (    ' +
+        '    SELECT DISTINCT orc.tb_customer_id, orc.current_debit_balance, orc.id,orc.dt_record     ' +
+        '    FROM tb_order_consignment orc  ' +
+        '        inner join tb_order ord   ' +
+        '        on (ord.id = orc.id)   ' +
+        '          and (ord.tb_institution_id = orc.tb_institution_id)   ' +
+        '    WHERE orc.id is not null       ' +
+        '      and orc.id in (  ' +
+        '            SELECT MAX(orca.id)    ' +
+        '            FROM tb_order_consignment orca   ' +
+        '              inner join tb_order orda    ' +
+        '              on (orda.id = orca.id)    ' +
+        '                and (orda.tb_institution_id = orca.tb_institution_id)    ' +
+        '            WHERE ( orca.tb_institution_id = ? )    ' +
+        '              and ( orca.tb_customer_id = ? )    ' +
+        '              and ( orca.id < ?) ' +
+        '              and (orca.kind = ? )    ' +
+        '            GROUP BY orca.tb_customer_id  ' +
+        '            ) ' +
+        ') current_debit_balance ';
 
       Tb.sequelize.query(
         sqltxt,
         {
-          replacements: [tb_institution_id, tb_customer_id, tb_order_id,  'supplying'],
+          replacements: [tb_institution_id, tb_customer_id, tb_order_id, 'supplying'],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve({
@@ -382,7 +382,7 @@ class OrderConsignmentController extends Base {
           previous_debit_balance: body.Order.previous_debit_balance,
           current_debit_balance: body.Order.current_debit_balance,
         };
-        var dataRes = await this.getById(body.Order.id, body.Order.tb_institution_id,'checkpoint');
+        var dataRes = await this.getById(body.Order.id, body.Order.tb_institution_id, 'checkpoint');
         if (dataRes.id == 0) {
           await this.insert(dataOrder)
             .then(async () => {
@@ -417,7 +417,7 @@ class OrderConsignmentController extends Base {
           number: 0,
           current_debit_balance: body.Order.current_debit_balance,
         };
-        var dataRes = await this.getById(body.Order.id, body.Order.tb_institution_id,'supplying');
+        var dataRes = await this.getById(body.Order.id, body.Order.tb_institution_id, 'supplying');
         if (dataRes.id == 0) {
           await this.insert(dataOrder)
             .then(async () => {
@@ -873,7 +873,9 @@ class OrderConsignmentController extends Base {
               result.Order = dataOrder;
               const dataItems = await consignmentCard.getSupplyingList(tb_institution_id, data.id);
               if (dataItems.length > 0)
-                result.Items = dataItems;
+                result.Items = dataItems
+              else
+                result.Items = await consignmentCard.getSupplyingNewList(tb_institution_id);
               resolve(result);
             } else {
               entityController.getById(tb_customer_id)
