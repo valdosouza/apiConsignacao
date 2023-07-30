@@ -30,7 +30,7 @@ class OrderLoadEndPoint {
             }
             dataItems.push(objItem);
           }
-          req.body['Items'] = dataItems
+          req.body['items'] = dataItems
 
           //Retorna do estoque do vendedor - Venda direta pelo estoque do vendedor ....lembrar da venda direta pelo estoque do cliente
           var stockSalesman = await entityHasStockList.getByEntity(req.body.tb_institution_id, req.body.tb_user_id);
@@ -41,7 +41,7 @@ class OrderLoadEndPoint {
           //Usar o grupo estoque manager por que pode ser usado tanto salesman quanto o customer    
           req.body['StockOrigen'] = stockInstitution[0];
 
-          req.body['Order'] = {
+          req.body['order'] = {
             id: req.body.id,
             tb_institution_id: req.body.tb_institution_id,
             tb_user_id: req.body.tb_user_id,
@@ -57,7 +57,7 @@ class OrderLoadEndPoint {
           res.send({ result: "Carregamento foi encerrado com Sucesso" });
         } else {
           res.send({ result: "Carregamento já está encerrado" });
-         }
+        }
       })
 
   }
@@ -70,9 +70,22 @@ class OrderLoadEndPoint {
       })
   }
 
-  static getlist(req, res) {
-
+  static getlist(req, res) {    
     OrderLoadCardController.getList(req.params.tb_institution_id)
+      .then(data => {
+        res.send(data);
+      })
+  }
+
+  static getByOrder(req, res) {
+    OrderLoadCardController.getByOrder(req.params.tb_institution_id, req.params.tb_order_id)
+      .then(data => {
+        res.send(data);
+      })
+  }
+  static getlistByUser(req, res) {
+
+    OrderLoadCardController.getListByUser(req.params.tb_institution_id, req.params.tb_user_id)
       .then(data => {
         res.send(data);
       })

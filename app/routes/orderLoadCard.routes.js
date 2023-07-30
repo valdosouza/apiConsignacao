@@ -23,8 +23,8 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *           type: integer
  *         tb_user_id:
  *           type: integer
- *         user_name:
- *           type: String  
+ *         name_name:
+ *           type: string  
  *         dt_record:
  *           type: string 
  *         items:
@@ -50,6 +50,24 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *           type: number
  *         new_load:
  *           type: number 
+ * 
+ *     OrderLoadCardList:
+ *       type: object
+ *       required:
+ *         - tb_institution_id
+ *         - tb_user_id
+ *       properties:
+ *         id:
+ *           type: integer 
+ *         tb_institution_id:
+ *           type: integer
+ *         tb_user_id:
+ *           type: integer
+ *         user_name:
+ *           type: String  
+ *         dt_record:
+ *           type: string 
+ * 
  */
  
  
@@ -120,13 +138,60 @@ router.post("/closure/", orderloadcard.closure);
  *               items:
  *                 $ref: '#/components/schemas/OrderLoadCardMain'
  */
-
 router.get("/getlist/:tb_institution_id", orderloadcard.getlist);
 
+/**
+ * @swagger
+ * /orderloadcard/getlistByUser/{tb_institution_id}/{tb_user_id}:
+ *   get:
+ *     summary: Returns the list Load Card by User
+ *     tags: [OrderLoadCard]
+ *     parameters:
+ *      - in: path
+ *        name: tb_institution_id
+ *        required: true 
+ *      - in: path
+ *        name: tb_user_id
+ *        required: true 
+ *     responses:
+ *       200:
+ *         description: The list of Load card by User
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/OrderLoadCardList'
+ */
+
+router.get("/getlistByUser/:tb_institution_id/:tb_user_id", orderloadcard.getlistByUser);
+
+/**
+ * @swagger
+ * /orderloadcard/getByOrder/{tb_institution_id}/{tb_order_id}:
+ *   get:
+ *     summary: Returns the Load Card by Order ID
+ *     tags: [OrderLoadCard]
+ *     parameters:
+ *      - in: path
+ *        name: tb_institution_id
+ *        required: true 
+ *      - in: path
+ *        name: tb_order_id
+ *        required: true 
+ *     responses:
+ *       200:
+ *         description: The Order Load card by Order
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/OrderLoadCardMain'
+ */
+	router.get("/getByOrder/:tb_institution_id/:tb_order_id", orderloadcard.getByOrder);
 
  /**
  * @swagger
- * /orderloadcard/{tb_institution_id}/{tb_user_id}/{dt_record}:
+ * /orderloadcard/getNewOrder/{tb_institution_id}/{tb_user_id}/{dt_record}:
  *   get:
  *     summary: Returns the list of items of card
  *     tags: [OrderLoadCard]
@@ -149,6 +214,8 @@ router.get("/getlist/:tb_institution_id", orderloadcard.getlist);
  *               $ref: '#/components/schemas/OrderLoadCardMain'
  */
   
- router.get("/:tb_institution_id/:tb_user_id/:dt_record", orderloadcard.getNewOrderLoadCard);
+ router.get("/getNewOrder/:tb_institution_id/:tb_user_id/:dt_record", orderloadcard.getNewOrderLoadCard);
+
+
 
 module.exports = router;

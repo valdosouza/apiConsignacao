@@ -100,9 +100,9 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *     OrderStockTransferMain:
  *       type: object
  *       properties:
- *         Order:
+ *         order:
  *           $ref: '#/components/schemas/OrderStockTransfer'
- *         Items:
+ *         items:
  *            type: array
  *            items:
  *              $ref: '#/components/schemas/OrderStockTransferItem'

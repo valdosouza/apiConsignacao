@@ -88,7 +88,6 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *               items:
  *                 $ref: '#/components/schemas/Region'
  */
-
 router.get("/getlist/:tb_institution_id", region.getList);
   
 

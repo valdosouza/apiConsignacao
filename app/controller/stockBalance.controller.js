@@ -166,7 +166,6 @@ class StockBalanceController extends Base {
         '  on (ct.id = ehs.tb_entity_id) ' +
         '   inner join tb_region rg '+
         '   on (rg.id = ct.tb_region_id) '+
-
         '    and (ct.tb_institution_id = ehs.tb_institution_id) ' +
         'where stb.tb_institution_id =?  ' +
         'and rg.tb_salesman_id =?  ' +
@@ -229,16 +228,26 @@ class StockBalanceController extends Base {
         '    inner join tb_stock_list stl    ' +
         '    on (stl.id = stb.tb_stock_list_id)  ' +
         '      and (stl.tb_institution_id = stb.tb_institution_id)  ' +
+
         '    inner join tb_product prd  ' +
         '    on (prd.id = stb.tb_merchandise_id)   ' +
+        '     and (prd.tb_institution_id = stb.tb_institution_id)  '+
+
         '    inner join tb_entity_has_stock_list ehs   ' +
         '    on (ehs.tb_stock_list_id = stb.tb_stock_list_id)   ' +
         '      and (ehs.tb_institution_id = stb.tb_institution_id)  ' +
+      
         '    inner join tb_customer ct  ' +
         '    on (ct.id = ehs.tb_entity_id)  ' +
         '      and (ct.tb_institution_id = ehs.tb_institution_id)  ' +
+      
+        '    inner join tb_region rg '+
+        '    on (rg.id = ct.tb_region_id) '+
+        '      and (ct.tb_institution_id = ehs.tb_institution_id) '+
+     
+
         '  where stb.tb_institution_id =? ' +
-        '  and ct.tb_salesman_id =? ' +
+        '  and rg.tb_salesman_id =? ' +
         '  group by 1,2 '+
         '   union ' +
         '   select  ' +
@@ -249,14 +258,19 @@ class StockBalanceController extends Base {
         '     inner join tb_stock_list stl ' +
         '     on (stl.id = stb.tb_stock_list_id)  ' +
         '       and (stl.tb_institution_id = stb.tb_institution_id)  ' +
+       
         '     inner join tb_product prd  ' +
         '     on (prd.id = stb.tb_merchandise_id)   ' +
+        '      and (prd.tb_institution_id = stb.tb_institution_id)  '+
+
         '     inner join tb_entity_has_stock_list ehs   ' +
         '     on (ehs.tb_stock_list_id = stb.tb_stock_list_id)   ' +
         '       and (ehs.tb_institution_id = stb.tb_institution_id)  ' +
+      
         '     inner join tb_collaborator c  ' +
         '     on (c.id = ehs.tb_entity_id)  ' +
         '       and (c.tb_institution_id = ehs.tb_institution_id) ' +
+      
         '   where stb.tb_institution_id =?   ' +
         '   and ehs.tb_entity_id =? ' +
         ' ) tb_stock_by_salesman ' +

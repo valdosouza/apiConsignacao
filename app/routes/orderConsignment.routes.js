@@ -86,16 +86,30 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         value:
  *           type: number
  *  
+ *     ConsignmentList:
+ *       type: object
+ *       required:
+ *         - tb_institution_id
+ *         - tb_customer_id
+ *       properties:
+ *         tb_institution_id:
+ *           type : integer
+ *         tb_order_id:
+ *           type: integer
+ *         dt_register:
+ *           type : string
+ * 
+ * 
  *     OrderConsignmentCheckPointMain:
  *       type: object
  *       properties:
- *         Order:
+ *         order:
  *           $ref: '#/components/schemas/OrderConsignmentCheckPoint'
- *         Items:
+ *         items:
  *            type: array
  *            items:
  *              $ref: '#/components/schemas/OrderConsignmentCardCheckPoint'
- *         Payments:
+ *         payments:
  *            type: array
  *            items:
  *              $ref: '#/components/schemas/OrderPaid'
@@ -109,7 +123,6 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         - tb_salesman_id
  *         - dt_record
  *         - current_debit_balance 
- * 
  *       properties:
  *         id:
  *           type: integer
@@ -139,7 +152,6 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         - new_consignment
  *         - qtty_consigned
  *         - unit_value 
- * 
  *       properties:
  *         tb_product_id:
  *           type: integer
@@ -161,9 +173,9 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *     OrderConsignmentSupplyingMain:
  *       type: object
  *       properties:
- *         Order:
+ *         order:
  *           $ref: '#/components/schemas/OrderConsignmentSupplying'
- *         Items:
+ *         items:
  *            type: array
  *            items:
  *              $ref: '#/components/schemas/OrderConsignmentCardSupplying' 
@@ -303,5 +315,31 @@ router.get("/supplying/get/:tb_institution_id/:id", orderconsignment.getSupplyin
  */
 
 router.get("/getlast/:tb_institution_id/:tb_customer_id", orderconsignment.getLast);
+
+/**
+ * @swagger
+ * /orderconsignment/getlist/{tb_institution_id}/{tb_customer_id}:
+ *   get:
+ *     summary: Returns the List of Consignament 
+ *     tags: [OrderConsignment]
+ *     parameters:
+ *      - in: path
+ *        name: tb_institution_id
+ *      - in: path
+ *        name: tb_customer_id
+ *        schema:
+ *          type: string
+ *        required: true
+ *        description: The List of orderconsignment by tb_institution_id and tb_customer_id
+ *     responses:
+ *       200:
+ *         description: The OrderConsignment
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ConsignmentList'
+ */
+
+router.get("/getlist/:tb_institution_id/:tb_customer_id", orderconsignment.getList);
 
 module.exports = router;

@@ -84,10 +84,10 @@ class OrderStockTransferController extends Base {
           replacements: [body.tb_institution_id, body.tb_salesman_id, body.dt_record, body.tb_customer_id, 'N'],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
-          if (data) {
+          if (data.length > 0) {
             resolve(data[0]);
           } else {
-            resolve(data);
+            resolve({id:0});
           }
         })
         .catch(err => {
@@ -345,18 +345,18 @@ class OrderStockTransferController extends Base {
 
   static async finished(body) {
     const promise = new Promise(async (resolve, reject) => {
-      if (body.Order.recall == "S") {
-        await OrderController.updateNote(body.Order.tb_institution_id, body.Order.id, body.Order.note);
+      if (body.order.recall == "S") {
+        await OrderController.updateNote(body.order.tb_institution_id, body.order.id, body.order.note);
         await SalesRouteController.setRecall(body);
       }
 
 
       Tb.update({ 
-                recall : body.Order.recall,
+                recall : body.order.recall,
                 finished: "S" }, {
         where: {
-          id: body.Order.id,
-          tb_institution_id: body.Order.tb_institution_id,
+          id: body.order.id,
+          tb_institution_id: body.order.tb_institution_id,
           terminal: 0
         }
       })

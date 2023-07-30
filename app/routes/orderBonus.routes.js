@@ -96,9 +96,9 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *     OrderBonusMain:
  *       type: object
  *       properties:
- *         Order:
+ *         order:
  *           $ref: '#/components/schemas/OrderBonus'
- *         Items:
+ *         items:
  *            type: array
  *            items:
  *              $ref: '#/components/schemas/OrderBonusItem'

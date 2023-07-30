@@ -120,14 +120,14 @@ class FinancialController extends Base {
     const promise = new Promise(async (resolve, reject) => {
       try {
         var dataFinancial = {
-          tb_institution_id: body.Order.tb_institution_id,
-          tb_order_id: body.Order.id,
+          tb_institution_id: body.order.tb_institution_id,
+          tb_order_id: body.order.id,
           terminal: 0,
           parcel: 1,
-          tb_entity_id: body.Order.tb_customer_id,
-          dt_record: body.Order.dt_record,
+          tb_entity_id: body.order.tb_customer_id,
+          dt_record: body.order.dt_record,
           number: 0,
-          dt_expiration: body.Order.dt_record,
+          dt_expiration: body.order.dt_record,
           tb_payment_types_id: 0,
           tag_value: 0,
           tb_financial_plans_id: 0,
@@ -135,12 +135,12 @@ class FinancialController extends Base {
           situation: "D",
           operation: "C",
         }
-        for (var item of body.Payments) {
+        for (var item of body.payments) {
           if (item.value > 0) {
             dataFinancial.parcel += dataFinancial.parcel;
             dataFinancial.tb_payment_types_id = item.tb_payment_type_id;
-            if ((item.name_payment_type = 'DINHEIRO') && (body.Order.change_value > 0)) {
-              dataFinancial.tag_value = item.value - body.Order.change_value;
+            if ((item.name_payment_type = 'DINHEIRO') && (body.order.change_value > 0)) {
+              dataFinancial.tag_value = item.value - body.order.change_value;
             } else {
               dataFinancial.tag_value = item.value;
             }

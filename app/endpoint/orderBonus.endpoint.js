@@ -5,7 +5,7 @@ class OrderBonusEndPoint {
   static create = (req, res) => {
     OrderBonusController.insert(req.body)
       .then(data => {
-        res.send(data.Order);
+        res.send(data.order);
       })
   }
 
@@ -29,7 +29,7 @@ class OrderBonusEndPoint {
     OrderBonusController.update(req.body)
       .then((data) => {
 
-        res.send(data.Order)
+        res.send(data.order)
       })
   }
 

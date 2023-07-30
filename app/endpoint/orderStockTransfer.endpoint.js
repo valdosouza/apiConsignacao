@@ -5,7 +5,7 @@ class OrderStockTransferEndPoint {
   static create = (req, res) => {
     OrderStockTransferController.insert(req.body)
       .then(data => {
-        res.send(data.Order);
+        res.send(data.order);
       })
   }
 
@@ -29,7 +29,7 @@ class OrderStockTransferEndPoint {
     OrderStockTransferController.update(req.body)
       .then((data) => {
 
-        res.send(data.Order)
+        res.send(data.order)
       })
   }
 

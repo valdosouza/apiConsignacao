@@ -35,18 +35,18 @@ class OrderSaleController extends Base {
   static async insertOrder(body) {
     const promise = new Promise(async (resolve, reject) => {
 
-      if (body.Order.number == 0)
-        body.Order.number = await this.getNextNumber(body.Order.tb_institution_id);
+      if (body.order.number == 0)
+        body.order.number = await this.getNextNumber(body.order.tb_institution_id);
 
       const dataOrder = {
-        id: body.Order.id,
-        tb_institution_id: body.Order.tb_institution_id,
+        id: body.order.id,
+        tb_institution_id: body.order.tb_institution_id,
         terminal: 0,
-        tb_salesman_id: body.Order.tb_salesman_id,
-        number: body.Order.number,
-        tb_customer_id: body.Order.tb_customer_id,
-        total_value: body.Order.total_value,
-        change_value: body.Order.change_value,
+        tb_salesman_id: body.order.tb_salesman_id,
+        number: body.order.number,
+        tb_customer_id: body.order.tb_customer_id,
+        total_value: body.order.total_value,
+        change_value: body.order.change_value,
       }
       Tb.create(dataOrder)
         .then((data) => {
@@ -65,15 +65,15 @@ class OrderSaleController extends Base {
     const promise = new Promise(async (resolve, reject) => {
       const dataOrder = {
         id: 0,
-        tb_institution_id: body.Order.tb_institution_id,
+        tb_institution_id: body.order.tb_institution_id,
         terminal: 0,
-        tb_user_id: body.Order.tb_user_id,
-        dt_record: body.Order.dt_record,
-        note: body.Order.note
+        tb_user_id: body.order.tb_user_id,
+        dt_record: body.order.dt_record,
+        note: body.order.note
       }
       order.insert(dataOrder)
         .then(async (data) => {
-          body.Order.id = data.id;
+          body.order.id = data.id;
           this.insertOrder(body)
             .then(() => {
               this.updateOrderItem(body)
@@ -256,9 +256,9 @@ class OrderSaleController extends Base {
       try {
         var result = {};
         const dataOrder = await this.getOrder(tb_institution_id, tb_order_id);
-        result.Order = dataOrder;
+        result.order = dataOrder;
         const dataItems = await orderItem.getList(tb_institution_id, tb_order_id);
-        result.Items = dataItems;
+        result.items = dataItems;
 
         resolve(result);
       }
@@ -272,12 +272,12 @@ class OrderSaleController extends Base {
   static async updateOrder(body) {
     const promise = new Promise(async (resolve, reject) => {
       const dataOrderStockAdjust = {
-        id: body.Order.id,
-        tb_institution_id: body.Order.tb_institution_id,
+        id: body.order.id,
+        tb_institution_id: body.order.tb_institution_id,
         terminal: 0,
-        tb_user_id: body.Order.tb_user_id,
-        dt_record: body.Order.dt_record,
-        note: body.Order.note
+        tb_user_id: body.order.tb_user_id,
+        dt_record: body.order.dt_record,
+        note: body.order.note
       }
       Tb.update(dataOrderStockAdjust, {
         where: {
@@ -302,12 +302,12 @@ class OrderSaleController extends Base {
       try {
         var dataItem = {};
         var resultItem = {};
-        for (var item of body.Items) {
+        for (var item of body.items) {
           if (item.updateStatus != "") {
             dataItem = {
               id: item.id,
-              tb_institution_id: body.Order.tb_institution_id,
-              tb_order_id: body.Order.id,
+              tb_institution_id: body.order.tb_institution_id,
+              tb_order_id: body.order.id,
               terminal: 0,
               tb_stock_list_id: item.tb_stock_list_id,
               tb_price_list_id: item.tb_price_list_id,
@@ -346,12 +346,12 @@ class OrderSaleController extends Base {
       try {
         var dataItem = {};
         var resultItem = {};
-        for (var item of body.Items) {
+        for (var item of body.items) {
           if (item.updateStatus != "") {
             dataItem = {
               id: item.id,
-              tb_institution_id: body.Order.tb_institution_id,
-              tb_order_id: body.Order.id,
+              tb_institution_id: body.order.tb_institution_id,
+              tb_order_id: body.order.id,
               terminal: 0,
               tb_stock_list_id: item.tb_stock_list_id,
               tb_price_list_id: item.tb_price_list_id,
@@ -381,12 +381,12 @@ class OrderSaleController extends Base {
   static async update(body) {
     const promise = new Promise((resolve, reject) => {
       const dataOrder = {
-        id: body.Order.id,
-        tb_institution_id: body.Order.tb_institution_id,
+        id: body.order.id,
+        tb_institution_id: body.order.tb_institution_id,
         terminal: 0,
-        tb_user_id: body.Order.tb_user_id,
-        dt_record: body.Order.dt_record,
-        note: body.Order.note
+        tb_user_id: body.order.tb_user_id,
+        dt_record: body.order.dt_record,
+        note: body.order.note
       }
       order.update(dataOrder)
         .then(() => {
@@ -509,7 +509,7 @@ class OrderSaleController extends Base {
         //Não salva tb_order por que já foi criado no attendance   
         await this.insertCard(body);
         await this.insertOrderPaid(body);
-        resolve(body.Order);
+        resolve(body.order);
       } catch (err) {
         reject('OrderSaleController.saveCard: ' + err);
       }
@@ -521,10 +521,10 @@ class OrderSaleController extends Base {
     const promise = new Promise(async (resolve, reject) => {
       try {
         var dataItem = {};
-        for (var item of body.Items) {
+        for (var item of body.items) {
           dataItem = {
-            id: body.Order.id,
-            tb_institution_id: body.Order.tb_institution_id,
+            id: body.order.id,
+            tb_institution_id: body.order.tb_institution_id,
             terminal: 0,
             tb_product_id: item.tb_product_id,
             bonus: item.bonus,
@@ -547,11 +547,11 @@ class OrderSaleController extends Base {
     const promise = new Promise(async (resolve, reject) => {
       try {
         var dataPayment = {};
-        for (var item of body.Payments) {
+        for (var item of body.payments) {
           if (item.dt_expiration == "") delete item.dt_expiration;
           dataPayment = {
-            id: body.Order.id,
-            tb_institution_id: body.Order.tb_institution_id,
+            id: body.order.id,
+            tb_institution_id: body.order.tb_institution_id,
             terminal: 0,
             tb_payment_type_id: item.tb_payment_type_id,
             value: item.value,
@@ -573,11 +573,11 @@ class OrderSaleController extends Base {
     const promise = new Promise(async (resolve, reject) => {
       try {
         var qtde = 0;
-        for (var item of body.Items) {
+        for (var item of body.items) {
           qtde += item.qtty_sold;
         }
         if (qtde > 0) {
-          body.Order['number'] = 0;
+          body.order['number'] = 0;
           await this.insertOrder(body);
           await this.insertOrderItemByCard(body);
           await this.closurebyCard(body);
@@ -594,12 +594,12 @@ class OrderSaleController extends Base {
     const promise = new Promise(async (resolve, reject) => {
       try {
         var dataItem = {};
-        for (var item of body.Items) {
+        for (var item of body.items) {
           if (item.qtty_sold > 0) {
             dataItem = {
               id: 0,
-              tb_institution_id: body.Order.tb_institution_id,
-              tb_order_id: body.Order.id,
+              tb_institution_id: body.order.tb_institution_id,
+              tb_order_id: body.order.id,
               terminal: 0,
               tb_stock_list_id: body.StockOrigen.tb_stock_list_id,//Neste caso via card na consignação deve informar o estoque do cliente 
               tb_product_id: item.tb_product_id,
@@ -623,7 +623,7 @@ class OrderSaleController extends Base {
   static async closurebyCard(body) {
     const promise = new Promise(async (resolve, reject) => {
       try {
-        var items = await this.getItemList(body.Order.tb_institution_id, body.Order.id);
+        var items = await this.getItemList(body.order.tb_institution_id, body.order.id);
         var dataItem = {};
         for (var item of items) {
           dataItem = {
@@ -635,7 +635,7 @@ class OrderSaleController extends Base {
             tb_stock_list_id: item.tb_stock_list_id,
             local: "web",
             kind: "Fechamento",
-            dt_record: body.Order.dt_record,
+            dt_record: body.order.dt_record,
             direction: "S",
             tb_merchandise_id: item.tb_product_id,
             quantity: item.quantity,
@@ -644,7 +644,7 @@ class OrderSaleController extends Base {
           await stockStatement.insert(dataItem);
 
         };
-        await order.updateStatus(body.Order.tb_institution_id, body.Order.id, 'F');
+        await order.updateStatus(body.order.tb_institution_id, body.order.id, 'F');
         resolve("200");
       } catch (err) {
         reject(err);

@@ -12,10 +12,10 @@ class OrderLoadCardController extends Base {
     const promise = new Promise((resolve, reject) => {
       Tb.sequelize.query(
         'Select ' +
-        'ord.status, '+
+        'ord.status, ' +
         'ord.id, ' +
-        'ord.tb_institution_id,'+
-        'ord.tb_user_id,'+
+        'ord.tb_institution_id,' +
+        'ord.tb_user_id,' +
         'occ.tb_product_id, ' +
         'pd.description name_product, ' +
         'occ.stock_balance, ' +
@@ -31,13 +31,13 @@ class OrderLoadCardController extends Base {
         '  on (occ.id = ord.id)' +
         '    and (occ.tb_institution_id = ord.tb_institution_id)' +
         'where ( ord.id =?) ' +
-        ' and (ord.tb_institution_id =?)' ,
+        ' and (ord.tb_institution_id =?)',
         {
           replacements: [id, tb_institution_id],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
-          
-          resolve( data);
+
+          resolve(data);
         })
         .catch(err => {
           reject('getById: ' + err);
@@ -84,22 +84,120 @@ class OrderLoadCardController extends Base {
   static async getList(tb_institution_id) {
     const promise = new Promise((resolve, reject) => {
       Tb.sequelize.query(
-        'Select distinct '+
-        'ord.tb_institution_id, '+
-        'ord.id,  '+
-        'ord.dt_record,  '+
-        'ord.tb_user_id, '+
-        'etd.name_company name_user '+
-        'from tb_order_load_card  occ  '+
-        '  inner join tb_order ord  '+
-        '  on (occ.id = ord.id) '+
-        '    and (occ.tb_institution_id = ord.tb_institution_id) '+
-        '  inner join tb_entity etd '+
-        '  on (etd.id = ord.tb_user_id) '+
-        'where  (ord.tb_institution_id =?) '+
+        'Select distinct ' +
+        'ord.tb_institution_id, ' +
+        'ord.id,  ' +
+        'ord.dt_record,  ' +
+        'ord.tb_user_id, ' +
+        'etd.name_company name_user ' +
+        'from tb_order_load_card  occ  ' +
+        '  inner join tb_order ord  ' +
+        '  on (occ.id = ord.id) ' +
+        '    and (occ.tb_institution_id = ord.tb_institution_id) ' +
+        '  inner join tb_entity etd ' +
+        '  on (etd.id = ord.tb_user_id) ' +
+        'where  (ord.tb_institution_id =?) ' +
         ' and (ord.status =?) ',
         {
           replacements: [tb_institution_id, 'A'],
+          type: Tb.sequelize.QueryTypes.SELECT
+        }).then(data => {
+          resolve(data);
+        })
+        .catch(err => {
+          reject('getById: ' + err);
+        });
+    });
+    return promise;
+  };
+
+
+  static async getByOrder(tb_institution_id, tb_order_id) {
+    const promise = new Promise((resolve, reject) => {
+      Tb.sequelize.query(
+        'Select ' +
+        'ord.status, ' +
+        'ord.id, ' +
+        'ord.tb_institution_id,' +
+        'ord.dt_record,' +
+        'ord.tb_user_id,' +
+        'user.nick_trade name_user, '+
+        'occ.tb_product_id, ' +
+        'pd.description name_product, ' +
+        'occ.stock_balance, ' +
+        'occ.sale, ' +
+        'occ.bonus, ' +
+        'occ.adjust, ' +
+        'occ.new_load ' +
+        'from tb_order_load_card  occ ' +
+        '  inner join tb_product pd ' +
+        '    on (pd.id = occ.tb_product_id) ' +
+        '    and (pd.tb_institution_id = occ.tb_institution_id)' +
+        '  inner join tb_order ord ' +
+        '  on (occ.id = ord.id)' +
+        '    and (occ.tb_institution_id = ord.tb_institution_id)' +
+        '  inner join tb_entity user '+
+        '  on (ord.tb_user_id = user.id)'+
+        'where ( ord.id =?) ' +
+        ' and (ord.tb_institution_id =?)',
+        {
+          replacements: [tb_order_id, tb_institution_id],
+          type: Tb.sequelize.QueryTypes.SELECT
+        }).then(data => {
+          var dataResult = {};
+          if (data.length > 0) {
+            dataResult = {
+              id: data[0].id,
+              tb_institution_id: data[0].tb_institution_id,
+              tb_user_id: data[0].tb_user_id,
+              name_user: data[0].name_user,
+              dt_record: data[0].dt_record,
+              items: [],
+            }
+            for (var item of data) {
+              dataResult.items.push({
+                id: item.id,
+                tb_product_id : item.tb_product_id,
+                name_product : item.name_product,
+                stock_balance: Number(item.stock_balance),
+                sale: Number(item.sale),
+                bonus: Number(item.bonus),
+                adjust: Number(item.adjust),
+                new_load: Number(item.new_load),
+              });
+            }
+            resolve(dataResult);
+
+          } else {
+            resolve({ id: 0 });
+          }
+        })
+        .catch(err => {
+          reject('getByOrder: ' + err);
+        });
+    });
+    return promise;
+  };
+
+  static async getListByUser(tb_institution_id, tb_user_id) {
+    const promise = new Promise((resolve, reject) => {
+      Tb.sequelize.query(
+        'Select distinct ' +
+        'ord.tb_institution_id, ' +
+        'ord.id,  ' +
+        'ord.dt_record,  ' +
+        'ord.tb_user_id, ' +
+        'etd.name_company name_user ' +
+        'from tb_order_load_card  occ  ' +
+        '  inner join tb_order ord  ' +
+        '  on (occ.id = ord.id) ' +
+        '    and (occ.tb_institution_id = ord.tb_institution_id) ' +
+        '  inner join tb_entity etd ' +
+        '  on (etd.id = ord.tb_user_id) ' +
+        'where  (ord.tb_institution_id =?) ' +
+        ' and (ord.tb_user_id =?) ',
+        {
+          replacements: [tb_institution_id, tb_user_id],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve(data);
@@ -123,7 +221,7 @@ class OrderLoadCardController extends Base {
       order.insert(dataOrder)
         .then(async (data) => {
           body.id = data.id;
-          for (var item of body.Items) {
+          for (var item of body.items) {
             try {
               item['id'] = body.id;
               item['tb_institution_id'] = body.tb_institution_id;

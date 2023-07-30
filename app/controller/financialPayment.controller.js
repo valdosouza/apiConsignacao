@@ -120,8 +120,8 @@ class FinancialPaymnetController extends Base {
     const promise = new Promise(async (resolve, reject) => {
       try {
         var dataFinancial = {
-          tb_institution_id: body.Order.tb_institution_id,
-          tb_order_id: body.Order.id,
+          tb_institution_id: body.order.tb_institution_id,
+          tb_order_id: body.order.id,
           terminal: 0,
           parcel: 1,
           interest_value: 0,
@@ -134,16 +134,16 @@ class FinancialPaymnetController extends Base {
           tb_financial_plans_id: 0,
           settled_code: 0,
         }
-        for (var item of body.Payments) {
+        for (var item of body.payments) {
           if (item.value > 0) {
             dataFinancial.parcel += dataFinancial.parcel;
             dataFinancial.tb_payment_types_id = item.tb_payment_type_id;
-            if ((item.name_payment_type = 'DINHEIRO') && (body.Order.change_value > 0)) {
-              dataFinancial.paid_value = item.value - body.Order.change_value;
+            if ((item.name_payment_type = 'DINHEIRO') && (body.order.change_value > 0)) {
+              dataFinancial.paid_value = item.value - body.order.change_value;
             } else {
               dataFinancial.paid_value = item.value;
             }
-            dataFinancial.settled_code = await this.getSettledCode(body.Order.tb_institution_id);
+            dataFinancial.settled_code = await this.getSettledCode(body.order.tb_institution_id);
             item['settled_code'] = dataFinancial.settled_code;
             await this.insert(dataFinancial);
           }

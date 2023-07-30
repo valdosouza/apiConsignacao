@@ -74,9 +74,9 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *     OrderSaleMain:
  *       type: object
  *       properties:
- *         Order:
+ *         order:
  *           $ref: '#/components/schemas/OrderSale'
- *         Items:
+ *         items:
  *            type: array
  *            items:
  *              $ref: '#/components/schemas/OrderSaleItems'
@@ -85,9 +85,9 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *     OrderSaleMainCard:
  *       type: object
  *       properties:
- *         Order:
+ *         order:
  *           $ref: '#/components/schemas/OrderSale'
- *         Items:
+ *         items:
  *            type: array
  *            items:
  *              $ref: '#/components/schemas/OrderSaleCard'

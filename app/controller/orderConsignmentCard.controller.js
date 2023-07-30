@@ -62,10 +62,53 @@ class OrderConsignmentCardController extends Base {
           replacements: [tb_institution_id, id, 'checkpoint'],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
-          resolve(data);
+          var dataResult = [];
+          for (var item of data) {
+            dataResult.push({
+              tb_product_id: item.tb_product_id,
+              name_product: item.name_product,
+              bonus: Number(item.bonus),
+              qtty_consigned: Number(item.qtty_consigned),
+              leftover: Number(item.leftover),
+              qtty_sold: Number(item.qtty_sold),
+              unit_value: Number(item.unit_value),
+            });
+          }
+          resolve(dataResult);
         })
         .catch(err => {
           reject("OrderConsignmentCard.getCheckpointList: " + err);
+        });
+    });
+    return promise;
+  }
+
+  static getPayment(tb_institution_id, id) {
+    const promise = new Promise((resolve, reject) => {
+      Tb.sequelize.query(
+        'select orp.tb_payment_type_id, pt.description name_payment_type, orp.dt_expiration, value ' +
+        'from tb_order_paid orp ' +
+        '  inner join tb_payment_types pt ' +
+        '  on (pt.id = orp.tb_payment_type_id) ' +
+        'where orp.tb_institution_id  =? ' +
+        ' and orp.id =? ',
+        {
+          replacements: [tb_institution_id, id],
+          type: Tb.sequelize.QueryTypes.SELECT
+        }).then(data => {
+          var dataResult = [];
+          for (var item of data) {
+            dataResult.push({
+              tb_payment_type_id: item.tb_payment_type_id,
+              name_payment_type: item.name_payment_type,
+              dt_expiration: item.dt_expiration,
+              value: Number(item.value)
+            });
+          }
+          resolve(dataResult);
+        })
+        .catch(err => {
+          reject("OrderConsignmentCard.getPayment: " + err);
         });
     });
     return promise;
@@ -94,7 +137,20 @@ class OrderConsignmentCardController extends Base {
           replacements: [tb_institution_id, id, 'supplying'],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
-          resolve(data);
+          var dataResult = [];
+          for (var item of data) {
+            dataResult.push({
+              tb_product_id: item.tb_product_id,
+              name_product: item.name_product,
+              bonus: Number(item.bonus),                            
+              leftover: Number(item.leftover),
+              devolution: Number(item.devolution),
+              qtty_consigned: Number(item.qtty_consigned),
+              new_consignment: Number(item.new_consignment),
+              unit_value: Number(item.unit_value),
+            });
+          }
+          resolve(dataResult);
         })
         .catch(err => {
           reject("OrderConsignmentCard.getSupplyingList: " + err);

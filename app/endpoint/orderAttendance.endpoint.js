@@ -5,18 +5,18 @@ class OrderAttendanceEndPoint {
 
   static create = (req, res) => {
     OrderAttendanceController.getNotFinished(req.body)
-      .then(async data => {        
-        if(data) {        
-          //Como a Order não foi finalizara realizar um "rollback/cleanUp"
-          await OrderAttendanceController.cleanUp(data.tb_institution_id,data.id)
-          req.body.id = data.id;          
-          await OrderAttendanceController.update(req.body)
-          .then(async data=>{            
-            await CashierController.autoCreate(req.body.tb_institution_id, req.body.tb_user_id);
-            res.send(data);  
-          })
-        }else{
+      .then(async data => {
+        if (data.id == 0) {
           OrderAttendanceController.insert(req.body)
+            .then(async data => {
+              await CashierController.autoCreate(req.body.tb_institution_id, req.body.tb_user_id);
+              res.send(data);
+            })
+        } else {
+          //Como a Order não foi finalizara realizar um "rollback/cleanUp"
+          await OrderAttendanceController.cleanUp(data.tb_institution_id, data.id)
+          req.body.id = data.id;
+          await OrderAttendanceController.update(req.body)
             .then(async data => {
               await CashierController.autoCreate(req.body.tb_institution_id, req.body.tb_user_id);
               res.send(data);
@@ -89,11 +89,11 @@ class OrderAttendanceEndPoint {
 
   static cleanup(req, res) {
 
-    OrderAttendanceController.cleanUp(req.body.tb_institution,req.body.id)
+    OrderAttendanceController.cleanUp(req.body.tb_institution, req.body.id)
       .then(data => {
-        res.status(200).json({message: data})        
+        res.status(200).json({ message: data })
       })
-  }  
+  }
 }
 
 module.exports = OrderAttendanceEndPoint; 

@@ -83,9 +83,9 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *     OrderStockAdjustMain:
  *       type: object
  *       properties:
- *         Order:
+ *         order:
  *           $ref: '#/components/schemas/OrderStockAdjust'
- *         Items:
+ *         items:
  *            type: array
  *            items:
  *              $ref: '#/components/schemas/OrderStockAdjustItem'
@@ -143,7 +143,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/OrderStockAdjustMain/'
+ *                 $ref: '#/components/schemas/OrderStockAdjust'
  */
 
 router.get("/getlist/:tb_institution_id", orderstockadjust.getList);

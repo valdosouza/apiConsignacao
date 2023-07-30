@@ -152,9 +152,9 @@ class SalesRouteController extends Base {
     const promise = new Promise(async (resolve, reject) => {
       try {
         var dataRecall = {
-          tb_institution_id : body.Order.tb_institution_id,
-          tb_customer_id : body.Order.tb_customer_id,
-          recall : body.Order.recall,
+          tb_institution_id : body.order.tb_institution_id,
+          tb_customer_id : body.order.tb_customer_id,
+          recall : body.order.recall,
         }
         SalesRouteCustomerController.setRecall(dataRecall);
         resolve("changed");
