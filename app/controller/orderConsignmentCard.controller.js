@@ -142,7 +142,7 @@ class OrderConsignmentCardController extends Base {
             dataResult.push({
               tb_product_id: item.tb_product_id,
               name_product: item.name_product,
-              bonus: Number(item.bonus),                            
+              bonus: Number(item.bonus),
               leftover: Number(item.leftover),
               devolution: Number(item.devolution),
               qtty_consigned: Number(item.qtty_consigned),
@@ -181,7 +181,20 @@ class OrderConsignmentCardController extends Base {
           replacements: [tb_institution_id],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
-          resolve(data);
+          var dataResult = [];
+          for (var item of data) {
+            dataResult.push({
+              tb_product_id: item.tb_product_id,
+              name_product: item.name_product,
+              bonus: Number(item.bonus),
+              leftover: Number(item.leftover),
+              devolution: Number(item.devolution),
+              qtty_consigned: Number(item.qtty_consigned),
+              new_consignment: Number(item.new_consignment),
+              unit_value: Number(item.unit_value),
+            });
+          }
+          resolve(dataResult);
         })
         .catch(err => {
           reject("OrderConsignmentCard.getSupplyingList: " + err);

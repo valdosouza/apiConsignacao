@@ -914,7 +914,7 @@ class OrderConsignmentController extends Base {
                     name_customer: data.nick_trade,
                     tb_salesman_id: 0,
                     name_salesman: "",
-                    current_debit_balance: "0.00",
+                    current_debit_balance: 0,
                   };
                   result.order = dataOrder;
                   const dataItems = await consignmentCard.getSupplyingNewList(tb_institution_id);
