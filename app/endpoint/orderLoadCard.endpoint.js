@@ -4,6 +4,7 @@ const OrderLoadCardController = require("../controller/orderLoadCard.controller.
 const entityHasStockList = require("../controller/entityHasStockList.controller.js");
 const OrderStockAdjustController = require('../controller/orderStockAdjust.controller.js');
 
+
 class OrderLoadEndPoint {
 
   static create = (req, res) => {
@@ -16,6 +17,7 @@ class OrderLoadEndPoint {
   static closure = (req, res) => {
     OrderLoadCardController.getById(req.body.tb_institution_id, req.body.id)
       .then(async data => {
+        console.log(data[0].status);
         if (data[0].status = 'A') {
           var dataItems = [];
           var objItem = {};
@@ -53,7 +55,7 @@ class OrderLoadEndPoint {
 
           await OrderStockAdjustController.saveByCard(req.body);
           await OrderStockTransferController.saveLoadCardByCard(req.body);
-
+          await OrderLoadCardController.finished(req.body);
           res.send({ result: "Carregamento foi encerrado com Sucesso" });
         } else {
           res.send({ result: "Carregamento já está encerrado" });

@@ -83,7 +83,7 @@ class OrderController extends Base {
 
   static async update(order) {
     const promise = new Promise((resolve, reject) => {
-      if (order.validity == '') delete order.validity;      
+      if (order.validity == '') delete order.validity;
       Tb.update(order, {
         where: {
           id: order.id,
@@ -151,6 +151,27 @@ class OrderController extends Base {
               reject("Erro:"+ err);
           });
       */
+    });
+    return promise;
+  }
+
+  static async finished(body) {
+    const promise = new Promise(async (resolve, reject) => {
+      Tb.update({
+        status: "F"
+      }, {
+        where: {
+          id: body.order.id,
+          tb_institution_id: body.order.tb_institution_id,
+          terminal: 0
+        }
+      })
+        .then((data) => {
+          resolve(data);
+        })
+        .catch(err => {
+          reject("order.Controller.finished:" + err);
+        });
     });
     return promise;
   }

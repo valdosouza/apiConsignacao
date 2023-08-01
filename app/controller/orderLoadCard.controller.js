@@ -297,6 +297,16 @@ class OrderLoadCardController extends Base {
     return promise;
   }
 
+  static async finished(body) {
+    const promise = new Promise(async (resolve, reject) => {
+      order.finished(body)
+      .then(data => {
+        resolve(data);
+      })
+    });
+    return promise;
+  }
+
   static async delete(body) {
     const promise = new Promise((resolve, reject) => {
       resolve("Em Desenvolvimento");
