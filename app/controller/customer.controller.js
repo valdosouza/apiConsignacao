@@ -448,34 +448,27 @@ class CustomerController extends Base {
     const promise = new Promise(async (resolve, reject) => {
 
       var sqltxt = 
-        'select tb_institution_id, tb_sales_route_id, name_sales_route, sequence, id,  name_company,  nick_trade,  doc_kind, doc_number,street,nmbr,complement, active,turn_back ,dt_record '+
-        'from ( '+
-        '    select vw_order.*, ord.dt_record '+
-        '    from (  '+
-        '          select distinct vwsr.* , max(ora.id) order_id '+
-        '          from ('+
-        this.getSQLListSalesRouteTodos()+
-        ') vwsr '+
-        '   left outer join tb_order_attendance ora  '+
-        '   on (vwsr.tb_institution_id = ora.tb_institution_id)  '+
-        '     and (vwsr.id = ora.tb_customer_id) '+
-        '  where (ora.finished = ?)  '+
-        '  group by id '+
-        ') vw_order '+
-        '   left outer join tb_order ord '+
-        '    on (ord.tb_institution_id = vw_order.tb_institution_id) '+
-        '        and (vw_order.order_id = ord.id) '+
-        '        and (ord.dt_record = ?) '+
-        ') ate  '+
-        'where (ate.dt_record is null)  '+
-        '  and ( ate.active = ?) '+
-        '  and ( turn_back = ?)'+         
-        'order by 4 ';
+      'select tb_institution_id, tb_sales_route_id, name_sales_route, sequence, id,  name_company,  nick_trade,  doc_kind, doc_number,street,nmbr,complement, active,turn_back ,dt_record '+
+      'from ( '+
+      '                select distinct vwsr.* , ord.dt_record '+
+      '                from ( '+
+                        this.getSQLListSalesRouteTodos() +
+      '                ) vwsr '+
+      '                    left outer join tb_order_attendance ora     on (vwsr.tb_institution_id = ora.tb_institution_id)       and (vwsr.id = ora.tb_customer_id) '+
+      '                    left outer join tb_order ord                on (ord.tb_institution_id = ora.tb_institution_id)    and (ora.id = ord.id)         and ( (ord.dt_record = ?) or (ord.dt_record is null) ) '+
+      '                    where (ora.finished = ?) or (active = ?) '+
+      '                    order by id desc '+
+      ') ate '+
+      'where (ate.dt_record is null) '+
+      'and ( ate.active = ?) '+
+      'and ( turn_back = ?) '+
+      'order by 4  ';
+
            
       Tb.sequelize.query(
         sqltxt,
         {
-          replacements: [tb_institution_id, tb_sales_route_id, tb_region_id,'S', tb_institution_id, tb_sales_route_id, tb_region_id, 'S','S',dt_record,'S','N'],
+          replacements: [tb_institution_id, tb_sales_route_id, tb_region_id,'S', tb_institution_id, tb_sales_route_id, tb_region_id, 'S',dt_record,'S','S','S','N'],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve(data);

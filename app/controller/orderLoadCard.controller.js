@@ -121,7 +121,7 @@ class OrderLoadCardController extends Base {
         'ord.tb_institution_id,' +
         'ord.dt_record,' +
         'ord.tb_user_id,' +
-        'user.nick_trade name_user, '+
+        'user.nick_trade name_user, ' +
         'occ.tb_product_id, ' +
         'pd.description name_product, ' +
         'occ.stock_balance, ' +
@@ -136,8 +136,8 @@ class OrderLoadCardController extends Base {
         '  inner join tb_order ord ' +
         '  on (occ.id = ord.id)' +
         '    and (occ.tb_institution_id = ord.tb_institution_id)' +
-        '  inner join tb_entity user '+
-        '  on (ord.tb_user_id = user.id)'+
+        '  inner join tb_entity user ' +
+        '  on (ord.tb_user_id = user.id)' +
         'where ( ord.id =?) ' +
         ' and (ord.tb_institution_id =?)',
         {
@@ -157,8 +157,8 @@ class OrderLoadCardController extends Base {
             for (var item of data) {
               dataResult.items.push({
                 id: item.id,
-                tb_product_id : item.tb_product_id,
-                name_product : item.name_product,
+                tb_product_id: item.tb_product_id,
+                name_product: item.name_product,
                 stock_balance: Number(item.stock_balance),
                 sale: Number(item.sale),
                 bonus: Number(item.bonus),
@@ -244,11 +244,13 @@ class OrderLoadCardController extends Base {
   static getNewOrderLoadCard(tb_institution_id, tb_user_id, dt_record) {
     const promise = new Promise(async (resolve, reject) => {
       try {
+        var orderId = 0;
         var resData = [];
         var data = [];
         data = await this.getByUser(tb_institution_id, tb_user_id);
         if (data.length > 0) {
           for (var item of data) {
+            if (orderId == 0) orderId = item.id;
             resData.push(
               {
                 id: item.id,
@@ -279,7 +281,15 @@ class OrderLoadCardController extends Base {
             )
           }
         }
-        resolve(resData);
+        resolve({
+          id: orderId,
+          tb_institution_id: parseInt(tb_institution_id),
+          tb_user_id: parseInt(tb_user_id),
+          name_user: '',
+          dt_record: '',
+          items: resData
+        }
+        );
       } catch (err) {
         reject("OrderLoadCard.getNewOrderLoadCard: " + err);
       }
