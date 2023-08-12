@@ -263,28 +263,25 @@ class OrderConsignmentController extends Base {
         '        on (ord.id = orc.id)  ' +
         '            and (ord.tb_institution_id = orc.tb_institution_id)  ' +
         '    WHERE orc.id = ( ' +
-        '                    SELECT MAX(orca.id) ' +
-        '                    FROM tb_order_consignment orca ' +
-        '                        inner join tb_order orda ' +
-        '                        on (orda.id = orca.id) ' +
-        '                            and (orda.tb_institution_id = orca.tb_institution_id) ' +
-        '                    WHERE ( orca.tb_institution_id = orc.tb_institution_id ) ' +
-        '                        and ( orca.tb_customer_id = orc.tb_customer_id ) ' +
-        '                        and (orda.dt_record <= ? ) ' +
-        '                    GROUP BY orca.tb_customer_id  ' +
-        '                    ) ' +
+                            'SELECT MAX(orca.id) ' +
+                            'FROM tb_order_consignment orca ' +
+                            '    inner join tb_order orda ' +
+                            '    on (orda.id = orca.id) ' +
+                            '        and (orda.tb_institution_id = orca.tb_institution_id) ' +
+                            'WHERE ( orca.tb_institution_id = orc.tb_institution_id ) ' +
+                            '    and ( orca.tb_customer_id = orc.tb_customer_id ) ' +
+                            '    and (orda.dt_record <= ? ) ' +
+                            'GROUP BY orca.tb_customer_id  ' +
+                            ') ' +
         '    and (orc.tb_institution_id = ?) ' +
         '    and orc.current_debit_balance > 0  ' +
         '    and (orc.kind = ? ) ' +
         '                        and (orc.tb_customer_id in ( ' +
-        '                                                      select tb_customer_id ' +
-        '                                                      from tb_order_attendance oat ' +
-        '                                                          inner join tb_order ord  ' +
-        '                                                          on (ord.id = oat.id)  ' +
-        '                                                              and (ord.tb_institution_id = oat.tb_institution_id) ' +
-        '                                                      where oat.tb_institution_id = ?  ' +
-        '                                                            and ord.dt_record <= ?  ' +
-        '                                                            and (ord.tb_user_id = ?) ' +
+                                                              'select ctm.id '+
+                                                              'from  tb_customer ctm '+
+                                                              '  inner join tb_region rgn '+
+                                                              '  on (rgn.id = ctm.tb_region_id) '+
+                                                              'where rgn.tb_salesman_id = ? '+
         '                                                      ))  ' +
         ') current_debit_balance  ';
 
