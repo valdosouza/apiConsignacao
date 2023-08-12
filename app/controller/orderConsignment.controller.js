@@ -253,7 +253,7 @@ class OrderConsignmentController extends Base {
 
   static async getSaldoDevedor(tb_institution_id, tb_salesman_id, dt_record) {
     const promise = new Promise((resolve, reject) => {
-
+      console.log(tb_salesman_id);
       var sqltxt =
         'select sum(current_debit_balance) saldoDevedor ' +
         'from ( ' +
@@ -289,7 +289,7 @@ class OrderConsignmentController extends Base {
       Tb.sequelize.query(
         sqltxt,
         {
-          replacements: [dt_record, tb_institution_id, 'supplying', tb_institution_id, dt_record, tb_salesman_id],
+          replacements: [dt_record, tb_institution_id, 'supplying',  tb_salesman_id],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve({
