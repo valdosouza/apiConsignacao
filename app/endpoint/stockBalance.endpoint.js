@@ -10,16 +10,16 @@ class StockBalanceEndPoint {
     })
   }
 
-  static getListBySalesman(req, res) {
-    StockBalanceController.getListBySalesman(req.params.tb_institution_id,
+  static getBySalesman(req, res) {
+    StockBalanceController.getBySalesman(req.params.tb_institution_id,
                                             req.params.tb_salesman_id)
     .then(data => {
       res.send(data);
     })
   }
   
-  static getListAllCustomer(req, res) {
-    StockBalanceController.getListAllCustomer(req.params.tb_institution_id,
+  static getAllCustomer(req, res) {
+    StockBalanceController.getAllCustomer(req.params.tb_institution_id,
                                               req.params.tb_salesman_id)
     .then(data => {
       res.send(data);

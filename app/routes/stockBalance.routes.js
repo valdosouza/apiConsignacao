@@ -93,7 +93,7 @@ router.get("/getlist/:tb_institution_id/:tb_stock_list_id/", stockBalance.getLis
   
 /**
  * @swagger
- * /stockbalance/salesman/getlist/{tb_institution_id}/{tb_salesman_id}:
+ * /stockbalance/salesman/get/{tb_institution_id}/{tb_salesman_id}:
  *  get:
  *    summary: Return stockbalance by the salesman
  *    tags: [StockBalance]
@@ -116,11 +116,11 @@ router.get("/getlist/:tb_institution_id/:tb_stock_list_id/", stockBalance.getLis
  *      500:
  *        description: Some error happened
  */
-router.get("/salesman/getlist/:tb_institution_id/:tb_salesman_id/", stockBalance.getListBySalesman);
+router.get("/salesman/get/:tb_institution_id/:tb_salesman_id/", stockBalance.getBySalesman);
 
-/**
+/** 
  * @swagger
- * /stockbalance/customer/getlist/{tb_institution_id}/{tb_salesman_id}:
+ * /stockbalance/customer/getAll/{tb_institution_id}/{tb_salesman_id}:
  *  get:
  *    summary: Return stockbalance of all customer by the salesman
  *    tags: [StockBalance]
@@ -143,7 +143,7 @@ router.get("/salesman/getlist/:tb_institution_id/:tb_salesman_id/", stockBalance
  *      500:
  *        description: Some error happened
  */
-router.get("/customer/getlist/:tb_institution_id/:tb_salesman_id/", stockBalance.getListAllCustomer);
+router.get("/customer/getAll/:tb_institution_id/:tb_salesman_id/", stockBalance.getAllCustomer);
 
 /**
  * @swagger

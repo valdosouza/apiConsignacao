@@ -79,7 +79,7 @@ class StockBalanceController extends Base {
     return promise;
   }
 
-  static getListBySalesman(tb_institution_id, tb_salesman_id) {
+  static getBySalesman(tb_institution_id, tb_salesman_id) {
     const promise = new Promise((resolve, reject) => {
       Tb.sequelize.query(
         'select ' +
@@ -146,29 +146,26 @@ class StockBalanceController extends Base {
     return promise;
   }
 
-  static getListAllCustomer(tb_institution_id, tb_salesman_id) {
+  static getAllCustomer(tb_institution_id, tb_salesman_id) {
     const promise = new Promise((resolve, reject) => {
       Tb.sequelize.query(
-        'select ' +
-        'stb.tb_merchandise_id, ' +
-        'prd.description name_merchandise, ' +
-        'sum(stb.quantity) quantity ' +
-        'from tb_stock_balance stb ' +
-        '  inner join tb_stock_list stl ' +
-        '  on (stl.id = stb.tb_stock_list_id) ' +
-        '    and (stl.tb_institution_id = stb.tb_institution_id) ' +
-        '  inner join tb_product prd ' +
-        '  on (prd.id = stb.tb_merchandise_id) ' +
-        '  inner join tb_entity_has_stock_list ehs ' +
-        '  on (ehs.tb_stock_list_id = stb.tb_stock_list_id) ' +
-        '    and (ehs.tb_institution_id = stb.tb_institution_id) ' +
-        '  inner join tb_customer ct ' +
-        '  on (ct.id = ehs.tb_entity_id) ' +
-        '   inner join tb_region rg '+
-        '   on (rg.id = ct.tb_region_id) '+
-        '    and (ct.tb_institution_id = ehs.tb_institution_id) ' +
-        'where stb.tb_institution_id =?  ' +
-        'and rg.tb_salesman_id =?  ' +
+        'select stb.tb_merchandise_id, prd.description name_merchandise, sum(stb.quantity) quantity '+
+        'from tb_stock_balance stb '+
+        '    inner join tb_stock_list stl '+
+        '    on (stl.id = stb.tb_stock_list_id) '+
+        '        and (stl.tb_institution_id = stb.tb_institution_id) '+
+        '    inner join tb_product prd '+
+        '    on (prd.id = stb.tb_merchandise_id) '+
+        '        and (prd.tb_institution_id = stb.tb_institution_id) '+
+        '    inner join tb_entity_has_stock_list ehs '+
+        '    on (ehs.tb_stock_list_id = stb.tb_stock_list_id) '+
+        '        and (ehs.tb_institution_id = stb.tb_institution_id)  '+
+        '    inner join tb_customer ctm '+
+        '    on (ctm.id = ehs.tb_entity_id) '+
+        '    inner join tb_region rgn '+
+        '    on (rgn.id = ctm.tb_region_id) '+
+        'where (rgn.tb_institution_id =?) '+
+        '  and (rgn.tb_salesman_id = ?) '+
         'group by 1,2 ',
         {
           replacements: [tb_institution_id, tb_salesman_id],
