@@ -41,14 +41,18 @@ class AuditLogOrcSaleController extends AuditLog {
       try {
         Tb.sequelize
           .query(
-            'select distinct orc.id, orc.tb_institution_id, orc.terminal ' +
-            'from tb_order_consignment orc ' +
-            '    inner join tb_order_consignment_card orcd ' +
-            '    on (orcd.id = orc.id) ' +
-            '    and (orcd.tb_institution_id = orc.tb_institution_id) ' +
+            'select distinct orc.id, orc.tb_institution_id, orc.terminal '+
+            'from tb_order_consignment orc '+
+            '    inner join tb_order_consignment_card orcd '+
+            '    on (orcd.id = orc.id) '+
+            '    and (orcd.tb_institution_id = orc.tb_institution_id) '+
+            '    left outer join tb_order_sale ors '+
+            '    on (ors.id = orc.id) '+
+            '    and (ors.tb_institution_id = orc.tb_institution_id)     '+
             'where orc.createdat >= ? ' +
             ' and orcd.kind = ? ' +
-            ' and qtty_sold > 0 ',
+            ' and qtty_sold > 0 '+
+            'and ors.id is null ',            
             {
               replacements: ['2023-09-12', 'checkpoint'],
               type: Tb.sequelize.QueryTypes.SELECT,
