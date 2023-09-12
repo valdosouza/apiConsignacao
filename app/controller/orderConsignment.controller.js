@@ -467,7 +467,7 @@ class OrderConsignmentController extends Base {
             bonus: item.bonus,
             qtty_consigned: item.qtty_consigned,
             leftover: item.leftover,
-            qtty_sold: item.qtty_sold,
+            qtty_sold: item.sale,
             unit_value: item.unit_value
 
           };

@@ -64,4 +64,16 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  */
  router.post("/ordersalecard/checkitems", auditlog.orderSaleCardCheckItems);
 
+ /**
+ * @swagger
+ * /auditlog/orderconsigment/saveordersale:
+ *   post:
+ *     summary: Create a new audit log
+ *     tags: [AuditLog]
+ *     responses:
+ *      200:
+ *        description: The auditLog was executed
+ */
+ router.post("/orderconsigment/saveordersale", auditlog.orderConsignmentSaveSale);
+
 module.exports = router;  

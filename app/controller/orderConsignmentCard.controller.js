@@ -70,7 +70,7 @@ class OrderConsignmentCardController extends Base {
               bonus: Number(item.bonus),
               qtty_consigned: Number(item.qtty_consigned),
               leftover: Number(item.leftover),
-              qtty_sold: Number(item.qtty_sold),
+              sale: Number(item.qtty_sold),
               unit_value: Number(item.unit_value),
             });
           }

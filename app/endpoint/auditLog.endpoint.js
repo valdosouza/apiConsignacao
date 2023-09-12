@@ -1,6 +1,8 @@
 const AuditLogOrcSupplying = require("../controller/auditLogOrcSupplying.controller.js");
 const AuditLogOrcCheckout  = require("../controller/auditLogOrcCheckout.controller.js");
 const AuditLogOrderSaleCard = require("../controller/auditLogOrderSaleCard.controller.js");
+const AuditLogOrcSale = require("../controller/auditLogOrcSale.controller.js");
+
 
 class AuditLogEndPoint {
 
@@ -27,6 +29,14 @@ class AuditLogEndPoint {
       res.send(data);
     })
     
+  }
+
+  static orderConsignmentSaveSale = (req, res) => {    
+    
+    AuditLogOrcSale.doExecute()
+    .then(data => {      
+      res.send(data);
+    })    
   }
 
 }

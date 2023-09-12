@@ -631,7 +631,7 @@ class OrderSaleController extends Base {
         for (var item of items) {
           dataItem = {
             id: 0,
-            tb_institution_id: item.tb_institution_id,
+            tb_institution_id: body.order.tb_institution_id,
             tb_order_id: item.tb_order_id,
             terminal: 0,
             tb_order_item_id: item.id,
@@ -643,8 +643,7 @@ class OrderSaleController extends Base {
             tb_merchandise_id: item.tb_product_id,
             quantity: item.quantity,
             operation: "Sale"
-          };
-          console.log(dataItem);
+          };          
           await stockStatement.insert(dataItem);
 
         };

@@ -480,7 +480,7 @@ class CustomerController extends Base {
     const promise = new Promise(async (resolve, reject) => {
 
       var sqltxt = 
-      'select * '+
+      'select distinct vwsr.*  '+
       'from ( '+
         this.getSQLListSalesRouteTodos()+
       '  ) vwsr '+
