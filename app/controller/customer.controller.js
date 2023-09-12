@@ -385,7 +385,7 @@ class CustomerController extends Base {
   }
   static getSQLListSalesRouteTodos() {
       var sqltxt = 
-      '  Select src.tb_institution_id, src.tb_sales_route_id, sr.description name_sales_route, src.sequence, et.id,  et.name_company,  et.nick_trade,  "F" doc_kind, pe.cpf doc_number,adr. street,adr.nmbr,adr.complement, src.active,src.turn_back ' +
+      '  Select src.tb_institution_id, src.tb_sales_route_id, sr.description name_sales_route, src.sequence, et.id tb_customer_id,  et.name_company,  et.nick_trade,  "F" doc_kind, pe.cpf doc_number,adr. street,adr.nmbr,adr.complement, src.active,src.turn_back ' +
         'from tb_customer ct  ' +
         '  inner join tb_entity et  ' +
         '  on (ct.id = et.id)  ' +
@@ -404,7 +404,7 @@ class CustomerController extends Base {
         ' and (ct.tb_region_id = ?)' +
         ' and (ct.active = ?) '+
         'union ' +
-        'Select src.tb_institution_id, src.tb_sales_route_id, sr.description name_sales_route, src.sequence, et.id,  et.name_company,  et.nick_trade,  "J" doc_kind, co.cnpj doc_number,adr. street,adr.nmbr,adr.complement , src.active,src.turn_back ' +
+        'Select src.tb_institution_id, src.tb_sales_route_id, sr.description name_sales_route, src.sequence, et.id tb_customer_id,  et.name_company,  et.nick_trade,  "J" doc_kind, co.cnpj doc_number,adr. street,adr.nmbr,adr.complement , src.active,src.turn_back ' +
         'from tb_customer ct  ' +
         '  inner join tb_entity et  ' +
         '  on (ct.id = et.id)  ' +
@@ -452,7 +452,7 @@ class CustomerController extends Base {
       'from ( '+
              this.getSQLListSalesRouteTodos() +
       ') vwsr '+
-      'where id not in( '+
+      'where tb_customer_id not in( '+
       '  select ora.tb_customer_id '+
       '  from tb_order_attendance ora '+
       '     inner join tb_order ord '+
@@ -486,7 +486,7 @@ class CustomerController extends Base {
       '  ) vwsr '+
       '  inner join tb_order_attendance ora '+
       '  on (vwsr.tb_institution_id = ora.tb_institution_id) '+
-      '    and (vwsr.id = ora.tb_customer_id) '+
+      '    and (vwsr.tb_customer_id = ora.tb_customer_id) '+
       '  inner join tb_order ord '+
       '  on (ora.tb_institution_id = ord.tb_institution_id) '+
       '    and (ora.id = ord.id)     '+

@@ -644,6 +644,7 @@ class OrderSaleController extends Base {
             quantity: item.quantity,
             operation: "Sale"
           };
+          console.log(dataItem);
           await stockStatement.insert(dataItem);
 
         };
