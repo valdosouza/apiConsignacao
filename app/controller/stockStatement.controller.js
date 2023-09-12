@@ -16,6 +16,33 @@ class StockStatementController extends Base {
     });
     return promise;
   }
+  
+  static getByAudit(params) {
+    const promise = new Promise((resolve, reject) => {
+      Tb.sequelize.query(
+        'SELECT id '+
+        'FROM tb_stock_statement  '+
+        'WHERE tb_institution_id =? '+
+        ' and terminal = ? '+
+        ' and tb_order_id = ? '+
+        ' and tb_order_item_id = ? '+
+        ' and operation = ? ',
+        {
+          replacements: [params.tb_institution_id, params.terminal, params.tb_order_id, params.tb_order_item_id,params.operation],
+          type: Tb.sequelize.QueryTypes.SELECT
+        }).then(data => {
+          if (data.length > 0){
+            resolve(data[0]);
+          }else{
+            resolve({id:0});
+          }
+        })
+        .catch(err => {
+          reject(new Error("stockStatement.gelist:" + err));
+        });
+    });
+    return promise;
+  }
 
   static getListByOrder(tb_institution_id, tb_order_id) {
     const promise = new Promise((resolve, reject) => {

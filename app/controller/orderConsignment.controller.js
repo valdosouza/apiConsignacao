@@ -1,12 +1,12 @@
 const Base = require('./base.controller.js');
 const db = require("../model");
 const Tb = db.orderconsignment;
-const order = require('./order.controller.js');
+const orderController = require('./order.controller.js');
 const consignmentCard = require('./orderConsignmentCard.controller.js');
 const orderPaid = require('./orderPaid.controller.js');
 const { entity } = require('../model');
 const entityController = require('./entity.controller.js');
-const orderItem = require('./orderItemBonus.controller.js');
+const orderItem = require('./orderItemConsignment.controller.js');
 const stockStatement = require('./stockStatement.controller.js');
 
 class OrderConsignmentController extends Base {
@@ -252,8 +252,7 @@ class OrderConsignmentController extends Base {
   };
 
   static async getSaldoDevedor(tb_institution_id, tb_salesman_id, dt_record) {
-    const promise = new Promise((resolve, reject) => {
-      console.log(tb_salesman_id);
+    const promise = new Promise((resolve, reject) => {      
       var sqltxt =
         'select sum(current_debit_balance) saldoDevedor ' +
         'from ( ' +
@@ -631,37 +630,6 @@ class OrderConsignmentController extends Base {
         })
         .catch(err => {
           reject("orderstockadjust.getlist: " + err);
-        });
-    });
-    return promise;
-  }
-
-  static getItemList(tb_institution_id, id) {
-    const promise = new Promise((resolve, reject) => {
-      Tb.sequelize.query(
-        'select ' +
-        'ori.* ' +
-        'from tb_order ord ' +
-        '  inner join tb_order_consignment orc ' +
-        '  on (orc.id = ord.id) ' +
-        '    and (orc.tb_institution_id = ord.tb_institution_id) ' +
-        '    and (orc.terminal = ord.terminal) ' +
-        '  inner join tb_order_item ori  ' +
-        '  on (orc.id = ori.tb_order_id)  ' +
-        '    and (orc.tb_institution_id = ori.tb_institution_id) ' +
-        '    and (orc.terminal = ori.terminal)  ' +
-        'where (ord.tb_institution_id =? )  ' +
-        ' and ( orc.id =? ) ' +
-        ' and ( ori.kind =? ) ' +
-        ' and ( orc.kind = ? )',
-        {
-          replacements: [tb_institution_id, id, 'Consignment', 'supplying'],
-          type: Tb.sequelize.QueryTypes.SELECT
-        }).then(data => {
-          resolve(data);
-        })
-        .catch(err => {
-          reject("orderBonus.getItemlist: " + err);
         });
     });
     return promise;
@@ -1050,7 +1018,7 @@ class OrderConsignmentController extends Base {
       try {
         var status = await this.getStatus(body.tb_institution_id, body.id);
         if (status == 'A') {
-          var items = await orderItem.getList(body.tb_institution_id, body.id);
+          var items = await orderItem.getList(body.tb_institution_id, body.id,'Consignment');
           var dataItem = {};
           for (var item of items) {
             dataItem = {
@@ -1182,7 +1150,7 @@ class OrderConsignmentController extends Base {
   static async closurebyCard(body, operation) {
     const promise = new Promise(async (resolve, reject) => {
       try {
-        var items = await this.getItemList(body.order.tb_institution_id, body.order.id, operation);
+        var items = await orderItem.getList(body.order.tb_institution_id, body.order.id, operation,'Consignment');
         var dataItem = {};
         for (var item of items) {
           dataItem = {
@@ -1210,7 +1178,7 @@ class OrderConsignmentController extends Base {
           await stockStatement.insert(dataItem);
 
         };
-        await order.updateStatus(body.order.tb_institution_id, body.order.id, 'F');
+        await orderController.updateStatus(body.order.tb_institution_id, body.order.id, 'F');
         resolve("200");
       } catch (err) {
         reject(err);

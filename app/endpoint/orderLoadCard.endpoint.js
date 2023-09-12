@@ -17,7 +17,6 @@ class OrderLoadEndPoint {
   static closure = (req, res) => {
     OrderLoadCardController.getById(req.body.tb_institution_id, req.body.id)
       .then(async data => {
-        console.log(data[0].status);
         if (data[0].status = 'A') {
           var dataItems = [];
           var objItem = {};
@@ -35,11 +34,11 @@ class OrderLoadEndPoint {
           req.body['items'] = dataItems
 
           //Retorna do estoque do vendedor - Venda direta pelo estoque do vendedor ....lembrar da venda direta pelo estoque do cliente
-          var stockSalesman = await entityHasStockList.getByEntity(req.body.tb_institution_id, req.body.tb_user_id);
+          var stockSalesman = await entityHasStockList.getByEntity(req.body.tb_institution_id, req.body.tb_user_id,'salesman');
           //Usar o grupo estoque manager por que pode ser usado tanto salesman quanto o customer    
           req.body['StockDestiny'] = stockSalesman[0];
           //Retorna do estoque do Estabelecimento-
-          var stockInstitution = await entityHasStockList.getByEntity(req.body.tb_institution_id, req.body.tb_institution_id);
+          var stockInstitution = await entityHasStockList.getByEntity(req.body.tb_institution_id, req.body.tb_institution_id,'institution');
           //Usar o grupo estoque manager por que pode ser usado tanto salesman quanto o customer    
           req.body['StockOrigen'] = stockInstitution[0];
 

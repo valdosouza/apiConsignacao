@@ -117,24 +117,28 @@ class OrderConsignmentCardController extends Base {
   static getSupplyingList(tb_institution_id, id) {
     const promise = new Promise((resolve, reject) => {
       Tb.sequelize.query(
-        '  select ' +
-        '  occ.tb_product_id, ' +
-        '  pdt.description name_product, ' +
-        '  occ.bonus, ' +
-        '  occ.leftover, ' +
-        '  occ.devolution, ' +
-        '  occ.new_consignment,' +
-        '  occ.qtty_consigned, ' +
-        '  occ.unit_value ' +
-        'from tb_product pdt ' +
-        '    left outer join tb_order_consignment_card occ ' +
-        '    on (pdt.id = occ.tb_product_id) ' +
-        '       and (pdt.tb_institution_id = occ.tb_institution_id) ' +
-        'where pdt.tb_institution_id  =? ' +
-        ' and occ.id =? ' +
-        ' and kind =? ',
+        'SELECT '+
+        'pdt.id AS tb_product_id, '+
+        'pdt.description AS name_product, '+
+        'COALESCE(occ.bonus, 0) AS bonus, '+
+        'COALESCE(occ.leftover, 0) AS leftover, '+
+        'COALESCE(occ.devolution, 0) AS devolution, '+
+        'COALESCE(occ.new_consignment, 0) AS new_consignment, '+
+        'COALESCE(occ.qtty_consigned, 0) AS qtty_consigned, '+
+        'COALESCE(occ.unit_value, prc.price_tag) AS unit_value '+
+        'from tb_product pdt      '+
+        '    inner join tb_price prc '+
+        '    on (prc.tb_product_id = pdt.id) '+
+        '      and (prc.tb_institution_id = pdt.tb_institution_id) '+
+        '      and (prc.tb_price_list_id = 1) '+
+        '    left outer join tb_order_consignment_card occ      '+
+        '    on (pdt.id = occ.tb_product_id)         '+
+        '    and ((pdt.tb_institution_id = occ.tb_institution_id) or (occ.tb_institution_id is null)) '+
+        '    and ((occ.id = ?) or (occ.id is null)) '+
+        '    and ((kind =? ) or (kind is null)) '+
+        'where  pdt.tb_institution_id = ? ',
         {
-          replacements: [tb_institution_id, id, 'supplying'],
+          replacements: [id, 'supplying',tb_institution_id],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           var dataResult = [];

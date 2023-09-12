@@ -89,29 +89,55 @@ class OrderSaleController extends Base {
     return promise;
   }
 
-  static getList(tb_institution_id) {
+  static getList(body) {
     const promise = new Promise((resolve, reject) => {
+      var nick_trade = "";
+      var sqltxt =      
+      '  select ' +
+      '  ord.id, ' +
+      '  ord.tb_institution_id, ' +
+      '  ord.tb_user_id, ' +
+      '  ors.tb_customer_id,' +
+      '  etd.name_company name_entity,' +
+      '  ord.dt_record, ' +
+      '  ors.number, ' +
+      '  ord.status, ' +
+      ' CAST(ord.note AS CHAR(1000) CHARACTER SET utf8) note ' +
+      'from tb_order ord  ' +
+      '   inner join tb_order_sale ors ' +
+      '   on (ors.id = ord.id)  ' +
+      '     and (ors.tb_institution_id = ord.tb_institution_id) ' +
+      '     and (ors.terminal = ord.terminal) ' +
+      '   inner join tb_entity etd ' +
+      '   on (etd.id = ors.tb_customer_id)  ' +
+      'where (ord.tb_institution_id =? ) '+
+      '  and (ord.terminal = ?) '+
+      'and (ors.tb_salesman_id = ?) ' +
+      ' AND (ord.status <> ?) ';
+
+      if (body.tb_customer_id > 0) {     
+        sqltxt += ' and (ors.tb_customer_id = ? ) ';
+      } else {
+        sqltxt += ' and (ors.tb_customer_id <> ?) ';
+      }
+
+
+      if (body.nick_trade != "") {     
+        nick_trade = body.nick_trade;
+        sqltxt += ' and (etd.nick_trade like ? ) ';
+      } else {
+        nick_trade = "";
+        sqltxt += ' and (etd.nick_trade <> ?) ';
+      }
+      sqltxt +=
+        ' order by number DESC '+
+        ' limit ' + ((body.page - 1) * 20) + ',20 ';   
+        
+        
       Tb.sequelize.query(
-        '  select ' +
-        '  ord.id, ' +
-        '  ord.tb_institution_id, ' +
-        '  ord.tb_user_id, ' +
-        '  ors.tb_customer_id,' +
-        '  etd.name_company name_entity,' +
-        '  ord.dt_record, ' +
-        '  ors.number, ' +
-        '  ord.status, ' +
-        ' CAST(ord.note AS CHAR(1000) CHARACTER SET utf8) note ' +
-        'from tb_order ord  ' +
-        '   inner join tb_order_sale ors ' +
-        '   on (ors.id = ord.id)  ' +
-        '     and (ors.tb_institution_id = ord.tb_institution_id) ' +
-        '     and (ors.terminal = ord.terminal) ' +
-        '   inner join tb_entity etd ' +
-        '   on (etd.id = ors.tb_customer_id)  ' +
-        'where (ord.tb_institution_id =? ) ',
+        sqltxt,
         {
-          replacements: [tb_institution_id],
+          replacements: [body.tb_institution_id, 0, body.tb_salesman_id, 'D', body.tb_customer_id, nick_trade],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve(data);
@@ -123,35 +149,6 @@ class OrderSaleController extends Base {
     return promise;
   }
 
-  static getItemList(tb_institution_id, id) {
-    const promise = new Promise((resolve, reject) => {
-      Tb.sequelize.query(
-        'select ' +
-        'ori.* ' +
-        'from tb_order ord ' +
-        '  inner join tb_order_sale ors ' +
-        '  on (ors.id = ord.id) ' +
-        '    and (ors.tb_institution_id = ord.tb_institution_id) ' +
-        '    and (ors.terminal = ord.terminal) ' +
-        '  inner join tb_order_item ori ' +
-        '  on (ors.id = ori.tb_order_id) ' +
-        '    and (ors.tb_institution_id = ori.tb_institution_id) ' +
-        '    and (ors.terminal = ori.terminal)  ' +
-        'where (ord.tb_institution_id =? ) ' +
-        'and (ors.id = ?) ' +
-        ' and ori.kind =? ',
-        {
-          replacements: [tb_institution_id, id, 'Sale'],
-          type: Tb.sequelize.QueryTypes.SELECT
-        }).then(data => {
-          resolve(data);
-        })
-        .catch(err => {
-          reject("orderSale.getItemlist: " + err);
-        });
-    });
-    return promise;
-  }
   static getQttyByDay(tb_institution_id, tb_salesman_id, dt_record, tb_product_id) {
     const promise = new Promise((resolve, reject) => {
       Tb.sequelize.query(
@@ -215,7 +212,11 @@ class OrderSaleController extends Base {
           replacements: [tb_institution_id, id],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
-          resolve(data[0]);
+          if (data.length > 0) {
+            resolve(data[0]);
+          } else {
+            resolve({ id: 0 });
+          }
         })
         .catch(err => {
           reject('orderstockadjust.get: ' + err);
@@ -259,6 +260,8 @@ class OrderSaleController extends Base {
         result.order = dataOrder;
         const dataItems = await orderItem.getList(tb_institution_id, tb_order_id);
         result.items = dataItems;
+        const dataPayments = await orderPaid.getList(tb_institution_id, tb_order_id);
+        result.payments = dataPayments;
 
         resolve(result);
       }
@@ -574,7 +577,7 @@ class OrderSaleController extends Base {
       try {
         var qtde = 0;
         for (var item of body.items) {
-          qtde += item.qtty_sold;
+          qtde += item.sale;
         }
         if (qtde > 0) {
           body.order['number'] = 0;
@@ -595,7 +598,7 @@ class OrderSaleController extends Base {
       try {
         var dataItem = {};
         for (var item of body.items) {
-          if (item.qtty_sold > 0) {
+          if (item.sale > 0) {
             dataItem = {
               id: 0,
               tb_institution_id: body.order.tb_institution_id,
@@ -603,7 +606,7 @@ class OrderSaleController extends Base {
               terminal: 0,
               tb_stock_list_id: body.StockOrigen.tb_stock_list_id,//Neste caso via card na consignação deve informar o estoque do cliente 
               tb_product_id: item.tb_product_id,
-              quantity: item.qtty_sold,
+              quantity: item.sale,
               unit_value: item.unit_value,
               kind: 'Sale',
             };
@@ -623,7 +626,7 @@ class OrderSaleController extends Base {
   static async closurebyCard(body) {
     const promise = new Promise(async (resolve, reject) => {
       try {
-        var items = await this.getItemList(body.order.tb_institution_id, body.order.id);
+        var items = await orderItem.getList(body.order.tb_institution_id, body.order.id);
         var dataItem = {};
         for (var item of items) {
           dataItem = {

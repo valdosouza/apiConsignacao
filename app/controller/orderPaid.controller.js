@@ -63,32 +63,37 @@ class OrderPaidController extends Base {
   }
 
   //Lembrar que está vinculada a Consignação
-  static getList(tb_institution_id) {
+  static getList(tb_institution_id,tb_order_id) {
     const promise = new Promise((resolve, reject) => {
       Tb.sequelize.query(
-        '  select ' +
-        '  ord.id, ' +
-        '  ord.tb_institution_id, ' +
-        '  ord.tb_user_id, ' +
-        '  ora.tb_entity_id,' +
-        '  etd.name_company name_entity,' +
-        '  ord.dt_record, ' +
-        '  ora.number, ' +
-        '  ord.status, ' +
-        ' CAST(ord.note AS CHAR(1000) CHARACTER SET utf8) note ' +
-        'from tb_order ord  ' +
-        '   inner join tb_order_consignment ora ' +
-        '   on (ora.id = ord.id)  ' +
-        '     and (ora.tb_institution_id = ord.tb_institution_id) ' +
-        '     and (ora.terminal = ord.terminal) ' +
-        '   inner join tb_entity etd ' +
-        '   on (etd.id = ora.tb_entity_id)  ' +
-        'where (ord.tb_institution_id =? ) ',
+        'select '+
+        'orp.tb_payment_type_id, '+
+        'pmt.description name_payment_type, '+
+        'orp.dt_expiration, '+
+        'orp.value '+
+        'from tb_order ord   '+
+        '  inner join tb_order_paid orp  '+
+        '  on (orp.id = ord.id)   '+
+        '   and (orp.tb_institution_id = ord.tb_institution_id)  '+
+        '   and (orp.terminal = ord.terminal)  '+
+        '  inner join tb_payment_types pmt '+
+        '  on (pmt.id = orp.tb_payment_type_id)   '+
+        'where (ord.tb_institution_id =? )  '+
+        'and ord.id = ? ',
         {
-          replacements: [tb_institution_id],
+          replacements: [tb_institution_id,tb_order_id],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
-          resolve(data);
+          var dataResult = [];
+          for (var item of data) {
+            dataResult.push({
+              tb_payment_type_id : item.tb_payment_type_id,
+              name_payment_type : item.name_payment_type,
+              dt_expiration : item.dt_expiration,
+              value: Number(item.value),
+            });
+          }
+          resolve(dataResult);
         })
         .catch(err => {
           reject("OrderPaidController.getlist: " + err);

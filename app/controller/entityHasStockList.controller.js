@@ -8,7 +8,7 @@ class EntityHasStockListController extends Base {
   static async createAuto(body) {
     const promise = new Promise(async (resolve, reject) => {
       var dataResult = {};
-      var checkExist = await this.getByEntity(body.tb_institution_id, body.tb_entity_id);
+      var checkExist = await this.getByEntity(body.tb_institution_id, body.tb_entity_id,body.profile);
 
       if (checkExist.length == 0) {
         try {
@@ -25,6 +25,7 @@ class EntityHasStockListController extends Base {
                 tb_institution_id: body.tb_institution_id,
                 tb_entity_id: body.tb_entity_id,
                 tb_stock_list_id: data.id,
+                profile: body.profile,
               }
               Tb.create(dataEntityHasStockList)
                 .then((data) => {
@@ -32,6 +33,7 @@ class EntityHasStockListController extends Base {
                     tb_institution_id: data.tb_institution_id,
                     tb_entity_id: data.tb_entity_id,
                     tb_stock_list_id: data.tb_stock_list_id,
+                    profile: data.profile,
                   }
                   resolve(dataResult);
                 });
@@ -69,15 +71,16 @@ class EntityHasStockListController extends Base {
     return promise;
   }
 
-  static async getByEntity(tb_institution_id, tb_entity_id) {
+  static async getByEntity(tb_institution_id, tb_entity_id,profile) {
     const promise = new Promise((resolve, reject) => {
       Tb.sequelize.query(
         'Select * ' +
         'from tb_entity_has_stock_list  ' +
         'where ( tb_institution_id =? ) ' +
-        ' and ( tb_entity_id =? ) ',
+        ' and ( tb_entity_id =? ) '+
+        ' and (profile = ?) ',
         {
-          replacements: [tb_institution_id, tb_entity_id],
+          replacements: [tb_institution_id, tb_entity_id,profile],
           type: Tb.sequelize.QueryTypes.SELECT
         })
         .then(data => {          

@@ -117,4 +117,6 @@ db.orderItemDetached = require("./orderItemDetached.model.js")(sequelize, Sequel
 db.orderItemDetail = require("./orderItemDetail.model.js")(sequelize, Sequelize);
 db.deliveryRange = require("./deliveryRange.model.js")(sequelize, Sequelize);
 
+db.auditlog = require("./auditLog.model.js")(sequelize, Sequelize);
+
 module.exports = db;

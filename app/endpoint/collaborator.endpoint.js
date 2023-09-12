@@ -15,6 +15,7 @@ class CollaboratorEndPoint {
               tb_institution_id: data.collaborator.tb_institution_id,
               tb_entity_id: data.entity.id,
               name_entity: data.entity.nick_trade,
+              profile : 'salesman'
             }
             await entityHasStockList.createAuto(dataEntityHasStockList);
           }

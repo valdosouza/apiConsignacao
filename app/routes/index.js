@@ -96,4 +96,7 @@ routes.use("/orderloadcard", orderloadcard);
 const region = require("../routes/region.routes");
 routes.use("/region", region);
 
+const auditlog = require("../routes/auditLog.routes");
+routes.use("/auditlog", auditlog);
+
 module.exports = routes;

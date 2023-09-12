@@ -22,6 +22,15 @@ module.exports = sequelize => {
       comment: null,
       field: "tb_entity_id"
     },
+    profile: {
+      type: DataTypes.STRING(20),
+      allowNull: false,
+      defaultValue: null,
+      primaryKey: true,
+      autoIncrement: false,
+      comment: null,
+      field: "profile"
+    },
     tb_stock_list_id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,

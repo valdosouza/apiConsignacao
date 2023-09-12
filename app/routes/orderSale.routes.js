@@ -115,7 +115,22 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *           type: number 
  *         unit_value:
  *           type: number 
- 
+ * 
+ *     orderSaleParams:
+ *       type: object
+ *       properties:
+ *         page:
+ *           type: integer
+ *         tb_institution_id:
+ *           type: integer 
+ *         tb_salesman_id:
+ *           type: integer 
+ *         number:
+ *           type: integer
+ *         tb_customer_id:
+ *           type: integer
+ *         nick_trade:
+ *           type: string 
  */
  
  
@@ -151,28 +166,28 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  router.post("/", ordersale.create);
 
  
- /**
- * @swagger
- * /ordersale/getlist/{tb_institution_id}:
- *   get:
- *     summary: Returns the list of all the OrderSales
- *     tags: [OrderSale]
- *     parameters:
- *      - in: path
- *        name: tb_institution_id
- *        required: true 
- *     responses:
- *       200:
- *         description: The list of Order Sales
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/OrderSale'
- */
-
-router.get("/getlist/:tb_institution_id/", ordersale.getList);
+/**
+* @swagger
+* /ordersale/getlist/:
+*   post:
+*     summary: Returns the list of all the OrderSale
+*     tags: [OrderSale]
+*     requestBody:
+*       content:
+*         application/json:
+*           schema:
+*             $ref: '#/components/schemas/orderSaleParams'
+*     responses:
+*       200:
+*         description: The list of the payment types
+*         content:
+*           application/json:
+*             schema:
+*               type: array
+*               items:
+*                 $ref: '#/components/schemas/orderSale'
+*/
+router.post("/getlist", ordersale.getList);
   
 
 /**
@@ -295,5 +310,31 @@ router.post("/card", ordersale.saveByCard);
  */
 
  router.get("/card/newlist/:tb_institution_id/:tb_price_list_id/", ordersale.getNewOrderSaleCard);
+
+ /**
+ * @swagger
+ * /ordersale/card/get/{tb_institution_id}/{tb_order_id}:
+ *   get:
+ *     summary: Returns a orderSaleCard
+ *     tags: [OrderSale]
+ *     parameters:
+ *      - in: path
+ *        name: tb_institution_id
+ *        required: true 
+ *      - in: path
+ *        name: tb_order_id
+ *        required: true  
+ *     responses:
+ *       200:
+ *         description: Returns a orderSaleCard
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/OrderSaleCard'
+ */
+
+ router.get("/card/get/:tb_institution_id/:tb_order_id/", ordersale.getOrderSaleCard);
 
 module.exports = router;

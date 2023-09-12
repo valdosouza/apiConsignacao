@@ -37,16 +37,31 @@ class OrderItemSaleController extends Base {
         '  inner join tb_stock_list stl ' +
         '  on (stl.id = ori.tb_stock_list_id) ' +
         '    and (stl.tb_institution_id = ori.tb_institution_id) ' +
-        '  inner join tb_price_list pcl ' +
+        '  left outer join tb_price_list pcl ' +
         '  on (pcl.id = ori.tb_price_list_id) ' +
         '    and (pcl.tb_institution_id = ori.tb_institution_id) ' +
         'where ( ori.tb_institution_id =?)' +
-        ' and ( ori.tb_order_id =? )',
+        ' and ( ori.tb_order_id =? )' +
+        ' and ( ori.kind =?) ',
         {
-          replacements: [tb_institution_id, tb_order_id],
+          replacements: [tb_institution_id, tb_order_id, 'Sale'],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
-          resolve(data);
+          var dataResult = [];
+          for (var item of data) {
+            dataResult.push({
+              id: item.id,
+              tb_stock_list_id: item.tb_stock_list_id,
+              name_stock_list: item.name_stock_list,
+              tb_price_list_id: item.tb_price_list_id,
+              name_price_list: item.name_price_list,
+              tb_product_id: item.tb_product_id,
+              name_product: item.description,
+              quantity: Number(item.quantity),
+              update_status: item.update_status,
+            });
+          }
+          resolve(dataResult);
         })
         .catch(err => {
           reject("itemSale.getlist: " + err);

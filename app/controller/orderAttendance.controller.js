@@ -147,9 +147,10 @@ class OrderStockTransferController extends Base {
         tb_price_list_id: body.tb_price_list_id,
         visited: body.visited,
         charged: body.charged,
+        finished: body.finished,
         longitude: body.longitude,
         latitude: body.latitude
-      }
+      }      
       Tb.create(dataOrder)
         .then(() => {
           resolve(body);

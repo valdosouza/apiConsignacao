@@ -146,36 +146,6 @@ class OrderBonusController extends Base {
     return promise;
   }
 
-  static getItemList(tb_institution_id, id) {
-    const promise = new Promise((resolve, reject) => {
-      Tb.sequelize.query(
-        'select ' +
-        'ori.* ' +
-        'from tb_order ord ' +
-        '  inner join tb_order_bonus orb ' +
-        '  on (orb.id = ord.id) ' +
-        '    and (orb.tb_institution_id = ord.tb_institution_id) ' +
-        '    and (orb.terminal = ord.terminal) ' +
-        '  inner join tb_order_item ori ' +
-        '  on (orb.id = ori.tb_order_id) ' +
-        '    and (orb.tb_institution_id = ori.tb_institution_id) ' +
-        '    and (orb.terminal = ori.terminal)  ' +
-        'where (ord.tb_institution_id =? ) ' +
-        'and (orb.id = ?) ' +
-        ' and ori.kind =? ',
-        {
-          replacements: [tb_institution_id, id, 'bonus'],
-          type: Tb.sequelize.QueryTypes.SELECT
-        }).then(data => {
-          resolve(data);
-        })
-        .catch(err => {
-          reject("orderBonus.getItemlist: " + err);
-        });
-    });
-    return promise;
-  }
-
   static getQttyByDay(tb_institution_id, tb_salesman_id, dt_record, tb_product_id) {
     const promise = new Promise((resolve, reject) => {
       Tb.sequelize.query(
@@ -238,7 +208,11 @@ class OrderBonusController extends Base {
           replacements: [tb_institution_id, id],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
-          resolve(data[0]);
+          if (data.length > 0) {
+            resolve(data[0]);
+          } else {
+            resolve({ id: 0 });
+          }
         })
         .catch(err => {
           reject('orderBonus.get: ' + err);
@@ -509,7 +483,7 @@ class OrderBonusController extends Base {
   static async closurebyCard(body) {
     const promise = new Promise(async (resolve, reject) => {
       try {
-        var items = await this.getItemList(body.order.tb_institution_id, body.order.id);
+        var items = await orderItem.getList(body.order.tb_institution_id, body.order.id);
         var dataItem = {};
         for (var item of items) {
           dataItem = {
@@ -539,19 +513,19 @@ class OrderBonusController extends Base {
   }
 
   static async cleanUp(tb_institution_id, id) {
-    const promise = new Promise(async (resolve, reject) =>  {
+    const promise = new Promise(async (resolve, reject) => {
       try {
-        
+
         const order = {
           tb_institution_id: tb_institution_id,
-          id : id,
-          terminal:0,
-        }        
-         
-        await this.delete(order);  
+          id: id,
+          terminal: 0,
+        }
+
+        await this.delete(order);
         resolve("clenUp executado com sucesso!");
       } catch (error) {
-        reject('orderBonus.cleanUp ' + error);  
+        reject('orderBonus.cleanUp ' + error);
       }
     });
     return promise;

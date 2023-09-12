@@ -147,36 +147,6 @@ class OrderStockAdjustController extends Base {
     return promise;
   }
 
-  static getItemList(tb_institution_id, id, kind) {
-    const promise = new Promise((resolve, reject) => {
-      Tb.sequelize.query(
-        'select ' +
-        'ori.* ' +
-        'from tb_order ord  ' +
-        '  inner join tb_order_stock_adjust ora  ' +
-        '  on (ora.id = ord.id)  ' +
-        '    and (ora.tb_institution_id = ord.tb_institution_id)  ' +
-        '    and (ora.terminal = ord.terminal)  ' +
-        '  inner join tb_order_item ori  ' +
-        '  on (ora.id = ori.tb_order_id)  ' +
-        '    and (ora.tb_institution_id = ori.tb_institution_id)  ' +
-        '    and (ora.terminal = ori.terminal)   ' +
-        'where (ord.tb_institution_id =? )  ' +
-        ' and ( ora.id = ? )  ' +
-        ' and ( ori.kind =? )  ',
-        {
-          replacements: [tb_institution_id, id, kind],
-          type: Tb.sequelize.QueryTypes.SELECT
-        }).then(data => {
-          resolve(data);
-        })
-        .catch(err => {
-          reject("orderSale.getItemlist: " + err);
-        });
-    });
-    return promise;
-  }
-
   static getOrder(tb_institution_id, id) {
     const promise = new Promise((resolve, reject) => {
       Tb.sequelize.query(
@@ -543,7 +513,7 @@ class OrderStockAdjustController extends Base {
   static async closurebyCard(body, operation) {
     const promise = new Promise(async (resolve, reject) => {
       try {
-        var items = await this.getItemList(body.order.tb_institution_id, body.order.id, operation);
+        var items = await orderItem.getList(body.order.tb_institution_id, body.order.id);
         var dataItem = {};
         for (var item of items) {
           dataItem = {

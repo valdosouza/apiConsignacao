@@ -447,28 +447,24 @@ class CustomerController extends Base {
   static getListSalesRouteAtender = (tb_institution_id, tb_sales_route_id, tb_region_id,dt_record) => {
     const promise = new Promise(async (resolve, reject) => {
 
-      var sqltxt = 
-      'select tb_institution_id, tb_sales_route_id, name_sales_route, sequence, id,  name_company,  nick_trade,  doc_kind, doc_number,street,nmbr,complement, active,turn_back ,dt_record '+
+      var sqltxt =       
+      'select * '+
       'from ( '+
-      '                select distinct vwsr.* , ord.dt_record '+
-      '                from ( '+
-                        this.getSQLListSalesRouteTodos() +
-      '                ) vwsr '+
-      '                    left outer join tb_order_attendance ora     on (vwsr.tb_institution_id = ora.tb_institution_id)       and (vwsr.id = ora.tb_customer_id) '+
-      '                    left outer join tb_order ord                on (ord.tb_institution_id = ora.tb_institution_id)    and (ora.id = ord.id)         and ( (ord.dt_record = ?) or (ord.dt_record is null) ) '+
-      '                    where (ora.finished = ?) or (active = ?) '+
-      '                    order by id desc '+
-      ') ate '+
-      'where (ate.dt_record is null) '+
-      'and ( ate.active = ?) '+
-      'and ( turn_back = ?) '+
-      'order by 4  ';
-
-           
+             this.getSQLListSalesRouteTodos() +
+      ') vwsr '+
+      'where id not in( '+
+      '  select ora.tb_customer_id '+
+      '  from tb_order_attendance ora '+
+      '     inner join tb_order ord '+
+      '     on (ord.id = ora.id) '+
+      '     and (ord.tb_institution_id = ora.tb_institution_id) '+
+      '  where  ord.dt_record = ? '+
+      ' )'+
+      'order by 4 ';           
       Tb.sequelize.query(
         sqltxt,
         {
-          replacements: [tb_institution_id, tb_sales_route_id, tb_region_id,'S', tb_institution_id, tb_sales_route_id, tb_region_id, 'S',dt_record,'S','S','S','N'],
+          replacements: [tb_institution_id, tb_sales_route_id, tb_region_id,'S', tb_institution_id, tb_sales_route_id, tb_region_id, 'S',dt_record],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve(data);
@@ -484,7 +480,7 @@ class CustomerController extends Base {
     const promise = new Promise(async (resolve, reject) => {
 
       var sqltxt = 
-      'select distinct vwsr.*, ord.dt_record '+
+      'select * '+
       'from ( '+
         this.getSQLListSalesRouteTodos()+
       '  ) vwsr '+

@@ -146,7 +146,7 @@ class FinancialStatementController extends Base {
 
         resolve(dataResult);
       } catch (err) {
-        reject("financialStatement.get: " + err);
+        reject("financialStatement.getByDay: " + err);
       }
     });
     return promise;
@@ -188,7 +188,7 @@ class FinancialStatementController extends Base {
 
         resolve(dataResult);
       } catch (err) {
-        reject("financialStatement.get: " + err);
+        reject("financialStatement.getByMonth: " + err);
       }
     });
     return promise;
@@ -250,7 +250,7 @@ class FinancialStatementController extends Base {
 
         resolve(dataResult);
       } catch (err) {
-        reject("financialStatement.get: " + err);
+        reject("financialStatement.getByCustomer: " + err);
       }
     });
     return promise;

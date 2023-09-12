@@ -22,7 +22,7 @@ class OrderSaleEndPoint {
       .then(async data => {
         
         //Retorna do estoque do vendedor - Venda direta pelo estoque do vendedor ....lembrar da venda direta pelo estoque do cliente
-        var stockSalesman = await entityHasStockList.getByEntity(req.body.order.tb_institution_id,req.body.order.tb_salesman_id);    
+        var stockSalesman = await entityHasStockList.getByEntity(req.body.order.tb_institution_id,req.body.order.tb_salesman_id,'salesman');    
         //Usar o grupo estoque manager por que pode ser usado tanto salesman quanto o customer    
         req.body['StockOrigen'] = stockSalesman[0];          
 
@@ -45,7 +45,7 @@ class OrderSaleEndPoint {
 
   static getList(req, res) {
 
-    OrderSaleController.getList(req.params.tb_institution_id)
+    OrderSaleController.getList(req.body)
       .then(data => {
         res.send(data);
       })
@@ -54,6 +54,14 @@ class OrderSaleEndPoint {
   static getNewOrderSaleCard(req, res) {
 
     OrderSaleCardController.getNewOrderSaleCard(req.params.tb_institution_id, req.params.tb_price_list_id)
+      .then(data => {
+        res.send(data);
+      })
+  }
+
+  static getOrderSaleCard(req, res) {
+
+    OrderSaleCardController.getMainOrderSaleCard(req.params.tb_institution_id, req.params.tb_order_id)
       .then(data => {
         res.send(data);
       })

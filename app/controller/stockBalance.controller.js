@@ -102,9 +102,10 @@ class StockBalanceController extends Base {
         '  on (c.id = ehs.tb_entity_id) ' +
         '    and (c.tb_institution_id = ehs.tb_institution_id) ' +
         'where stb.tb_institution_id =?   ' +
-        'and ehs.tb_entity_id =?   ',
+        ' and ehs.tb_entity_id =?   '+
+        ' and ehs.profile = ? ',
         {
-          replacements: [tb_institution_id, tb_salesman_id],
+          replacements: [tb_institution_id, tb_salesman_id,'salesman'],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           if (data.length > 0) {
@@ -166,9 +167,10 @@ class StockBalanceController extends Base {
         '    on (rgn.id = ctm.tb_region_id) '+
         'where (rgn.tb_institution_id =?) '+
         '  and (rgn.tb_salesman_id = ?) '+
+        '  and ehs.profile = ? '+
         'group by 1,2 ',
         {
-          replacements: [tb_institution_id, tb_salesman_id],
+          replacements: [tb_institution_id, tb_salesman_id, 'customer'],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           if (data.length > 0) {
@@ -245,6 +247,7 @@ class StockBalanceController extends Base {
 
         '  where stb.tb_institution_id =? ' +
         '  and rg.tb_salesman_id =? ' +
+        '  and ehs.profile = ? '+
         '  group by 1,2 '+
         '   union ' +
         '   select  ' +
@@ -270,10 +273,11 @@ class StockBalanceController extends Base {
       
         '   where stb.tb_institution_id =?   ' +
         '   and ehs.tb_entity_id =? ' +
+        '   and ehs.profile = ? '+
         ' ) tb_stock_by_salesman ' +
         ' group by 1,2  ',
         {
-          replacements: [tb_institution_id, tb_salesman_id,tb_institution_id, tb_salesman_id],
+          replacements: [tb_institution_id, tb_salesman_id,'customer', tb_institution_id, tb_salesman_id, 'salesman'],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           if (data.length > 0) {

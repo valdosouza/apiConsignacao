@@ -32,7 +32,7 @@ module.exports = sequelize => {
       field: "nmbr"
     },
     complement: {
-      type: DataTypes.STRING(100),
+      type: DataTypes.STRING(200),
       allowNull: true,
       defaultValue: null,
       primaryKey: false,

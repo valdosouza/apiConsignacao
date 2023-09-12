@@ -402,6 +402,7 @@ class UserController extends Base {
         "username": userEmail,
         "password": "",
         "jwt": token,
+        "error" :"",
       }
       resolve(result);
     });

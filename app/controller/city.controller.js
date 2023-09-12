@@ -19,8 +19,7 @@ class CityController extends Base {
                         if (data) { resolve(data) } else { resolve(Null) };
                     })
             } catch (error) {
-                
-                console.error(err + " |" + "Algum erro aconteceu ao buscar a cidades");
+               
                 resolve(Null)
             }
         });
