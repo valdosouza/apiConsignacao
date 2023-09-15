@@ -94,6 +94,15 @@ class OrderAttendanceEndPoint {
         res.status(200).json({ message: data })
       })
   }
+
+  static detaild(req, res) {
+    
+    OrderAttendanceController.detaild(req.params.tb_institution_id, req.params.tb_order_id)
+      .then(data => {
+        res.send( data );
+      })
+  }
+
 }
 
 module.exports = OrderAttendanceEndPoint; 

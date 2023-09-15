@@ -252,7 +252,7 @@ class OrderConsignmentController extends Base {
   };
 
   static async getSaldoDevedor(tb_institution_id, tb_salesman_id, dt_record) {
-    const promise = new Promise((resolve, reject) => {      
+    const promise = new Promise((resolve, reject) => {
       var sqltxt =
         'select sum(current_debit_balance) saldoDevedor ' +
         'from ( ' +
@@ -262,25 +262,25 @@ class OrderConsignmentController extends Base {
         '        on (ord.id = orc.id)  ' +
         '            and (ord.tb_institution_id = orc.tb_institution_id)  ' +
         '    WHERE orc.id = ( ' +
-                            'SELECT MAX(orca.id) ' +
-                            'FROM tb_order_consignment orca ' +
-                            '    inner join tb_order orda ' +
-                            '    on (orda.id = orca.id) ' +
-                            '        and (orda.tb_institution_id = orca.tb_institution_id) ' +
-                            'WHERE ( orca.tb_institution_id = orc.tb_institution_id ) ' +
-                            '    and ( orca.tb_customer_id = orc.tb_customer_id ) ' +
-                            '    and (orda.dt_record <= ? ) ' +
-                            'GROUP BY orca.tb_customer_id  ' +
-                            ') ' +
+        'SELECT MAX(orca.id) ' +
+        'FROM tb_order_consignment orca ' +
+        '    inner join tb_order orda ' +
+        '    on (orda.id = orca.id) ' +
+        '        and (orda.tb_institution_id = orca.tb_institution_id) ' +
+        'WHERE ( orca.tb_institution_id = orc.tb_institution_id ) ' +
+        '    and ( orca.tb_customer_id = orc.tb_customer_id ) ' +
+        '    and (orda.dt_record <= ? ) ' +
+        'GROUP BY orca.tb_customer_id  ' +
+        ') ' +
         '    and (orc.tb_institution_id = ?) ' +
         '    and orc.current_debit_balance > 0  ' +
         '    and (orc.kind = ? ) ' +
         '                        and (orc.tb_customer_id in ( ' +
-                                                              'select ctm.id '+
-                                                              'from  tb_customer ctm '+
-                                                              '  inner join tb_region rgn '+
-                                                              '  on (rgn.id = ctm.tb_region_id) '+
-                                                              'where rgn.tb_salesman_id = ? '+
+        'select ctm.id ' +
+        'from  tb_customer ctm ' +
+        '  inner join tb_region rgn ' +
+        '  on (rgn.id = ctm.tb_region_id) ' +
+        'where rgn.tb_salesman_id = ? ' +
         '                                                      ))  ' +
         ') current_debit_balance  ';
 
@@ -288,7 +288,7 @@ class OrderConsignmentController extends Base {
       Tb.sequelize.query(
         sqltxt,
         {
-          replacements: [dt_record, tb_institution_id, 'supplying',  tb_salesman_id],
+          replacements: [dt_record, tb_institution_id, 'supplying', tb_salesman_id],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve({
@@ -438,7 +438,7 @@ class OrderConsignmentController extends Base {
       try {
         if (data.number == 0)
           data.number = await this.getNextNumber(data.tb_institution_id);
-        Tb.create(data)
+        this.create(data)
           .then((data) => {
             resolve(data);
           })
@@ -448,6 +448,22 @@ class OrderConsignmentController extends Base {
       }
       finally {
         resolve(data);
+      }
+    });
+    return promise;
+  }
+
+
+  static async create(data) {
+    const promise = new Promise(async (resolve, reject) => {
+      try {
+        Tb.create(data)
+          .then((data) => {
+            resolve(data);
+          })
+      }
+      catch (err) {
+        reject("OrderConsignmentController.create:" + err);
       }
     });
     return promise;
@@ -815,7 +831,7 @@ class OrderConsignmentController extends Base {
         var result = {};
         this.getOrder(tb_institution_id, id, 'supplying')
           .then(async data => {
-            if (data.id > 0) {              
+            if (data.id > 0) {
               var dataOrder = {
                 id: data.id,
                 tb_institution_id: data.tb_institution_id,
@@ -1018,7 +1034,7 @@ class OrderConsignmentController extends Base {
       try {
         var status = await this.getStatus(body.tb_institution_id, body.id);
         if (status == 'A') {
-          var items = await orderItem.getList(body.tb_institution_id, body.id,'Consignment');
+          var items = await orderItem.getList(body.tb_institution_id, body.id, 'Consignment');
           var dataItem = {};
           for (var item of items) {
             dataItem = {
@@ -1150,13 +1166,13 @@ class OrderConsignmentController extends Base {
   static async closurebyCard(body, operation) {
     const promise = new Promise(async (resolve, reject) => {
       try {
-        var items = await orderItem.getList(body.order.tb_institution_id, body.order.id, operation,'Consignment');
+        var items = await orderItem.getList(body.order.tb_institution_id, body.order.id, 'supplying', 'Consignment');
         var dataItem = {};
         for (var item of items) {
           dataItem = {
             id: 0,
-            tb_institution_id: item.tb_institution_id,
-            tb_order_id: item.tb_order_id,
+            tb_institution_id: body.order.tb_institution_id,
+            tb_order_id: body.order.id,     
             terminal: 0,
             tb_order_item_id: item.id,
             tb_stock_list_id: item.tb_stock_list_id,

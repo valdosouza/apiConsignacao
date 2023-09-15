@@ -32,25 +32,41 @@ class OrderBonusController extends Base {
 
   static async insertOrder(body) {
     const promise = new Promise(async (resolve, reject) => {
+      try {
+        if (body.order.number == 0)
+          body.order.number = await this.getNextNumber(body.order.tb_institution_id);
 
-      if (body.order.number == 0)
-        body.order.number = await this.getNextNumber(body.order.tb_institution_id);
+        const dataOrder = {
+          id: body.order.id,
+          tb_institution_id: body.order.tb_institution_id,
+          terminal: 0,
+          tb_salesman_id: body.order.tb_salesman_id,
+          number: body.order.number,
+          tb_customer_id: body.order.tb_customer_id,
+        }
+        this.create(dataOrder)
+          .then(() => {
+            resolve(body);
+          })
 
-      const dataOrder = {
-        id: body.order.id,
-        tb_institution_id: body.order.tb_institution_id,
-        terminal: 0,
-        tb_salesman_id: body.order.tb_salesman_id,
-        number: body.order.number,
-        tb_customer_id: body.order.tb_customer_id,
+      } catch (error) {
+        reject("orderBonus.insertOrder:" + err);
       }
-      Tb.create(dataOrder)
-        .then(() => {
-          resolve(body);
-        })
-        .catch(err => {
-          reject("orderBonus.insertOrder:" + err);
-        });
+
+    });
+    return promise;
+  }
+
+  static async create(body) {
+    const promise = new Promise(async (resolve, reject) => {
+      try {
+        Tb.create(dataOrder)
+          .then(() => {
+            resolve(body);
+          })
+      } catch (error) {
+        reject("orderBonus.insertOrder:" + err);
+      }
     });
     return promise;
   }

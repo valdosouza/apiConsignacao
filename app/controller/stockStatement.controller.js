@@ -55,7 +55,7 @@ class StockStatementController extends Base {
           replacements: [tb_institution_id, tb_order_id],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
-          resolve(data);
+            resolve(data);          
         })
         .catch(err => {
           reject(new Error("stockStatement.gelist:" + err));

@@ -252,4 +252,26 @@ router.delete("/:tb_institution_id/:id", orderattendance.delete);
 
  router.post("/cleanup", orderattendance.cleanup);
 
+
+ /**
+  * @swagger
+  * /orderattendance/detail/{tb_institution_id}/{tb_order_id}:
+  *   get:
+  *     summary: Shows the detail of attendance
+  *     tags: [OrderAttendance]
+  *     parameters:
+  *      - in: path
+  *        name: tb_institution_id
+  *      - in: path
+  *        name: tb_order_id
+  *     responses:
+  *       200:
+  *         description: The OrderAttendance was detailed  
+  *       404:
+  *         description: The Order Attendance was not Found
+  *       500:
+  *         description: Some error happened
+  */
+ router.get("/detail/:tb_institution_id/:tb_order_id", orderattendance.detaild);    
+
 module.exports = router;

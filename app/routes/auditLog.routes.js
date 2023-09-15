@@ -66,7 +66,7 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
 
  /**
  * @swagger
- * /auditlog/orderconsigment/saveordersale:
+ * /auditlog/orderconsigment/cardtosale:
  *   post:
  *     summary: Create a new audit log
  *     tags: [AuditLog]
@@ -74,6 +74,90 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *      200:
  *        description: The auditLog was executed
  */
- router.post("/orderconsigment/saveordersale", auditlog.orderConsignmentSaveSale);
+ router.post("/orderconsigment/cardtosale", auditlog.orderConsignmentCardToSale);
+
+/**
+ * @swagger
+ * /auditlog/orderconsigment/cardtostocktransfer:
+ *   post:
+ *     summary: Create a new audit log
+ *     tags: [AuditLog]
+ *     responses:
+ *      200:
+ *        description: The auditLog was executed
+ */
+router.post("/orderconsigment/cardtostocktransfer", auditlog.orderConsignmentCardToStockTransfer);
+
+/**
+ * @swagger
+ * /auditlog/orderconsigment/cardtoconsignment:
+ *   post:
+ *     summary: Create a new audit log
+ *     tags: [AuditLog]
+ *     responses:
+ *      200:
+ *        description: The auditLog was executed
+ */
+router.post("/orderconsigment/cardtoconsignment", auditlog.orderConsignmentCardToConsignment);
+
+/**
+ * @swagger
+ * /auditlog/orderconsigment/cardtobonus:
+ *   post:
+ *     summary: Create a new audit log
+ *     tags: [AuditLog]
+ *     responses:
+ *      200:
+ *        description: The auditLog was executed
+ */
+router.post("/orderconsigment/cardtobonus", auditlog.orderConsignmentCardToBonus);
+
+/**
+ * @swagger
+ * /auditlog/stockstatement/ordersale:
+ *   post:
+ *     summary: Create a new audit log
+ *     tags: [AuditLog]
+ *     responses:
+ *      200:
+ *        description: The auditLog was executed
+ */
+router.post("/stockstatement/ordersale", auditlog.stockSatementOrderSale);
+
+/**
+ * @swagger
+ * /auditlog/stockstatement/orderconsignment:
+ *   post:
+ *     summary: Create a new audit log
+ *     tags: [AuditLog]
+ *     responses:
+ *      200:
+ *        description: The auditLog was executed
+ */
+router.post("/stockstatement/orderconsignment", auditlog.stockSatementOrderConsignment);
+
+/**
+ * @swagger
+ * /auditlog/stockstatement/orderstocktransfer:
+ *   post:
+ *     summary: Create a new audit log
+ *     tags: [AuditLog]
+ *     responses:
+ *      200:
+ *        description: The auditLog was executed
+ */
+router.post("/stockstatement/orderstocktransfer", auditlog.stockSatementOrderStockTransfer);
+
+/**
+ * @swagger
+ * /auditlog/stockstatement/stockbalance:
+ *   post:
+ *     summary: Create a new audit log
+ *     tags: [AuditLog]
+ *     responses:
+ *      200:
+ *        description: The auditLog was executed
+ */
+router.post("/stockstatement/stockbalance", auditlog.stockSatementStockBalance);
 
 module.exports = router;  

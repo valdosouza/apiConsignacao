@@ -4,20 +4,23 @@ const Tb = db.orderattendance;
 const OrderController = require("../controller/order.controller.js");
 const ControllerOrderBonus = require("../controller/orderBonus.controller.js");
 const ControllerOrderConsignment = require("../controller/orderConsignment.controller.js");
+const ControllerOrderItemConsignment = require("../controller/orderItemConsignment.controller.js");
 const ControllerOrderConsignmentCard = require("../controller/orderConsignmentCard.controller.js");
 const ControllerOrdeItem = require("../controller/orderItem.controller.js");
 const ControllerOrderPaid = require("../controller/orderPaid.controller.js");
 const ControllerOrderSale = require("../controller/orderSale.controller.js");
+const OrderItemSale = require('./orderItemSale.controller.js');
 const ControllerOrderSaleCard = require("../controller/orderSaleCard.controller.js");
 const ControllerOrderStockAdjust = require("../controller/orderStockAdjust.controller.js");
 const ControllerOrderStockTransfer = require("../controller/orderStockTransfer.controller.js");
+const OrderItemStockTransfer = require('./orderItemStockTransfer.controller.js');
 const ControllerStockStatement = require("../controller/stockStatement.controller.js");
 const ControllerFinancial = require("../controller/financial.controller.js");
 const SalesRouteCustomerController = require('./salesRouteCustomer.controller.js');
 const SalesRouteController = require("../controller/salesRoute.controller.js");
 
 
-class OrderStockTransferController extends Base {
+class OrderAttendanceController extends Base {
   static async getNextNumber(tb_institution_id) {
     const promise = new Promise((resolve, reject) => {
       Tb.sequelize.query(
@@ -78,7 +81,7 @@ class OrderStockTransferController extends Base {
         'and ora.tb_salesman_id = ? ' +
         'and ord.dt_record = ? ' +
         'and ora.tb_customer_id = ? ' +
-        'and ora.finished = ? '+
+        'and ora.finished = ? ' +
         'order by ora.id ',
         {
           replacements: [body.tb_institution_id, body.tb_salesman_id, body.dt_record, body.tb_customer_id, 'N'],
@@ -87,7 +90,7 @@ class OrderStockTransferController extends Base {
           if (data.length > 0) {
             resolve(data[0]);
           } else {
-            resolve({id:0});
+            resolve({ id: 0 });
           }
         })
         .catch(err => {
@@ -150,7 +153,7 @@ class OrderStockTransferController extends Base {
         finished: body.finished,
         longitude: body.longitude,
         latitude: body.latitude
-      }      
+      }
       Tb.create(dataOrder)
         .then(() => {
           resolve(body);
@@ -352,9 +355,10 @@ class OrderStockTransferController extends Base {
       }
 
 
-      Tb.update({ 
-                recall : body.order.recall,
-                finished: "S" }, {
+      Tb.update({
+        recall: body.order.recall,
+        finished: "S"
+      }, {
         where: {
           id: body.order.id,
           tb_institution_id: body.order.tb_institution_id,
@@ -420,5 +424,52 @@ class OrderStockTransferController extends Base {
     });
     return promise;
   }
+
+  static async detaild(tb_institution_id, tb_order_id) {
+    const promise = new Promise(async (resolve, reject) => {
+      try {
+        var dataResult = {};
+        var orderAttendance = await this.getById(tb_order_id, tb_institution_id);
+        dataResult['attendace'] = orderAttendance;
+
+        var orderConsignmentCheckPoint = await ControllerOrderConsignment.getById(tb_order_id, tb_institution_id, 'checkpoint');
+        if (orderConsignmentCheckPoint.id > 0) {
+          dataResult['consignment_checkpoint'] = orderConsignmentCheckPoint;
+
+          var orcCheckItems = await ControllerOrderItemConsignment.getList(tb_institution_id, tb_order_id, 'checkpoint', 'Sale');
+          dataResult['consignment_checkpoint']['items'] = orcCheckItems;
+        }
+
+        var orderConsignmentSupplying = await ControllerOrderConsignment.getById(tb_order_id, tb_institution_id, 'supplying');
+        if (orderConsignmentSupplying.id > 0) {
+          dataResult['consignment_supplying'] = orderConsignmentSupplying;
+          var orcSupplyItems = await ControllerOrderItemConsignment.getList(tb_institution_id, tb_order_id, 'supplying', 'Consignment');
+          dataResult['consignment_supplying']['items'] = orcSupplyItems;
+        }
+
+        var orderSale = await ControllerOrderSale.getOrder(tb_institution_id, tb_order_id);
+        if (orderSale.id > 0) {
+          dataResult['sale'] = orderSale;
+          var orsItems = await OrderItemSale.getList(tb_institution_id, tb_order_id);
+          dataResult['sale']['items'] = orsItems;
+        }
+
+        var orderStockTransfer = await ControllerOrderStockTransfer.getOrder(tb_institution_id, tb_order_id);
+        if (orderStockTransfer.id > 0) {
+          dataResult['stock_transfer'] = orderStockTransfer;
+          var orsItems = await OrderItemStockTransfer.getList(tb_institution_id, tb_order_id);
+          dataResult['stock_transfer']['items'] = orsItems;
+        }
+
+        var stockStatement = await ControllerStockStatement.getListByOrder(tb_institution_id, tb_order_id);
+        dataResult['stock_statement'] = stockStatement;
+
+        resolve(dataResult);
+      } catch (err) {
+        reject(err);
+      }
+    });
+    return promise;
+  }
 }
-module.exports = OrderStockTransferController;
+module.exports = OrderAttendanceController;

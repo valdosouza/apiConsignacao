@@ -34,32 +34,45 @@ class OrderSaleController extends Base {
 
   static async insertOrder(body) {
     const promise = new Promise(async (resolve, reject) => {
+      try {
 
-      if (body.order.number == 0)
-        body.order.number = await this.getNextNumber(body.order.tb_institution_id);
+        if (body.order.number == 0)
+          body.order.number = await this.getNextNumber(body.order.tb_institution_id);
 
-      const dataOrder = {
-        id: body.order.id,
-        tb_institution_id: body.order.tb_institution_id,
-        terminal: 0,
-        tb_salesman_id: body.order.tb_salesman_id,
-        number: body.order.number,
-        tb_customer_id: body.order.tb_customer_id,
-        total_value: body.order.total_value,
-        change_value: body.order.change_value,
+        const dataOrder = {
+          id: body.order.id,
+          tb_institution_id: body.order.tb_institution_id,
+          terminal: 0,
+          tb_salesman_id: body.order.tb_salesman_id,
+          number: body.order.number,
+          tb_customer_id: body.order.tb_customer_id,
+          total_value: body.order.total_value,
+          change_value: body.order.change_value,
+        }
+        this.create(dataOrder)
+          .then(() => {
+            resolve(body);
+          });
+      } catch (error) {
+        reject('insertOrder'+error);
       }
-      Tb.create(dataOrder)
-        .then((data) => {
-          resolve(body);
-        })
-        .catch(err => {
-          reject("orderSale.insertOrder:" + err);
-        });
     });
     return promise;
   }
 
-
+  static async create(dataOrder) {
+    const promise = new Promise(async (resolve, reject) => {
+      try {
+        Tb.create(dataOrder)
+          .then((data) => {
+            resolve(data);
+          })
+      } catch (error) {
+        reject('create:' + error);
+      }
+    });
+    return promise;
+  }
 
   static async insert(body) {
     const promise = new Promise(async (resolve, reject) => {
@@ -92,37 +105,37 @@ class OrderSaleController extends Base {
   static getList(body) {
     const promise = new Promise((resolve, reject) => {
       var nick_trade = "";
-      var sqltxt =      
-      '  select ' +
-      '  ord.id, ' +
-      '  ord.tb_institution_id, ' +
-      '  ord.tb_user_id, ' +
-      '  ors.tb_customer_id,' +
-      '  etd.name_company name_entity,' +
-      '  ord.dt_record, ' +
-      '  ors.number, ' +
-      '  ord.status, ' +
-      ' CAST(ord.note AS CHAR(1000) CHARACTER SET utf8) note ' +
-      'from tb_order ord  ' +
-      '   inner join tb_order_sale ors ' +
-      '   on (ors.id = ord.id)  ' +
-      '     and (ors.tb_institution_id = ord.tb_institution_id) ' +
-      '     and (ors.terminal = ord.terminal) ' +
-      '   inner join tb_entity etd ' +
-      '   on (etd.id = ors.tb_customer_id)  ' +
-      'where (ord.tb_institution_id =? ) '+
-      '  and (ord.terminal = ?) '+
-      'and (ors.tb_salesman_id = ?) ' +
-      ' AND (ord.status <> ?) ';
+      var sqltxt =
+        '  select ' +
+        '  ord.id, ' +
+        '  ord.tb_institution_id, ' +
+        '  ord.tb_user_id, ' +
+        '  ors.tb_customer_id,' +
+        '  etd.name_company name_entity,' +
+        '  ord.dt_record, ' +
+        '  ors.number, ' +
+        '  ord.status, ' +
+        ' CAST(ord.note AS CHAR(1000) CHARACTER SET utf8) note ' +
+        'from tb_order ord  ' +
+        '   inner join tb_order_sale ors ' +
+        '   on (ors.id = ord.id)  ' +
+        '     and (ors.tb_institution_id = ord.tb_institution_id) ' +
+        '     and (ors.terminal = ord.terminal) ' +
+        '   inner join tb_entity etd ' +
+        '   on (etd.id = ors.tb_customer_id)  ' +
+        'where (ord.tb_institution_id =? ) ' +
+        '  and (ord.terminal = ?) ' +
+        'and (ors.tb_salesman_id = ?) ' +
+        ' AND (ord.status <> ?) ';
 
-      if (body.tb_customer_id > 0) {     
+      if (body.tb_customer_id > 0) {
         sqltxt += ' and (ors.tb_customer_id = ? ) ';
       } else {
         sqltxt += ' and (ors.tb_customer_id <> ?) ';
       }
 
 
-      if (body.nick_trade != "") {     
+      if (body.nick_trade != "") {
         nick_trade = body.nick_trade;
         sqltxt += ' and (etd.nick_trade like ? ) ';
       } else {
@@ -130,10 +143,10 @@ class OrderSaleController extends Base {
         sqltxt += ' and (etd.nick_trade <> ?) ';
       }
       sqltxt +=
-        ' order by number DESC '+
-        ' limit ' + ((body.page - 1) * 20) + ',20 ';   
-        
-        
+        ' order by number DESC ' +
+        ' limit ' + ((body.page - 1) * 20) + ',20 ';
+
+
       Tb.sequelize.query(
         sqltxt,
         {
@@ -630,9 +643,9 @@ class OrderSaleController extends Base {
         var dataItem = {};
         for (var item of items) {
           dataItem = {
-            id: 0,
+            id: 0,            
             tb_institution_id: body.order.tb_institution_id,
-            tb_order_id: item.tb_order_id,
+            tb_order_id: body.order.id,                        
             terminal: 0,
             tb_order_item_id: item.id,
             tb_stock_list_id: item.tb_stock_list_id,
@@ -643,7 +656,7 @@ class OrderSaleController extends Base {
             tb_merchandise_id: item.tb_product_id,
             quantity: item.quantity,
             operation: "Sale"
-          };          
+          };
           await stockStatement.insert(dataItem);
 
         };

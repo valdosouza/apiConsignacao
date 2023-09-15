@@ -32,30 +32,46 @@ class OrderStockTransferController extends Base {
 
   static async insertOrder(body) {
     const promise = new Promise(async (resolve, reject) => {
+      try {
+        if (body.order.number == 0)
+          body.order.number = await this.getNextNumber(body.order.tb_institution_id);
 
-      if (body.order.number == 0)
-        body.order.number = await this.getNextNumber(body.order.tb_institution_id);
+        const dataOrder = {
+          id: body.order.id,
+          tb_institution_id: body.order.tb_institution_id,
+          terminal: 0,
+          number: body.order.number,
+          tb_entity_id: body.order.tb_entity_id,
+          tb_stock_list_id_ori: body.order.tb_stock_list_id_ori,
+          tb_stock_list_id_des: body.order.tb_stock_list_id_des,
+        }
 
-      const dataOrder = {
-        id: body.order.id,
-        tb_institution_id: body.order.tb_institution_id,
-        terminal: 0,
-        number: body.order.number,
-        tb_entity_id: body.order.tb_entity_id,
-        tb_stock_list_id_ori: body.order.tb_stock_list_id_ori,
-        tb_stock_list_id_des: body.order.tb_stock_list_id_des,
+        this.create(dataOrder)
+          .then(() => {
+            resolve(body);
+          })
+      } catch (error) {
+        reject("orderStockTransfer.insertOrder:" + err);
       }
-      Tb.create(dataOrder)
-        .then(() => {
-          resolve(body);
-        })
-        .catch(err => {
-          reject("orderStockTransfer.insertOrder:" + err);
-        });
+
     });
     return promise;
   }
 
+  static async create(dataOrder) {
+    const promise = new Promise(async (resolve, reject) => {
+      try {
+        Tb.create(dataOrder)
+          .then((data) => {
+            resolve(data);
+          })
+      } catch (error) {
+        reject('create' + error);
+      }
+    });
+    return promise;
+  }
+  
   static async insertOrderItem(body) {
     const promise = new Promise(async (resolve, reject) => {
       try {
@@ -198,7 +214,11 @@ class OrderStockTransferController extends Base {
           replacements: [tb_institution_id, id],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
-          resolve(data[0]);
+          if (data.length > 0) {
+            resolve(data[0]);
+          } else {
+            resolve({ id: 0 });
+          }
         })
         .catch(err => {
           reject('orderstocktransfer.get: ' + err);
@@ -606,7 +626,7 @@ class OrderStockTransferController extends Base {
     });
     return promise;
   }
-  
+
   static async cleanUp(tb_institution_id, id) {
     const promise = new Promise(async (resolve, reject) => {
       try {
@@ -622,6 +642,6 @@ class OrderStockTransferController extends Base {
       }
     });
     return promise;
-  }  
+  }
 }
 module.exports = OrderStockTransferController;
