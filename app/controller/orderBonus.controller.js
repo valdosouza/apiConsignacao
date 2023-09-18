@@ -23,8 +23,8 @@ class OrderBonusController extends Base {
             resolve(1);
           }
         })
-        .catch(err => {
-          reject('orderBonus.getNexNumber: ' + err);
+        .catch(error => {
+          reject('orderBonus.getNexNumber: ' + error);
         });
     });
     return promise;
@@ -50,7 +50,7 @@ class OrderBonusController extends Base {
           })
 
       } catch (error) {
-        reject("orderBonus.insertOrder:" + err);
+        reject("orderBonus.insertOrder:" + error);
       }
 
     });
@@ -65,7 +65,7 @@ class OrderBonusController extends Base {
             resolve(body);
           })
       } catch (error) {
-        reject("orderBonus.insertOrder:" + err);
+        reject("orderBonus.create:" + error);
       }
     });
     return promise;
@@ -91,8 +91,8 @@ class OrderBonusController extends Base {
           await orderItem.insert(dataItem);
         };
         resolve("Items Adicionados");
-      } catch (err) {
-        reject("orderBonus.insertOrderItem:" + err);
+      } catch (error) {
+        reject("orderBonus.insertOrderItem:" + error);
       }
 
     });
@@ -119,8 +119,8 @@ class OrderBonusController extends Base {
                   resolve(body);
                 })
             })
-            .catch(err => {
-              reject("orderBonus.insert:" + err);
+            .catch(error => {
+              reject("orderBonus.insert:" + error);
             });
         })
     });
@@ -155,8 +155,8 @@ class OrderBonusController extends Base {
         }).then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject("orderBonus.getlist: " + err);
+        .catch(error => {
+          reject("orderBonus.getlist: " + error);
         });
     });
     return promise;
@@ -189,8 +189,8 @@ class OrderBonusController extends Base {
             resolve(0);
           }
         })
-        .catch(err => {
-          reject("orderSale.getItemlist: " + err);
+        .catch(error => {
+          reject("orderSale.getItemlist: " + error);
         });
     });
     return promise;
@@ -230,8 +230,8 @@ class OrderBonusController extends Base {
             resolve({ id: 0 });
           }
         })
-        .catch(err => {
-          reject('orderBonus.get: ' + err);
+        .catch(error => {
+          reject('orderBonus.get: ' + error);
         });
     });
     return promise;
@@ -248,8 +248,8 @@ class OrderBonusController extends Base {
 
         resolve(result);
       }
-      catch (err) {
-        reject('collaborbtor.get: ' + err);
+      catch (error) {
+        reject('collaborbtor.get: ' + error);
       }
     });
     return promise;
@@ -275,8 +275,8 @@ class OrderBonusController extends Base {
         .then((data) => {
           resolve(data);
         })
-        .catch(err => {
-          reject("orderBonus.updateOrder:" + err);
+        .catch(error => {
+          reject("orderBonus.updateOrder:" + error);
         });
     });
     return promise;
@@ -315,8 +315,8 @@ class OrderBonusController extends Base {
           }
         };
         resolve("Items Alterados");
-      } catch (err) {
-        reject("orderBonus.updateOrderItem:" + err);
+      } catch (error) {
+        reject("orderBonus.updateOrderItem:" + error);
       }
 
     });
@@ -344,8 +344,8 @@ class OrderBonusController extends Base {
             })
           resolve(body);
         })
-        .catch(err => {
-          reject("orderBonus.update:" + err);
+        .catch(error => {
+          reject("orderBonus.update:" + error);
         });
     });
     return promise;
@@ -363,8 +363,8 @@ class OrderBonusController extends Base {
         .then((data) => {
           resolve(data);
         })
-        .catch(err => {
-          reject("OrderBonus.delete:" + err);
+        .catch(error => {
+          reject("OrderBonus.delete:" + error);
         });
     });
     return promise;
@@ -401,8 +401,8 @@ class OrderBonusController extends Base {
         } else {
           resolve("201");
         }
-      } catch (err) {
-        reject(err);
+      } catch (error) {
+        reject(error);
       }
     });
     return promise;
@@ -438,8 +438,8 @@ class OrderBonusController extends Base {
         } else {
           resolve("201");
         }
-      } catch (err) {
-        reject(err);
+      } catch (error) {
+        reject(error);
       }
     });
     return promise;
@@ -459,8 +459,8 @@ class OrderBonusController extends Base {
           await this.closurebyCard(body);
         }
         resolve(body);
-      } catch (err) {
-        reject(err);
+      } catch (error) {
+        reject(error);
       }
     });
     return promise;
@@ -488,8 +488,8 @@ class OrderBonusController extends Base {
           }
         };
         resolve("Items Adicionados");
-      } catch (err) {
-        reject("orderBonus.insertOrderItem:" + err);
+      } catch (error) {
+        reject("orderBonus.insertOrderItem:" + error);
       }
 
     });
@@ -521,8 +521,8 @@ class OrderBonusController extends Base {
         };
         await order.updateStatus(body.order.tb_institution_id, body.order.id, 'F');
         resolve("200");
-      } catch (err) {
-        reject(err);
+      } catch (error) {
+        reject(error);
       }
     });
     return promise;

@@ -263,7 +263,7 @@ class FinancialStatementController extends Base {
         var orderConsignament = await OrderAttendaceController.getById(tb_order_id, tb_institution_id);
         var tb_customer_id = 0;
         
-        if (orderConsignament)
+        if (orderConsignament.id > 0)
           tb_customer_id = orderConsignament.tb_customer_id;
         var dataini = dt_record;
         var datafim = dt_record;
