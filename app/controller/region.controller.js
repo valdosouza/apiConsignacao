@@ -47,19 +47,26 @@ class RegionController extends Base {
 
   static getListBySalesman(tb_institution_id,tb_salesman_id) {
     const promise = new Promise((resolve, reject) => {
+      var sqlTxt = 
+      'select '+
+      ' rg.id, ' +
+      ' rg.tb_institution_id,'+
+      ' rg.description, '+
+      ' rg.tb_salesman_id,'+
+      ' et.nick_trade salesman_name,'+
+      ' rg.active '+
+      'from tb_region rg ' +
+      '  inner join tb_entity et '+
+      '  on (et.id = rg.tb_salesman_id) '+
+      'where (rg.tb_institution_id =? ) ';
+      if (tb_salesman_id > 0){
+        sqlTxt += ' and ( rg.tb_salesman_id =? )';
+      }else{
+        sqlTxt += ' and ( rg.tb_salesman_id <> ? )';        
+      }
+      
       Tb.sequelize.query(
-        'select '+
-        ' rg.id, ' +
-        ' rg.tb_institution_id,'+
-        ' rg.description, '+
-        ' rg.tb_salesman_id,'+
-        ' et.nick_trade salesman_name,'+
-        ' rg.active '+
-        'from tb_region rg ' +
-        '  inner join tb_entity et '+
-        '  on (et.id = rg.tb_salesman_id) '+
-        'where (rg.tb_institution_id =? ) '+
-        ' and ( rg.tb_salesman_id =? )',
+         sqlTxt, 
         {
           replacements: [tb_institution_id,tb_salesman_id],
           type: Tb.sequelize.QueryTypes.SELECT
