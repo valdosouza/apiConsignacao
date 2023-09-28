@@ -60,7 +60,7 @@ class OrderBonusController extends Base {
   static async create(body) {
     const promise = new Promise(async (resolve, reject) => {
       try {
-        Tb.create(dataOrder)
+        Tb.create(body)
           .then(() => {
             resolve(body);
           })
