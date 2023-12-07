@@ -725,6 +725,11 @@ class OrderConsignmentController extends Base {
         'ord.status, ' +
         'CAST(ord.note AS CHAR(1000) CHARACTER SET utf8) note  ' +
         'from tb_order ord ' +
+        'inner join tb_order_attendance ora ' +
+        '   on (ora.id = ord.id) ' +
+        '     and (ora.tb_institution_id = ord.tb_institution_id) ' +
+        '     and (ora.terminal = ord.terminal) ' +
+   
         '   inner join tb_order_consignment orc ' +
         '   on (orc.id = ord.id)  ' +
         '     and (orc.tb_institution_id = ord.tb_institution_id) ' +
@@ -736,11 +741,11 @@ class OrderConsignmentController extends Base {
         'where (ord.tb_institution_id = ? )  '+
         ' and (orc.tb_customer_id = ?) '+
         ' and (orc.kind = ? ) '+     
-        ' and (ord.status = ?) '+
+        ' and (ora.finished = ?) '+
         ' order by orc.id desc '+
         ' limit 1 ',
         {
-          replacements: [tb_institution_id, tb_customer_id,'supplying','F'],
+          replacements: [tb_institution_id, tb_customer_id,'supplying','S'],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve(data[0]);

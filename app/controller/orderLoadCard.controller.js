@@ -182,6 +182,81 @@ class OrderLoadCardController extends Base {
     return promise;
   };
 
+  static async getByUserDate(tb_institution_id, tb_user_id, dt_record) {
+    const promise = new Promise((resolve, reject) => {
+      var dataResult = {};
+      Tb.sequelize.query(
+        'Select ' +
+        'ord.status, ' +
+        'ord.id, ' +
+        'ord.tb_institution_id,' +
+        'ord.dt_record,' +
+        'ord.tb_user_id,' +
+        'user.nick_trade name_user, ' +
+        'occ.tb_product_id, ' +
+        'pd.description name_product, ' +
+        'occ.stock_balance, ' +
+        'occ.sale, ' +
+        'occ.bonus, ' +
+        'occ.adjust, ' +
+        'occ.new_load ' +
+        'from tb_order_load_card  occ ' +
+        '  inner join tb_product pd ' +
+        '    on (pd.id = occ.tb_product_id) ' +
+        '    and (pd.tb_institution_id = occ.tb_institution_id)' +
+        '  inner join tb_order ord ' +
+        '  on (occ.id = ord.id)' +
+        '    and (occ.tb_institution_id = ord.tb_institution_id)' +
+        '  inner join tb_entity user ' +
+        '  on (ord.tb_user_id = user.id)' +
+        'where  (ord.tb_institution_id =?)'+
+        ' and (ord.tb_user_id = ?)'+
+        ' and (ord.dt_record = ?)',
+        {
+          replacements: [tb_institution_id, tb_user_id, dt_record],
+          type: Tb.sequelize.QueryTypes.SELECT
+        }).then(data => {
+          
+          if (data.length > 0) {
+            dataResult = {
+              id: data[0].id,
+              tb_institution_id: data[0].tb_institution_id,
+              tb_user_id: data[0].tb_user_id,
+              name_user: data[0].name_user,
+              dt_record: data[0].dt_record,
+              items: [],
+            }
+            for (var item of data) {
+              dataResult.items.push({
+                id: item.id,
+                tb_product_id: item.tb_product_id,
+                name_product: item.name_product,
+                stock_balance: Number(item.stock_balance),
+                sale: Number(item.sale),
+                bonus: Number(item.bonus),
+                adjust: Number(item.adjust),
+                new_load: Number(item.new_load),
+              });
+            }            
+          } else {
+            dataResult = {
+              id: 0,
+              tb_institution_id: Number(tb_institution_id),
+              tb_user_id: Number(tb_user_id),
+              name_user: "",
+              dt_record: dt_record,
+              items: [],
+            }            
+          }
+          resolve(dataResult);
+        })
+        .catch(err => {
+          reject('getByOrder: ' + err);
+        });
+    });
+    return promise;
+  };
+
   static async getListByUser(tb_institution_id, tb_user_id) {
     const promise = new Promise((resolve, reject) => {
       Tb.sequelize.query(

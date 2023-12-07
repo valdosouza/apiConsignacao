@@ -189,6 +189,32 @@ router.get("/getlistByUser/:tb_institution_id/:tb_user_id", orderloadcard.getlis
  */
 	router.get("/getByOrder/:tb_institution_id/:tb_order_id", orderloadcard.getByOrder);
 
+/**
+ * @swagger
+ * /orderloadcard/getByUserDate/{tb_institution_id}/{tb_user_id}/{dt_record}:
+ *   get:
+ *     summary: Returns the Load Card by Order User and Date
+ *     tags: [OrderLoadCard]
+ *     parameters:
+ *      - in: path
+ *        name: tb_institution_id
+ *        required: true 
+ *      - in: path
+ *        name: tb_user_id
+ *        required: true 
+ *      - in: path
+ *        name: dt_record
+ *        required: true 
+ *     responses:
+ *       200:
+ *         description: The Order Load card by Order
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/OrderLoadCardMain'
+ */
+router.get("/getByUserDate/:tb_institution_id/:tb_user_id/:dt_record", orderloadcard.getByUserDate);
+
  /**
  * @swagger
  * /orderloadcard/getNewOrder/{tb_institution_id}/{tb_user_id}/{dt_record}:

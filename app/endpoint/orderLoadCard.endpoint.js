@@ -84,6 +84,14 @@ class OrderLoadEndPoint {
         res.send(data);
       })
   }
+
+  static getByUserDate(req, res) {
+    OrderLoadCardController.getByUserDate(req.params.tb_institution_id, req.params.tb_user_id,req.params.dt_record)
+      .then(data => {
+        res.send(data);
+      })
+  }
+
   static getlistByUser(req, res) {
 
     OrderLoadCardController.getListByUser(req.params.tb_institution_id, req.params.tb_user_id)
