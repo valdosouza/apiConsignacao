@@ -1,5 +1,6 @@
 const AuditLogOrcSupplying = require("../controller/auditLogOrcSupplying.controller.js");
 const AuditLogOrcCheckout = require("../controller/auditLogOrcCheckout.controller.js");
+const AuditLogOrcTwoRecords = require("../controller/auditLogOrcTwoRecords.controller.js");
 const AuditLogOrderSaleCard = require("../controller/auditLogOrderSaleCard.controller.js");
 const AuditLogOrcCardToSale = require("../controller/auditLogOrcCardToSale.controller.js");
 const AuditLogOrcCardToStockTransfer = require("../controller/auditLogOrcCardToStockTransfer.controller.js");
@@ -9,6 +10,7 @@ const AuditLogStockSatementOrderSale = require("../controller/auditLogStockState
 const AuditLogStockSatementOrderConsginment = require("../controller/auditLogStockStatementOrderConsignment.controller.js");
 const AuditLogStockSatementOrderStockTransfer = require("../controller/auditLogStockStatementOrderStockTransfer.controller.js");
 const AuditLogStockSatementStockBalance = require("../controller/auditLogStockStatementStockBalance.controller.js");
+
 
 class AuditLogEndPoint {
 
@@ -66,6 +68,14 @@ class AuditLogEndPoint {
       });
   }
 
+  static verifyTwoRecords = (req, res) =>{
+    AuditLogOrcTwoRecords.doExecute()
+      .then((data) => {
+        res.send(data);
+      });
+  }
+    
+  
   static stockSatementOrderSale = (req, res) => {
     AuditLogStockSatementOrderSale.doExecute()
       .then((data) => {

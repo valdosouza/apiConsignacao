@@ -114,6 +114,19 @@ router.post("/orderconsigment/cardtobonus", auditlog.orderConsignmentCardToBonus
 
 /**
  * @swagger
+ * /auditlog/orderconsigment/tworecords:
+ *   post:
+ *     summary: Veirify two records by operation
+ *     tags: [AuditLog]
+ *     responses:
+ *      200:
+ *        description: The auditLog was executed
+ */
+router.post("/orderconsigment/tworecords", auditlog.verifyTwoRecords);
+
+
+/**
+ * @swagger
  * /auditlog/stockstatement/ordersale:
  *   post:
  *     summary: Create a new audit log

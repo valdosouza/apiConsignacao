@@ -57,7 +57,8 @@ class OrderLoadCardController extends Base {
         'occ.sale, ' +
         'occ.bonus, ' +
         'occ.adjust, ' +
-        'occ.new_load ' +
+        'occ.new_load, ' +
+        'tbUser.nick_trade '+
         'from tb_order_load_card  occ ' +
         '  inner join tb_product pd ' +
         '    on (pd.id = occ.tb_product_id) ' +
@@ -65,6 +66,8 @@ class OrderLoadCardController extends Base {
         '  inner join tb_order ord ' +
         '  on (occ.id = ord.id)' +
         '    and (occ.tb_institution_id = ord.tb_institution_id)' +
+        '  inner  join tb_entity tbUSer '+
+        '  on (tbUser.id = ord.tb_user_id) '+
         'where  (ord.tb_institution_id =?)' +
         ' and (ord.tb_user_id =?)' +
         ' and ( ord.status=?) ',
@@ -247,8 +250,10 @@ class OrderLoadCardController extends Base {
         var orderId = 0;
         var resData = [];
         var data = [];
+        var nameUser = "";
         data = await this.getByUser(tb_institution_id, tb_user_id);
         if (data.length > 0) {
+          nameUser = data[0].nick_trade;
           for (var item of data) {
             if (orderId == 0) orderId = item.id;
             resData.push(
@@ -265,6 +270,7 @@ class OrderLoadCardController extends Base {
             )
           }
         } else {
+          
           var data = await StockBalanceControler.getAllBySalesman(tb_institution_id, tb_user_id);
           for (var item of data.items) {
             resData.push(
@@ -285,8 +291,8 @@ class OrderLoadCardController extends Base {
           id: orderId,
           tb_institution_id: parseInt(tb_institution_id),
           tb_user_id: parseInt(tb_user_id),
-          name_user: '',
-          dt_record: '',
+          name_user: nameUser,
+          dt_record: dt_record,
           items: resData
         }
         );
