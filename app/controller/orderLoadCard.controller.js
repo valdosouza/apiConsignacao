@@ -66,7 +66,7 @@ class OrderLoadCardController extends Base {
         '  inner join tb_order ord ' +
         '  on (occ.id = ord.id)' +
         '    and (occ.tb_institution_id = ord.tb_institution_id)' +
-        '  inner  join tb_entity tbUSer '+
+        '  inner  join tb_entity tbUser '+
         '  on (tbUser.id = ord.tb_user_id) '+
         'where  (ord.tb_institution_id =?)' +
         ' and (ord.tb_user_id =?)' +
