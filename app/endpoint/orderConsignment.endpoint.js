@@ -118,5 +118,12 @@ class OrderConsignmentEndPoint {
         res.send(data);
       })
   }
+
+  static delete(req, res) {
+    OrderConsignmentController.delete(req.params.tb_institution_id, req.params.id)
+      .then(data => {
+        res.send(data);
+      })
+  }  
 }
 module.exports = OrderConsignmentEndPoint; 

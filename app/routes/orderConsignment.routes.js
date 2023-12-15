@@ -342,4 +342,28 @@ router.get("/getlast/:tb_institution_id/:tb_customer_id", orderconsignment.getLa
 
 router.get("/getlist/:tb_institution_id/:tb_customer_id", orderconsignment.getList);
 
+
+/**
+ * @swagger
+ * /orderconsignment/{tb_institution_id}/{id}:
+ *  delete:
+ *    summary: Delete the CheckPoint by the tb_institution_id/id
+ *    tags: [OrderConsignment]
+ *    parameters:
+ *      - in: path
+ *        name: tb_institution_id
+ *        required: true
+ *      - in: path
+ *        name: id
+ *        required: true
+ *    responses:
+ *      200:
+ *        description: The CheckPoint was deleted
+ *      404:
+ *        description: The CheckPoint was not found
+ *      500:
+ *        description: Some error happened
+ */
+router.delete("/:tb_institution_id/:id", orderconsignment.delete);
+
 module.exports = router;

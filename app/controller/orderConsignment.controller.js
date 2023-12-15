@@ -8,6 +8,24 @@ const { entity } = require('../model');
 const entityController = require('./entity.controller.js');
 const orderItem = require('./orderItemConsignment.controller.js');
 const stockStatement = require('./stockStatement.controller.js');
+const ControllerOrderConsignmentCard = require("../controller/orderConsignmentCard.controller.js");
+const ControllerOrderPaid = require("../controller/orderPaid.controller.js");
+const ControllerOrderBonus = require("../controller/orderBonus.controller.js");
+const ControllerOrderItemConsignment = require("../controller/orderItemConsignment.controller.js");
+const ControllerOrdeItem = require("../controller/orderItem.controller.js");
+const ControllerOrderSale = require("../controller/orderSale.controller.js");
+const OrderItemSale = require('./orderItemSale.controller.js');
+const ControllerOrderSaleCard = require("../controller/orderSaleCard.controller.js");
+const ControllerOrderStockAdjust = require("../controller/orderStockAdjust.controller.js");
+const ControllerOrderStockTransfer = require("../controller/orderStockTransfer.controller.js");
+const OrderItemStockTransfer = require('./orderItemStockTransfer.controller.js');
+const ControllerStockStatement = require("../controller/stockStatement.controller.js");
+const ControllerFinancial = require("../controller/financial.controller.js");
+const SalesRouteCustomerController = require('./salesRouteCustomer.controller.js');
+const SalesRouteController = require("../controller/salesRoute.controller.js");
+
+
+
 
 class OrderConsignmentController extends Base {
   static async getById(id, tb_institution_id, kind) {
@@ -635,6 +653,7 @@ class OrderConsignmentController extends Base {
       } else {
         sqltxt = sqltxt + 'and tb_customer_id <> ?';
       }
+      sqltxt = sqltxt + 'order by ord.dt_record desc ';
 
       Tb.sequelize.query(
         sqltxt,
@@ -729,7 +748,7 @@ class OrderConsignmentController extends Base {
         '   on (ora.id = ord.id) ' +
         '     and (ora.tb_institution_id = ord.tb_institution_id) ' +
         '     and (ora.terminal = ord.terminal) ' +
-   
+
         '   inner join tb_order_consignment orc ' +
         '   on (orc.id = ord.id)  ' +
         '     and (orc.tb_institution_id = ord.tb_institution_id) ' +
@@ -738,14 +757,14 @@ class OrderConsignmentController extends Base {
         '   on (ctm.id = orc.tb_customer_id) ' +
         '   inner join tb_entity slm  ' +
         '   on (slm.id = orc.tb_salesman_id) ' +
-        'where (ord.tb_institution_id = ? )  '+
-        ' and (orc.tb_customer_id = ?) '+
-        ' and (orc.kind = ? ) '+     
-        ' and (ora.finished = ?) '+
-        ' order by orc.id desc '+
+        'where (ord.tb_institution_id = ? )  ' +
+        ' and (orc.tb_customer_id = ?) ' +
+        ' and (orc.kind = ? ) ' +
+        ' and (ora.finished = ?) ' +
+        ' order by orc.id desc ' +
         ' limit 1 ',
         {
-          replacements: [tb_institution_id, tb_customer_id,'supplying','S'],
+          replacements: [tb_institution_id, tb_customer_id, 'supplying', 'S'],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve(data[0]);
@@ -1007,25 +1026,39 @@ class OrderConsignmentController extends Base {
     return promise;
   }
 
-
-  static async delete(order) {
-    const promise = new Promise((resolve, reject) => {
-      Tb.destroy({
-        where: {
-          id: order.id,
-          tb_institution_id: order.tb_institution_id,
-          terminal: order.terminal,
-        }
-      })
-        .then((data) => {
-          resolve(data);
-        })
-        .catch(err => {
-          reject("OrderConsignemnt.delete:" + err);
-        });
+  static async delete(tb_institution_id, id) {
+    const promise = new Promise(async (resolve, reject) => {
+      try {
+        //01 - tb_order_bonus;
+        await ControllerOrderBonus.cleanUp(tb_institution_id, id);
+        //02 - tb_order_consignment
+        await this.cleanUp(tb_institution_id, id);
+        //03 - tb_order_consignment_card
+        await ControllerOrderConsignmentCard.cleanUp(tb_institution_id, id);
+        //04 - tb_order_item
+        await ControllerOrdeItem.cleanUp(tb_institution_id, id);
+        //05 - tb_order_paid      
+        await ControllerOrderPaid.cleanUp(tb_institution_id, id);
+        //06 - tb_order_sale
+        await ControllerOrderSale.cleanUp(tb_institution_id, id);
+        //07 - tb_order_sale_card
+        await ControllerOrderSaleCard.cleanUp(tb_institution_id, id);
+        //08 - tb_order_stock_adjust
+        await ControllerOrderStockAdjust.cleanUp(tb_institution_id, id);
+        //09 - tb_order_stocktransfer
+        await ControllerOrderStockTransfer.cleanUp(tb_institution_id, id);
+        //10 - tb_stock_statement
+        await ControllerStockStatement.cleanUp(tb_institution_id, id);
+        //11 - financial
+        await ControllerFinancial.cleanUp(tb_institution_id, id);
+        resolve(`Delete executado com sucesso`)
+      } catch (error) {
+        reject(`orderConsignment.delete:${error}`)
+      }
     });
     return promise;
   }
+
 
 
   static async closure(body) {
@@ -1171,7 +1204,7 @@ class OrderConsignmentController extends Base {
           dataItem = {
             id: 0,
             tb_institution_id: body.order.tb_institution_id,
-            tb_order_id: body.order.id,     
+            tb_order_id: body.order.id,
             terminal: 0,
             tb_order_item_id: item.id,
             tb_stock_list_id: item.tb_stock_list_id,
@@ -1205,12 +1238,13 @@ class OrderConsignmentController extends Base {
   static async cleanUp(tb_institution_id, id) {
     const promise = new Promise(async (resolve, reject) => {
       try {
-        const order = {
+        Tb.destroy({
+          where: {
           tb_institution_id: tb_institution_id,
           id: id,
           terminal: 0,
-        }
-        await this.delete(order);
+          }
+        })
         resolve("clenUp executado com sucesso!");
       } catch (error) {
         reject('orderConsignment.cleanUp ' + error);
