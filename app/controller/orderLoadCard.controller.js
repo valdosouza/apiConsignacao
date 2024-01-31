@@ -289,6 +289,7 @@ class OrderLoadCardController extends Base {
 
   static async insert(body) {
     const promise = new Promise(async (resolve, reject) => {
+      console.log(body);
       const dataOrder = {
         id: 0,
         tb_institution_id: body.tb_institution_id,

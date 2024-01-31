@@ -13,9 +13,7 @@ class AuditLogOrcTwoRecordsController extends AuditLog {
           await this.hasSupplying(item.tb_institution_id, item.id)
             .then(async (data) => {              
               if (data.result == false) {
-                console.log(data);
-                console.log('--------------');                
-                item.kind = 'supplying';
+               item.kind = 'supplying';
                 item.total_value = 0;
                 item.change_value = 0;
                 item.previous_debit_balance = 0;

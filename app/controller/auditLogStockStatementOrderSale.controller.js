@@ -9,10 +9,8 @@ class AuditLogStockStatementOrderSale extends AuditLog {
   static async doExecute() {
     const promise = new Promise(async (resolve, reject) => {
       try {
-        console.log("efetuando a busca");
         var orderList = await this.getList();
         var dataItem = {};
-        console.log(orderList.length);
         if (orderList.length > 0) {
           for (var item of orderList) {
             dataItem = {

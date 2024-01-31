@@ -16,7 +16,7 @@ class AuditLogOrcSaleController extends AuditLog {
         var body = {};
         for (var item of orderList) {          
           orderSale = await this.getOrderSale(item.tb_institution_id, item.id, item.terminal);          
-          console.log(orderSale);
+          
           if (orderSale.id == 0) {
             body = await this.geraBody(item.tb_institution_id, item.id, item.terminal) ; 
             StockDestiny = await entityHasStockList.getByEntity(body.order.tb_institution_id, body.order.tb_customer_id,'customer');

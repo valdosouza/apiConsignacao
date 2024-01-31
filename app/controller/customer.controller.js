@@ -69,10 +69,13 @@ class CustomerController extends Base {
           replacements: [tb_institution_id, docNumber, tb_institution_id, docNumber],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
-          if (data.length > 0)
-            resolve(data[0])
-          else
-            resolve(data);
+          
+          if (data.length > 0) {
+            resolve(data[0]);
+          } else {
+            console.log("Sem registro");
+            resolve({ id: 0, tb_salesman_id: 0 });
+          }
         })
         .catch(err => {
           reject('getByDocNumber: ' + err);
@@ -384,44 +387,44 @@ class CustomerController extends Base {
     return promise;
   }
   static getSQLListSalesRouteTodos() {
-      var sqltxt = 
+    var sqltxt =
       '  Select src.tb_institution_id, src.tb_sales_route_id, sr.description name_sales_route, src.sequence, et.id tb_customer_id,  et.name_company,  et.nick_trade,  "F" doc_kind, pe.cpf doc_number,adr. street,adr.nmbr,adr.complement, src.active,src.turn_back ' +
-        'from tb_customer ct  ' +
-        '  inner join tb_entity et  ' +
-        '  on (ct.id = et.id)  ' +
-        '  inner join tb_person pe ' +
-        '  on (pe.id = et.id) ' +
-        '  inner join tb_address adr ' +
-        '  on (adr.id = et.id) ' +
-        ' inner join tb_sales_route_customer src  ' +
-        ' on (ct.id = src.tb_customer_id )  ' +
-        ' and  (ct.tb_institution_id = src.tb_institution_id) ' +
-        ' inner  join  tb_sales_route sr  ' +
-        ' on (src.tb_sales_route_id = sr.id)  ' +
-        '  and  (src.tb_institution_id = sr.tb_institution_id) ' +
-        'where ct.tb_institution_id =? ' +
-        '  and ( (tb_sales_route_id =?) or (tb_sales_route_id =0))' +
-        ' and (ct.tb_region_id = ?)' +
-        ' and (ct.active = ?) '+
-        'union ' +
-        'Select src.tb_institution_id, src.tb_sales_route_id, sr.description name_sales_route, src.sequence, et.id tb_customer_id,  et.name_company,  et.nick_trade,  "J" doc_kind, co.cnpj doc_number,adr. street,adr.nmbr,adr.complement , src.active,src.turn_back ' +
-        'from tb_customer ct  ' +
-        '  inner join tb_entity et  ' +
-        '  on (ct.id = et.id)  ' +
-        '  inner join tb_company co ' +
-        '  on (co.id = et.id) ' +
-        '  inner join tb_address adr ' +
-        '  on (adr.id = et.id) ' +
-        ' inner  join tb_sales_route_customer src  ' +
-        ' on (ct.id = src.tb_customer_id )  ' +
-        ' and  (ct.tb_institution_id = src.tb_institution_id) ' +
-        ' inner  join  tb_sales_route sr  ' +
-        ' on (src.tb_sales_route_id = sr.id)  ' +
-        '  and  (src.tb_institution_id = sr.tb_institution_id) ' +
-        'where ct.tb_institution_id =? ' +
-        '  and ( (tb_sales_route_id =?) or (tb_sales_route_id =0))' +
-        ' and (ct.tb_region_id = ?)'+
-        ' and (ct.active = ?) ';
+      'from tb_customer ct  ' +
+      '  inner join tb_entity et  ' +
+      '  on (ct.id = et.id)  ' +
+      '  inner join tb_person pe ' +
+      '  on (pe.id = et.id) ' +
+      '  inner join tb_address adr ' +
+      '  on (adr.id = et.id) ' +
+      ' inner join tb_sales_route_customer src  ' +
+      ' on (ct.id = src.tb_customer_id )  ' +
+      ' and  (ct.tb_institution_id = src.tb_institution_id) ' +
+      ' inner  join  tb_sales_route sr  ' +
+      ' on (src.tb_sales_route_id = sr.id)  ' +
+      '  and  (src.tb_institution_id = sr.tb_institution_id) ' +
+      'where ct.tb_institution_id =? ' +
+      '  and ( (tb_sales_route_id =?) or (tb_sales_route_id =0))' +
+      ' and (ct.tb_region_id = ?)' +
+      ' and (ct.active = ?) ' +
+      'union ' +
+      'Select src.tb_institution_id, src.tb_sales_route_id, sr.description name_sales_route, src.sequence, et.id tb_customer_id,  et.name_company,  et.nick_trade,  "J" doc_kind, co.cnpj doc_number,adr. street,adr.nmbr,adr.complement , src.active,src.turn_back ' +
+      'from tb_customer ct  ' +
+      '  inner join tb_entity et  ' +
+      '  on (ct.id = et.id)  ' +
+      '  inner join tb_company co ' +
+      '  on (co.id = et.id) ' +
+      '  inner join tb_address adr ' +
+      '  on (adr.id = et.id) ' +
+      ' inner  join tb_sales_route_customer src  ' +
+      ' on (ct.id = src.tb_customer_id )  ' +
+      ' and  (ct.tb_institution_id = src.tb_institution_id) ' +
+      ' inner  join  tb_sales_route sr  ' +
+      ' on (src.tb_sales_route_id = sr.id)  ' +
+      '  and  (src.tb_institution_id = sr.tb_institution_id) ' +
+      'where ct.tb_institution_id =? ' +
+      '  and ( (tb_sales_route_id =?) or (tb_sales_route_id =0))' +
+      ' and (ct.tb_region_id = ?)' +
+      ' and (ct.active = ?) ';
     return sqltxt;
   }
 
@@ -429,11 +432,11 @@ class CustomerController extends Base {
     const promise = new Promise(async (resolve, reject) => {
 
       var sqltxt = this.getSQLListSalesRouteTodos();
-           
+
       Tb.sequelize.query(
         sqltxt,
         {
-          replacements: [tb_institution_id, tb_sales_route_id, tb_region_id,'S', tb_institution_id, tb_sales_route_id, tb_region_id, 'S'],
+          replacements: [tb_institution_id, tb_sales_route_id, tb_region_id, 'S', tb_institution_id, tb_sales_route_id, tb_region_id, 'S'],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve(data);
@@ -444,27 +447,27 @@ class CustomerController extends Base {
     });
     return promise;
   }
-  static getListSalesRouteAtender = (tb_institution_id, tb_sales_route_id, tb_region_id,dt_record) => {
+  static getListSalesRouteAtender = (tb_institution_id, tb_sales_route_id, tb_region_id, dt_record) => {
     const promise = new Promise(async (resolve, reject) => {
 
-      var sqltxt =       
-      'select * '+
-      'from ( '+
-             this.getSQLListSalesRouteTodos() +
-      ') vwsr '+
-      'where tb_customer_id not in( '+
-      '  select ora.tb_customer_id '+
-      '  from tb_order_attendance ora '+
-      '     inner join tb_order ord '+
-      '     on (ord.id = ora.id) '+
-      '     and (ord.tb_institution_id = ora.tb_institution_id) '+
-      '  where  ord.dt_record = ? '+
-      ' )'+
-      'order by 4 ';           
+      var sqltxt =
+        'select * ' +
+        'from ( ' +
+        this.getSQLListSalesRouteTodos() +
+        ') vwsr ' +
+        'where tb_customer_id not in( ' +
+        '  select ora.tb_customer_id ' +
+        '  from tb_order_attendance ora ' +
+        '     inner join tb_order ord ' +
+        '     on (ord.id = ora.id) ' +
+        '     and (ord.tb_institution_id = ora.tb_institution_id) ' +
+        '  where  ord.dt_record = ? ' +
+        ' )' +
+        'order by 4 ';
       Tb.sequelize.query(
         sqltxt,
         {
-          replacements: [tb_institution_id, tb_sales_route_id, tb_region_id,'S', tb_institution_id, tb_sales_route_id, tb_region_id, 'S',dt_record],
+          replacements: [tb_institution_id, tb_sales_route_id, tb_region_id, 'S', tb_institution_id, tb_sales_route_id, tb_region_id, 'S', dt_record],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve(data);
@@ -476,27 +479,27 @@ class CustomerController extends Base {
     return promise;
   }
 
-  static getListSalesRouteAtendido = (tb_institution_id, tb_sales_route_id, tb_region_id,dt_record) => {
+  static getListSalesRouteAtendido = (tb_institution_id, tb_sales_route_id, tb_region_id, dt_record) => {
     const promise = new Promise(async (resolve, reject) => {
 
-      var sqltxt = 
-      'select distinct vwsr.*  '+
-      'from ( '+
-        this.getSQLListSalesRouteTodos()+
-      '  ) vwsr '+
-      '  inner join tb_order_attendance ora '+
-      '  on (vwsr.tb_institution_id = ora.tb_institution_id) '+
-      '    and (vwsr.tb_customer_id = ora.tb_customer_id) '+
-      '  inner join tb_order ord '+
-      '  on (ora.tb_institution_id = ord.tb_institution_id) '+
-      '    and (ora.id = ord.id)     '+
-      'where  (ord.dt_record = ?) '+
-      ' and (ora.finished = ?) ';
-           
+      var sqltxt =
+        'select distinct vwsr.*  ' +
+        'from ( ' +
+        this.getSQLListSalesRouteTodos() +
+        '  ) vwsr ' +
+        '  inner join tb_order_attendance ora ' +
+        '  on (vwsr.tb_institution_id = ora.tb_institution_id) ' +
+        '    and (vwsr.tb_customer_id = ora.tb_customer_id) ' +
+        '  inner join tb_order ord ' +
+        '  on (ora.tb_institution_id = ord.tb_institution_id) ' +
+        '    and (ora.id = ord.id)     ' +
+        'where  (ord.dt_record = ?) ' +
+        ' and (ora.finished = ?) ';
+
       Tb.sequelize.query(
         sqltxt,
         {
-          replacements: [tb_institution_id, tb_sales_route_id, tb_region_id,'S', tb_institution_id, tb_sales_route_id, tb_region_id,'S', dt_record,'S'],
+          replacements: [tb_institution_id, tb_sales_route_id, tb_region_id, 'S', tb_institution_id, tb_sales_route_id, tb_region_id, 'S', dt_record, 'S'],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve(data);
@@ -511,17 +514,17 @@ class CustomerController extends Base {
   static getListSalesRouteRetorno = (tb_institution_id, tb_sales_route_id, tb_region_id) => {
     const promise = new Promise(async (resolve, reject) => {
 
-      var sqltxt = 
-      'select distinct vwsr.*, "" dt_record '+
-      'from ( '+
-        this.getSQLListSalesRouteTodos()+
-      '  ) vwsr '+
-      'where  (turn_back = ?) ';
-           
+      var sqltxt =
+        'select distinct vwsr.*, "" dt_record ' +
+        'from ( ' +
+        this.getSQLListSalesRouteTodos() +
+        '  ) vwsr ' +
+        'where  (turn_back = ?) ';
+
       Tb.sequelize.query(
         sqltxt,
         {
-          replacements: [tb_institution_id, tb_sales_route_id, tb_region_id,'S', tb_institution_id, tb_sales_route_id, tb_region_id,'S','S'],
+          replacements: [tb_institution_id, tb_sales_route_id, tb_region_id, 'S', tb_institution_id, tb_sales_route_id, tb_region_id, 'S', 'S'],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve(data);
@@ -536,17 +539,17 @@ class CustomerController extends Base {
   static getListSalesRouteRecolhido = (tb_institution_id, tb_sales_route_id, tb_region_id) => {
     const promise = new Promise(async (resolve, reject) => {
 
-      var sqltxt = 
-      'select distinct vwsr.*, "" dt_record '+
-      'from ( '+
-        this.getSQLListSalesRouteTodos()+
-      '  ) vwsr '+
-      'where  (active = ?) ';
-           
+      var sqltxt =
+        'select distinct vwsr.*, "" dt_record ' +
+        'from ( ' +
+        this.getSQLListSalesRouteTodos() +
+        '  ) vwsr ' +
+        'where  (active = ?) ';
+
       Tb.sequelize.query(
         sqltxt,
         {
-          replacements: [tb_institution_id, tb_sales_route_id, tb_region_id, 'S', tb_institution_id, tb_sales_route_id, tb_region_id,'S', 'N'],
+          replacements: [tb_institution_id, tb_sales_route_id, tb_region_id, 'S', tb_institution_id, tb_sales_route_id, tb_region_id, 'S', 'N'],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve(data);

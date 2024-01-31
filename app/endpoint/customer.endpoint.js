@@ -25,7 +25,7 @@ class CustomerEndPoint {
     return dataRes;
   }
 
-  static _saveWithoutReturn(data) {
+  static _saveWithoutReturn(data, msg) {
     var docNumber = "";
     var docKind = "";
     if (data.person) {
@@ -42,39 +42,75 @@ class CustomerEndPoint {
       nick_trade: data.entity.nick_trade,
       doc_kind: docKind,
       doc_number: docNumber,
-      error: "Não foi possivel salva este Cliente.",
+      error: msg,
     };
     return dataRes;
   }
 
-  static save = (req, res) => {
-    try {
-      if (req.body.customer.id > 0) {
-        CustomerController.getById(req.body.customer.tb_institution_id, req.body.customer.id)
-          .then(dataById => {
-            if (dataById) {
-              CustomerController.update(req.body)
-                .then(data => {
-                  res.send(this._saveReturn(data));
-                })
-            } else {
-              res.status(201).json(this._saveWithoutReturn(req.body));
-            }
-          });
-      } else {
+  static _validateSave = (body) => {
+    const promise = new Promise(async (resolve, reject) => {
+      try {
         var docNumber = "";
         var docKind = "";
-        if (req.body.person) {
-          docNumber = req.body.person.cpf;
+        if (body.person) {
+          docNumber = body.person.cpf;
           docKind = "F";
         }
         if (docNumber == "") {
-          docNumber = req.body.company.cnpj;
+          docNumber = body.company.cnpj;
           docKind = "J";
         }
-        CustomerController.getByDocNumber(req.body.customer.tb_institution_id, docNumber)
-          .then(dataDocnumber => {            
-            if (dataDocnumber.length == 0) {
+        var dataDocnumber = await CustomerController.getByDocNumber(body.customer.tb_institution_id, docNumber);
+
+        //Validar se o cliente pertence a outro vendedor
+        if ((dataDocnumber.tb_salesman_id != body.customer.tb_salesman_id) && (dataDocnumber.tb_salesman_id > 0)) {
+          resolve({ validate: false, msg: "Este cliente pertence a outro Vendedor." });
+
+
+        } else {
+          resolve({ validate: true, msg: "" });
+        }
+
+      } catch (error) {
+        reject({ validate: false, msg: error });
+      }
+    });
+    return promise;
+  };
+  static save = async (req, res) => {
+    try {
+
+      var result = await this._validateSave(req.body);
+      
+      if (result.validate == true) {
+        if (req.body.customer.id > 0) {          
+          CustomerController.getById(req.body.customer.tb_institution_id, req.body.customer.id)
+            .then(dataById => {
+              if (dataById) {
+                CustomerController.update(req.body)
+                  .then(data => {
+                    res.send(this._saveReturn(data));
+                  })
+              } else {
+                res.status(201).json(this._saveWithoutReturn(req.body, "Não foi possivel salva este Cliente."));
+              }
+            });
+        } else {
+          
+          var docNumber = "";
+          var docKind = "";
+          if (req.body.person) {
+            docNumber = req.body.person.cpf;
+            docKind = "F";
+          }
+          if (docNumber == "") {
+            docNumber = req.body.company.cnpj;
+            docKind = "J";
+          }
+          CustomerController.getByDocNumber(req.body.customer.tb_institution_id, docNumber)
+          .then((dataDocnumber) => {
+            console.log(dataDocnumber);
+            if (dataDocnumber.id == 0) {
               CustomerController.insert(req.body)
                 .then(data => {
                   res.send(this._saveReturn(data));
@@ -86,8 +122,10 @@ class CustomerEndPoint {
                 })
             }
           });
+        }
+      } else {
+        res.status(201).json(this._saveWithoutReturn(req.body, result.msg));
       }
-
     } catch (err) {
       res.send(err);
     }
