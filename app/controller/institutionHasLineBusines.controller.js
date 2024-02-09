@@ -12,8 +12,8 @@ class InstitutionHasLineBusinesController extends Base {
                 .then((data) => {
                     resolve(data);
                 })
-                .catch(err => {
-                    reject("Erro:"+ err);
+                .catch(error => {
+                    reject("Erro:"+ error);
                 });
         });
         return promise;        
@@ -28,8 +28,8 @@ class InstitutionHasLineBusinesController extends Base {
         .then((data)=>{
             resolve(data);
         })
-        .catch(err => {
-          reject("Erro:"+ err);
+        .catch(error => {
+          reject("Erro:"+ error);
         });
       });
       return promise;        
@@ -43,8 +43,8 @@ class InstitutionHasLineBusinesController extends Base {
                 .then((data) => {
                     resolve(data);
                 })
-                .catch(err => {
-                    reject("Erro:"+ err);
+                .catch(error => {
+                    reject("Erro:"+ error);
                 });
             */
         });

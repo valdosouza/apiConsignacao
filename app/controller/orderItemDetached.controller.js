@@ -22,7 +22,7 @@ class OrderItemDetachedController extends Base {
                         data[0].maxId = 0;
                     resolve(data[0].maxId + 1);
                 })
-                .catch(err => {
+                .catch(error => {
                     reject(1);
                 });
         });

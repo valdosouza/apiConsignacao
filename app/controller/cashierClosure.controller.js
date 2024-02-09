@@ -33,8 +33,8 @@ class CashierClosureController extends Base {
         } else {
           resolve("Não foi encontrado caixa aberto para este usuário!");
         }
-      } catch (err) {
-        reject('CashierClosure.closure: ' + err);
+      } catch (error) {
+        reject('CashierClosure.closure: ' + error);
       }
 
     });
@@ -101,8 +101,8 @@ class CashierClosureController extends Base {
             resolve(dataResult);
           })
 
-      } catch (err) {
-        reject('CashierClosure.closure: ' + err);
+      } catch (error) {
+        reject('CashierClosure.closure: ' + error);
       }
     });
     return promise;
@@ -127,8 +127,8 @@ class CashierClosureController extends Base {
             resolve(data);
           })
 
-      } catch (err) {
-        reject('CashierClosure.getlist: ' + err);
+      } catch (error) {
+        reject('CashierClosure.getlist: ' + error);
       }
     });
     return promise;
@@ -203,8 +203,8 @@ class CashierClosureController extends Base {
 
         resolve(DataGeral);
 
-      } catch (err) {
-        reject('CashierClosure.getForClosure: ' + err);
+      } catch (error) {
+        reject('CashierClosure.getForClosure: ' + error);
       }
     });
     return promise;

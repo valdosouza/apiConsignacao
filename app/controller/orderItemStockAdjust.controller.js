@@ -11,8 +11,8 @@ class OrderItemStockAdjustController extends Base {
         .then(data => {
           resolve(data);
         })          
-        .catch(err => {
-          reject("itemStockAdjust.insert:"+ err);
+        .catch(error => {
+          reject("itemStockAdjust.insert:"+ error);
         });
       });
       return promise;        
@@ -46,8 +46,8 @@ class OrderItemStockAdjustController extends Base {
             }).then(data => {
               resolve(data);
             })
-            .catch(err => {
-              reject("itemStockAdjust.getlist: " + err);
+            .catch(error => {
+              reject("itemStockAdjust.getlist: " + error);
             });
         });
         return promise;
@@ -73,8 +73,8 @@ class OrderItemStockAdjustController extends Base {
           }).then(data => {
             resolve(data);
           })
-          .catch(err => {
-            reject('itemStockAdjust.get: '+err);
+          .catch(error => {
+            reject('itemStockAdjust.get: '+error);
           });
       });
       return promise;
@@ -86,8 +86,8 @@ class OrderItemStockAdjustController extends Base {
         .then(data => {
           resolve(data);
         })          
-        .catch(err => {
-          reject("itemStockAdjust.update:"+ err);
+        .catch(error => {
+          reject("itemStockAdjust.update:"+ error);
         });
       });
       return promise;        
@@ -99,8 +99,8 @@ class OrderItemStockAdjustController extends Base {
           .then(data => {
             resolve(data);
           })          
-          .catch(err => {
-            reject("itemStockAdjust.delete:"+ err);
+          .catch(error => {
+            reject("itemStockAdjust.delete:"+ error);
           });
         });
         return promise;        

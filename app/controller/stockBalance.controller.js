@@ -11,8 +11,8 @@ class StockBalanceController extends Base {
         .then((data) => {
           resolve(data);
         })
-        .catch(err => {
-          reject("price.insert:" + err);
+        .catch(error => {
+          reject("price.insert:" + error);
         });
     });
     return promise;
@@ -91,8 +91,8 @@ class StockBalanceController extends Base {
 
           }
         })
-        .catch(err => {
-          reject("StockBalance.getlist: " + err);
+        .catch(error => {
+          reject("StockBalance.getlist: " + error);
         });
     });
     return promise;
@@ -159,8 +159,8 @@ class StockBalanceController extends Base {
 
           }
         })
-        .catch(err => {
-          reject("StockBalance.getListByEnitity: " + err);
+        .catch(error => {
+          reject("StockBalance.getListByEnitity: " + error);
         });
     });
     return promise;
@@ -223,8 +223,8 @@ class StockBalanceController extends Base {
             resolve(dataResult);
           }
         })
-        .catch(err => {
-          reject("StockBalance.getListAllCustomer: " + err);
+        .catch(error => {
+          reject("StockBalance.getListAllCustomer: " + error);
         });
     });
     return promise;
@@ -331,8 +331,8 @@ class StockBalanceController extends Base {
 
           }
         })
-        .catch(err => {
-          reject("StockBalance.getListAllCustomer: " + err);
+        .catch(error => {
+          reject("StockBalance.getListAllCustomer: " + error);
         });
     });
     return promise;
@@ -346,8 +346,8 @@ class StockBalanceController extends Base {
           .then((data) => {
               resolve(data);
           })
-          .catch(err => {
-              reject("Erro:"+ err);
+          .catch(error => {
+              reject("Erro:"+ error);
           });
       */
     });
@@ -369,8 +369,8 @@ class StockBalanceController extends Base {
           await Tb.create(dataPrice);
         }
         resolve("Estoque adicionado");
-      } catch (err) {
-        reject('autoInsertByStockList: ' + err)
+      } catch (error) {
+        reject('autoInsertByStockList: ' + error);
       }
     });
     return promise;
@@ -392,8 +392,8 @@ class StockBalanceController extends Base {
         }).then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject("stockBalance." + err);
+        .catch(error => {
+          reject("stockBalance." + error);
         });
     });
     return promise;

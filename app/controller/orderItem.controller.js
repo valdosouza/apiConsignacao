@@ -22,8 +22,8 @@ class OrderItemController extends Base {
             resolve(1);
           }
         })
-        .catch(err => {
-          reject('orderItem.getNexId: ' + err);
+        .catch(error => {
+          reject('orderItem.getNexId: ' + error);
         });
     });
     return promise;
@@ -37,8 +37,8 @@ class OrderItemController extends Base {
         .then((data) => {
           resolve(data);
         })
-        .catch(err => {
-          reject("item.insert:" + err);
+        .catch(error => {
+          reject("item.insert:" + error);
         });
     });
     return promise;
@@ -57,8 +57,8 @@ class OrderItemController extends Base {
         }).then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject("item.getlist: " + err);
+        .catch(error => {
+          reject("item.getlist: " + error);
         });
     });
     return promise;
@@ -78,8 +78,8 @@ class OrderItemController extends Base {
         }).then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject('item.get: ' + err);
+        .catch(error => {
+          reject('item.get: ' + error);
         });
     });
     return promise;
@@ -93,8 +93,8 @@ class OrderItemController extends Base {
         .then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject("item.update:" + err);
+        .catch(error => {
+          reject("item.update:" + error);
         });
     });
     return promise;
@@ -113,8 +113,8 @@ class OrderItemController extends Base {
         .then((data) => {
           resolve(data);
         })
-        .catch(err => {
-          reject("Erro:" + err);
+        .catch(error => {
+          reject("Erro:" + error);
         });
     });
     return promise;
@@ -131,8 +131,8 @@ class OrderItemController extends Base {
         .then((data) => {
           resolve(data);
         })
-        .catch(err => {
-          reject("orderItem.CleanUp:" + err);
+        .catch(error => {
+          reject("orderItem.CleanUp:" + error);
         });
     });
     return promise;

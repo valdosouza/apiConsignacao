@@ -73,6 +73,7 @@ db.stockBalance = require("./stockBalance.model.js")(sequelize, Sequelize);
 db.stockStatement = require("./stockStatement.model.js")(sequelize, Sequelize);
 
 db.collaborator = require("./collaborator.model.js")(sequelize, Sequelize);
+db.salesman = require("../salesman/model.js")(sequelize, Sequelize);
 
 db.customer = require("./customer.model.js")(sequelize, Sequelize);
 

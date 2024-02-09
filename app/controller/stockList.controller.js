@@ -34,8 +34,8 @@ class StockListController extends Base {
           stockbalance.autoInsertByStokcList(stocklist.tb_institution_id, data.id);
           resolve(data);
         })
-        .catch(err => {
-          reject("Erro:" + err);
+        .catch(error => {
+          reject("Erro:" + error);
         });
     });
     return promise;
@@ -54,8 +54,8 @@ class StockListController extends Base {
         }).then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject(new Error("stocklist.gelist:" + err));
+        .catch(error => {
+          reject(new Error("stocklist.gelist:" + error));
         });
     });
     return promise;
@@ -74,8 +74,8 @@ class StockListController extends Base {
         }).then(data => {
           resolve(data[0]);
         })
-        .catch(err => {
-          reject('stocklist.get: ' + err);
+        .catch(error => {
+          reject('stocklist.get: ' + error);
         });
     });
     return promise;
@@ -89,8 +89,8 @@ class StockListController extends Base {
         .then(data => {
           resolve(data[0]);
         })
-        .catch(err => {
-          reject("Erro:" + err);
+        .catch(error => {
+          reject("Erro:" + error);
         });
     });
     return promise;
@@ -104,8 +104,8 @@ class StockListController extends Base {
           .then((data) => {
               resolve(data);
           })
-          .catch(err => {
-              reject("Erro:"+ err);
+          .catch(error => {
+              reject("Erro:"+ error);
           });
       */
     });

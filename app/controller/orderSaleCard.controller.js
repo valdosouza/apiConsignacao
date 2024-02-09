@@ -20,8 +20,8 @@ class OrderSaleCardController extends Base {
         }).then(data => {
             resolve(data[0]);
         })
-        .catch(err => {
-          reject('getById: ' + err);
+        .catch(error => {
+          reject('getById: ' + error);
         });
     });
     return promise;
@@ -33,8 +33,8 @@ class OrderSaleCardController extends Base {
         .then(async (data)=>{
           resolve(data);
         })            
-        .catch(err => {
-          reject("OrderSaleCardController.insert:"+ err);
+        .catch(error => {
+          reject("OrderSaleCardController.insert:"+ error);
         });        
     });
     return promise;        
@@ -74,8 +74,8 @@ class OrderSaleCardController extends Base {
           }       
           resolve(resData);
         })
-        .catch(err => {
-          reject("OrderSaleCard.getPreListForSale: " + err);
+        .catch(error => {
+          reject("OrderSaleCard.getPreListForSale: " + error);
         });
     });
     return promise;
@@ -133,8 +133,8 @@ class OrderSaleCardController extends Base {
             resolve({ id: 0 });
           }
         })
-        .catch(err => {
-          reject('orderSaleCard.getOrder: ' + err);
+        .catch(error => {
+          reject('orderSaleCard.getOrder: ' + error);
         });
     });
     return promise;
@@ -153,8 +153,8 @@ class OrderSaleCardController extends Base {
 
         resolve(result);
       }
-      catch (err) {
-        reject('OrderSaleCard.getMainOrderSaleCard: ' + err);
+      catch (error) {
+        reject('OrderSaleCard.getMainOrderSaleCard: ' + error);
       }
     });
     return promise;
@@ -193,8 +193,8 @@ class OrderSaleCardController extends Base {
           }       
           resolve(resData);
         })
-        .catch(err => {
-          reject("OrderSaleCard.get: " + err);
+        .catch(error => {
+          reject("OrderSaleCard.get: " + error);
         });
     });
     return promise;
@@ -211,8 +211,8 @@ class OrderSaleCardController extends Base {
         .then((data) => {
           resolve(data);
         })
-        .catch(err => {
-          reject("OrderSAleCard.delete:" + err);
+        .catch(error => {
+          reject("OrderSAleCard.delete:" + error);
         });
     });
     return promise;

@@ -11,8 +11,8 @@ class RestButtonController extends Base {
         .then(result => {
           resolve(result);
         })
-        .catch(err => {
-          reject(new Error("RestButton - " + err));
+        .catch(error => {
+          reject(new Error("RestButton - " + error));
         });
     });
     return promise;
@@ -30,8 +30,8 @@ class RestButtonController extends Base {
             resolve("Nao foi possivel atualizar com id=${id}. Talvez RestButton não foi encontrada ou req.body está vazio!");
           }
         })
-        .catch(err => {
-          reject(new Error("RestButton - " + err));
+        .catch(error => {
+          reject(new Error("RestButton - " + error));
         });
     });
   }
@@ -67,8 +67,8 @@ class RestButtonController extends Base {
         }).then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject(new Error("RestButton:" + err));
+        .catch(error => {
+          reject(new Error("RestButton:" + error));
         });
     });
     return promise;
@@ -91,8 +91,8 @@ class RestButtonController extends Base {
         }).then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject(new Error("RestButton:" + err));
+        .catch(error => {
+          reject(new Error("RestButton:" + error));
         });
     });
     return promise;

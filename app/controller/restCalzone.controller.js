@@ -12,8 +12,8 @@ class RestCalzoneController extends Base {
         .then(result => {
           resolve(result);
         })
-        .catch(err => {
-          reject(new Error("RestCalzone - " + err));
+        .catch(error => {
+          reject(new Error("RestCalzone - " + error));
         });
     });
     return promise;
@@ -31,8 +31,8 @@ class RestCalzoneController extends Base {
             resolve("Nao foi possivel atualizar com id=${id}. Talvez RestCalzone não foi encontrada ou req.body está vazio!");
           }
         })
-        .catch(err => {
-          reject(new Error("RestCalzone - " + err));
+        .catch(error => {
+          reject(new Error("RestCalzone - " + error));
         });
     });
   }
@@ -74,8 +74,8 @@ class RestCalzoneController extends Base {
         }).then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject(new Error("RestCalzone:" + err));
+        .catch(error => {
+          reject(new Error("RestCalzone:" + error));
         });
     });
     return promise;

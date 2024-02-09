@@ -12,8 +12,8 @@ class PriceController extends Base {
           .then((data) => {             
             resolve(data);
           })
-          .catch(err => {
-            reject("price.insert:"+ err);
+          .catch(error => {
+            reject("price.insert:"+ error);
           });        
     });
     return promise;        
@@ -52,8 +52,8 @@ class PriceController extends Base {
           }).then(data => {              
             resolve(data);
           })
-          .catch(err => {
-            reject("price.getlist: " + err);
+          .catch(error => {
+            reject("price.getlist: " + error);
           });
       });
       return promise;
@@ -72,8 +72,8 @@ class PriceController extends Base {
         }).then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject('price.get: '+err);
+        .catch(error => {
+          reject('price.get: '+error);
         });
     });
     return promise;
@@ -104,8 +104,8 @@ class PriceController extends Base {
             })
           }            
         })          
-        .catch(err => {
-          reject("price.update:"+ err);
+        .catch(error => {
+          reject("price.update:"+ error);
         });
       });
     return promise;        
@@ -119,8 +119,8 @@ class PriceController extends Base {
               .then((data) => {
                   resolve(data);
               })
-              .catch(err => {
-                  reject("Erro:"+ err);
+              .catch(error => {
+                  reject("Erro:"+ error);
               });
           */
       });
@@ -142,8 +142,8 @@ class PriceController extends Base {
           await Tb.create(dataPrice);
         }
         resolve("Preços adicionas");
-      } catch (err) {
-        reject('autoInsertByPriceList: ' + err)
+      } catch (error) {
+        reject('autoInsertByPriceList: ' + error);
       }
     });
     return promise;
@@ -165,8 +165,8 @@ class PriceController extends Base {
         }).then(data => {          
           resolve(data);
         })
-        .catch(err => {
-          reject("price.productGetList: " + err);
+        .catch(error => {
+          reject("price.productGetList: " + error);
         });
     });
     return promise;

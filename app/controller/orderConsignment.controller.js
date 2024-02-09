@@ -46,8 +46,8 @@ class OrderConsignmentController extends Base {
             resolve({ 'id': 0 });
           }
         })
-        .catch(err => {
-          reject('getById: ' + err);
+        .catch(error => {
+          reject('getById: ' + error);
         });
     });
     return promise;
@@ -110,8 +110,8 @@ class OrderConsignmentController extends Base {
             color: "red",
           },);
         })
-        .catch(err => {
-          reject('getDividaVelhaBySalesman: ' + err);
+        .catch(error => {
+          reject('getDividaVelhaBySalesman: ' + error);
         });
     });
     return promise;
@@ -149,8 +149,14 @@ class OrderConsignmentController extends Base {
         '                                                          on (ord.id = oat.id)  ' +
         '                                                              and (ord.tb_institution_id = oat.tb_institution_id) ' +
         '                                                      where oat.tb_institution_id = ?  ' +
-        '                                                            and ord.dt_record = ?  ' +
-        '                                                            and (ord.tb_user_id = ?) ' +
+        '                                                            and ord.dt_record = ?  ';
+        if (tb_salesman_id == 0) {
+          sqltxt = sqltxt + ' and (ord.tb_user_id <> ?) ';
+        } else {
+          sqltxt = sqltxt + ' and (ord.tb_user_id = ?)  ';
+        };
+
+        sqltxt = sqltxt + 
         '                                                      ))  ' +
         ') current_debit_balance  ';
 
@@ -168,8 +174,8 @@ class OrderConsignmentController extends Base {
             color: "red",
           },);
         })
-        .catch(err => {
-          reject('getDividaVelhaByDay: ' + err);
+        .catch(error => {
+          reject('getDividaVelhaByDay: ' + error);
         });
     });
     return promise;
@@ -216,8 +222,8 @@ class OrderConsignmentController extends Base {
             color: "red",
           },);
         })
-        .catch(err => {
-          reject('getDividaVelhaByCustomer: ' + err);
+        .catch(error => {
+          reject('getDividaVelhaByCustomer: ' + error);
         });
     });
     return promise;
@@ -262,8 +268,8 @@ class OrderConsignmentController extends Base {
             color: "red",
           },);
         })
-        .catch(err => {
-          reject('getDividaVelhaByOrder: ' + err);
+        .catch(error => {
+          reject('getDividaVelhaByOrder: ' + error);
         });
     });
     return promise;
@@ -316,8 +322,8 @@ class OrderConsignmentController extends Base {
             color: "red",
           },);
         })
-        .catch(err => {
-          reject('getSaldoDevedor: ' + err);
+        .catch(error => {
+          reject('getSaldoDevedor: ' + error);
         });
     });
     return promise;
@@ -370,8 +376,8 @@ class OrderConsignmentController extends Base {
             color: "red",
           },);
         })
-        .catch(err => {
-          reject('getById: ' + err);
+        .catch(error => {
+          reject('getById: ' + error);
         });
     });
     return promise;
@@ -410,8 +416,8 @@ class OrderConsignmentController extends Base {
               resolve(body);
             })
         }
-      } catch (err) {
-        reject('OrderConsignmentController.saveCheckpoint: ' + err);
+      } catch (error) {
+        reject('OrderConsignmentController.saveCheckpoint: ' + error);
       }
     });
     return promise;
@@ -444,8 +450,8 @@ class OrderConsignmentController extends Base {
               resolve(body);
             })
         }
-      } catch (err) {
-        reject('OrderConsignmentController.saveSupplying: ' + err);
+      } catch (error) {
+        reject('OrderConsignmentController.saveSupplying: ' + error);
       }
     });
     return promise;
@@ -461,8 +467,8 @@ class OrderConsignmentController extends Base {
             resolve(data);
           })
       }
-      catch (err) {
-        reject("OrderConsignmentController.insert:" + err);
+      catch (error) {
+        reject("OrderConsignmentController.insert:" + error);
       }
       finally {
         resolve(data);
@@ -480,8 +486,8 @@ class OrderConsignmentController extends Base {
             resolve(data);
           })
       }
-      catch (err) {
-        reject("OrderConsignmentController.create:" + err);
+      catch (error) {
+        reject("OrderConsignmentController.create:" + error);
       }
     });
     return promise;
@@ -509,8 +515,8 @@ class OrderConsignmentController extends Base {
           await consignmentCard.insert(dataItem);
         };
         resolve("Items Adicionados");
-      } catch (err) {
-        reject("OrderConsignmentController.insertCheckpointCard:" + err);
+      } catch (error) {
+        reject("OrderConsignmentController.insertCheckpointCard:" + error);
       }
 
     });
@@ -540,8 +546,8 @@ class OrderConsignmentController extends Base {
 
         };
         resolve("Items Adicionados");
-      } catch (err) {
-        reject("OrderConsignmentController.insertSupplyngCard:" + err);
+      } catch (error) {
+        reject("OrderConsignmentController.insertSupplyngCard:" + error);
       }
 
     });
@@ -569,8 +575,8 @@ class OrderConsignmentController extends Base {
         } else {
           resolve("Tag Payments não encontrada");
         }
-      } catch (err) {
-        reject("OrderConsignmentController.insertCheckpointPaid:" + err);
+      } catch (error) {
+        reject("OrderConsignmentController.insertCheckpointPaid:" + error);
       }
 
     });
@@ -595,8 +601,8 @@ class OrderConsignmentController extends Base {
             resolve(1);
           }
         })
-        .catch(err => {
-          reject('orderConsignment.getNexNumber: ' + err);
+        .catch(error => {
+          reject('orderConsignment.getNexNumber: ' + error);
         });
     });
     return promise;
@@ -622,8 +628,8 @@ class OrderConsignmentController extends Base {
         .then(() => {
           resolve(body);
         })
-        .catch(err => {
-          reject("orderConsignment.insertOrderPaid:" + err);
+        .catch(error => {
+          reject("orderConsignment.insertOrderPaid:" + error);
         });
     });
     return promise;
@@ -663,8 +669,8 @@ class OrderConsignmentController extends Base {
         }).then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject("orderstockadjust.getlist: " + err);
+        .catch(error => {
+          reject("orderstockadjust.getlist: " + error);
         });
     });
     return promise;
@@ -717,8 +723,8 @@ class OrderConsignmentController extends Base {
           else
             resolve({ id: 0 });
         })
-        .catch(err => {
-          reject('orderConsignmentController.getOrder: ' + err);
+        .catch(error => {
+          reject('orderConsignmentController.getOrder: ' + error);
         });
     });
     return promise;
@@ -769,8 +775,8 @@ class OrderConsignmentController extends Base {
         }).then(data => {
           resolve(data[0]);
         })
-        .catch(err => {
-          reject('OrderConsignment.getLastOrderByCustomer: ' + err);
+        .catch(error => {
+          reject('OrderConsignment.getLastOrderByCustomer: ' + error);
         });
     });
     return promise;
@@ -796,8 +802,8 @@ class OrderConsignmentController extends Base {
         }).then(data => {
           resolve(data[0].status);
         })
-        .catch(err => {
-          reject('orderstockadjust.getStatus: ' + err);
+        .catch(error => {
+          reject('orderstockadjust.getStatus: ' + error);
         });
     });
     return promise;
@@ -836,8 +842,8 @@ class OrderConsignmentController extends Base {
             }
           })
       }
-      catch (err) {
-        reject('OrderConsignment.getCheckpoint: ' + err);
+      catch (error) {
+        reject('OrderConsignment.getCheckpoint: ' + error);
       }
     });
     return promise;
@@ -872,8 +878,8 @@ class OrderConsignmentController extends Base {
             }
           })
       }
-      catch (err) {
-        reject('OrderConsignment.getSupplyin: ' + err);
+      catch (error) {
+        reject('OrderConsignment.getSupplyin: ' + error);
       }
     });
     return promise;
@@ -924,8 +930,8 @@ class OrderConsignmentController extends Base {
             }
           })
       }
-      catch (err) {
-        reject('OrderConsignment.getLast: ' + err);
+      catch (error) {
+        reject('OrderConsignment.getLast: ' + error);
       }
     });
     return promise;
@@ -951,8 +957,8 @@ class OrderConsignmentController extends Base {
             })
           resolve(body);
         })
-        .catch(err => {
-          reject("orderConsignment.update:" + err);
+        .catch(error => {
+          reject("orderConsignment.update:" + error);
         });
     });
     return promise;
@@ -994,8 +1000,8 @@ class OrderConsignmentController extends Base {
         } else {
           resolve("Item não informado");
         }
-      } catch (err) {
-        reject("orderConsignment.updateOrderItem:" + err);
+      } catch (error) {
+        reject("orderConsignment.updateOrderItem:" + error);
       }
 
     });
@@ -1019,8 +1025,8 @@ class OrderConsignmentController extends Base {
           terminal: dataOrderStockAdjust.terminal
         }
       })
-        .catch(err => {
-          reject("orderConsignment.updateOrder:" + err);
+        .catch(error => {
+          reject("orderConsignment.updateOrder:" + error);
         });
     });
     return promise;
@@ -1092,8 +1098,8 @@ class OrderConsignmentController extends Base {
         } else {
           resolve("201");
         }
-      } catch (err) {
-        reject(err);
+      } catch (error) {
+        reject(error);
       }
     });
     return promise;
@@ -1138,8 +1144,8 @@ class OrderConsignmentController extends Base {
           resolve("201");
         }
 
-      } catch (err) {
-        reject(err);
+      } catch (error) {
+        reject(error);
       }
 
     });
@@ -1158,8 +1164,8 @@ class OrderConsignmentController extends Base {
           await this.closurebyCard(body, "Consignment");
         }
         resolve(body);
-      } catch (err) {
-        reject(err);
+      } catch (error) {
+        reject(error);
       }
     });
     return promise;
@@ -1187,8 +1193,8 @@ class OrderConsignmentController extends Base {
           }
         };
         resolve("Items Adicionados");
-      } catch (err) {
-        reject("orderConsignment.insertOrderItem:" + err);
+      } catch (error) {
+        reject("orderConsignment.insertOrderItem:" + error);
       }
 
     });
@@ -1228,8 +1234,8 @@ class OrderConsignmentController extends Base {
         };
         await orderController.updateStatus(body.order.tb_institution_id, body.order.id, 'F');
         resolve("200");
-      } catch (err) {
-        reject(err);
+      } catch (error) {
+        reject(error);
       }
     });
     return promise;

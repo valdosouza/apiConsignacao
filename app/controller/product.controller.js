@@ -22,8 +22,8 @@ class ProdcutController extends Base {
             resolve(1);
           }
         })
-        .catch(err => {
-          reject('product.getNexId: '+err);
+        .catch(error => {
+          reject('product.getNexId: '+error);
         });           
     });
     return promise;
@@ -51,8 +51,8 @@ class ProdcutController extends Base {
             };
             resolve(product);     
           })
-          .catch(err => {
-            reject("product.insert:"+ err);
+          .catch(error => {
+            reject("product.insert:"+ error);
           });        
     });
     return promise;        
@@ -74,8 +74,8 @@ class ProdcutController extends Base {
         }).then(data => {          
           resolve(data);
         })
-        .catch(err => {
-          reject("product.getlist: " + err);
+        .catch(error => {
+          reject("product.getlist: " + error);
         });
     });
     return promise;
@@ -100,8 +100,8 @@ class ProdcutController extends Base {
         }).then(data => {
             resolve(data[0]);
         })
-        .catch(err => {
-          reject('getById: ' + err);
+        .catch(error => {
+          reject('getById: ' + error);
         });
     });
     return promise;
@@ -129,8 +129,8 @@ class ProdcutController extends Base {
         
         resolve(result);
       } 
-      catch(err){
-        reject('get: ' + err);
+      catch(error){
+        reject('get: ' + error);
       } 
     });
     return promise;
@@ -152,8 +152,8 @@ class ProdcutController extends Base {
         }).then(data => {
             resolve(data);
         })
-        .catch(err => {
-          reject('getById: ' + err);
+        .catch(error => {
+          reject('getById: ' + error);
         });
     });
     return promise;
@@ -194,8 +194,8 @@ class ProdcutController extends Base {
         });
         resolve(vetPriceList);        
       } 
-      catch(err){
-        reject('priceListGetAll: ' + err);
+      catch(error){
+        reject('priceListGetAll: ' + error);
       } 
     });
     return promise;
@@ -235,8 +235,8 @@ class ProdcutController extends Base {
               .then((data) => {
                   resolve(data);
               })
-              .catch(err => {
-                  reject("Erro:"+ err);
+              .catch(error => {
+                  reject("Erro:"+ error);
               });
           */
       });

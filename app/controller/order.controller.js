@@ -20,8 +20,8 @@ class OrderController extends Base {
             resolve(1);
           }
         })
-        .catch(err => {
-          reject('order.getNexId: ' + err);
+        .catch(error => {
+          reject('order.getNexId: ' + error);
         });
     });
     return promise;
@@ -34,8 +34,8 @@ class OrderController extends Base {
         .then((data) => {
           resolve(data);
         })
-        .catch(err => {
-          reject("order.insert:" + err);
+        .catch(error => {
+          reject("order.insert:" + error);
         });
     });
     return promise;
@@ -53,8 +53,8 @@ class OrderController extends Base {
         }).then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject("order.getlist: " + err);
+        .catch(error => {
+          reject("order.getlist: " + error);
         });
     });
     return promise;
@@ -73,8 +73,8 @@ class OrderController extends Base {
         }).then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject('order.get: ' + err);
+        .catch(error => {
+          reject('order.get: ' + error);
         });
     });
     return promise;
@@ -93,8 +93,8 @@ class OrderController extends Base {
         .then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject("order.update:" + err);
+        .catch(error => {
+          reject("order.update:" + error);
         });
     });
     return promise;
@@ -112,8 +112,8 @@ class OrderController extends Base {
         .then((data) => {
           resolve(data);
         })
-        .catch(err => {
-          reject("order.updateStatus:" + err);
+        .catch(error => {
+          reject("order.updateStatus:" + error);
         });
     });
     return promise;
@@ -131,8 +131,8 @@ class OrderController extends Base {
         .then((data) => {
           resolve(data);
         })
-        .catch(err => {
-          reject("order.updateNote:" + err);
+        .catch(error => {
+          reject("order.updateNote:" + error);
         });
     });
     return promise;
@@ -146,8 +146,8 @@ class OrderController extends Base {
           .then((data) => {
               resolve(data);
           })
-          .catch(err => {
-              reject("Erro:"+ err);
+          .catch(error => {
+              reject("Erro:"+ error);
           });
       */
     });
@@ -168,8 +168,8 @@ class OrderController extends Base {
         .then((data) => {
           resolve(data);
         })
-        .catch(err => {
-          reject("order.Controller.finished:" + err);
+        .catch(error => {
+          reject("order.Controller.finished:" + error);
         });
     });
     return promise;

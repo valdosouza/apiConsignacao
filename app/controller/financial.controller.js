@@ -11,8 +11,8 @@ class FinancialController extends Base {
         .then((data) => {
           resolve(data);
         })
-        .catch(err => {
-          reject("financial.insert:" + err);
+        .catch(error => {
+          reject("financial.insert:" + error);
         });
     });
     return promise;
@@ -30,8 +30,8 @@ class FinancialController extends Base {
         }).then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject("financial.getlist: " + err);
+        .catch(error => {
+          reject("financial.getlist: " + error);
         });
     });
     return promise;
@@ -51,8 +51,8 @@ class FinancialController extends Base {
         }).then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject('financial.get: ' + err);
+        .catch(error => {
+          reject('financial.get: ' + error);
         });
     });
     return promise;
@@ -70,8 +70,8 @@ class FinancialController extends Base {
         .then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject("financial.update:" + err);
+        .catch(error => {
+          reject("financial.update:" + error);
         });
     });
     return promise;
@@ -90,8 +90,8 @@ class FinancialController extends Base {
         .then((data) => {
           resolve(data);
         })
-        .catch(err => {
-          reject("Financial.delete:" + err);
+        .catch(error => {
+          reject("Financial.delete:" + error);
         });
     });
     return promise;
@@ -109,8 +109,8 @@ class FinancialController extends Base {
         .then((data) => {
           resolve(data);
         })
-        .catch(err => {
-          reject("Financial.delete:" + err);
+        .catch(error => {
+          reject("Financial.delete:" + error);
         });
     });
     return promise;

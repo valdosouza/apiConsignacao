@@ -29,5 +29,8 @@ const definition = {
   
   module.exports = {
 	definition,
-	apis: ['./app/routes/*.js'],
+	apis: ['./app/routes/*.js',
+           './app/cashier_statement_summary/routes.js',
+           './app/salesman/routes.js'
+    ],
 }

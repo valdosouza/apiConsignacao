@@ -21,8 +21,8 @@ class SalesRouteController extends Base {
             resolve(1);
           }
         })
-        .catch(err => {
-          reject('salesroute.getNexId: ' + err);
+        .catch(error => {
+          reject('salesroute.getNexId: ' + error);
         });
     });
     return promise;
@@ -37,8 +37,8 @@ class SalesRouteController extends Base {
         .then((data) => {
           resolve(data);
         })
-        .catch(err => {
-          reject("salesroute.insert:" + err);
+        .catch(error => {
+          reject("salesroute.insert:" + error);
         });
     });
     return promise;
@@ -56,8 +56,8 @@ class SalesRouteController extends Base {
         }).then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject("salesroute.getlist: " + err);
+        .catch(error => {
+          reject("salesroute.getlist: " + error);
         });
     });
     return promise;
@@ -76,8 +76,8 @@ class SalesRouteController extends Base {
         }).then(data => {
           resolve(data[0]);
         })
-        .catch(err => {
-          reject('salesroute.get: ' + err);
+        .catch(error => {
+          reject('salesroute.get: ' + error);
         });
     });
     return promise;
@@ -92,8 +92,8 @@ class SalesRouteController extends Base {
         .then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject("salesroute.update:" + err);
+        .catch(error => {
+          reject("salesroute.update:" + error);
         });
     });
     return promise;
@@ -129,8 +129,8 @@ class SalesRouteController extends Base {
           }
         }
         resolve("Sequência da rota atualizada!!");
-      } catch (err) {
-        reject("salesroute.sequence:" + err);
+      } catch (error) {
+        reject("salesroute.sequence:" + error);
       }
     });
     return promise;
@@ -141,8 +141,8 @@ class SalesRouteController extends Base {
       try {
         SalesRouteCustomerController.setTurnBack(body);
         resolve("changed");
-      } catch (err) {
-        reject("salesroute.setTurnBack:" + err);
+      } catch (error) {
+        reject("salesroute.setTurnBack:" + error);
       }
     });
     return promise;
@@ -158,8 +158,8 @@ class SalesRouteController extends Base {
         }
         SalesRouteCustomerController.setRecall(dataRecall);
         resolve("changed");
-      } catch (err) {
-        reject("salesroute.setTurnBack:" + err);
+      } catch (error) {
+        reject("salesroute.setTurnBack:" + error);
       }
     });
     return promise;
@@ -173,8 +173,8 @@ class SalesRouteController extends Base {
           .then((data) => {
               resolve(data);
           })
-          .catch(err => {
-              reject("Erro:"+ err);
+          .catch(error => {
+              reject("Erro:"+ error);
           });
       */
     });

@@ -12,8 +12,8 @@ class RestDoughController extends Base {
         .then(result => {
           resolve(result);
         })
-        .catch(err => {
-          reject(new Error("RestEdge - " + err));
+        .catch(error => {
+          reject(new Error("RestEdge - " + error));
         });
     });
     return promise;
@@ -31,8 +31,8 @@ class RestDoughController extends Base {
             resolve("Nao foi possivel atualizar com id=${id}. Talvez RestEdge não foi encontrada ou req.body está vazio!");
           }
         })
-        .catch(err => {
-          reject(new Error("RestEdge - " + err));
+        .catch(error => {
+          reject(new Error("RestEdge - " + error));
         });
     });
   }
@@ -71,8 +71,8 @@ class RestDoughController extends Base {
         }).then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject(new Error("RestSubGRupo:" + err));
+        .catch(error => {
+          reject(new Error("RestSubGRupo:" + error));
         });
     });
     return promise;

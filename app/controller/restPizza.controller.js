@@ -12,8 +12,8 @@ class RestPizzaController extends Base {
         .then(result => {
           resolve(result);
         })
-        .catch(err => {
-          reject(new Error("RestPizza - " + err));
+        .catch(error => {
+          reject(new Error("RestPizza - " + error));
         });
     });
     return promise;
@@ -31,8 +31,8 @@ class RestPizzaController extends Base {
             resolve("Nao foi possivel atualizar com id=${id}. Talvez RestPizza não foi encontrada ou req.body está vazio!");
           }
         })
-        .catch(err => {
-          reject(new Error("RestPizza - " + err));
+        .catch(error => {
+          reject(new Error("RestPizza - " + error));
         });
     });
   }
@@ -72,8 +72,8 @@ class RestPizzaController extends Base {
         }).then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject(new Error("RestSubGRupo:" + err));
+        .catch(error => {
+          reject(new Error("RestSubGRupo:" + error));
         });
     });
     return promise;

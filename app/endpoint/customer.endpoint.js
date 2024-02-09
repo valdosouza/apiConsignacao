@@ -108,8 +108,7 @@ class CustomerEndPoint {
             docKind = "J";
           }
           CustomerController.getByDocNumber(req.body.customer.tb_institution_id, docNumber)
-          .then((dataDocnumber) => {
-            console.log(dataDocnumber);
+          .then((dataDocnumber) => {            
             if (dataDocnumber.id == 0) {
               CustomerController.insert(req.body)
                 .then(data => {
@@ -126,8 +125,8 @@ class CustomerEndPoint {
       } else {
         res.status(201).json(this._saveWithoutReturn(req.body, result.msg));
       }
-    } catch (err) {
-      res.send(err);
+    } catch (error) {
+      res.send(error);
     }
   }
 

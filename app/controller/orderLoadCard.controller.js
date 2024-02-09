@@ -39,8 +39,8 @@ class OrderLoadCardController extends Base {
 
           resolve(data);
         })
-        .catch(err => {
-          reject('getById: ' + err);
+        .catch(error => {
+          reject('getById: ' + error);
         });
     });
     return promise;
@@ -77,8 +77,8 @@ class OrderLoadCardController extends Base {
         }).then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject('getById: ' + err);
+        .catch(error => {
+          reject('getById: ' + error);
         });
     });
     return promise;
@@ -107,8 +107,8 @@ class OrderLoadCardController extends Base {
         }).then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject('getById: ' + err);
+        .catch(error => {
+          reject('getById: ' + error);
         });
     });
     return promise;
@@ -175,8 +175,8 @@ class OrderLoadCardController extends Base {
             resolve({ id: 0 });
           }
         })
-        .catch(err => {
-          reject('getByOrder: ' + err);
+        .catch(error => {
+          reject('getByOrder: ' + error);
         });
     });
     return promise;
@@ -250,8 +250,8 @@ class OrderLoadCardController extends Base {
           }
           resolve(dataResult);
         })
-        .catch(err => {
-          reject('getByOrder: ' + err);
+        .catch(error => {
+          reject('getByOrder: ' + error);
         });
     });
     return promise;
@@ -280,8 +280,8 @@ class OrderLoadCardController extends Base {
         }).then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject('getById: ' + err);
+        .catch(error => {
+          reject('getById: ' + error);
         });
     });
     return promise;
@@ -289,7 +289,6 @@ class OrderLoadCardController extends Base {
 
   static async insert(body) {
     const promise = new Promise(async (resolve, reject) => {
-      console.log(body);
       const dataOrder = {
         id: 0,
         tb_institution_id: body.tb_institution_id,
@@ -306,14 +305,14 @@ class OrderLoadCardController extends Base {
               item['tb_institution_id'] = body.tb_institution_id;
               item['terminal'] = data.terminal;
               await Tb.create(item);
-            } catch (err) {
-              reject("OrderLoadCardController.insert:" + err);
+            } catch (error) {
+              reject("OrderLoadCardController.insert:" + error);
             }
           }
           resolve(body);
         })
-        .catch(err => {
-          reject("OrderLoadCardController.insert:" + err);
+        .catch(error => {
+          reject("OrderLoadCardController.insert:" + error);
         });
     });
     return promise;
@@ -372,8 +371,8 @@ class OrderLoadCardController extends Base {
           items: resData
         }
         );
-      } catch (err) {
-        reject("OrderLoadCard.getNewOrderLoadCard: " + err);
+      } catch (error) {
+        reject("OrderLoadCard.getNewOrderLoadCard: " + error);
       }
     });
     return promise;
@@ -397,8 +396,8 @@ class OrderLoadCardController extends Base {
           .then((data) => {
               resolve(data);
           })
-          .catch(err => {
-              reject("Erro:"+ err);
+          .catch(error => {
+              reject("Erro:"+ error);
           });
       */
     });

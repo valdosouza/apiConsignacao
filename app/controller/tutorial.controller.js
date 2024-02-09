@@ -24,10 +24,10 @@ exports.create = (req, res) => {
     .then(data => {
       res.send(data);
     })
-    .catch(err => {
+    .catch(error => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while creating the Tutorial."
+          error.message || "Some error occurred while creating the Tutorial."
       });
     });
 };
@@ -41,10 +41,10 @@ exports.findAll = (req, res) => {
     .then(data => {
       res.send(data);
     })
-    .catch(err => {
+    .catch(error => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving tutorials."
+          error.message || "Some error occurred while retrieving tutorials."
       });
     });
 };
@@ -57,7 +57,7 @@ exports.findOne = (req, res) => {
     .then(data => {
       res.send(data);
     })
-    .catch(err => {
+    .catch(error => {
       res.status(500).send({
         message: "Error retrieving Tutorial with id=" + id
       });
@@ -82,7 +82,7 @@ exports.update = (req, res) => {
         });
       }
     })
-    .catch(err => {
+    .catch(error => {
       res.status(500).send({
         message: "Error updating Tutorial with id=" + id
       });
@@ -107,7 +107,7 @@ exports.delete = (req, res) => {
         });
       }
     })
-    .catch(err => {
+    .catch(error => {
       res.status(500).send({
         message: "Could not delete Tutorial with id=" + id
       });
@@ -123,10 +123,10 @@ exports.deleteAll = (req, res) => {
     .then(nums => {
       res.send({ message: `${nums} Tutorials were deleted successfully!` });
     })
-    .catch(err => {
+    .catch(error => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while removing all tutorials."
+          error.message || "Some error occurred while removing all tutorials."
       });
     });
 };
@@ -137,10 +137,10 @@ exports.findAllPublished = (req, res) => {
     .then(data => {
       res.send(data);
     })
-    .catch(err => {
+    .catch(error => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving tutorials."
+          error.message || "Some error occurred while retrieving tutorials."
       });
     });
 };

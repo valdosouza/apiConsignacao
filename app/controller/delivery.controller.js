@@ -24,8 +24,8 @@ class DeliveryController {
                 resolve(data);
                 
             })
-            .catch(err => {
-                reject(new Error("Erro: " + err));
+            .catch(error => {
+                reject(new Error("Erro: " + error));
               });            
 
         });     
@@ -39,8 +39,8 @@ class DeliveryController {
             .then((data) => {                 
                  resolve( data);
              })  
-            .catch(err => {
-                reject(new Error("Erro: " + err));
+            .catch(error => {
+                reject(new Error("Erro: " + error));
               });            
         });
         return promise;   
@@ -53,8 +53,8 @@ class DeliveryController {
             .then((data) => {                 
                  resolve( data);
              })  
-            .catch(err => {
-                reject(new Error("Erro: " + err));
+            .catch(error => {
+                reject(new Error("Erro: " + error));
               });            
         });
         return promise;   

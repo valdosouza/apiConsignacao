@@ -11,8 +11,8 @@ class OrderItemConsignmentController extends Base {
         .then(data => {
           resolve(data);
         })          
-        .catch(err => {
-          reject("itemConsignment.insert:"+ err);
+        .catch(error => {
+          reject("itemConsignment.insert:"+ error);
         });
       });
       return promise;        
@@ -51,8 +51,8 @@ class OrderItemConsignmentController extends Base {
             }).then(data => {                
               resolve(data);
             })
-            .catch(err => {
-              reject("itemConsignment.getlist: " + err);
+            .catch(error => {
+              reject("itemConsignment.getlist: " + error);
             });
         });
         return promise;
@@ -78,8 +78,8 @@ class OrderItemConsignmentController extends Base {
           }).then(data => {
             resolve(data);
           })
-          .catch(err => {
-            reject('itemConsignment.get: '+err);
+          .catch(error => {
+            reject('itemConsignment.get: '+error);
           });
       });
       return promise;
@@ -91,8 +91,8 @@ class OrderItemConsignmentController extends Base {
         .then(data => {
           resolve(data);
         })          
-        .catch(err => {
-          reject("itemConsignment.update:"+ err);
+        .catch(error => {
+          reject("itemConsignment.update:"+ error);
         });
       });
       return promise;        
@@ -105,8 +105,8 @@ class OrderItemConsignmentController extends Base {
           .then(data => {
             resolve(data);
           })          
-          .catch(err => {
-            reject("itemConsignment.delete:"+ err);
+          .catch(error => {
+            reject("itemConsignment.delete:"+ error);
           });
         });
         return promise;        

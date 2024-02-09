@@ -11,8 +11,8 @@ class OrderItemStockTransferController extends Base {
         .then(data => {
           resolve(data);
         })          
-        .catch(err => {
-          reject("itemStockTransfer.insert:"+ err);
+        .catch(error => {
+          reject("itemStockTransfer.insert:"+ error);
         });
       });
       return promise;        
@@ -40,8 +40,8 @@ class OrderItemStockTransferController extends Base {
             }).then(data => {              
               resolve(data);
             })
-            .catch(err => {
-              reject("itemStockTransfer.getlist: " + err);
+            .catch(error => {
+              reject("itemStockTransfer.getlist: " + error);
             });
         });
         return promise;
@@ -66,8 +66,8 @@ class OrderItemStockTransferController extends Base {
           }).then(data => {
             resolve(data);
           })
-          .catch(err => {
-            reject('itemStockTransfer.get: '+err);
+          .catch(error => {
+            reject('itemStockTransfer.get: '+error);
           });
       });
       return promise;
@@ -79,8 +79,8 @@ class OrderItemStockTransferController extends Base {
         .then(data => {
           resolve(data);
         })          
-        .catch(err => {
-          reject("itemStockTransfer.update:"+ err);
+        .catch(error => {
+          reject("itemStockTransfer.update:"+ error);
         });
       });
       return promise;        
@@ -93,8 +93,8 @@ class OrderItemStockTransferController extends Base {
           .then(data => {
             resolve(data);
           })          
-          .catch(err => {
-            reject("itemStockTransfer.delete:"+ err);
+          .catch(error => {
+            reject("itemStockTransfer.delete:"+ error);
           });
         });
         return promise;        

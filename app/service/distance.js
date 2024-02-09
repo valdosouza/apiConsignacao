@@ -15,9 +15,9 @@ class ServicesController {
             var origins = [body.origins];
             var destinations = [body.destinations];
 
-            distance.matrix(origins, destinations, function (err, distances) {
-                if (err) {
-                    resolve(err);
+            distance.matrix(origins, destinations, function (error, distances) {
+                if (error) {
+                    resolve(error);
                 }
                 if (!distances) {
                     resolve('no distances');
@@ -35,9 +35,9 @@ class ServicesController {
             var origins = [body.origins];
             var destinations = [body.destinations];
 
-            distance.matrix(origins, destinations, function (err, distances) {
-                if (err) {
-                    resolve(err);
+            distance.matrix(origins, destinations, function (error, distances) {
+                if (error) {
+                    resolve(error);
                 }
                 if (!distances) {
                     resolve('no distances');

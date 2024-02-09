@@ -11,8 +11,8 @@ class FinancialPaymnetController extends Base {
         .then((data) => {
           resolve(data);
         })
-        .catch(err => {
-          reject("financialPaymnent.insert:" + err);
+        .catch(error => {
+          reject("financialPaymnent.insert:" + error);
         });
     });
     return promise;
@@ -30,8 +30,8 @@ class FinancialPaymnetController extends Base {
         }).then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject("financialPaymnent.getlist: " + err);
+        .catch(error => {
+          reject("financialPaymnent.getlist: " + error);
         });
     });
     return promise;
@@ -51,8 +51,8 @@ class FinancialPaymnetController extends Base {
         }).then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject("financialPayment.get: " + err);
+        .catch(error => {
+          reject("financialPayment.get: " + error);
         });
     });
     return promise;
@@ -70,8 +70,8 @@ class FinancialPaymnetController extends Base {
         .then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject("financialPaymnent.update:" + err);
+        .catch(error => {
+          reject("financialPaymnent.update:" + error);
         });
     });
     return promise;
@@ -85,8 +85,8 @@ class FinancialPaymnetController extends Base {
           .then((data) => {
               resolve(data);
           })
-          .catch(err => {
-              reject("Erro:"+ err);
+          .catch(error => {
+              reject("Erro:"+ error);
           });
       */
     });
@@ -109,8 +109,8 @@ class FinancialPaymnetController extends Base {
             resolve(0);
           }
         })
-        .catch(err => {
-          reject("financialPayment.get: " + err);
+        .catch(error => {
+          reject("financialPayment.get: " + error);
         });
     });
     return promise;

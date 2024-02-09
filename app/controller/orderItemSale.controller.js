@@ -11,8 +11,8 @@ class OrderItemSaleController extends Base {
         .then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject("itemSale.insert:" + err);
+        .catch(error => {
+          reject("itemSale.insert:" + error);
         });
     });
     return promise;
@@ -63,8 +63,8 @@ class OrderItemSaleController extends Base {
           }
           resolve(dataResult);
         })
-        .catch(err => {
-          reject("itemSale.getlist: " + err);
+        .catch(error => {
+          reject("itemSale.getlist: " + error);
         });
     });
     return promise;
@@ -90,8 +90,8 @@ class OrderItemSaleController extends Base {
         }).then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject('itemSale.get: ' + err);
+        .catch(error => {
+          reject('itemSale.get: ' + error);
         });
     });
     return promise;
@@ -103,8 +103,8 @@ class OrderItemSaleController extends Base {
         .then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject("itemSale.update:" + err);
+        .catch(error => {
+          reject("itemSale.update:" + error);
         });
     });
     return promise;
@@ -116,8 +116,8 @@ class OrderItemSaleController extends Base {
         .then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject("itemSale.delete:" + err);
+        .catch(error => {
+          reject("itemSale.delete:" + error);
         });
     });
     return promise;

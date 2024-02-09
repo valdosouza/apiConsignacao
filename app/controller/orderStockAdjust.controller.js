@@ -23,8 +23,8 @@ class OrderStockAdjustController extends Base {
             resolve(1);
           }
         })
-        .catch(err => {
-          reject('orderStockAdjust.getNexNumber: ' + err);
+        .catch(error => {
+          reject('orderStockAdjust.getNexNumber: ' + error);
         });
     });
     return promise;
@@ -49,8 +49,8 @@ class OrderStockAdjustController extends Base {
         .then(() => {
           resolve(body);
         })
-        .catch(err => {
-          reject("orderStockAdjust.insertOrder:" + err);
+        .catch(error => {
+          reject("orderStockAdjust.insertOrder:" + error);
         });
     });
     return promise;
@@ -76,8 +76,8 @@ class OrderStockAdjustController extends Base {
           await orderItem.insert(dataItem);
         };
         resolve("Items Adicionados");
-      } catch (err) {
-        reject("orderStockAdjust.insertOrderItem:" + err);
+      } catch (error) {
+        reject("orderStockAdjust.insertOrderItem:" + error);
       }
 
     });
@@ -104,8 +104,8 @@ class OrderStockAdjustController extends Base {
                   resolve(body);
                 })
             })
-            .catch(err => {
-              reject("orderStockAdjust.insert:" + err);
+            .catch(error => {
+              reject("orderStockAdjust.insert:" + error);
             });
         })
     });
@@ -140,8 +140,8 @@ class OrderStockAdjustController extends Base {
           resolve(data);
 
         })
-        .catch(err => {
-          reject("orderstockadjust.getlist: " + err);
+        .catch(error => {
+          reject("orderstockadjust.getlist: " + error);
         });
     });
     return promise;
@@ -176,8 +176,8 @@ class OrderStockAdjustController extends Base {
         }).then(data => {
           resolve(data[0]);
         })
-        .catch(err => {
-          reject('orderstockadjust.get: ' + err);
+        .catch(error => {
+          reject('orderstockadjust.get: ' + error);
         });
     });
     return promise;
@@ -203,8 +203,8 @@ class OrderStockAdjustController extends Base {
         }).then(data => {
           resolve(data[0].status);
         })
-        .catch(err => {
-          reject('orderstockadjust.getStatus: ' + err);
+        .catch(error => {
+          reject('orderstockadjust.getStatus: ' + error);
         });
     });
     return promise;
@@ -221,8 +221,8 @@ class OrderStockAdjustController extends Base {
 
         resolve(result);
       }
-      catch (err) {
-        reject('collaborator.get: ' + err);
+      catch (error) {
+        reject('collaborator.get: ' + error);
       }
     });
     return promise;
@@ -249,8 +249,8 @@ class OrderStockAdjustController extends Base {
         .then(() => {
           resolve(dataOrderStockAdjust);
         })
-        .catch(err => {
-          reject("orderStockAdjust.updateOrder:" + err);
+        .catch(error => {
+          reject("orderStockAdjust.updateOrder:" + error);
         });
     });
     return promise;
@@ -288,8 +288,8 @@ class OrderStockAdjustController extends Base {
           }
         };
         resolve("Items Alterados");
-      } catch (err) {
-        reject("orderStockAdjust.updateOrderItem:" + err);
+      } catch (error) {
+        reject("orderStockAdjust.updateOrderItem:" + error);
       }
 
     });
@@ -317,8 +317,8 @@ class OrderStockAdjustController extends Base {
             })
           resolve(body);
         })
-        .catch(err => {
-          reject("orderStockAdjust.update:" + err);
+        .catch(error => {
+          reject("orderStockAdjust.update:" + error);
         });
     });
     return promise;
@@ -336,8 +336,8 @@ class OrderStockAdjustController extends Base {
         .then((data) => {
           resolve(data);
         })
-        .catch(err => {
-          reject("OrderStockAdjust.delete:" + err);
+        .catch(error => {
+          reject("OrderStockAdjust.delete:" + error);
         });
     });
     return promise;
@@ -374,8 +374,8 @@ class OrderStockAdjustController extends Base {
         } else {
           resolve("201");
         }
-      } catch (err) {
-        reject(err);
+      } catch (error) {
+        reject(error);
       }
     });
     return promise;
@@ -420,8 +420,8 @@ class OrderStockAdjustController extends Base {
           resolve("201");
         }
 
-      } catch (err) {
-        reject(err);
+      } catch (error) {
+        reject(error);
       }
 
     });
@@ -464,8 +464,8 @@ class OrderStockAdjustController extends Base {
           await this.closurebyCard(body, "StockAdjustment");
         }
         resolve(body);
-      } catch (err) {
-        reject(err);
+      } catch (error) {
+        reject(error);
       }
 
 
@@ -502,8 +502,8 @@ class OrderStockAdjustController extends Base {
           }
         };
         resolve("Items Adicionados");
-      } catch (err) {
-        reject("orderStockAdjust.insertOrderItemByCard:" + err);
+      } catch (error) {
+        reject("orderStockAdjust.insertOrderItemByCard:" + error);
       }
 
     });
@@ -537,8 +537,8 @@ class OrderStockAdjustController extends Base {
           await stockStatement.insert(dataItem);
         };
         resolve("200");
-      } catch (err) {
-        reject(err);
+      } catch (error) {
+        reject(error);
       }
     });
     return promise;

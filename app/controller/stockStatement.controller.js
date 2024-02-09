@@ -10,8 +10,8 @@ class StockStatementController extends Base {
         .then((data) => {
           resolve(data);
         })
-        .catch(err => {
-          reject("Erro:" + err);
+        .catch(error => {
+          reject("Erro:" + error);
         });
     });
     return promise;
@@ -37,8 +37,8 @@ class StockStatementController extends Base {
             resolve({id:0});
           }
         })
-        .catch(err => {
-          reject(new Error("stockStatement.gelist:" + err));
+        .catch(error => {
+          reject(new Error("stockStatement.gelist:" + error));
         });
     });
     return promise;
@@ -57,8 +57,8 @@ class StockStatementController extends Base {
         }).then(data => {
             resolve(data);          
         })
-        .catch(err => {
-          reject(new Error("stockStatement.gelist:" + err));
+        .catch(error => {
+          reject(new Error("stockStatement.gelist:" + error));
         });
     });
     return promise;

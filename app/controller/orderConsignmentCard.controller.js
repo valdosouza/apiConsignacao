@@ -19,8 +19,8 @@ class OrderConsignmentCardController extends Base {
         }).then(data => {
           resolve(data[0]);
         })
-        .catch(err => {
-          reject('getById: ' + err);
+        .catch(error => {
+          reject('getById: ' + error);
         });
     });
     return promise;
@@ -32,8 +32,8 @@ class OrderConsignmentCardController extends Base {
         .then(async (data) => {
           resolve(data);
         })
-        .catch(err => {
-          reject("OrderConsignmentCardController.insert:" + err);
+        .catch(error => {
+          reject("OrderConsignmentCardController.insert:" + error);
         });
     });
     return promise;
@@ -76,8 +76,8 @@ class OrderConsignmentCardController extends Base {
           }
           resolve(dataResult);
         })
-        .catch(err => {
-          reject("OrderConsignmentCard.getCheckpointList: " + err);
+        .catch(error => {
+          reject("OrderConsignmentCard.getCheckpointList: " + error);
         });
     });
     return promise;
@@ -107,8 +107,8 @@ class OrderConsignmentCardController extends Base {
           }
           resolve(dataResult);
         })
-        .catch(err => {
-          reject("OrderConsignmentCard.getPayment: " + err);
+        .catch(error => {
+          reject("OrderConsignmentCard.getPayment: " + error);
         });
     });
     return promise;
@@ -156,8 +156,8 @@ class OrderConsignmentCardController extends Base {
           }
           resolve(dataResult);
         })
-        .catch(err => {
-          reject("OrderConsignmentCard.getSupplyingList: " + err);
+        .catch(error => {
+          reject("OrderConsignmentCard.getSupplyingList: " + error);
         });
     });
     return promise;
@@ -200,8 +200,8 @@ class OrderConsignmentCardController extends Base {
           }
           resolve(dataResult);
         })
-        .catch(err => {
-          reject("OrderConsignmentCard.getSupplyingList: " + err);
+        .catch(error => {
+          reject("OrderConsignmentCard.getSupplyingList: " + error);
         });
     });
     return promise;
@@ -219,8 +219,8 @@ class OrderConsignmentCardController extends Base {
         .then((data) => {
           resolve(data);
         })
-        .catch(err => {
-          reject("OrderConsigmentCard.delete:" + err);
+        .catch(error => {
+          reject("OrderConsigmentCard.delete:" + error);
         });
     });
     return promise;

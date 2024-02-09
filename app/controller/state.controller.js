@@ -12,7 +12,7 @@ class StateController extends Base {
           ).then(data => {
             resolve(data[0]);
           })
-            .catch(err => {
+            .catch(error => {
               reject(new Error("Algum erro aconteceu ao buscar o Estado"));
             });
         });
@@ -31,8 +31,8 @@ class StateController extends Base {
             }).then(data => {          
             if (data) { resolve(data[0]) } else { resolve(Null) };
             })
-            .catch(err => {
-            reject(new Error(err+ " |"+ "Algum erro aconteceu ao buscar o Estado"));
+            .catch(error => {
+            reject(error+ " |"+ "Algum erro aconteceu ao buscar o Estado");
             });
         });
         return promise;

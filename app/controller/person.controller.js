@@ -18,8 +18,8 @@ class PersonController extends Base {
         else
           resolve(data);
         })
-        .catch(err => {
-          reject('Person.getById: ' + err);
+        .catch(error => {
+          reject('Person.getById: ' + error);
         });
     });
     return promise;
@@ -37,8 +37,8 @@ class PersonController extends Base {
             .then(data => {
                 resolve(data);
             })
-            .catch(err => {
-                reject("Erro:"+ err);
+            .catch(error => {
+                reject("Erro:"+ error);
             });
     });
     return promise;
@@ -56,8 +56,8 @@ class PersonController extends Base {
         }).then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject(new Error("Entity:" + err));
+        .catch(error => {
+          reject(new Error("Entity:" + error));
         });
     });
     return promise;
@@ -70,8 +70,8 @@ class PersonController extends Base {
       Tb.update(person,{
         where: { id: person.id }
       })
-      .catch(err => {
-        reject("Erro:"+ err);
+      .catch(error => {
+        reject("Erro:"+ error);
       });
     });
     return promise;        
@@ -87,8 +87,8 @@ class PersonController extends Base {
         .then((data) => {
           resolve(data);
         })
-        .catch(err => {
-          reject("Person.delete:" + err);
+        .catch(error => {
+          reject("Person.delete:" + error);
         });
     });
     return promise;       
@@ -108,7 +108,7 @@ class PersonController extends Base {
           //deve retornar o vetor mesmo que vazio para a verificação na função subsequente
           resolve(data);
         })
-        .catch(err => {
+        .catch(error => {
           reject(new Error("Algum erro aconteceu ao buscar o CNPJ"));
         });
     });

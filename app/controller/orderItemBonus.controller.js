@@ -11,8 +11,8 @@ class OrderItemBonusController extends Base {
         .then(data => {
           resolve(data);
         })          
-        .catch(err => {
-          reject("itemBonus.insert:"+ err);
+        .catch(error => {
+          reject("itemBonus.insert:"+ error);
         });
       });
       return promise;        
@@ -45,8 +45,8 @@ class OrderItemBonusController extends Base {
             }).then(data => {              
               resolve(data);
             })
-            .catch(err => {
-              reject("itemBonus.getlist: " + err);
+            .catch(error => {
+              reject("itemBonus.getlist: " + error);
             });
         });
         return promise;
@@ -71,8 +71,8 @@ class OrderItemBonusController extends Base {
           }).then(data => {
             resolve(data);
           })
-          .catch(err => {
-            reject('itemBonus.get: '+err);
+          .catch(error => {
+            reject('itemBonus.get: '+error);
           });
       });
       return promise;
@@ -84,8 +84,8 @@ class OrderItemBonusController extends Base {
         .then(data => {
           resolve(data);
         })          
-        .catch(err => {
-          reject("itemBonus.update:"+ err);
+        .catch(error => {
+          reject("itemBonus.update:"+ error);
         });
       });
       return promise;        
@@ -98,8 +98,8 @@ class OrderItemBonusController extends Base {
           .then(data => {
             resolve(data);
           })          
-          .catch(err => {
-            reject("itemBonus.delete:"+ err);
+          .catch(error => {
+            reject("itemBonus.delete:"+ error);
           });
         });
         return promise;        

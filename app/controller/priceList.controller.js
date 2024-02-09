@@ -21,8 +21,8 @@ class PriceListController extends Base {
               resolve(1);
             }
           })
-          .catch(err => {
-            reject('priceList.getNexId: '+err);
+          .catch(error => {
+            reject('priceList.getNexId: '+error);
           });           
       });
       return promise;
@@ -38,8 +38,8 @@ class PriceListController extends Base {
               price.autoInsertByPriceList(pricelist.tb_institution_id,data.id);
               resolve(data);
             })
-            .catch(err => {
-              reject("priceList.insert:"+ err);
+            .catch(error => {
+              reject("priceList.insert:"+ error);
             });        
       });
       return promise;        
@@ -57,8 +57,8 @@ class PriceListController extends Base {
             }).then(data => {
               resolve(data);
             })
-            .catch(err => {
-              reject("pricelist.getlist: " + err);
+            .catch(error => {
+              reject("pricelist.getlist: " + error);
             });
         });
         return promise;
@@ -77,8 +77,8 @@ class PriceListController extends Base {
           }).then(data => {
             resolve(data[0]);
           })
-          .catch(err => {
-            reject('pricelist.get: '+err);
+          .catch(error => {
+            reject('pricelist.get: '+error);
           });
       });
       return promise;
@@ -93,8 +93,8 @@ class PriceListController extends Base {
           .then(data => {
             resolve(data);
           })          
-          .catch(err => {
-           reject("pricelist.update:"+ err);
+          .catch(error => {
+           reject("pricelist.update:"+ error);
           });
         });
       return promise;        
@@ -108,8 +108,8 @@ class PriceListController extends Base {
                 .then((data) => {
                     resolve(data);
                 })
-                .catch(err => {
-                    reject("Erro:"+ err);
+                .catch(error => {
+                    reject("Erro:"+ error);
                 });
             */
         });

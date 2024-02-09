@@ -8,10 +8,10 @@ class DeliveryEndPoint {
       .then(data => {       
         res.status(200).send();
       })
-      .catch(err => {
+      .catch(error => {
         res.status(500).send({
           message:
-            err.message || "' - DeliveryEndPoint!'"
+            error.message || "' - DeliveryEndPoint!'"
         });
       });
     
@@ -24,10 +24,10 @@ class DeliveryEndPoint {
       .then(data => {
         res.send(data);
       })
-      .catch(err => {
+      .catch(error => {
         res.status(500).send({
           message:
-            err.message || "' - DeliveryEndPoint!'"
+            error.message || "' - DeliveryEndPoint!'"
         });
       });
   };
@@ -37,10 +37,10 @@ class DeliveryEndPoint {
       .then(data => {
         res.send(data);
       })
-      .catch(err => {
+      .catch(error => {
         res.status(500).send({
           message:
-            err.message || "' - DeliveryEndPoint!'"
+            error.message || "' - DeliveryEndPoint!'"
         });
       });
   };

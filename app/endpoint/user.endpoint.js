@@ -62,8 +62,8 @@ class UserEndPoint {
       .then(data => {
         res.send(data);
       })
-      .catch(err => {
-        res.send(new Error("EP - Usuário: "+ err));
+      .catch(error => {
+        res.send(new Error("EP - Usuário: "+ error));
       });      
   };
 

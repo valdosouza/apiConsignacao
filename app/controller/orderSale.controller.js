@@ -25,8 +25,8 @@ class OrderSaleController extends Base {
             resolve(1);
           }
         })
-        .catch(err => {
-          reject('orderSale.getNexNumber: ' + err);
+        .catch(error => {
+          reject('orderSale.getNexNumber: ' + error);
         });
     });
     return promise;
@@ -94,8 +94,8 @@ class OrderSaleController extends Base {
                   resolve(body);
                 })
             })
-            .catch(err => {
-              reject("orderSale.insert:" + err);
+            .catch(error => {
+              reject("orderSale.insert:" + error);
             });
         })
     });
@@ -155,8 +155,8 @@ class OrderSaleController extends Base {
         }).then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject("orderstockadjust.getlist: " + err);
+        .catch(error => {
+          reject("orderstockadjust.getlist: " + error);
         });
     });
     return promise;
@@ -189,8 +189,8 @@ class OrderSaleController extends Base {
             resolve(0);
           }
         })
-        .catch(err => {
-          reject("orderSale.getItemlist: " + err);
+        .catch(error => {
+          reject("orderSale.getItemlist: " + error);
         });
     });
     return promise;
@@ -231,8 +231,8 @@ class OrderSaleController extends Base {
             resolve({ id: 0 });
           }
         })
-        .catch(err => {
-          reject('orderstockadjust.get: ' + err);
+        .catch(error => {
+          reject('orderstockadjust.get: ' + error);
         });
     });
     return promise;
@@ -258,8 +258,8 @@ class OrderSaleController extends Base {
         }).then(data => {
           resolve(data[0].status);
         })
-        .catch(err => {
-          reject('orderstockadjust.getStatus: ' + err);
+        .catch(error => {
+          reject('orderstockadjust.getStatus: ' + error);
         });
     });
     return promise;
@@ -278,8 +278,8 @@ class OrderSaleController extends Base {
 
         resolve(result);
       }
-      catch (err) {
-        reject('collaborator.get: ' + err);
+      catch (error) {
+        reject('collaborator.get: ' + error);
       }
     });
     return promise;
@@ -306,8 +306,8 @@ class OrderSaleController extends Base {
         .then(() => {
           resolve(dataOrderStockAdjust);
         })
-        .catch(err => {
-          reject("orderSale.updateOrder:" + err);
+        .catch(error => {
+          reject("orderSale.updateOrder:" + error);
         });
     });
     return promise;
@@ -349,8 +349,8 @@ class OrderSaleController extends Base {
           }
         };
         resolve("Items Alterados");
-      } catch (err) {
-        reject("orderSale.updateOrderItem:" + err);
+      } catch (error) {
+        reject("orderSale.updateOrderItem:" + error);
       }
 
     });
@@ -386,8 +386,8 @@ class OrderSaleController extends Base {
           }
         };
         resolve("Items Alterados");
-      } catch (err) {
-        reject("orderSale.updateOrderItem:" + err);
+      } catch (error) {
+        reject("orderSale.updateOrderItem:" + error);
       }
 
     });
@@ -415,8 +415,8 @@ class OrderSaleController extends Base {
             })
           resolve(body);
         })
-        .catch(err => {
-          reject("orderSale.update:" + err);
+        .catch(error => {
+          reject("orderSale.update:" + error);
         });
     });
     return promise;
@@ -434,8 +434,8 @@ class OrderSaleController extends Base {
         .then((data) => {
           resolve(data);
         })
-        .catch(err => {
-          reject("OrderSale.delete:" + err);
+        .catch(error => {
+          reject("OrderSale.delete:" + error);
         });
     });
     return promise;
@@ -472,8 +472,8 @@ class OrderSaleController extends Base {
         } else {
           resolve("201");
         }
-      } catch (err) {
-        reject(err);
+      } catch (error) {
+        reject(error);
       }
     });
     return promise;
@@ -511,8 +511,8 @@ class OrderSaleController extends Base {
           resolve("201");
         }
 
-      } catch (err) {
-        reject(err);
+      } catch (error) {
+        reject(error);
       }
 
     });
@@ -526,8 +526,8 @@ class OrderSaleController extends Base {
         await this.insertCard(body);
         await this.insertOrderPaid(body);
         resolve(body.order);
-      } catch (err) {
-        reject('OrderSaleController.saveCard: ' + err);
+      } catch (error) {
+        reject('OrderSaleController.saveCard: ' + error);
       }
     });
     return promise;
@@ -551,8 +551,8 @@ class OrderSaleController extends Base {
           await orderSaleCard.insert(dataItem);
         };
         resolve("Items Adicionados");
-      } catch (err) {
-        reject("OrderSaleController.insertCard:" + err);
+      } catch (error) {
+        reject("OrderSaleController.insertCard:" + error);
       }
 
     });
@@ -577,8 +577,8 @@ class OrderSaleController extends Base {
           await orderPaid.insert(dataPayment);
         };
         resolve("Pagamentos Adicionados");
-      } catch (err) {
-        reject("OrderSaleController.insertOrderPaid:" + err);
+      } catch (error) {
+        reject("OrderSaleController.insertOrderPaid:" + error);
       }
 
     });
@@ -599,8 +599,8 @@ class OrderSaleController extends Base {
           await this.closurebyCard(body);
         }
         resolve(body);
-      } catch (err) {
-        reject(err);
+      } catch (error) {
+        reject(error);
       }
     });
     return promise;
@@ -628,8 +628,8 @@ class OrderSaleController extends Base {
           }
         };
         resolve("Items Adicionados");
-      } catch (err) {
-        reject("orderSale.insertOrderItem:" + err);
+      } catch (error) {
+        reject("orderSale.insertOrderItem:" + error);
       }
 
     });
@@ -662,8 +662,8 @@ class OrderSaleController extends Base {
         };
         await order.updateStatus(body.order.tb_institution_id, body.order.id, 'F');
         resolve("200");
-      } catch (err) {
-        reject(err);
+      } catch (error) {
+        reject(error);
       }
     });
     return promise;

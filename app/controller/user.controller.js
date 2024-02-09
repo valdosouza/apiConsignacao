@@ -73,8 +73,8 @@ class UserController extends Base {
                 resolve(dataResolve);
 
               })
-              .catch(err => {
-                reject(err)
+              .catch(error => {
+                reject(error)
               });
           }
         })
@@ -119,8 +119,8 @@ class UserController extends Base {
           await TbInstitutionHasUser.create(dataInstitutionHU);
           resolve(data);
         })
-        .catch(err => {
-          reject(err)
+        .catch(error => {
+          reject(error)
         });
     });
     return promise;
@@ -138,8 +138,8 @@ class UserController extends Base {
         TbEntity.update(dataEntity, {
           where: { id: user.id }
         })
-          .catch(err => {
-            reject(new Error("Update Usuário." + err));
+          .catch(error => {
+            reject(new Error("Update Usuário." + error));
           });
         //Atualiza o Mailing
         MailingController.findByEntityId(user.id)
@@ -188,8 +188,8 @@ class UserController extends Base {
         .then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject(new Error("Deletar Usuário." + err));
+        .catch(error => {
+          reject(new Error("Deletar Usuário." + error));
         });
     });
     return promise;
@@ -219,8 +219,8 @@ class UserController extends Base {
       ).then(data => {
         resolve(data[0]);
       })
-        .catch(err => {
-          reject(new Error("Usuário: " + err));
+        .catch(error => {
+          reject(new Error("Usuário: " + error));
         });
     });
     return promise;
@@ -253,8 +253,8 @@ class UserController extends Base {
       ).then(data => {
         resolve(data);
       })
-        .catch(err => {
-          reject(new Error("Usuário: " + err));
+        .catch(error => {
+          reject(new Error("Usuário: " + error));
         });
     });
     return promise;
@@ -282,8 +282,8 @@ class UserController extends Base {
         }).then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject(new Error(err + " |" + "Algum erro aconteceu ao buscar o Usuário"));
+        .catch(error => {
+          reject(error + " |" + "Algum erro aconteceu ao buscar o Usuário");
         });
     });
     return promise;
@@ -314,8 +314,8 @@ class UserController extends Base {
             resolve(0)
           };
         })
-        .catch(err => {
-          reject(new Error(err + " |" + "Algum erro aconteceu ao buscar o Usuário"));
+        .catch(error => {
+          reject(error + " |" + "Algum erro aconteceu ao buscar o Usuário");
         });
     });
     return promise;
@@ -346,8 +346,8 @@ class UserController extends Base {
             resolve("")
           };
         })
-        .catch(err => {
-          reject(new Error(err + " |" + "Algum erro aconteceu ao buscar o Usuário"));
+        .catch(error => {
+          reject(error + " |" + "Algum erro aconteceu ao buscar o Usuário");
         });
     });
     return promise;
@@ -372,8 +372,8 @@ class UserController extends Base {
             resolve(0)
           };
         })
-        .catch(err => {
-          reject(new Error('Salt: ' + err));
+        .catch(error => {
+          reject(new Error('Salt: ' + error));
         });
     });
     return promise;
@@ -413,9 +413,9 @@ class UserController extends Base {
     const promise = new Promise((resolve, reject) => {
       try {
         //{expiresIn: "15d",algorithm: 'HS256'}
-        jwt.verify(token, process.env.SECRET, function (err, decoded) {
-          if (err) {
-            resolve(err);
+        jwt.verify(token, process.env.SECRET, function (error, decoded) {
+          if (error) {
+            resolve(error);
           } else {
             //se tudo correr bem, salver a requisição para o uso em outras rotas            
             resolve(decoded);
@@ -458,15 +458,15 @@ class UserController extends Base {
               }
               resolve(dataResult);
             })
-            .catch(err => {
-              reject(new Error('Salt : ' + err));
+            .catch(error => {
+              reject(new Error('Salt : ' + error));
             });
         } else {
           reject("este email não tem usuário vinculado.");
         };
-      } catch (err) {
+      } catch (error) {
         // ... handle it locally
-        throw new Error(err.message);
+        throw new Error(error.message);
       }
     });
     return promise;
@@ -494,11 +494,11 @@ class UserController extends Base {
             }
             resolve(dataResult);
           })
-          .catch(err => {
-            reject(new Error("Erro ao alterar senha - " + err));
+          .catch(error => {
+            reject(new Error("Erro ao alterar senha - " + error));
           });
-      } catch (err) {
-        throw new Error(err.message);
+      } catch (error) {
+        throw new Error(error.message);
       }
     });
     return promise;

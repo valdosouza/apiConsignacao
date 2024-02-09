@@ -12,8 +12,8 @@ class RestGroupController extends Base {
         .then(result => {
           resolve(result);
         })
-        .catch(err => {
-          reject(new Error("RestGrupo - " + err));
+        .catch(error => {
+          reject(new Error("RestGrupo - " + error));
         });
     });
     return promise;
@@ -32,8 +32,8 @@ class RestGroupController extends Base {
         }).then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject(new Error("RestGrupo:" + err));
+        .catch(error => {
+          reject(new Error("RestGrupo:" + error));
         });
     });
     return promise;

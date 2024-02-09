@@ -9,10 +9,10 @@ exports.findAll = (req, res) => {
     .then(data => {
       res.send(data);
     })
-    .catch(err => {
+    .catch(error => {
       res.status(500).send({
         message:
-          err.message || "Algum erro aconteceu!"
+          error.message || "Algum erro aconteceu!"
       });
     });
 };

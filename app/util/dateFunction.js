@@ -40,11 +40,66 @@ class DateFunction {
     }
     static getTime() {
         var d = new Date(),
-        hour = '' + (d.getHours()),
-        minunte = '' + d.getMinutes();
+            hour = '' + (d.getHours()),
+            minunte = '' + d.getMinutes();
         if (minunte < 10) minunte = ['0', minunte].join('');
 
         return [hour, minunte].join(':');
+    }
+    static weekDay(date) {
+        var days = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
+        var now = new Date(date);
+        return days[now.getDay()];
+    }
+    static getMonthNumber(month) {
+        var months = [
+            "JANEIRO",
+            "FEVEREIRO",
+            "MARÇO",
+            "ABRIL",
+            "MAIO",
+            "JUNHO",
+            "JULHO",
+            "AGOSTO",
+            "SETEMBRO",
+            "OUTUBRO",
+            "NOVEMBRO",
+            "DEZEMBRO"
+        ];
+        for (var i = 0; i < 12; i++) {
+            if (months[i] == month) {
+                return i + 1;
+            }
+        }
+        return 1;
+    }
+    static getMonthDays(month,year) {
+        var months = [
+            "JANEIRO",
+            "FEVEREIRO",
+            "MARÇO",
+            "ABRIL",
+            "MAIO",
+            "JUNHO",
+            "JULHO",
+            "AGOSTO",
+            "SETEMBRO",
+            "OUTUBRO",
+            "NOVEMBRO",
+            "DEZEMBRO"
+        ];
+        var digMonth = 1;
+        for (var i = 0; i < 12; i++) {
+            if (months[i] == month) {
+                digMonth = i + 1;
+            }
+        }
+               
+        const ultimoDiaDoMes = new Date(year, digMonth, 0);
+
+        // O método getDate() retorna o dia do mês
+        return ultimoDiaDoMes.getDate();
+        
     }
 }
 

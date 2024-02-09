@@ -11,8 +11,8 @@ class InstitutionHasPaymentTypeController extends Base {
                 .then((data) => {
                     resolve(data);
                 })
-                .catch(err => {
-                    reject("Erro:"+ err);
+                .catch(error => {
+                    reject("Erro:"+ error);
                 });
         });
         return promise;        
@@ -24,8 +24,8 @@ class InstitutionHasPaymentTypeController extends Base {
             where: { tb_institution_id: ihPaymentType.tb_institution_id,
                 tb_payment_types_id : ihPaymentType.tb_payment_types_id }
           })
-        .catch(err => {
-          reject("Erro:"+ err);
+        .catch(error => {
+          reject("Erro:"+ error);
         });
       });
       return promise;        
@@ -39,8 +39,8 @@ class InstitutionHasPaymentTypeController extends Base {
                 .then((data) => {
                     resolve(data);
                 })
-                .catch(err => {
-                    reject("Erro:"+ err);
+                .catch(error => {
+                    reject("Erro:"+ error);
                 });
             */
         });

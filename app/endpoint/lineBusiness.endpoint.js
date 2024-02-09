@@ -32,8 +32,8 @@ class LineBusinessEndPoint {
       if ( data[0] == 1 )
         res.send(req.body)
     })
-    .catch(err => {
-      res.send("Erro:"+ err);
+    .catch(error => {
+      res.send("Erro:"+ error);
     });
   }
 

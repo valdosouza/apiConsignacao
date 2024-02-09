@@ -25,11 +25,11 @@ class PhoneController extends Base {
             else
               resolve(data);
           })
-          .catch(err => {
-            reject('Phone.getById: ' + err);
+          .catch(error => {
+            reject('Phone.getById: ' + error);
           });
-      } catch (err) {
-        reject('Phone.getById: ' + err);
+      } catch (error) {
+        reject('Phone.getById: ' + error);
       }
     });
     return promise;
@@ -45,8 +45,8 @@ class PhoneController extends Base {
           this.update(phone);
         }
         resolve(phone);
-      } catch (err) {
-        reject('Phone.save: ' + err);
+      } catch (error) {
+        reject('Phone.save: ' + error);
       }
     });
     return promise;
@@ -59,11 +59,11 @@ class PhoneController extends Base {
           .then(data => {
             resolve(data);
           })
-          .catch(err => {
-            reject("Phone.insert:" + err);
+          .catch(error => {
+            reject("Phone.insert:" + error);
           });
-      } catch (err) {
-        reject('Phone.insert: ' + err);
+      } catch (error) {
+        reject('Phone.insert: ' + error);
       }
     });
     return promise;
@@ -74,8 +74,8 @@ class PhoneController extends Base {
       Tb.update(phone, {
         where: { id: phone.id, kind: phone.kind }
       })
-        .catch(err => {
-          reject("Phone.update:" + err);
+        .catch(error => {
+          reject("Phone.update:" + error);
         });
     });
     return promise;

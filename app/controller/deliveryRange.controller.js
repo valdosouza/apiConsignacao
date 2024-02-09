@@ -22,7 +22,7 @@ class DeliveryRAngeController extends Base {
               else
                 resolve('0');
             })
-            .catch(err => {
+            .catch(error => {
               reject(new Error("Algum erro aconteceu ao buscar o Estabelecimento"));
             });
         });

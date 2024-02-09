@@ -11,8 +11,8 @@ class RestButtonHasMenuController extends Base {
         .then(result => {
           resolve(result);
         })
-        .catch(err => {
-          reject(new Error("RestButtonHasMenu - " + err));
+        .catch(error => {
+          reject(new Error("RestButtonHasMenu - " + error));
         });
     });
     return promise;
@@ -30,8 +30,8 @@ class RestButtonHasMenuController extends Base {
             resolve("Nao foi possivel atualizar com id=${id}. Talvez RestButtonHasMenu não foi encontrada ou req.body está vazio!");
           }
         })
-        .catch(err => {
-          reject(new Error("RestSubGrupo - " + err));
+        .catch(error => {
+          reject(new Error("RestSubGrupo - " + error));
         });
     });
   }
@@ -49,8 +49,8 @@ class RestButtonHasMenuController extends Base {
         }).then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject(new Error("RestSubGRupo:" + err));
+        .catch(error => {
+          reject(new Error("RestSubGRupo:" + error));
         });
     });
     return promise;

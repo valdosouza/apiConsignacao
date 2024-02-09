@@ -43,8 +43,8 @@ class AddressController extends Base {
           if (data.length > 0) resolve(data[0]);
           else resolve(data);
         })
-        .catch((err) => {
-          reject("Address.getById: " + err);
+        .catch((error) => {
+          reject("Address.getById: " + error);
         });
     });
     return promise;
@@ -64,8 +64,8 @@ class AddressController extends Base {
           this.update(address);
         }
         resolve(address);
-      } catch (err) {
-        reject("Address.save: " + err);
+      } catch (error) {
+        reject("Address.save: " + error);
       }
     });
     return promise;
@@ -80,8 +80,8 @@ class AddressController extends Base {
         .then((data) => {
           resolve(data);
         })
-        .catch((err) => {
-          reject("Erro:" + err);
+        .catch((error) => {
+          reject("Erro:" + error);
         });
     });
     return promise;
@@ -96,8 +96,8 @@ class AddressController extends Base {
         .then((data) => {
           resolve(data);
         })
-        .catch((err) => {
-          reject(new Error("Address.getlist:" + err));
+        .catch((error) => {
+          reject(new Error("Address.getlist:" + error));
         });
     });
     return promise;
@@ -107,8 +107,8 @@ class AddressController extends Base {
     const promise = new Promise((resolve, reject) => {
       Tb.update(address, {
         where: { id: address.id, kind: address.kind },
-      }).catch((err) => {
-        reject("Address.update:" + err);
+      }).catch((error) => {
+        reject("Address.update:" + error);
       });
     });
     return promise;
@@ -122,8 +122,8 @@ class AddressController extends Base {
             .then((data) => {
                 resolve(data);
             })
-            .catch(err => {
-                reject("Erro:"+ err);
+            .catch(error => {
+                reject("Erro:"+ error);
             });
         */
     });

@@ -45,6 +45,9 @@ routes.use("/linebusiness", lineBusinesse);
 const collaborator = require("../routes/collaborator.routes");
 routes.use("/collaborator", collaborator);
 
+const salesman = require("../salesman/routes");
+routes.use("/salesman", salesman);
+
 const customer = require("../routes/customer.routes");
 routes.use("/customer", customer);
 
@@ -98,5 +101,9 @@ routes.use("/region", region);
 
 const auditlog = require("../routes/auditLog.routes");
 routes.use("/auditlog", auditlog);
+
+const cashierstatementsummary = require("../cashier_statement_summary/routes");
+routes.use("/cashierstatementsummary", cashierstatementsummary);
+
 
 module.exports = routes;

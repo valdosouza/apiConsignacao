@@ -10,8 +10,8 @@ class SalesRouteCustomerController extends Base {
         .then((data) => {
           resolve(data);
         })
-        .catch(err => {
-          reject("salesrouteCustomer.insert:" + err);
+        .catch(error => {
+          reject("salesrouteCustomer.insert:" + error);
         });
     });
     return promise;
@@ -36,8 +36,8 @@ class SalesRouteCustomerController extends Base {
           else
             resolve(data);
         })
-        .catch(err => {
-          reject('salesroute.get: ' + err);
+        .catch(error => {
+          reject('salesroute.get: ' + error);
         });
     });
     return promise;
@@ -60,8 +60,8 @@ class SalesRouteCustomerController extends Base {
         }).then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject('salesroute.get: ' + err);
+        .catch(error => {
+          reject('salesroute.get: ' + error);
         });
     });
     return promise;
@@ -91,8 +91,8 @@ class SalesRouteCustomerController extends Base {
                 resolve(data);
               })
           })
-          .catch(err => {
-            reject("salesrouteCustomer.delete:" + err);
+          .catch(error => {
+            reject("salesrouteCustomer.delete:" + error);
           });
       } else {
         resolve("Rotas Informada é igual a atual");
@@ -118,7 +118,7 @@ class SalesRouteCustomerController extends Base {
             resolve(data);
           })
       } catch (error) {
-        reject("salesrouteCustomer.updateSequence:" + err);
+        reject("salesrouteCustomer.updateSequence:" + error);
       }
     });
     return promise;
@@ -138,7 +138,7 @@ class SalesRouteCustomerController extends Base {
             resolve(data);
           })
       } catch (error) {
-        reject("salesrouteCustomer.updateSequence:" + err);
+        reject("salesrouteCustomer.updateSequence:" + error);
       }
     });
     return promise;
@@ -164,7 +164,7 @@ class SalesRouteCustomerController extends Base {
           })
           
       } catch (error) {
-        reject("salesrouteCustomer.updateSequence:" + err);
+        reject("salesrouteCustomer.updateSequence:" + error);
       }
     });
     return promise;

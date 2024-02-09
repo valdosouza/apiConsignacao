@@ -12,8 +12,8 @@ class MailingController extends Base {
         .then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject(new Error("Algum erro aconteceu ao criar o Email. "+ err));
+        .catch(error => {
+          reject(new Error("Algum erro aconteceu ao criar o Email. "+ error));
 
         });
     });
@@ -29,7 +29,7 @@ class MailingController extends Base {
         .then(data => {
           resolve(data);
         })
-        .catch(err => {
+        .catch(error => {
           reject(new Error("Algum erro aconteceu ao atualizar o Email."));
 
         });
@@ -46,7 +46,7 @@ class MailingController extends Base {
         .then(data => {
           resolve(data);
         })
-        .catch(err => {
+        .catch(error => {
           reject(new Error("Algum erro aconteceu ao Deletar o Email."));
 
         });
@@ -67,7 +67,7 @@ class MailingController extends Base {
       ).then(data => {
         resolve(data);
       })
-        .catch(err => {
+        .catch(error => {
           reject(new Error("Algum erro aconteceu ao buscar Email"));
         });
     });
@@ -89,7 +89,7 @@ class MailingController extends Base {
       ).then(data => {
         resolve(data);
       })
-        .catch(err => {
+        .catch(error => {
           reject(new Error("Algum erro aconteceu ao buscar Email"));
         });
     });
@@ -109,8 +109,8 @@ class MailingController extends Base {
           resolve(null)
         };
       })
-      .catch(err => {
-        reject(new Error("Algum erro aconteceu ao buscar email" + err));
+      .catch(error => {
+        reject(new Error("Algum erro aconteceu ao buscar email" + error));
       });
     });
     return promise;
@@ -128,7 +128,7 @@ class MailingController extends Base {
       ).then(data => {
         resolve(data);
       })
-        .catch(err => {
+        .catch(error => {
           reject(new Error("Algum erro aconteceu ao buscar Email"));
         });
     });

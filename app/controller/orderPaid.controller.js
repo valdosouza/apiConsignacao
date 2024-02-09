@@ -18,8 +18,8 @@ class OrderPaidController extends Base {
         }).then(data => {
           resolve(data[0]);
         })
-        .catch(err => {
-          reject('OrderPaidController.getById: ' + err);
+        .catch(error => {
+          reject('OrderPaidController.getById: ' + error);
         });
     });
     return promise;
@@ -42,8 +42,8 @@ class OrderPaidController extends Base {
             })
         }
         resolve(body);
-      } catch (err) {
-        reject('OrderPaidController.save: ' + err);
+      } catch (error) {
+        reject('OrderPaidController.save: ' + error);
       }
     });
     return promise;
@@ -55,8 +55,8 @@ class OrderPaidController extends Base {
         .then(async (data) => {
           resolve(data);
         })
-        .catch(err => {
-          reject("OrderPaidController.insert:" + err);
+        .catch(error => {
+          reject("OrderPaidController.insert:" + error);
         });
     });
     return promise;
@@ -95,8 +95,8 @@ class OrderPaidController extends Base {
           }
           resolve(dataResult);
         })
-        .catch(err => {
-          reject("OrderPaidController.getlist: " + err);
+        .catch(error => {
+          reject("OrderPaidController.getlist: " + error);
         });
     });
     return promise;
@@ -121,8 +121,8 @@ class OrderPaidController extends Base {
         .then(() => {
           resolve(body);
         })
-        .catch(err => {
-          reject("OrderPaidController.update:" + err);
+        .catch(error => {
+          reject("OrderPaidController.update:" + error);
         });
     });
     return promise;
@@ -140,8 +140,8 @@ class OrderPaidController extends Base {
         .then((data) => {
           resolve(data);
         })
-        .catch(err => {
-          reject("OrderPaid.delete:" + err);
+        .catch(error => {
+          reject("OrderPaid.delete:" + error);
         });
     });
     return promise;

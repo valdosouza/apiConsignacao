@@ -12,8 +12,8 @@ class RegionController extends Base {
         .then((data) => {
           resolve(data);
         })
-        .catch(err => {
-          reject("region.insert:" + err);
+        .catch(error => {
+          reject("region.insert:" + error);
         });
     });
     return promise;
@@ -38,8 +38,8 @@ class RegionController extends Base {
         }).then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject("region.getlist: " + err);
+        .catch(error => {
+          reject("region.getlist: " + error);
         });
     });
     return promise;
@@ -73,8 +73,8 @@ class RegionController extends Base {
         }).then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject("region.getlisBySalesman: " + err);
+        .catch(error => {
+          reject("region.getlisBySalesman: " + error);
         });
     });
     return promise;
@@ -93,8 +93,8 @@ class RegionController extends Base {
         }).then(data => {
           resolve(data[0]);
         })
-        .catch(err => {
-          reject('region.get: ' + err);
+        .catch(error => {
+          reject('region.get: ' + error);
         });
     });
     return promise;
@@ -110,8 +110,8 @@ class RegionController extends Base {
         .then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject("region.update:" + err);
+        .catch(error => {
+          reject("region.update:" + error);
         });
     });
     return promise;
@@ -126,8 +126,8 @@ class RegionController extends Base {
           .then((data) => {
               resolve(data);
           })
-          .catch(err => {
-              reject("Erro:"+ err);
+          .catch(error => {
+              reject("Erro:"+ error);
           });
       */
     });

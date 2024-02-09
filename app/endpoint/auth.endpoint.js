@@ -44,10 +44,10 @@ class AuthEndPoint {
                   .then(data => {
                     return res.json(data);
                   })
-                  .catch(err => {
+                  .catch(error => {
                     res.status(500).send({
                       message:
-                        err.message || "' - Algum erro aconteceu!'"
+                        error.message || "' - Algum erro aconteceu!'"
                     });
                   });
               }

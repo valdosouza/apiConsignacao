@@ -22,8 +22,8 @@ class CashierController extends Base {
             resolve(1);
           }
         })
-        .catch(err => {
-          reject('cashier.getNexId: ' + err);
+        .catch(error => {
+          reject('cashier.getNexId: ' + error);
         });
     });
     return promise;
@@ -63,8 +63,8 @@ class CashierController extends Base {
             });
           }
         })
-        .catch(err => {
-          reject('cashier.getLastIdOpen: ' + err);
+        .catch(error => {
+          reject('cashier.getLastIdOpen: ' + error);
         });
     });
     return promise;
@@ -78,8 +78,8 @@ class CashierController extends Base {
         try {
           await this.open(tb_institution_id, tb_user_id);
           resolve("Caixa foi aberto");
-        } catch (err) {
-          reject("Erro:" + err);
+        } catch (error) {
+          reject("Erro:" + error);
         }
       }
       else {
@@ -108,8 +108,8 @@ class CashierController extends Base {
           .then((data) => {
             resolve(data);
           })
-      } catch (err) {
-        reject('Cashier.open: ' + err);
+      } catch (error) {
+        reject('Cashier.open: ' + error);
       }
 
     });
@@ -133,8 +133,8 @@ class CashierController extends Base {
           .then((data) => {
             resolve(data);
           })
-      } catch (err) {
-        reject('Cashier.closure: ' + err);
+      } catch (error) {
+        reject('Cashier.closure: ' + error);
       }
 
     });

@@ -30,8 +30,8 @@ class EntityController extends Base {
         else
           resolve(data);
         })
-        .catch(err => {
-          reject('Entity.getById: ' + err);
+        .catch(error => {
+          reject('Entity.getById: ' + error);
         });
       });
       return promise;
@@ -63,8 +63,8 @@ class EntityController extends Base {
                 .then((data) => {
                     resolve(data);
                 })
-                .catch(err => {
-                    reject("Erro:"+ err);
+                .catch(error => {
+                    reject("Erro:"+ error);
                 });
         });
         return promise;        
@@ -82,8 +82,8 @@ class EntityController extends Base {
             }).then(data => {
               resolve(data);
             })
-            .catch(err => {
-              reject(new Error("Entity:" + err));
+            .catch(error => {
+              reject(new Error("Entity:" + error));
             });
         });
         return promise;
@@ -99,8 +99,8 @@ class EntityController extends Base {
         .then(data =>{
           resolve(data);
         })
-        .catch(err => {
-          reject("Erro:"+ err);
+        .catch(error => {
+          reject("Erro:"+ error);
         });
       });
       return promise;        
@@ -114,8 +114,8 @@ class EntityController extends Base {
                 .then((data) => {
                     resolve(data);
                 })
-                .catch(err => {
-                    reject("Erro:"+ err);
+                .catch(error => {
+                    reject("Erro:"+ error);
                 });
             */
         });        

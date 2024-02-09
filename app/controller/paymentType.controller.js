@@ -22,8 +22,8 @@ class PaymentTypeController extends Base {
           else
             resolve('0');
           })
-          .catch(err => {
-            reject(new Error(err));
+          .catch(error => {
+            reject(new Error(error));
           });           
       });
       return promise;
@@ -50,8 +50,8 @@ class PaymentTypeController extends Base {
                 resolve(paymentType);
               });              
             })
-            .catch(err => {
-              reject("Erro:"+ err);
+            .catch(error => {
+              reject("Erro:"+ error);
             });
         }else{
           //Se a forma de pagamento já existe fazer outro tratamento
@@ -76,8 +76,8 @@ class PaymentTypeController extends Base {
             }).then(data => {
               resolve(data);
             })
-            .catch(err => {
-              reject(new Error("PaymentType:" + err));
+            .catch(error => {
+              reject(new Error("PaymentType:" + error));
             });
         });
         return promise;
@@ -98,8 +98,8 @@ class PaymentTypeController extends Base {
           }).then(data => {
             resolve(data[0]);
           })
-          .catch(err => {
-            reject(new Error("PaymentType:" + err));
+          .catch(error => {
+            reject(new Error("PaymentType:" + error));
           });
       });
       return promise;
@@ -123,8 +123,8 @@ class PaymentTypeController extends Base {
           ihPaymentType.update(dataIhp);
           resolve(paymentType);
         })
-        .catch(err => {
-          reject("Erro:"+ err);
+        .catch(error => {
+          reject("Erro:"+ error);
         });
       });
       return promise;        
@@ -138,8 +138,8 @@ class PaymentTypeController extends Base {
                 .then((data) => {
                     resolve(data);
                 })
-                .catch(err => {
-                    reject("Erro:"+ err);
+                .catch(error => {
+                    reject("Erro:"+ error);
                 });
             */
         });

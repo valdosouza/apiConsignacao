@@ -19,8 +19,8 @@ class LineBusinessController extends Base {
           else
             resolve('0');
           })
-          .catch(err => {
-            reject(new Error(err));
+          .catch(error => {
+            reject(new Error(error));
           });           
       });
       return promise;
@@ -48,8 +48,8 @@ class LineBusinessController extends Base {
                 resolve(lineBusiness);
               });              
             })
-            .catch(err => {
-              reject("Erro:"+ err);
+            .catch(error => {
+              reject("Erro:"+ error);
             });
         }else{
           //Se o Cargo já existe fazer outro tratamento
@@ -74,8 +74,8 @@ class LineBusinessController extends Base {
             }).then(data => {
               resolve(data);
             })
-            .catch(err => {
-              reject(new Error("LineBusiness:" + err));
+            .catch(error => {
+              reject(new Error("LineBusiness:" + error));
             });
         });
         return promise;
@@ -96,8 +96,8 @@ class LineBusinessController extends Base {
           }).then(data => {
             resolve(data[0]);
           })
-          .catch(err => {
-            reject(new Error("LineBusiness:" + err));
+          .catch(error => {
+            reject(new Error("LineBusiness:" + error));
           });
       });
       return promise;
@@ -123,8 +123,8 @@ class LineBusinessController extends Base {
 
           resolve(data);
         })        
-        .catch(err => {
-          reject("Erro:"+ err);
+        .catch(error => {
+          reject("Erro:"+ error);
         });
       });
       return promise;        
@@ -138,8 +138,8 @@ class LineBusinessController extends Base {
                 .then((data) => {
                     resolve(data);
                 })
-                .catch(err => {
-                    reject("Erro:"+ err);
+                .catch(error => {
+                    reject("Erro:"+ error);
                 });
             */
         });

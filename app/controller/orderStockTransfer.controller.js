@@ -23,8 +23,8 @@ class OrderStockTransferController extends Base {
             resolve(1);
           }
         })
-        .catch(err => {
-          reject('orderStockTransfer.getNexNumber: ' + err);
+        .catch(error => {
+          reject('orderStockTransfer.getNexNumber: ' + error);
         });
     });
     return promise;
@@ -51,7 +51,7 @@ class OrderStockTransferController extends Base {
             resolve(body);
           })
       } catch (error) {
-        reject("orderStockTransfer.insertOrder:" + err);
+        reject("orderStockTransfer.insertOrder:" + error);
       }
 
     });
@@ -92,8 +92,8 @@ class OrderStockTransferController extends Base {
           await orderItem.insert(dataItem);
         };
         resolve("Items Adicionados");
-      } catch (err) {
-        reject("orderStockTransfer.insertOrderItem:" + err);
+      } catch (error) {
+        reject("orderStockTransfer.insertOrderItem:" + error);
       }
 
     });
@@ -120,8 +120,8 @@ class OrderStockTransferController extends Base {
                   resolve(body);
                 })
             })
-            .catch(err => {
-              reject("orderStockTransfer.insert:" + err);
+            .catch(error => {
+              reject("orderStockTransfer.insert:" + error);
             });
         })
     });
@@ -170,8 +170,8 @@ class OrderStockTransferController extends Base {
           }
           resolve(arrayReturn);
         })
-        .catch(err => {
-          reject("orderstocktransfer.getlist: " + err);
+        .catch(error => {
+          reject("orderstocktransfer.getlist: " + error);
         });
     });
     return promise;
@@ -220,8 +220,8 @@ class OrderStockTransferController extends Base {
             resolve({ id: 0 });
           }
         })
-        .catch(err => {
-          reject('orderstocktransfer.get: ' + err);
+        .catch(error => {
+          reject('orderstocktransfer.get: ' + error);
         });
     });
     return promise;
@@ -238,8 +238,8 @@ class OrderStockTransferController extends Base {
 
         resolve(result);
       }
-      catch (err) {
-        reject('collaborator.get: ' + err);
+      catch (error) {
+        reject('collaborator.get: ' + error);
       }
     });
     return promise;
@@ -265,8 +265,8 @@ class OrderStockTransferController extends Base {
         .then((data) => {
           resolve(data);
         })
-        .catch(err => {
-          reject("orderStockTransfer.updateOrder:" + err);
+        .catch(error => {
+          reject("orderStockTransfer.updateOrder:" + error);
         });
     });
     return promise;
@@ -305,8 +305,8 @@ class OrderStockTransferController extends Base {
           }
         };
         resolve("Items Alterados");
-      } catch (err) {
-        reject("orderStockTransfer.updateOrderItem:" + err);
+      } catch (error) {
+        reject("orderStockTransfer.updateOrderItem:" + error);
       }
 
     });
@@ -334,8 +334,8 @@ class OrderStockTransferController extends Base {
             })
           resolve(body);
         })
-        .catch(err => {
-          reject("orderStockTransfer.update:" + err);
+        .catch(error => {
+          reject("orderStockTransfer.update:" + error);
         });
     });
     return promise;
@@ -353,8 +353,8 @@ class OrderStockTransferController extends Base {
         .then((data) => {
           resolve(data);
         })
-        .catch(err => {
-          reject("OrderStockTransfer.delete:" + err);
+        .catch(error => {
+          reject("OrderStockTransfer.delete:" + error);
         });
     });
     return promise;
@@ -399,8 +399,8 @@ class OrderStockTransferController extends Base {
         } else {
           resolve("201");
         }
-      } catch (err) {
-        reject(err);
+      } catch (error) {
+        reject(error);
       }
     });
     return promise;
@@ -443,8 +443,8 @@ class OrderStockTransferController extends Base {
         } else {
           resolve("201");
         }
-      } catch (err) {
-        reject(err);
+      } catch (error) {
+        reject(error);
       }
     });
     return promise;
@@ -481,8 +481,8 @@ class OrderStockTransferController extends Base {
           await this.closurebyCard(body, "StockTransfer");
         }
         resolve(body);
-      } catch (err) {
-        reject(err);
+      } catch (error) {
+        reject(error);
       }
     });
     return promise;
@@ -517,8 +517,8 @@ class OrderStockTransferController extends Base {
           await this.closurebyCard(body, "StockTransfer");
         }
         resolve(body);
-      } catch (err) {
-        reject(err);
+      } catch (error) {
+        reject(error);
       }
     });
     return promise;
@@ -546,8 +546,8 @@ class OrderStockTransferController extends Base {
           }
         };
         resolve("Items Adicionados");
-      } catch (err) {
-        reject("orderTransfer.insertOrderItem:" + err);
+      } catch (error) {
+        reject("orderTransfer.insertOrderItem:" + error);
       }
 
     });
@@ -579,8 +579,8 @@ class OrderStockTransferController extends Base {
           }
         };
         resolve("Items Adicionados");
-      } catch (err) {
-        reject("orderTransfer.insertOrderItem:" + err);
+      } catch (error) {
+        reject("orderTransfer.insertOrderItem:" + error);
       }
 
     });
@@ -620,8 +620,8 @@ class OrderStockTransferController extends Base {
         };
         await order.updateStatus(body.order.tb_institution_id, body.order.id, 'F');
         resolve("200");
-      } catch (err) {
-        reject(err);
+      } catch (error) {
+        reject(error);
       }
     });
     return promise;

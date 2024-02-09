@@ -38,8 +38,8 @@ class OrderAttendanceController extends Base {
             resolve(1);
           }
         })
-        .catch(err => {
-          reject('orderAttendance.getNexNumber: ' + err);
+        .catch(error => {
+          reject('orderAttendance.getNexNumber: ' + error);
         });
     });
     return promise;
@@ -62,8 +62,8 @@ class OrderAttendanceController extends Base {
             resolve({ 'id': 0 });
           }
         })
-        .catch(err => {
-          reject('getById: ' + err);
+        .catch(error => {
+          reject('getById: ' + error);
         });
     });
     return promise;
@@ -93,8 +93,8 @@ class OrderAttendanceController extends Base {
             resolve({ id: 0 });
           }
         })
-        .catch(err => {
-          reject('orderAttendance.getNexNumber: ' + err);
+        .catch(error => {
+          reject('orderAttendance.getNexNumber: ' + error);
         });
     });
     return promise;
@@ -158,8 +158,8 @@ class OrderAttendanceController extends Base {
         .then(() => {
           resolve(body);
         })
-        .catch(err => {
-          reject("orderAttendance.insertOrder:" + err);
+        .catch(error => {
+          reject("orderAttendance.insertOrder:" + error);
         });
     });
     return promise;
@@ -183,8 +183,8 @@ class OrderAttendanceController extends Base {
             .then(() => {
               resolve(body);
             })
-            .catch(err => {
-              reject("orderAttendance.insert:" + err);
+            .catch(error => {
+              reject("orderAttendance.insert:" + error);
             });
         })
     });
@@ -225,8 +225,8 @@ class OrderAttendanceController extends Base {
         }).then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject("orderattendance.getlist: " + err);
+        .catch(error => {
+          reject("orderattendance.getlist: " + error);
         });
     });
     return promise;
@@ -248,8 +248,8 @@ class OrderAttendanceController extends Base {
         }).then(data => {
           resolve(data[0]);
         })
-        .catch(err => {
-          reject('orderattendance.get: ' + err);
+        .catch(error => {
+          reject('orderattendance.get: ' + error);
         });
     });
     return promise;
@@ -290,8 +290,8 @@ class OrderAttendanceController extends Base {
         }).then(data => {
           resolve(data[0]);
         })
-        .catch(err => {
-          reject('orderattendance.get: ' + err);
+        .catch(error => {
+          reject('orderattendance.get: ' + error);
         });
     });
     return promise;
@@ -316,8 +316,8 @@ class OrderAttendanceController extends Base {
           tb_salesman_id: body.tb_salesman_id
         }
       })
-        .catch(err => {
-          reject("orderAttendance.updateOrder:" + err);
+        .catch(error => {
+          reject("orderAttendance.updateOrder:" + error);
         });
     });
     return promise;
@@ -340,8 +340,8 @@ class OrderAttendanceController extends Base {
             })
           resolve(body);
         })
-        .catch(err => {
-          reject("orderAttendance.update:" + err);
+        .catch(error => {
+          reject("orderAttendance.update:" + error);
         });
     });
     return promise;
@@ -368,8 +368,8 @@ class OrderAttendanceController extends Base {
         .then((data) => {
           resolve(data);
         })
-        .catch(err => {
-          reject("orderAttendance.finished:" + err);
+        .catch(error => {
+          reject("orderAttendance.finished:" + error);
         });
     });
     return promise;
@@ -383,8 +383,8 @@ class OrderAttendanceController extends Base {
           .then((data) => {
               resolve(data);
           })
-          .catch(err => {
-              reject("Erro:"+ err);
+          .catch(error => {
+              reject("Erro:"+ error);
           });
       */
     });
@@ -401,8 +401,8 @@ class OrderAttendanceController extends Base {
         } else {
           resolve("201");
         }
-      } catch (err) {
-        reject(err);
+      } catch (error) {
+        reject(error);
       }
     });
     return promise;
@@ -418,8 +418,8 @@ class OrderAttendanceController extends Base {
         } else {
           resolve("201");
         }
-      } catch (err) {
-        reject(err);
+      } catch (error) {
+        reject(error);
       }
     });
     return promise;
@@ -465,8 +465,8 @@ class OrderAttendanceController extends Base {
         dataResult['stock_statement'] = stockStatement;
 
         resolve(dataResult);
-      } catch (err) {
-        reject(err);
+      } catch (error) {
+        reject(error);
       }
     });
     return promise;

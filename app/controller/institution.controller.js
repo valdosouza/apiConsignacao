@@ -52,8 +52,8 @@ class InstitutionController extends Base {
                 .then((data) => {
                   resolve(data);
                 })
-                .catch(err => {
-                  reject("Erro:"+ err);
+                .catch(error => {
+                  reject("Erro:"+ error);
                 });
               
               //Salva o endereço          
@@ -77,8 +77,8 @@ class InstitutionController extends Base {
                 .then((data) => {
                   resolve(data);
                 })
-                .catch(err => {
-                  reject("Erro:"+ err);
+                .catch(error => {
+                  reject("Erro:"+ error);
                 });
               //Salva o Phone
               const dataPhone = {
@@ -92,8 +92,8 @@ class InstitutionController extends Base {
                 .then((data) => {
                   resolve(data);
                 })
-                .catch(err => {
-                  reject("Erro:"+ err);
+                .catch(error => {
+                  reject("Erro:"+ error);
                 });
               //Grava o institution
               const dataInstitution = {
@@ -104,15 +104,15 @@ class InstitutionController extends Base {
                 .then(data => {
                   resolve(data);
                 })
-                .catch(err => {
-                  reject("Erro:" + err);
+                .catch(error => {
+                  reject("Erro:" + error);
                 });
               //REtornogeral
               resolve(institution);
 
             })
-            .catch(err => {
-              reject("Erro:" + err);
+            .catch(error => {
+              reject("Erro:" + error);
           });
       }
     });
@@ -204,10 +204,10 @@ class InstitutionController extends Base {
       .then(data => {
         res.send(data);
       })
-      .catch(err => {
+      .catch(error => {
         res.status(500).send({
           message:
-            err.message || "Algum erro aconteceu ao Listar Estabelecimentos"
+            error.message || "Algum erro aconteceu ao Listar Estabelecimentos"
         });
       });
   };
@@ -278,7 +278,7 @@ class InstitutionController extends Base {
           else
             resolve('0');
         })
-        .catch(err => {
+        .catch(error => {
           reject(new Error("Algum erro aconteceu ao buscar o Estabelecimento"));
         });
     });

@@ -38,8 +38,8 @@ class CustomerController extends Base {
           else
             resolve(data);
         })
-        .catch(err => {
-          reject('getById: ' + err);
+        .catch(error => {
+          reject('getById: ' + error);
         });
     });
     return promise;
@@ -73,12 +73,11 @@ class CustomerController extends Base {
           if (data.length > 0) {
             resolve(data[0]);
           } else {
-            console.log("Sem registro");
             resolve({ id: 0, tb_salesman_id: 0 });
           }
         })
-        .catch(err => {
-          reject('getByDocNumber: ' + err);
+        .catch(error => {
+          reject('getByDocNumber: ' + error);
         });
     });
     return promise;
@@ -103,8 +102,8 @@ class CustomerController extends Base {
               resolve(body);
             })
         }
-      } catch (err) {
-        reject('Customer.save: ' + err);
+      } catch (error) {
+        reject('Customer.save: ' + error);
       }
     });
     return promise;
@@ -138,8 +137,8 @@ class CustomerController extends Base {
               resolve(data);
             })
         }
-      } catch (err) {
-        reject('Customer Insert: ' + err);
+      } catch (error) {
+        reject('Customer Insert: ' + error);
       }
     });
     return promise;
@@ -155,36 +154,36 @@ class CustomerController extends Base {
             if (body.company.cnpj != "") {
               body.company.id = body.entity.id;
               company.insert(body.company)
-                .catch(err => {
-                  reject("Erro:" + err);
+                .catch(error => {
+                  reject("Erro:" + error);
                 });
             } else {
               body.person.id = body.entity.id;
               person.insert(body.person)
-                .catch(err => {
-                  reject("Erro:" + err);
+                .catch(error => {
+                  reject("Erro:" + error);
                 });
             }
 
             //Salva o endereço  
             body.address.id = body.entity.id
             address.insert(body.address)
-              .catch(err => {
-                reject("Erro:" + err);
+              .catch(error => {
+                reject("Erro:" + error);
               });
 
             //Salva o Phone
             body.phone.id = body.entity.id;
             phone.insert(body.phone)
-              .catch(err => {
-                reject("Erro:" + err);
+              .catch(error => {
+                reject("Erro:" + error);
               });
 
             //Grava o customer
             body.customer.id = body.entity.id;
             Tb.create(body.customer)
-              .catch(err => {
-                reject("Erro:" + err);
+              .catch(error => {
+                reject("Erro:" + error);
               });
 
             //Salva o cliente na Rota de venda
@@ -196,17 +195,17 @@ class CustomerController extends Base {
               active: "S",
             };
             salesRouteCustomer.insert(dataRoute)
-              .catch(err => {
-                reject("Erro:" + err);
+              .catch(error => {
+                reject("Erro:" + error);
               });
             //REtornogeral              
             resolve(body);
           })
-          .catch(err => {
-            reject('Customer InsertComplete: ' + err);
+          .catch(error => {
+            reject('Customer InsertComplete: ' + error);
           });
-      } catch (err) {
-        reject('Customer InsertComplete: ' + err);
+      } catch (error) {
+        reject('Customer InsertComplete: ' + error);
       }
     });
     return promise;
@@ -251,14 +250,14 @@ class CustomerController extends Base {
           active: "S"
         };
         salesRouteCustomer.insert(dataRoute)
-          .catch(err => {
-            reject("Erro:" + err);
+          .catch(error => {
+            reject("Erro:" + error);
           });
 
         //REtornogeral              
         resolve(body);
-      } catch (err) {
-        reject('Customer InsertParc: ' + err);
+      } catch (error) {
+        reject('Customer InsertParc: ' + error);
       }
     });
     return promise;
@@ -303,8 +302,8 @@ class CustomerController extends Base {
           where: { id: body.customer.id }
         });
         resolve(body);
-      } catch (err) {
-        reject('Customer.update: ' + err);
+      } catch (error) {
+        reject('Customer.update: ' + error);
       }
     });
     return promise;
@@ -339,8 +338,8 @@ class CustomerController extends Base {
 
         resolve(result);
       }
-      catch (err) {
-        reject('getCustomer: ' + err);
+      catch (error) {
+        reject('getCustomer: ' + error);
       }
     });
     return promise;
@@ -380,8 +379,8 @@ class CustomerController extends Base {
         }).then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject('Customer: ' + err);
+        .catch(error => {
+          reject('Customer: ' + error);
         });
     });
     return promise;
@@ -441,8 +440,8 @@ class CustomerController extends Base {
         }).then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject('Customer.getListSalesRouteTodos: ' + err);
+        .catch(error => {
+          reject('Customer.getListSalesRouteTodos: ' + error);
         });
     });
     return promise;
@@ -472,8 +471,8 @@ class CustomerController extends Base {
         }).then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject('Customer.getListSalesRouteAtender: ' + err);
+        .catch(error => {
+          reject('Customer.getListSalesRouteAtender: ' + error);
         });
     });
     return promise;
@@ -504,8 +503,8 @@ class CustomerController extends Base {
         }).then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject('Customer.getListSalesRouteAtendidos: ' + err);
+        .catch(error => {
+          reject('Customer.getListSalesRouteAtendidos: ' + error);
         });
     });
     return promise;
@@ -529,8 +528,8 @@ class CustomerController extends Base {
         }).then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject('Customer.getListSalesRouteRetorno: ' + err);
+        .catch(error => {
+          reject('Customer.getListSalesRouteRetorno: ' + error);
         });
     });
     return promise;
@@ -554,8 +553,8 @@ class CustomerController extends Base {
         }).then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject('Customer.getListSalesRouteRecolhido: ' + err);
+        .catch(error => {
+          reject('Customer.getListSalesRouteRecolhido: ' + error);
         });
     });
     return promise;
@@ -616,8 +615,8 @@ class CustomerController extends Base {
         }).then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject('Customer.getListByRegion: ' + err);
+        .catch(error => {
+          reject('Customer.getListByRegion: ' + error);
         });
     });
     return promise;
@@ -678,8 +677,8 @@ class CustomerController extends Base {
         }).then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject('Customer.getListBySalesman: ' + err);
+        .catch(error => {
+          reject('Customer.getListBySalesman: ' + error);
         });
     });
     return promise;

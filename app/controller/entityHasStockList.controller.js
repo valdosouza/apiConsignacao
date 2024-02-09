@@ -39,7 +39,7 @@ class EntityHasStockListController extends Base {
                 });
             })
         } catch (error) {
-          reject("Erro:" + err);
+          reject("Erro:" + error);
         }
       } else {        
         resolve(checkExist[0]);
@@ -64,8 +64,8 @@ class EntityHasStockListController extends Base {
         .then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject('Entity.getById: ' + err);
+        .catch(error => {
+          reject('Entity.getById: ' + error);
         });
     });
     return promise;
@@ -86,8 +86,8 @@ class EntityHasStockListController extends Base {
         .then(data => {          
           resolve(data);
         })
-        .catch(err => {
-          reject('Entity.getById: ' + err);
+        .catch(error => {
+          reject('Entity.getById: ' + error);
         });
     });
     return promise;
@@ -103,7 +103,7 @@ class EntityHasStockListController extends Base {
               resolve("Estoque registrado na entidade!");
             })
         } catch (error) {
-          reject("Erro:" + err);
+          reject("Erro:" + error);
         }
       }
       resolve("Entidade já tem estoque registrado");
@@ -117,8 +117,8 @@ class EntityHasStockListController extends Base {
         .then((data) => {
           resolve(data);
         })
-        .catch(err => {
-          reject("Erro:" + err);
+        .catch(error => {
+          reject("Erro:" + error);
         });
     });
     return promise;
@@ -132,8 +132,8 @@ class EntityHasStockListController extends Base {
           .then((data) => {
               resolve(data);
           })
-          .catch(err => {
-              reject("Erro:"+ err);
+          .catch(error => {
+              reject("Erro:"+ error);
           });
       */
     });

@@ -38,8 +38,8 @@ class CityController extends Base {
                 }).then(data => {
                     if (data) { resolve(data[0]) } else { resolve(Null) };
                 })
-                .catch(err => {
-                    reject(new Error(err + " |" + "Algum erro aconteceu ao buscar a cidades"));
+                .catch(error => {
+                    reject(error + " |" + "Algum erro aconteceu ao buscar a cidades");
                 });
         });
         return promise;
@@ -59,8 +59,8 @@ class CityController extends Base {
                 }).then(data => {
                     if (data) { resolve(data[0]) } else { resolve(Null) };
                 })
-                .catch(err => {
-                    reject(new Error(err + " |" + "Algum erro aconteceu ao buscar a cidade"));
+                .catch(error => {
+                    reject(error + " |" + "Algum erro aconteceu ao buscar a cidade");
                 });
         });
         return promise;

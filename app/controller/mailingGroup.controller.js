@@ -12,7 +12,7 @@ class MailingGroupController extends Base {
         .then(data => {
           resolve(data);
         })
-        .catch(err => {
+        .catch(error => {
           reject(new Error("Algum erro aconteceu ao criar o Grupo de Email."));
 
         });
@@ -29,7 +29,7 @@ class MailingGroupController extends Base {
         .then(data => {
           resolve(data);
         })
-        .catch(err => {
+        .catch(error => {
           reject(new Error("Algum erro aconteceu ao atualizar o Grupo de Email."));
 
         });
@@ -46,7 +46,7 @@ class MailingGroupController extends Base {
         .then(data => {
           resolve(data);
         })
-        .catch(err => {
+        .catch(error => {
           reject(new Error("Algum erro aconteceu ao Deletar o Grupo de Email."));
 
         });

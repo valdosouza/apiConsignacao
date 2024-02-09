@@ -42,8 +42,8 @@ class CollaboratorEndPoint {
           }
           res.send(dataRes);
         })
-    } catch (err) {
-      res.send(err);
+    } catch (error) {
+      res.send(error);
     }
   }
 

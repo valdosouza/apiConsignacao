@@ -23,10 +23,10 @@ exports.create = (req, res) => {
     .then(data => {
       res.send(data);
     })
-    .catch(err => {
+    .catch(error => {
       res.status(500).send({
         message:
-          err.message || "Algum Erro aconteceu!!"
+          error.message || "Algum Erro aconteceu!!"
       });
     });
 };

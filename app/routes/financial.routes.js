@@ -69,7 +69,6 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *        schema:
  *          type: string
  *        required: true
- *        description: The financial tb_institution_id/tb_user_id/date
  *     responses:
  *       200:
  *         description: The list of the Financial Statement
@@ -99,7 +98,6 @@ router.get("/statement/getbyday/:tb_institution_id/:tb_user_id/:date", financial
  *        schema:
  *          type: string
  *        required: true
- *        description: The financial tb_institution_id/tb_user_id/date -
  *     responses:
  *       200:
  *         description: The list of the Financial Statement

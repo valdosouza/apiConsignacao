@@ -22,8 +22,8 @@ class OrderProductionController extends Base {
             resolve(1);
           }
         })
-        .catch(err => {
-          reject('order.getNexNumber: '+err);
+        .catch(error => {
+          reject('order.getNexNumber: '+error);
         });           
     });
     return promise;
@@ -61,8 +61,8 @@ class OrderProductionController extends Base {
               orderproduction.number = nextNumber;           
               resolve(orderproduction);
             })
-            .catch(err => {
-              reject("orderProduction.insert:"+ err);
+            .catch(error => {
+              reject("orderProduction.insert:"+ error);
             });        
           })
       });
@@ -103,8 +103,8 @@ class OrderProductionController extends Base {
             }).then(data => {
               resolve(data);
             })
-            .catch(err => {
-              reject("orderproduction.getlist: " + err);
+            .catch(error => {
+              reject("orderproduction.getlist: " + error);
             });
         });
         return promise;
@@ -145,8 +145,8 @@ class OrderProductionController extends Base {
           }).then(data => {
             resolve(data[0]);
           })
-          .catch(err => {
-            reject('orderproduction.get: '+err);
+          .catch(error => {
+            reject('orderproduction.get: '+error);
           });
       });
       return promise;
@@ -179,8 +179,8 @@ class OrderProductionController extends Base {
       .then((data) => {  
         resolve(orderproduction);
       })
-      .catch(err => {
-        reject("orderProduction.insert:"+ err);
+      .catch(error => {
+        reject("orderProduction.insert:"+ error);
       });        
     });
     return promise;        
@@ -194,8 +194,8 @@ class OrderProductionController extends Base {
               .then((data) => {
                   resolve(data);
               })
-              .catch(err => {
-                  reject("Erro:"+ err);
+              .catch(error => {
+                  reject("Erro:"+ error);
               });
           */
       });
@@ -229,8 +229,8 @@ class OrderProductionController extends Base {
         }else{
           resolve("201");  
         }        
-      } catch (err) {
-        reject(err);
+      } catch (error) {
+        reject(error);
       }                
     });
     return promise;        
@@ -262,8 +262,8 @@ class OrderProductionController extends Base {
         }else{
           resolve("201");  
         }        
-      } catch (err) {
-        reject(err);
+      } catch (error) {
+        reject(error);
       }                                
     });
     return promise;        

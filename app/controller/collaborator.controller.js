@@ -24,8 +24,8 @@ class CollaboratorController extends Base {
         }).then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject('Collaborator.getById: ' + err);
+        .catch(error => {
+          reject('Collaborator.getById: ' + error);
         });
     });
     return promise;
@@ -54,8 +54,8 @@ class CollaboratorController extends Base {
               resolve(data);
             })
         }
-      } catch (err) {
-        reject('Collaborator.save: ' + err);
+      } catch (error) {
+        reject('Collaborator.save: ' + error);
       }
     });
     return promise;
@@ -84,8 +84,8 @@ class CollaboratorController extends Base {
               resolve(data);
             })
         }
-      } catch (err) {
-        reject('Collaborator Insert: ' + err);
+      } catch (error) {
+        reject('Collaborator Insert: ' + error);
       }
     });
     return promise;
@@ -102,36 +102,36 @@ class CollaboratorController extends Base {
             if (collaborator.company.cnpj != "") {
               collaborator.company.id = entityId;
               company.insert(collaborator.company)
-                .catch(err => {
-                  reject("company.insert:" + err);
+                .catch(error => {
+                  reject("company.insert:" + error);
                 });
             } else {
               collaborator.person.id = entityId;
               person.insert(collaborator.person)
-                .catch(err => {
-                  reject("person.insert:" + err);
+                .catch(error => {
+                  reject("person.insert:" + error);
                 });
             }
 
             //Salva o endereço  
             collaborator.address.id = entityId;
             address.insert(collaborator.address)
-              .catch(err => {
-                reject("address.insert" + err);
+              .catch(error => {
+                reject("address.insert" + error);
               });
 
             //Salva o Phone
             collaborator.phone.id = entityId;
             phone.insert(collaborator.phone)
-              .catch(err => {
-                reject("phone.insert:" + err);
+              .catch(error => {
+                reject("phone.insert:" + error);
               });
 
             //Grava o collaborator
             collaborator.collaborator.id = entityId;
             Tb.create(collaborator.collaborator)
-              .catch(err => {
-                reject("Tb.create.collaborator:" + err);
+              .catch(error => {
+                reject("Tb.create.collaborator:" + error);
               });
             //Grava Usuario
             var userModel = {
@@ -149,11 +149,11 @@ class CollaboratorController extends Base {
             //REtornogeral              
             resolve(collaborator);
           })
-          .catch(err => {
-            reject('Collaborator InsertComplete: ' + err);
+          .catch(error => {
+            reject('Collaborator InsertComplete: ' + error);
           });
-      } catch (err) {
-        reject('Collaborator InsertComplete: ' + err);
+      } catch (error) {
+        reject('Collaborator InsertComplete: ' + error);
       }
     });
     return promise;
@@ -204,8 +204,8 @@ class CollaboratorController extends Base {
         user.createAuto(userModel);
         //REtornogeral              
         resolve(collaborator);
-      } catch (err) {
-        reject('Collaborator InsertParcial: ' + err);
+      } catch (error) {
+        reject('Collaborator InsertParcial: ' + error);
       }
     });
     return promise;
@@ -228,8 +228,8 @@ class CollaboratorController extends Base {
           where: { id: collaborator.collaborator.id }
         });
         resolve(collaborator);
-      } catch (err) {
-        reject('Collaborator.update: ' + err);
+      } catch (error) {
+        reject('Collaborator.update: ' + error);
       }
     });
     return promise;
@@ -263,8 +263,8 @@ class CollaboratorController extends Base {
 
         resolve(result);
       }
-      catch (err) {
-        reject('collaborator.get: ' + err);
+      catch (error) {
+        reject('collaborator.get: ' + error);
       }
     });
     return promise;
@@ -313,8 +313,8 @@ class CollaboratorController extends Base {
         }).then(data => {
           resolve(data);
         })
-        .catch(err => {
-          reject('Colaborador: ' + err);
+        .catch(error => {
+          reject('Colaborador: ' + error);
         });
     });
     return promise;
