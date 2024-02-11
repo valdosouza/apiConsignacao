@@ -4,7 +4,7 @@ const DeliveryRangeController = require("../controller/deliveryRange.controller.
 //var distance = require('google-distance-matrix');
 var origins = [''];
 var destinations = [''];
-//distance.key('AIzaSyDJuJYh5SABRokwihgVAMi55UnNSrfBY50');
+distance.key('put here your api key');
 //distance.units('metric');
 
 
