@@ -49,14 +49,15 @@ class UserController extends Base {
                 const dataUser = {
                   id: user.id,
                   password: user.password,
-                  kind: user.kind
+                  kind: user.kind,
+                  kind_device: user.kind_device
                 };
                 await TbUser.create(dataUser);
                 const dataInstitutionHU = {
                   tb_institution_id: user.tb_institution_id,
                   tb_user_id: user.id,
                   kind: user.kind,
-                  active: "S"
+                  active: "S"                  
                 };
                 await TbInstitutionHasUser.create(dataInstitutionHU);
                 //REtornogeral
@@ -68,7 +69,8 @@ class UserController extends Base {
                   tb_device_id: 0,
                   active: user.active,
                   email: user.email,
-                  nick: user.nick
+                  nick: user.nick,
+                  kind_device: user.kind_device
                 }
                 resolve(dataResolve);
 
@@ -107,7 +109,8 @@ class UserController extends Base {
           const dataUser = {
             id: user.id,
             password: user.password,
-            kind: user.kind
+            kind: user.kind,
+            kind_device: user.kind_device
           };
           await TbUser.create(dataUser);
           const dataInstitutionHU = {
@@ -155,10 +158,18 @@ class UserController extends Base {
           tb_institution_id: user.tb_institution_id,
           tb_user_id: user.id,
           kind: user.kind,
-          active: user.active
+          active: user.active          
         };
         TbInstitutionHasUser.update(dataInstitutionHU, {
           where: { tb_institution_id: user.tb_institution_id, tb_user_id: user.id }
+        });
+        //Atualiza o Usuario
+        const dataUser = {
+          id: user.id,
+          kind_device: user.kind_device,
+        };
+        TbUser.update(dataUser, {
+          where: { id: user.id }
         });
 
         const dataResolve = {
@@ -234,7 +245,8 @@ class UserController extends Base {
         ' et.nick_trade nick, ' +
         ' ma.email, u.kind, ' +
         ' u.tb_device_id, ' +
-        ' u.active ' +
+        ' u.active, ' +
+        ' u.kind_device '+
         'from tb_user u  ' +
         '  inner join tb_institution_has_user ihu  ' +
         '  on (u.id = ihu.tb_user_id)  ' +
@@ -264,7 +276,8 @@ class UserController extends Base {
 
     const promise = new Promise((resolve, reject) => {
       TbUser.sequelize.query(
-        'Select ihu.tb_institution_id, u.id, m.email, u.password, "" token ' +
+        'Select ihu.tb_institution_id, u.id, ' +
+        ' m.email, u.password, u.kind_device, "" token ' +
         'from tb_entity e ' +
         '  inner join tb_entity_has_mailing ehm ' +
         '  on (ehm.tb_entity_id = e.id) ' +

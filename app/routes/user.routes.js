@@ -21,6 +21,7 @@
  *         - email
  *         - password
  *         - kind
+ *         - kindDevice
  *       properties:
  *         tb_institution_id:
  *           type: integer
@@ -38,6 +39,8 @@
  *           type: string  
  *         active:
  *           type: string
+ *         kind_device:
+ *           type: string  
  *     Auth:
  *       type: object
  *       required:

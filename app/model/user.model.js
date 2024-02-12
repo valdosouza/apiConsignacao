@@ -71,6 +71,16 @@ module.exports = sequelize => {
       comment: null,
       field: "activation_key"
     },
+    kind_device: {
+      type: DataTypes.STRING(10),
+      allowNull: false,
+      defaultValue: "mobile",
+      primaryKey: true,
+      autoIncrement: false,
+      comment: null,
+      field: "kind_device"
+    },
+
     createdAt: {
       type: DataTypes.DATE,
       allowNull: true,

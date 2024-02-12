@@ -40,16 +40,29 @@ class AuthEndPoint {
                 };
                 return res.json(dataReturn);
               } else {
-                UserController.generateJWT(data)
-                  .then(data => {
-                    return res.json(data);
-                  })
-                  .catch(error => {
-                    res.status(500).send({
-                      message:
-                        error.message || "' - Algum erro aconteceu!'"
+                if ((req.body.kind_device == data[0].kind_device) || (data[0].kind_device == "AMBOS")) {
+                  UserController.generateJWT(data)
+                    .then(data => {
+                      return res.json(data);
+                    })
+                    .catch(error => {
+                      res.status(500).send({
+                        message:
+                          error.message || "' - Algum erro aconteceu!'"
+                      });
                     });
-                  });
+                } else {
+                  const dataReturn = {
+                    "auth": false,
+                    "id": 0,
+                    "tb_institution_id": 0,
+                    "username": '',
+                    "password": '',
+                    "jwt": '',
+                    "error": "Sem permissão para este tipo de dispositivo!"
+                  };
+                  return res.json(dataReturn);
+                }
               }
             })
         }
