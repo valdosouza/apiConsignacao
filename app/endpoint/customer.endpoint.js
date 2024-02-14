@@ -9,15 +9,15 @@ class CustomerEndPoint {
       doc_kind: "",
       doc_number: "",
       error: "",
-    };
+    };    
     if (data.person) {
-      if (data.person.id > 0) {
+      if (data.person.cpf != "") {
         dataRes.doc_kind = "F";
         dataRes.doc_number = data.person.cpf;
       }
     }
     if (data.company) {
-      if (data.company.id > 0) {
+      if (data.company.cnpj != "") {
         dataRes.doc_kind = "J";
         dataRes.doc_number = data.company.cnpj;
       }
@@ -63,14 +63,16 @@ class CustomerEndPoint {
         var dataDocnumber = await CustomerController.getByDocNumber(body.customer.tb_institution_id, docNumber);
 
         //Validar se o cliente pertence a outro vendedor
-        if ((dataDocnumber.tb_salesman_id != body.customer.tb_salesman_id) && (dataDocnumber.tb_salesman_id > 0)) {
-          resolve({ validate: false, msg: "Este cliente pertence a outro Vendedor." });
+        var validate = true;
+        var msg = "";
+        if (dataDocnumber.kind_device == 'APP MOBILE') {
+          if ((dataDocnumber.tb_salesman_id != body.customer.tb_salesman_id) && (dataDocnumber.tb_salesman_id > 0)) {
+            validate = false;
+            msg = "Este cliente pertence a outro Vendedor.";
 
-
-        } else {
-          resolve({ validate: true, msg: "" });
+          }
         }
-
+        resolve({ validate: validate, msg: msg });
       } catch (error) {
         reject({ validate: false, msg: error });
       }
@@ -81,9 +83,9 @@ class CustomerEndPoint {
     try {
 
       var result = await this._validateSave(req.body);
-      
+
       if (result.validate == true) {
-        if (req.body.customer.id > 0) {          
+        if (req.body.customer.id > 0) {
           CustomerController.getById(req.body.customer.tb_institution_id, req.body.customer.id)
             .then(dataById => {
               if (dataById) {
@@ -96,7 +98,7 @@ class CustomerEndPoint {
               }
             });
         } else {
-          
+
           var docNumber = "";
           var docKind = "";
           if (req.body.person) {
@@ -108,19 +110,19 @@ class CustomerEndPoint {
             docKind = "J";
           }
           CustomerController.getByDocNumber(req.body.customer.tb_institution_id, docNumber)
-          .then((dataDocnumber) => {            
-            if (dataDocnumber.id == 0) {
-              CustomerController.insert(req.body)
-                .then(data => {
-                  res.send(this._saveReturn(data));
-                })
-            } else {
-              CustomerController.update(req.body)
-                .then(data => {
-                  res.send(this._saveReturn(data));
-                })
-            }
-          });
+            .then((dataDocnumber) => {
+              if (dataDocnumber.id == 0) {
+                CustomerController.insert(req.body)
+                  .then(data => {
+                    res.send(this._saveReturn(data));
+                  })
+              } else {
+                CustomerController.update(req.body)
+                  .then(data => {
+                    res.send(this._saveReturn(data));
+                  })
+              }
+            });
         }
       } else {
         res.status(201).json(this._saveWithoutReturn(req.body, result.msg));
