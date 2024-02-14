@@ -117,6 +117,81 @@ class OrderConsignmentController extends Base {
     return promise;
   };
 
+
+  static async getDividaVelhaBySalesmanDetailed(body) {
+    const promise = new Promise((resolve, reject) => {
+      var sqlCustomerList = '';
+      sqlCustomerList = sqlCustomerList.concat(
+          'select ctm.id ',
+          'from tb_customer ctm ',
+          '    inner join tb_region rgn ',
+          '    on (rgn.id = ctm.tb_region_id  ) ',
+          'where (ctm.tb_institution_id = ord.tb_institution_id)  ',
+          '   and (rgn.tb_salesman_id = ?) '
+      );
+
+      var sqlMaxOrder = '';
+      sqlMaxOrder = sqlMaxOrder.concat(
+        'SELECT MAX(orca.id) ',
+        'FROM tb_order_consignment orca ',
+        '    inner join tb_order orda ',
+        '    on (orda.id = orca.id) ',
+        '        and (orda.tb_institution_id = orca.tb_institution_id) ',
+        'WHERE ( orca.tb_institution_id = orc.tb_institution_id )  ',
+        '    and ( orca.tb_customer_id = orc.tb_customer_id )  ',
+        'GROUP BY orca.tb_customer_id '
+      );
+      var sqlTxt = '';
+      sqlTxt = sqlTxt.concat(
+        'SELECT DISTINCT orc.tb_customer_id, etd.nick_trade name_customer, orc.tb_institution_id, orc.current_debit_balance ',
+        'FROM tb_order_consignment orc ',
+        '    inner join tb_order ord ',
+        '    on (ord.id = orc.id) ',
+        '        and (ord.tb_institution_id = orc.tb_institution_id) ',
+        '    inner join tb_entity etd ',
+        '    on (etd.id = orc.tb_customer_id) ',
+        'WHERE orc.id = (', sqlMaxOrder, ')',
+        '    and (orc.tb_institution_id = ?)  ',
+        '    and (orc.current_debit_balance > 0)  ',
+        '    and (orc.kind = ? )  ',
+        '    and (orc.tb_customer_id in (', sqlCustomerList, '))');
+
+      if (body.name_customer.length >0) {
+        sqlTxt = sqlTxt.concat(
+        ' and (etd.nick_trade like "%',body.name_customer,'%")'  
+        );
+      }
+
+      sqlTxt = sqlTxt.concat(
+        'order by 2 ',
+        ' limit ', ((body.page - 1) * 20), ',20 '
+      );
+
+      Tb.sequelize.query(
+        sqlTxt,
+        {
+          replacements: [body.tb_institution_id, 'supplying', body.tb_salesman_id],
+          type: Tb.sequelize.QueryTypes.SELECT
+        }).then(data => {
+          var dataResult = [];
+          for (var item of data) {
+            dataResult.push({
+              dt_record: item.dt_record,
+              tb_customer_id: item.tb_customer_id,
+              name_customer: item.name_customer,
+              current_debit_balance: Number(item.current_debit_balance),
+            });
+          }
+          resolve(dataResult);
+        })
+        .catch(error => {
+          reject('getDividaVelhaBySalesmanDetailed: ' + error);
+        });
+    });
+    return promise;
+  };
+
+
   static async getDividaVelhaByDay(tb_institution_id, tb_salesman_id, dt_record) {
     const promise = new Promise((resolve, reject) => {
 
@@ -150,16 +225,15 @@ class OrderConsignmentController extends Base {
         '                                                              and (ord.tb_institution_id = oat.tb_institution_id) ' +
         '                                                      where oat.tb_institution_id = ?  ' +
         '                                                            and ord.dt_record = ?  ';
-        if (tb_salesman_id == 0) {
-          sqltxt = sqltxt + ' and (ord.tb_user_id <> ?) ';
-        } else {
-          sqltxt = sqltxt + ' and (ord.tb_user_id = ?)  ';
-        };
+      if (tb_salesman_id == 0) {
+        sqltxt = sqltxt + ' and (ord.tb_user_id <> ?) ';
+      } else {
+        sqltxt = sqltxt + ' and (ord.tb_user_id = ?)  ';
+      };
 
-        sqltxt = sqltxt + 
+      sqltxt = sqltxt +
         '                                                      ))  ' +
         ') current_debit_balance  ';
-
 
       Tb.sequelize.query(
         sqltxt,
@@ -1246,9 +1320,9 @@ class OrderConsignmentController extends Base {
       try {
         Tb.destroy({
           where: {
-          tb_institution_id: tb_institution_id,
-          id: id,
-          terminal: 0,
+            tb_institution_id: tb_institution_id,
+            id: id,
+            terminal: 0,
           }
         })
         resolve("clenUp executado com sucesso!");

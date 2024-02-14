@@ -43,6 +43,35 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         value_charged:
  *           type: number   
  *  
+ *     FinancialListCustomerOldDebit:
+ *       type: object
+ *       properties:
+ *         dt_record:
+ *           type: string
+ *         tb_customer_id:
+ *           type: integer
+ *         name_customer:
+ *           type: string
+ *         current_debit_balance:
+ *           type: number
+ * 
+ *     CashierStatementParams:
+ *       type: object
+ *       properties:
+ *         tb_institution_id:
+ *           type: integer
+ *         dt_record:
+ *           type: string
+ *         tb_customer_id:
+ *           type: integer
+ *         tb_order_id:
+ *           type: integer
+ *         tb_salesman_id:
+ *           type: integer
+ *         name_customer:
+ *           type: string
+ *         page:
+ *           type: integer 
  */
  
 
@@ -227,6 +256,30 @@ router.get("/customer/charged/getlist/:tb_institution_id/:tb_user_id/:date", fin
  */
 
 router.get("/salesman/customer/charged/getlist/:tb_institution_id/:date", financial.getListSalesmanCustomerCharge);
+
+/**
+ * @swagger
+ * /financial/customer/olddebit/getlist:
+ *   post:
+ *     summary: Returns the list of customers old debit
+ *     tags: [Financial]
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/CashierStatementParams'
+ *     responses:
+ *       200:
+ *         description: The list of customer that was charged
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/FinancialListCustomerOldDebit'
+ */
+
+router.post("/customer/olddebit/getlist", financial.getDividaVelhaBySalesmanDetailed);
 
 
 module.exports = router;

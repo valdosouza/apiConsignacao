@@ -40,7 +40,7 @@ class AuthEndPoint {
                 };
                 return res.json(dataReturn);
               } else {
-                if ((req.body.kind_device == data[0].kind_device) || (data[0].kind_device == "AMBOS")) {
+                if ((UPPER(req.body.kind_device) == UPPER(data[0].kind_device)) || (data[0].kind_device == "AMBOS")) {
                   UserController.generateJWT(data)
                     .then(data => {
                       return res.json(data);

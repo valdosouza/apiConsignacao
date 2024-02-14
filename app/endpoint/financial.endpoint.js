@@ -1,4 +1,5 @@
 const FinancialStatemenController = require("../controller/financialStatement.controller");
+const OrderConsigngmentController = require("../controller/orderConsignment.controller");
 
 class FinancialEndPoint {
 
@@ -61,6 +62,13 @@ class FinancialEndPoint {
         res.send(data);
       })
   }    
+
+  static getDividaVelhaBySalesmanDetailed(req, res) {    
+    OrderConsigngmentController.getDividaVelhaBySalesmanDetailed(req.body)
+      .then(data => {
+        res.send(data);
+      })
+  }      
 }
 
 module.exports = FinancialEndPoint; 
