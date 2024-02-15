@@ -122,14 +122,22 @@ class OrderConsignmentController extends Base {
     const promise = new Promise((resolve, reject) => {
       var sqlCustomerList = '';
       sqlCustomerList = sqlCustomerList.concat(
-          'select ctm.id ',
-          'from tb_customer ctm ',
-          '    inner join tb_region rgn ',
-          '    on (rgn.id = ctm.tb_region_id  ) ',
-          'where (ctm.tb_institution_id = ord.tb_institution_id)  ',
-          '   and (rgn.tb_salesman_id = ?) '
-      );
+        'select ctm.id ',
+        'from tb_customer ctm ',
+        '    inner join tb_region rgn ',
+        '    on (rgn.id = ctm.tb_region_id  ) ',
+        'where (ctm.tb_institution_id = ord.tb_institution_id)  ',
 
+      );
+      if (body.tb_salesman_id > 0) {
+        sqlCustomerList = sqlCustomerList.concat(
+          '   and (rgn.tb_salesman_id = ?) '
+        );
+      } else {
+        sqlCustomerList = sqlCustomerList.concat(
+          '   and (rgn.tb_salesman_id <> ?) '
+        )
+      }      
       var sqlMaxOrder = '';
       sqlMaxOrder = sqlMaxOrder.concat(
         'SELECT MAX(orca.id) ',
@@ -156,9 +164,9 @@ class OrderConsignmentController extends Base {
         '    and (orc.kind = ? )  ',
         '    and (orc.tb_customer_id in (', sqlCustomerList, '))');
 
-      if (body.name_customer.length >0) {
+      if (body.name_customer.length > 0) {
         sqlTxt = sqlTxt.concat(
-        ' and (etd.nick_trade like "%',body.name_customer,'%")'  
+          ' and (etd.nick_trade like "%', body.name_customer, '%")'
         );
       }
 

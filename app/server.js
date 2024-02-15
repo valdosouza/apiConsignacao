@@ -83,7 +83,6 @@ function shutDownServer() {
     console.log("Server shutting down...");
     process.exit(0);
   }
-
   // forcefully shut server down
   setTimeout(() => {
     console.log("Shutting server down forcefully...");
