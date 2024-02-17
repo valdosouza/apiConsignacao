@@ -9,14 +9,14 @@ const ControllerOrderConsignmentCard = require("../controller/orderConsignmentCa
 const ControllerOrdeItem = require("../controller/orderItem.controller.js");
 const ControllerOrderPaid = require("../controller/orderPaid.controller.js");
 const ControllerOrderSale = require("../controller/orderSale.controller.js");
-const OrderItemSale = require('./orderItemSale.controller.js');
+const OrderItemSale = require('../controller/orderItemSale.controller.js');
 const ControllerOrderSaleCard = require("../controller/orderSaleCard.controller.js");
 const ControllerOrderStockAdjust = require("../controller/orderStockAdjust.controller.js");
 const ControllerOrderStockTransfer = require("../controller/orderStockTransfer.controller.js");
-const OrderItemStockTransfer = require('./orderItemStockTransfer.controller.js');
+const OrderItemStockTransfer = require('../controller/orderItemStockTransfer.controller.js');
 const ControllerStockStatement = require("../controller/stockStatement.controller.js");
 const ControllerFinancial = require("../controller/financial.controller.js");
-const SalesRouteCustomerController = require('./salesRouteCustomer.controller.js');
+const SalesRouteCustomerController = require('../controller/salesRouteCustomer.controller.js');
 const SalesRouteController = require("../controller/salesRoute.controller.js");
 
 

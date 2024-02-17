@@ -122,5 +122,14 @@ class OrderSaleEndPoint {
         }
       })
   }
+
+  static getSaleAverage = (req, res) => {
+    OrderSaleController.getSaleAverage(req.body)
+      .then(data => {
+        res.send(data);
+      })
+  }
+
+
 }
 module.exports = OrderSaleEndPoint; 

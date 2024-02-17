@@ -31,7 +31,8 @@ class RegionController extends Base {
         'from tb_region rg ' +
         '  inner join tb_entity et '+
         '  on (et.id = rg.tb_salesman_id) '+
-        'where (rg.tb_institution_id =? ) ',
+        'where (rg.tb_institution_id =? ) '+
+        'order by rg.description ',
         {
           replacements: [tb_institution_id],
           type: Tb.sequelize.QueryTypes.SELECT

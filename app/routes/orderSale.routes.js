@@ -131,6 +131,29 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *           type: integer
  *         nick_trade:
  *           type: string 
+ *         tb_region_id:
+ *           type: integer
+ *         name_region:
+ *           type: string  
+ *         date_initial:
+ *           type: string
+ *         date_final:
+ *           type: string  
+ * 
+ *     saleAverage:
+ *       type: object
+ *       properties:
+ *         tb_customer_id:
+ *           type: integer
+ *         name_customer:
+ *           type: string  
+ *         total_value:
+ *           type: double
+ *         tag_value:
+ *           type: double
+ *         number_of_sales:
+ *           type: integer
+ * 
  */
  
  
@@ -336,5 +359,31 @@ router.post("/card", ordersale.saveByCard);
  */
 
  router.get("/card/get/:tb_institution_id/:tb_order_id/", ordersale.getOrderSaleCard);
+
+/**
+ * @swagger
+ * /ordersale/average/getlist:
+ *   post:
+ *     summary: Create a new ordersale
+ *     tags: [OrderSale]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/orderSaleParams'
+ *     responses:
+ *       200:
+ *         description: The OrderSale was successfully created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/saleAverage'
+ *       500:
+ *         description: Some server error
+ * 
+ */
+router.post("/average/getlist", ordersale.getSaleAverage);
+
 
 module.exports = router;

@@ -54,7 +54,7 @@ class OrderSaleController extends Base {
             resolve(body);
           });
       } catch (error) {
-        reject('insertOrder'+error);
+        reject('insertOrder' + error);
       }
     });
     return promise;
@@ -643,9 +643,9 @@ class OrderSaleController extends Base {
         var dataItem = {};
         for (var item of items) {
           dataItem = {
-            id: 0,            
+            id: 0,
             tb_institution_id: body.order.tb_institution_id,
-            tb_order_id: body.order.id,                        
+            tb_order_id: body.order.id,
             terminal: 0,
             tb_order_item_id: item.id,
             tb_stock_list_id: item.tb_stock_list_id,
@@ -685,5 +685,55 @@ class OrderSaleController extends Base {
     });
     return promise;
   }
+
+  static async getSaleAverage(body) {
+    const promise = new Promise((resolve, reject) => {
+      try {
+        var sqltxt = '';
+        sqltxt = sqltxt.concat(
+          'Select ors.tb_customer_id, etd.nick_trade name_customer , cast(sum(ors.total_value) as DECIMAL(2)) total_value, ',
+          ' cast(count(ors.id) as DECIMAL(2)) number_of_sales ',
+          'from tb_order ord ',
+          '   inner join tb_order_sale ors ',
+          '   on (ors.id = ord.id) ',
+          '     and (ord.tb_institution_id = ord.tb_institution_id) ',
+          '   inner join tb_entity etd ',
+          '   on (etd.id = ors.tb_customer_id) ',
+          '   inner join tb_customer ctm ',
+          '   on (ctm.id = ors.tb_customer_id) ',
+          '     and (ctm.tb_institution_id = ors.tb_institution_id)    ',
+          'where (ord.tb_institution_id = ?) ',
+          ' and ord.dt_record between ? and ?  ');
+        if (body.tb_region_id) {
+          sqltxt = sqltxt.concat(' and ctm.tb_region_id = ? ');
+        } else {
+          sqltxt = sqltxt.concat(' and ctm.tb_region_id <> ? ');
+        }
+        sqltxt = sqltxt.concat('group by 1  ');
+
+        Tb.sequelize.query(
+          sqltxt,
+          {
+            replacements: [body.tb_institution_id, body.date_initial, body.date_final, body.tb_region_id],
+            type: Tb.sequelize.QueryTypes.SELECT
+          }).then(data => {
+            if (data) {
+              data.forEach(row => {
+                row.total_value = parseFloat(row.total_value);
+                row.number_of_sales = parseInt(row.number_of_sales);
+                row.tag_value = row.total_value / row.number_of_sales;
+              });
+              resolve(data);
+            } else {
+              resolve(1);
+            }
+          })
+      } catch (error) {
+        reject('orderSale.getSaleAverage: ' + error);
+      }
+    });
+    return promise;
+  }
+
 }
 module.exports = OrderSaleController;
