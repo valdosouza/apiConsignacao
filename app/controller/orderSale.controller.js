@@ -710,7 +710,10 @@ class OrderSaleController extends Base {
         } else {
           sqltxt = sqltxt.concat(' and ctm.tb_region_id <> ? ');
         }
-        sqltxt = sqltxt.concat('group by 1  ');
+        sqltxt = sqltxt.concat(
+                              'group by 1  ',
+                              'order by 2 desc '              
+                              );
 
         Tb.sequelize.query(
           sqltxt,
