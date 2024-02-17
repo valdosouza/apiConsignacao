@@ -691,8 +691,9 @@ class OrderSaleController extends Base {
       try {
         var sqltxt = '';
         sqltxt = sqltxt.concat(
-          'Select ors.tb_customer_id, etd.nick_trade name_customer , cast(sum(ors.total_value) as DECIMAL(2)) total_value, ',
-          ' cast(count(ors.id) as DECIMAL(2)) number_of_sales ',
+          'Select ors.tb_customer_id, etd.nick_trade name_customer, ',
+          ' sum(ors.total_value)  total_value, ',
+          ' count(ors.id)number_of_sales ',
           'from tb_order ord ',
           '   inner join tb_order_sale ors ',
           '   on (ors.id = ord.id) ',
