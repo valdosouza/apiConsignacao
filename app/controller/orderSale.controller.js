@@ -697,7 +697,7 @@ class OrderSaleController extends Base {
           'from tb_order ord ',
           '   inner join tb_order_sale ors ',
           '   on (ors.id = ord.id) ',
-          '     and (ord.tb_institution_id = ord.tb_institution_id) ',
+          '     and (ors.tb_institution_id = ord.tb_institution_id) ',
           '   inner join tb_entity etd ',
           '   on (etd.id = ors.tb_customer_id) ',
           '   inner join tb_customer ctm ',
@@ -712,7 +712,8 @@ class OrderSaleController extends Base {
         }
         sqltxt = sqltxt.concat(
                               'group by 1  ',
-                              'order by 2 desc '              
+                              'having sum(ors.total_value) > 0 ',
+                              'order by 3 asc '              
                               );
 
         Tb.sequelize.query(
