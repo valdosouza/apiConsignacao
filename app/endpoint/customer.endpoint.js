@@ -1,4 +1,5 @@
 const CustomerController = require("../controller/customer.controller.js");
+const UserController = require("../controller/user.controller.js");
 
 class CustomerEndPoint {
   static _saveReturn(data) {
@@ -60,12 +61,13 @@ class CustomerEndPoint {
           docNumber = body.company.cnpj;
           docKind = "J";
         }
-        var dataDocnumber = await CustomerController.getByDocNumber(body.customer.tb_institution_id, docNumber);
-
-        //Validar se o cliente pertence a outro vendedor
         var validate = true;
         var msg = "";
-        if (dataDocnumber.kind_device == 'APP MOBILE') {
+        //Valida se o usuario pode editar o cliente
+        var dataUser = await UserController.getById(body.customer.tb_salesman_id);
+        if (dataUser.kind_device == 'APP MOBILE') {
+          //Validar se o cliente pertence a outro vendedor
+          var dataDocnumber = await CustomerController.getByDocNumber(body.customer.tb_institution_id, docNumber);          
           if ((dataDocnumber.tb_salesman_id != body.customer.tb_salesman_id) && (dataDocnumber.tb_salesman_id > 0)) {
             validate = false;
             msg = "Este cliente pertence a outro Vendedor.";

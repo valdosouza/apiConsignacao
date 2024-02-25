@@ -50,29 +50,23 @@ class CustomerController extends Base {
       Tb.sequelize.query(
         'Select ' +
         'ct.id,  ' +
-        'rgn.tb_salesman_id, ' +
-        'usr.kind_device '+
+        'rgn.tb_salesman_id ' +
         'from tb_customer  ct  ' +
         '  inner join tb_person prs  ' +
         '  on (prs.id = ct.id)  ' +
         '  inner join tb_region rgn  ' +
         '  on (rgn.id = ct.tb_region_id)  ' +
-        '  inner join tb_user usr  ' +
-        '  on (usr.id = rgn.tb_salesman_id )  ' +  
         'where (ct.tb_institution_id =?)  ' +
         ' and  ( prs.cpf = ?)  ' +
         'union ' +
         'Select  ' +
         'ct.id,  ' +
-        'rgn.tb_salesman_id, ' +
-        'usr.kind_device '+
+        'rgn.tb_salesman_id ' +
         'from tb_customer  ct  ' +        
         '  inner join tb_company cpn  ' +
         '  on (cpn.id = ct.id)  ' +
         '  inner join tb_region rgn  ' +
         '  on (rgn.id = ct.tb_region_id)  ' +
-        '  inner join tb_user usr  ' +
-        '  on (usr.id = rgn.tb_salesman_id )  ' +  
         'where (ct.tb_institution_id =?)  ' +
         ' and  ( cpn.cnpj = ?)  ',
         {

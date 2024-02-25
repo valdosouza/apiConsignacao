@@ -57,7 +57,7 @@ class UserController extends Base {
                   tb_institution_id: user.tb_institution_id,
                   tb_user_id: user.id,
                   kind: user.kind,
-                  active: "S"                  
+                  active: "S"
                 };
                 await TbInstitutionHasUser.create(dataInstitutionHU);
                 //REtornogeral
@@ -146,19 +146,19 @@ class UserController extends Base {
           });
         //Atualiza o Mailing
         MailingController.findByEntityId(user.id)
-        .then(async (data) =>  {
-          const dataMailing = {
-            id : data[0].id,
-            email: user.email
-          }
-          await MailingController.update(dataMailing)
-        });  
+          .then(async (data) => {
+            const dataMailing = {
+              id: data[0].id,
+              email: user.email
+            }
+            await MailingController.update(dataMailing)
+          });
         //Atualiza a institution
         const dataInstitutionHU = {
           tb_institution_id: user.tb_institution_id,
           tb_user_id: user.id,
           kind: user.kind,
-          active: user.active          
+          active: user.active
         };
         TbInstitutionHasUser.update(dataInstitutionHU, {
           where: { tb_institution_id: user.tb_institution_id, tb_user_id: user.id }
@@ -237,6 +237,32 @@ class UserController extends Base {
     return promise;
   }
 
+  static getById(id) {
+    const promise = new Promise((resolve, reject) => {
+      try {
+        TbUser.sequelize.query(
+          'Select u.* ' +
+          'from tb_user u  ' +
+          'where (u.id = ?) ',
+          {
+            replacements: [id],
+            type: TbUser.sequelize.QueryTypes.SELECT
+          }
+        ).then(data => {
+          if (data.length > 0) {
+            resolve(data[0]);
+          } else {
+            resolve({ id: 0 });
+          }
+        })
+
+      } catch (error) {
+        reject("userController: " + error);
+      }
+    });
+    return promise;
+  }
+
   static getlist(tb_institution_id) {
     const promise = new Promise((resolve, reject) => {
       TbUser.sequelize.query(
@@ -246,7 +272,7 @@ class UserController extends Base {
         ' ma.email, u.kind, ' +
         ' u.tb_device_id, ' +
         ' u.active, ' +
-        ' u.kind_device '+
+        ' u.kind_device ' +
         'from tb_user u  ' +
         '  inner join tb_institution_has_user ihu  ' +
         '  on (u.id = ihu.tb_user_id)  ' +
@@ -415,7 +441,7 @@ class UserController extends Base {
         "username": userEmail,
         "password": "",
         "jwt": token,
-        "error" :"",
+        "error": "",
       }
       resolve(result);
     });
