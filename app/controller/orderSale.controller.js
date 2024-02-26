@@ -693,7 +693,8 @@ class OrderSaleController extends Base {
         sqltxt = sqltxt.concat(
           'Select ors.tb_customer_id, etd.nick_trade name_customer, ',
           ' sum(ors.total_value)  total_value, ',
-          ' count(ors.id)number_of_sales ',
+          ' count(ors.id)number_of_sales, ',
+          ' ( sum(ors.total_value) / count(ors.id) ) tag_value ',
           'from tb_order ord ',
           '   inner join tb_order_sale ors ',
           '   on (ors.id = ord.id) ',
@@ -713,7 +714,7 @@ class OrderSaleController extends Base {
         sqltxt = sqltxt.concat(
                               'group by 1  ',
                               'having sum(ors.total_value) > 0 ',
-                              'order by 3 asc '              
+                              'order by 5 asc '              
                               );
 
         Tb.sequelize.query(
@@ -726,7 +727,7 @@ class OrderSaleController extends Base {
               data.forEach(row => {
                 row.total_value = parseFloat(row.total_value);
                 row.number_of_sales = parseInt(row.number_of_sales);
-                row.tag_value = row.total_value / row.number_of_sales;
+                row.tag_value = parseFloat(row.tag_value);
               });
               resolve(data);
             } else {
