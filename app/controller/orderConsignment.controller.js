@@ -770,6 +770,7 @@ class OrderConsignmentController extends Base {
         'orc.tb_salesman_id, ' +
         'slm.name_company name_salesman, ' +
         'orc.dt_record, ' +
+        'SUBSTRING(time(ate.createdAt), 1, 5) hr_record, '+
         'orc.total_value, ' +
         'orc.change_value, ' +
         'orc.previous_debit_balance, ' +
@@ -906,6 +907,7 @@ class OrderConsignmentController extends Base {
                 tb_salesman_id: data.tb_salesman_id,
                 name_saleman: data.name_salesman,
                 dt_record: data.dt_record,
+                hr_record: data.hr_record,
                 total_value: Number(data.total_value),
                 change_value: Number(data.change_value),
                 previous_debit_balance: Number(data.previous_debit_balance),
@@ -942,6 +944,7 @@ class OrderConsignmentController extends Base {
                 id: data.id,
                 tb_institution_id: data.tb_institution_id,
                 dt_record: data.dt_record,
+                hr_record:data.hr_record,
                 tb_customer_id: data.tb_customer_id,
                 name_customer: data.name_customer,
                 tb_salesman_id: data.tb_salesman_id,

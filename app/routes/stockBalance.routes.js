@@ -53,7 +53,16 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *         quantity:
  *           type: number
  * 
- *   
+ *     StockBalanceDetailed:
+ *       type: object
+ *       properties:
+ *         tb_merchandise_id:
+ *           type: integer
+ *         name_customer:
+ *           type: string
+ *         quantity:
+ *           type: number
+   
 */
     
  
@@ -144,6 +153,37 @@ router.get("/salesman/get/:tb_institution_id/:tb_salesman_id/", stockBalance.get
  *        description: Some error happened
  */
 router.get("/customer/getAll/:tb_institution_id/:tb_salesman_id/", stockBalance.getAllCustomer);
+
+/** 
+ * @swagger
+ * /stockbalance/customer/getAllByProduct/{tb_institution_id}/{tb_salesman_id}/{tb_product_id}:
+ *  get:
+ *    summary: Return stockbalance of all customer by the salesman detaild by product
+ *    tags: [StockBalance]
+ *    parameters:
+ *      - in: path
+ *        name: tb_institution_id
+ *        required: true
+ *      - in: path
+ *        name: tb_salesman_id
+ *        required: true
+ *      - in: path
+ *        name: tb_product_id
+ *        required: true
+ *    responses:
+ *      200:
+ *        description: The Stock Balance was Listed
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/StockBalanceDetailed'
+ *      404:
+ *        description: The stock Balance was not found
+ *      500:
+ *        description: Some error happened
+ */
+router.get("/customer/getAllByProduct/:tb_institution_id/:tb_salesman_id/:tb_product_id", stockBalance.getAllCustomerByProduct);
+
 
 /**
  * @swagger
