@@ -43,25 +43,88 @@ class SalesRouteCustomerController extends Base {
     return promise;
   }
 
-  static getListByRoute(tb_institution_id, tb_sales_route_id, sequence, tb_customer_id) {
+  static getListOrderSequence(tb_institution_id, tb_sales_route_id,tb_region_id, sequence) {
     const promise = new Promise((resolve, reject) => {
       Tb.sequelize.query(
-        'select * ' +
-        'from tb_sales_route_customer src ' +
-        'where (src.tb_institution_id =? ) ' +
-        ' and (src.tb_sales_route_id =? )' +
-        ' and (sequence >= ?)' +
-        ' and (sequence > 0)' +
-        ' and (tb_customer_id <> ?) ' +
+        'select src.tb_institution_id, src.tb_sales_route_id, '+
+        'src.tb_customer_id, src.default_seq, src.sequence, ctm.tb_region_id  '+
+        'from tb_sales_route_customer src  '+
+        '   inner join tb_customer ctm  '+
+        '   on (ctm.id = src.tb_customer_id) '+
+        '   and (ctm.tb_institution_id = src.tb_institution_id) '+
+        'where (src.tb_institution_id =? )  '+
+        ' and (src.tb_sales_route_id =? ) '+
+        ' and (ctm.tb_region_id = ?) '+   
+        ' and (sequence >= ?) '+
         'order by sequence ',
         {
-          replacements: [tb_institution_id, tb_sales_route_id, sequence, tb_customer_id],
+          replacements: [tb_institution_id, tb_sales_route_id, tb_region_id, sequence],
+          type: Tb.sequelize.QueryTypes.SELECT
+        }).then(data => {
+          resolve(data);
+        })
+        .catch(error => {
+          reject('salesroute.getListOrderSequence: ' + error);
+        });
+    });
+    return promise;
+  }
+
+  static getListOrderDefaultSeq(tb_institution_id, tb_sales_route_id, tb_region_id, default_seq) {
+    const promise = new Promise((resolve, reject) => {
+      var sqltxt = '';
+      sqltxt = sqltxt.concat(
+        'select src.tb_institution_id, src.tb_sales_route_id, '+
+        'src.tb_customer_id, src.default_seq, src.sequence, ctm.tb_region_id  '+
+        'from tb_sales_route_customer src  '+
+        '   inner join tb_customer ctm  '+
+        '   on (ctm.id = src.tb_customer_id) '+
+        '   and (ctm.tb_institution_id = src.tb_institution_id) '+
+        'where (src.tb_institution_id =? )  '+
+        ' and (src.tb_sales_route_id =? ) '+
+        ' and (ctm.tb_region_id = ?) '+
+        ' and (default_seq >= ?)'+
+        'order by default_seq '
+      )
+      Tb.sequelize.query(
+        sqltxt,
+        {
+          replacements: [tb_institution_id, tb_sales_route_id, tb_region_id, default_seq],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve(data);
         })
         .catch(error => {
           reject('salesroute.get: ' + error);
+        });
+    });
+    return promise;
+  }
+
+  static getListByRegion(tb_institution_id, tb_sales_route_id, tb_region_id) {
+    const promise = new Promise((resolve, reject) => {
+      var sqltxt = '';
+      sqltxt = sqltxt.concat(
+        'select src.tb_institution_id, src.tb_sales_route_id, '+
+        'src.tb_customer_id, src.default_seq, src.sequence, ctm.tb_region_id  '+
+        'from tb_sales_route_customer src  '+
+        '   inner join tb_customer ctm  '+
+        '   on (ctm.id = src.tb_customer_id) '+
+        '   and (ctm.tb_institution_id = src.tb_institution_id) '+
+        'where (src.tb_institution_id =? )  '+
+        ' and (src.tb_sales_route_id =? ) '+
+        ' and (ctm.tb_region_id = ?) ',        
+        )
+      Tb.sequelize.query(
+        sqltxt,
+        {
+          replacements: [tb_institution_id, tb_sales_route_id, tb_region_id],
+          type: Tb.sequelize.QueryTypes.SELECT
+        }).then(data => {
+          resolve(data);
+        })
+        .catch(error => {
+          reject('salesroute.getListByRegion: ' + error);
         });
     });
     return promise;
@@ -123,6 +186,50 @@ class SalesRouteCustomerController extends Base {
     });
     return promise;
   }
+  static async updateDefaultSeq(body) {
+    const promise = new Promise(async (resolve, reject) => {
+      try {
+        var dataUpdate = {
+          default_seq: body.default_seq
+        };
+        Tb.update(dataUpdate, {
+          where: {
+            tb_institution_id: body.tb_institution_id,
+            tb_sales_route_id: body.tb_sales_route_id,
+            tb_customer_id: body.tb_customer_id
+          }
+        })
+          .then(data => {
+            resolve(data);
+          })
+      } catch (error) {
+        reject("salesrouteCustomer.updateDefaultSeq:" + error);
+      }
+    });
+    return promise;
+  }
+
+  static async applyDefault(body) {
+    const promise = new Promise(async (resolve, reject) => {
+      try {
+        var dataUpdate = {
+          sequence: default_seq
+        };
+        Tb.update(dataUpdate, {
+          where: {
+            tb_institution_id: body.tb_institution_id,
+            tb_sales_route_id: body.tb_sales_route_id            
+          }
+        })
+          .then(data => {
+            resolve(data);
+          })
+      } catch (error) {
+        reject("salesrouteCustomer.applyDefault:" + error);
+      }
+    });
+    return promise;
+  }
 
   static async setTurnBack(body) {
     const promise = new Promise(async (resolve, reject) => {
@@ -146,12 +253,12 @@ class SalesRouteCustomerController extends Base {
 
   static async setRecall(data) {
     const promise = new Promise(async (resolve, reject) => {
-      try {       
+      try {
         var recall = {};
-        if (data.recall == "S"){
-          recall = {active: 'N'};
-        }else{
-          recall = {active: 'S'};
+        if (data.recall == "S") {
+          recall = { active: 'N' };
+        } else {
+          recall = { active: 'S' };
         }
         Tb.update(recall, {
           where: {
@@ -162,12 +269,12 @@ class SalesRouteCustomerController extends Base {
           .then(data => {
             resolve(data);
           })
-          
+
       } catch (error) {
         reject("salesrouteCustomer.updateSequence:" + error);
       }
     });
     return promise;
-  }  
+  }
 }
 module.exports = SalesRouteCustomerController;

@@ -2,26 +2,26 @@ const SalesRouteController = require("../controller/salesRoute.controller.js");
 
 class SalesRouteEndPoint {
 
-  static create = (req, res) => {    
+  static create = (req, res) => {
     SalesRouteController.insert(req.body)
       .then(data => {
         res.send(data);
-    })
+      })
   }
 
   static getList(req, res) {
-    
-    SalesRouteController.getList(req.params.tb_institution_id )
+
+    SalesRouteController.getList(req.params.tb_institution_id)
       .then(data => {
-        
+
         res.send(data);
-        
+
       })
   }
 
   static get(req, res) {
-    
-    SalesRouteController.get(req.params.tb_institution_id,req.params.id )
+
+    SalesRouteController.get(req.params.tb_institution_id, req.params.id)
       .then(data => {
         res.send(data);
       })
@@ -29,22 +29,34 @@ class SalesRouteEndPoint {
 
   static update = (req, res) => {
     SalesRouteController.update(req.body)
-      .then(() => {        
+      .then(() => {
         res.send(req.body);
       })
   }
 
   static sequence = (req, res) => {
     SalesRouteController.sequence(req.body)
-      .then(() => {        
+      .then(() => {
         res.send(req.body);
       })
   }
-  
+
+  static defaultSequence = (req, res) => {
+    SalesRouteController.defaultSequence(req.body)
+      .then(() => {
+        res.send(req.body);
+      })
+  }
+  static applyDefault = (req, res) => {
+    SalesRouteController.applyDefault(req.body)
+      .then(() => {
+        res.send(req.body);
+      })
+  }
   static setTurnBack = (req, res) => {
-    
+
     SalesRouteController.setTurnBack(req.body)
-      .then((data) => {        
+      .then((data) => {
         res.send(data);
       })
   }
@@ -56,7 +68,7 @@ class SalesRouteEndPoint {
         res.send(data);
       })
   }
-  
+
 }
 
 module.exports = SalesRouteEndPoint; 

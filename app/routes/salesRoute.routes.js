@@ -39,7 +39,11 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  *           type: integer
  *         tb_sales_route_id:
  *           type: integer  
+ *         tb_region_id:
+ *           type: integer  
  *         tb_customer_id:
+ *           type: integer
+ *         default_seq:
  *           type: integer
  *         sequence:
  *           type: integer
@@ -195,6 +199,50 @@ router.get("/getlist/:tb_institution_id", salesroute.getList);
  *        description: Some error happened
  */
  router.post("/sequence/", salesroute.sequence);
+
+ /**
+ * @swagger
+ * /salesroute/defaultsequence/:
+ *  post:
+ *    summary: Set the Default sequence of customer in the route
+ *    tags: [SalesRoute]
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            $ref: '#/components/schemas/SalesRouteSequence'
+ *    responses:
+ *      200:
+ *        description: The Sequence of Sales Route was updated
+ *      404:
+ *        description: The Sequence of salesroute was not found
+ *      500:
+ *        description: Some error happened
+ */
+ router.post("/defaultsequence/", salesroute.defaultSequence);
+
+  /**
+ * @swagger
+ * /salesroute/applydefault/:
+ *  post:
+ *    summary: Apply Default sequence over the salesman sequence
+ *    tags: [SalesRoute]
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            $ref: '#/components/schemas/SalesRouteSequence'
+ *    responses:
+ *      200:
+ *        description: The Sequence of Sales Route was updated
+ *      404:
+ *        description: The Sequence of salesroute was not found
+ *      500:
+ *        description: Some error happened
+ */
+  router.post("/applydefault/", salesroute.applyDefault);
 
 /**
  * @swagger

@@ -434,7 +434,11 @@ class CustomerController extends Base {
   static getListSalesRouteTodos = (tb_institution_id, tb_sales_route_id, tb_region_id) => {
     const promise = new Promise(async (resolve, reject) => {
 
-      var sqltxt = this.getSQLListSalesRouteTodos();
+      var sqltxt = '';
+      sqltxt = sqltxt.concat(
+         this.getSQLListSalesRouteTodos(),
+         'order by 4 '
+      );
 
       Tb.sequelize.query(
         sqltxt,
@@ -497,8 +501,8 @@ class CustomerController extends Base {
         '  on (ora.tb_institution_id = ord.tb_institution_id) ' +
         '    and (ora.id = ord.id)     ' +
         'where  (ord.dt_record = ?) ' +
-        ' and (ora.finished = ?) ';
-
+        ' and (ora.finished = ?) '+
+        'order by 4 ';
       Tb.sequelize.query(
         sqltxt,
         {
@@ -522,8 +526,8 @@ class CustomerController extends Base {
         'from ( ' +
         this.getSQLListSalesRouteTodos() +
         '  ) vwsr ' +
-        'where  (turn_back = ?) ';
-
+        'where  (turn_back = ?) '+
+        'order by 4 ';
       Tb.sequelize.query(
         sqltxt,
         {
@@ -547,8 +551,8 @@ class CustomerController extends Base {
         'from ( ' +
         this.getSQLListSalesRouteTodos() +
         '  ) vwsr ' +
-        'where  (active = ?) ';
-
+        'where  (active = ?) '+
+        'order by 4 ';
       Tb.sequelize.query(
         sqltxt,
         {
@@ -569,7 +573,7 @@ class CustomerController extends Base {
       Tb.sequelize.query(
         'Select ' +
         'ct.tb_region_id, ' +
-        'rg.descripton name_region, ' +
+        'rg.description name_region, ' +
         'et.id, ' +
         'et.name_company, ' +
         'et.nick_trade, ' +
@@ -615,6 +619,60 @@ class CustomerController extends Base {
         'order by 5 asc ',
         {
           replacements: [tb_institution_id, tb_region_id, tb_institution_id, tb_region_id],
+          type: Tb.sequelize.QueryTypes.SELECT
+        }).then(data => {
+          resolve(data);
+        })
+        .catch(error => {
+          reject('Customer.getListByRegion: ' + error);
+        });
+    });
+    return promise;
+  }
+
+  static getListByRegionRoute = (tb_institution_id, tb_region_id,tb_sales_route_id) => {
+    const promise = new Promise((resolve, reject) => {
+      Tb.sequelize.query(
+        '  Select src.tb_institution_id, src.tb_sales_route_id, sr.description name_sales_route, src.default_seq, src.sequence, et.id tb_customer_id,  et.name_company,  et.nick_trade,  "F" doc_kind, pe.cpf doc_number,adr. street,adr.nmbr,adr.complement, src.active,src.turn_back ' +
+        'from tb_customer ct  ' +
+        '  inner join tb_entity et  ' +
+        '  on (ct.id = et.id)  ' +
+        '  inner join tb_person pe ' +
+        '  on (pe.id = et.id) ' +
+        '  inner join tb_address adr ' +
+        '  on (adr.id = et.id) ' +
+        ' inner join tb_sales_route_customer src  ' +
+        ' on (ct.id = src.tb_customer_id )  ' +
+        ' and  (ct.tb_institution_id = src.tb_institution_id) ' +
+        ' inner  join  tb_sales_route sr  ' +
+        ' on (src.tb_sales_route_id = sr.id)  ' +
+        '  and  (src.tb_institution_id = sr.tb_institution_id) ' +
+        'where ct.tb_institution_id =? ' +
+        '  and ( (tb_sales_route_id =?) or (tb_sales_route_id =0))' +
+        ' and (ct.tb_region_id = ?)' +
+        ' and (ct.active = ?) ' +
+        'union ' +
+        'Select src.tb_institution_id, src.tb_sales_route_id, sr.description name_sales_route, src.default_seq, src.sequence, et.id tb_customer_id,  et.name_company,  et.nick_trade,  "J" doc_kind, co.cnpj doc_number,adr. street,adr.nmbr,adr.complement , src.active,src.turn_back ' +
+        'from tb_customer ct  ' +
+        '  inner join tb_entity et  ' +
+        '  on (ct.id = et.id)  ' +
+        '  inner join tb_company co ' +
+        '  on (co.id = et.id) ' +
+        '  inner join tb_address adr ' +
+        '  on (adr.id = et.id) ' +
+        ' inner  join tb_sales_route_customer src  ' +
+        ' on (ct.id = src.tb_customer_id )  ' +
+        ' and  (ct.tb_institution_id = src.tb_institution_id) ' +
+        ' inner  join  tb_sales_route sr  ' +
+        ' on (src.tb_sales_route_id = sr.id)  ' +
+        '  and  (src.tb_institution_id = sr.tb_institution_id) ' +
+        'where ct.tb_institution_id =? ' +
+        '  and ( (tb_sales_route_id =?) or (tb_sales_route_id =0))' +
+        ' and (ct.tb_region_id = ?)' +
+        ' and (ct.active = ?) '+
+        'order by 4 ',
+        {
+          replacements: [tb_institution_id, tb_sales_route_id, tb_region_id, 'S', tb_institution_id, tb_sales_route_id, tb_region_id, 'S'],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve(data);

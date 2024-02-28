@@ -4,14 +4,14 @@ const db = require("../model");
 const Tb = db.lineBusiness;
 
 class LineBusinessController extends Base {     
-    static async getbyDescription (descripton) {      
+    static async getbyDescription (description) {      
       const promise = new Promise((resolve, reject) => {        
         Tb.sequelize.query(
           'Select id ' +
           'from tb_linebusiness '+
           'WHERE ( description =? ) ',
           {
-            replacements: [descripton],
+            replacements: [description],
             type: Tb.sequelize.QueryTypes.SELECT
           }).then(data => {    
             if (data[0] != null)

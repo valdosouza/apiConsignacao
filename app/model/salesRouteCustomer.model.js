@@ -31,6 +31,16 @@ module.exports = sequelize => {
       comment: null,
       field: "tb_customer_id"
     },
+    default_seq: {
+      type: DataTypes.INTEGER(11),
+      allowNull: true,
+      defaultValue: 0,
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "default_seq"
+    },    
+
     sequence: {
       type: DataTypes.INTEGER(11),
       allowNull: true,

@@ -102,23 +102,24 @@ class SalesRouteController extends Base {
   static async sequence(body) {
     const promise = new Promise(async (resolve, reject) => {
       try {
-        var dataRoute = await SalesRouteCustomerController.getListByRoute(body.tb_institution_id,
+        var dataRoute = await SalesRouteCustomerController.getListOrderSequence(body.tb_institution_id,
           body.tb_sales_route_id,
-          body.sequence,
-          body.tb_customer_id);
-        var seqRoute = body.sequence;
+          body.tb_region_id,
+          body.sequence);
+        
         var dataSequence = {};
         dataSequence = {
           tb_institution_id: body.tb_institution_id,
           tb_sales_route_id: body.tb_sales_route_id,
           tb_customer_id: body.tb_customer_id,
-          sequence: seqRoute,
+          sequence: body.sequence,
         };
         await SalesRouteCustomerController.updateSequence(dataSequence);
 
         if (dataRoute.length > 0) {
+          var seqRoute = body.sequence;
           for (var item of dataRoute) {
-            seqRoute = seqRoute + 1;
+            seqRoute += 1;
             dataSequence = {
               tb_institution_id: item.tb_institution_id,
               tb_sales_route_id: item.tb_sales_route_id,
@@ -136,6 +137,73 @@ class SalesRouteController extends Base {
     return promise;
   }
 
+  static async defaultSequence(body) {
+    const promise = new Promise(async (resolve, reject) => {
+      try {
+        var dataRoute = await SalesRouteCustomerController.getListOrderDefaultSeq(body.tb_institution_id,
+          body.tb_sales_route_id,
+          body.tb_region_id,
+          body.default_seq);
+
+        var dataSequence = {};
+        dataSequence = {
+          tb_institution_id: body.tb_institution_id,
+          tb_sales_route_id: body.tb_sales_route_id,
+          tb_customer_id: body.tb_customer_id,
+          default_seq: body.default_seq,
+        };
+
+        await SalesRouteCustomerController.updateDefaultSeq(dataSequence);
+
+        if (dataRoute.length > 0) {
+          var seqDefaultRoute = body.default_seq;
+          for (var item of dataRoute) {
+            seqDefaultRoute += 1;
+            dataSequence = {
+              tb_institution_id: item.tb_institution_id,
+              tb_sales_route_id: item.tb_sales_route_id,
+              tb_customer_id: item.tb_customer_id,
+              default_seq: seqDefaultRoute,
+            };
+            await SalesRouteCustomerController.updateDefaultSeq(dataSequence);
+          }
+        }
+        resolve("Sequência Padrão da rota atualizada!!");
+      } catch (error) {
+        reject("salesroute.defaultSequence:" + error);
+      }
+    });
+    return promise;
+  }
+
+  static async applyDefault(body) {
+    const promise = new Promise(async (resolve, reject) => {
+      try {
+        var dataRoute = await SalesRouteCustomerController.getListByRegion(body.tb_institution_id,
+          body.tb_sales_route_id,
+          body.tb_region_id);
+        var dataSequence = {};  
+        if (dataRoute.length > 0) {          
+          for (var item of dataRoute) {
+            dataSequence = {
+              tb_institution_id: item.tb_institution_id,
+              tb_sales_route_id: item.tb_sales_route_id,
+              tb_customer_id: item.tb_customer_id,
+              sequence: item.default_seq,
+            };
+            console.log("Rota: " + item.tb_sales_route_id + " - Região: " + item.tb_region_id)
+            await SalesRouteCustomerController.updateSequence(dataSequence);
+          }
+        }
+        resolve("Sequência Padrão da rota atualizada!!");
+      } catch (error) {
+        reject("salesroute.defaultSequence:" + error);
+      }
+    });
+    return promise;
+  }
+
+
   static async setTurnBack(body) {
     const promise = new Promise(async (resolve, reject) => {
       try {
@@ -152,9 +220,9 @@ class SalesRouteController extends Base {
     const promise = new Promise(async (resolve, reject) => {
       try {
         var dataRecall = {
-          tb_institution_id : body.order.tb_institution_id,
-          tb_customer_id : body.order.tb_customer_id,
-          recall : body.order.recall,
+          tb_institution_id: body.order.tb_institution_id,
+          tb_customer_id: body.order.tb_customer_id,
+          recall: body.order.recall,
         }
         SalesRouteCustomerController.setRecall(dataRecall);
         resolve("changed");

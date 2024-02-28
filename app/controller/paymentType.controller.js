@@ -6,7 +6,7 @@ const Tb = db.paymentTypes;
 class PaymentTypeController extends Base {
  
     
-    static async getbyDescription (descripton) {
+    static async getbyDescription (description) {
       
       const promise = new Promise((resolve, reject) => {        
         Tb.sequelize.query(
@@ -14,7 +14,7 @@ class PaymentTypeController extends Base {
           'from tb_payment_types '+
           'WHERE ( description =? ) ',
           {
-            replacements: [descripton],
+            replacements: [description],
             type: Tb.sequelize.QueryTypes.SELECT
           }).then(data => {    
             if (data[0] != null)

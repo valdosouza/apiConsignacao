@@ -259,6 +259,36 @@ router.get("/region/getlist/:tb_institution_id/:tb_region_id", customer.getListB
 
 /**
  * @swagger
+ * /customer/regionroute/getlist/{tb_institution_id}/{tb_region_id}/{tb_route_id}:
+ *   get:
+ *     summary: Returns the list of all the Customer by Region and Route
+ *     tags: [Customer]
+ *     parameters:
+ *      - in: path
+ *        name: tb_institution_id
+ *        required: true 
+ *      - in: path
+ *        name: tb_region_id
+ *        required: true
+ *      - in: path
+ *        name: tb_route_id
+ *        required: true
+ *     responses:
+ *       200:
+ *         description: The list of Customer
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/ListCustomerBySalesRoute'
+ *       500:
+ *         description: Some server error 
+ */
+router.get("/regionroute/getlist/:tb_institution_id/:tb_region_id/:tb_route_id", customer.getListByRegionRoute); 
+
+/**
+ * @swagger
  * /customer/salesman/getlist/{tb_institution_id}/{tb_salesman_id}:
  *   get:
  *     summary: Returns the list of all the Customer

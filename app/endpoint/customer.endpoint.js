@@ -209,6 +209,16 @@ class CustomerEndPoint {
       })
   };
 
+  static getListByRegionRoute = (req, res) => {
+
+    CustomerController.getListByRegionRoute(req.params.tb_institution_id, 
+                                            req.params.tb_region_id,
+                                            req.params.tb_route_id)
+      .then(data => {
+        res.send(data);
+      })
+  };
+
   static getListBySalesman = (req, res) => {
 
     CustomerController.getListBySalesman(req.params.tb_institution_id, req.params.tb_salesman_id)
