@@ -136,31 +136,33 @@ class OrderAttendanceController extends Base {
 
   static async insertOrder(body) {
     const promise = new Promise(async (resolve, reject) => {
+      try {
+        if ((body.number == 0) || (body.number == null))
+          body.number = await this.getNextNumber(body.tb_institution_id);
 
-      if ((body.number == 0) || (body.number == null))
-        body.number = await this.getNextNumber(body.tb_institution_id);
+        const dataOrder = {
+          id: body.id,
+          tb_institution_id: body.tb_institution_id,
+          terminal: 0,
+          number: body.number,
+          tb_salesman_id: body.tb_salesman_id,
+          tb_customer_id: body.tb_customer_id,
+          tb_price_list_id: body.tb_price_list_id,
+          visited: body.visited,
+          charged: body.charged,
+          finished: body.finished,
+          longitude: body.longitude,
+          latitude: body.latitude
+        }
+        Tb.create(dataOrder)
+          .then(() => {
+            resolve(body);
+          })
 
-      const dataOrder = {
-        id: body.id,
-        tb_institution_id: body.tb_institution_id,
-        terminal: 0,
-        number: body.number,
-        tb_salesman_id: body.tb_salesman_id,
-        tb_customer_id: body.tb_customer_id,
-        tb_price_list_id: body.tb_price_list_id,
-        visited: body.visited,
-        charged: body.charged,
-        finished: body.finished,
-        longitude: body.longitude,
-        latitude: body.latitude
+      } catch (error) {
+        reject("orderAttendance.insertOrder:" + error);
       }
-      Tb.create(dataOrder)
-        .then(() => {
-          resolve(body);
-        })
-        .catch(error => {
-          reject("orderAttendance.insertOrder:" + error);
-        });
+
     });
     return promise;
   }
