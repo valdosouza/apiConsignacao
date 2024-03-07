@@ -1,5 +1,5 @@
 const Order = require("../controller/order.controller.js");
-const OrderSale = require("../controller/orderSale.controller.js");
+const OrderSale = require("../order_sale/orderSale.controller.js");
 const orderItemDetached = require("../controller/orderItemDetached.controller.js")
 const Customer  = require("../controller/customer.controller.js");
 class DeliveryController {

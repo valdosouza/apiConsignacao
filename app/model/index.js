@@ -83,7 +83,7 @@ db.orderitem = require("./orderItem.model.js")(sequelize, Sequelize);
 db.orderproduction = require("./orderProduction.model.js")(sequelize, Sequelize);
 db.orderbonus = require("./orderBonus.model.js")(sequelize, Sequelize);
 db.orderstockadjust = require("./orderStockAdjust.model.js")(sequelize, Sequelize);
-db.ordersale = require("./orderSale.model.js")(sequelize, Sequelize);
+db.ordersale = require("../order_sale/orderSale.model.js")(sequelize, Sequelize);
 db.ordersalecard = require("./orderSaleCard.model.js")(sequelize, Sequelize);
 db.orderstocktransfer = require("./orderStockTransfer.model.js")(sequelize, Sequelize);
 db.orderconsignment = require("./orderConsignment.model.js")(sequelize, Sequelize);
@@ -108,7 +108,7 @@ db.restBeverage = require("./restMenu.model.js")(sequelize, Sequelize);
 
 db.TbInstitutionHasUser = require("./institutionHasUser.model.js")(sequelize, Sequelize);
 db.order = require("./order.model.js")(sequelize, Sequelize);
-db.orderSale = require("./orderSale.model.js")(sequelize, Sequelize);
+db.orderSale = require("../order_sale/orderSale.model.js")(sequelize, Sequelize);
 db.financial = require("./financial.model.js")(sequelize, Sequelize);
 db.financialPayment = require("./financial_payment.model.js")(sequelize, Sequelize);
 db.financialStatement = require("./financialStatement.model.js")(sequelize, Sequelize);

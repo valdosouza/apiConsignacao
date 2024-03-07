@@ -1,6 +1,6 @@
 const { Router } = require("express");
   
-const ordersale =  require("../endpoint/orderSale.endpoint.js");
+const ordersale =  require("../order_sale/orderSale.endpoint.js");
 
 const { withJWTAuthMiddleware } = require("express-kun");
 const router = Router();
@@ -385,5 +385,27 @@ router.post("/card", ordersale.saveByCard);
  */
 router.post("/average/getlist", ordersale.getSaleAverage);
 
+/**
+* @swagger
+* /ordersale/sincronize/getlist/{tb_institution_id}/{updated_at}:
+*   get:
+*     summary: Returns the list of all the OrderSale
+*     tags: [OrderSale]
+*     parameters:
+*      - in: path
+*        name: tb_institution_id
+*      - in: path
+*        name: updated_at
+*     responses:
+*       200:
+*         description: The list of the payment types
+*         content:
+*           application/json:
+*             schema:
+*               type: array
+*               items:
+*                 $ref: '#/components/schemas/orderSale'
+*/
+router.get("/sincronize/getlist/:tb_institution_id/:updated_at", ordersale.sincronizeGetList);
 
 module.exports = router;

@@ -1,11 +1,11 @@
-const Base = require('./base.controller.js');
-const db = require("../model");
+const Base = require('../controller/base.controller.js');
+const db = require("../model/index.js");
 const Tb = db.ordersale;
-const order = require('./order.controller.js');
-const orderItem = require('./orderItemSale.controller.js');
-const stockStatement = require('./stockStatement.controller.js');
-const orderSaleCard = require('./orderSaleCard.controller.js');
-const orderPaid = require('./orderPaid.controller.js');
+const order = require('../controller/order.controller.js');
+const orderItem = require('../controller/orderItemSale.controller.js');
+const stockStatement = require('../controller/stockStatement.controller.js');
+const orderSaleCard = require('../controller/orderSaleCard.controller.js');
+const orderPaid = require('../controller/orderPaid.controller.js');
 
 class OrderSaleController extends Base {
   static async getNextNumber(tb_institution_id) {
@@ -160,6 +160,37 @@ class OrderSaleController extends Base {
         });
     });
     return promise;
+  }
+
+  static sincronizeGetList(tb_institution_id, updated_at) {
+    const promise = new Promise((resolve, reject) => {
+      var sqltxt = '';
+      sqltxt = sqltxt.concat(
+        'SELECT ods.* ',
+        'FROM tb_order_sale ods ',
+        '  inner join tb_order od ',
+        '  on (od.id = ods.id) ',
+        '   and (od.tb_institution_id = ods.tb_institution_id) ',
+        '   and (od.terminal = ods.terminal) ',
+        'WHERE ( ods.tb_institution_id =? ) ' ,
+        ' and ( (od.status = ?) or (od.status = ?) ) ',
+        ' AND ( ods.updatedAt >= ? ) ',
+        ' order by ods.updatedAt asc '
+      )
+
+      Tb.sequelize.query(
+        sqltxt,
+        {
+          replacements: [tb_institution_id, 'N', 'F',updated_at],
+          type: Tb.sequelize.QueryTypes.SELECT
+        }).then(data => {
+          resolve(data);
+        })
+        .catch(error => {
+          reject("orderstockadjust.getlist: " + error);
+        });
+    });
+    return promise;  
   }
 
   static getQttyByDay(tb_institution_id, tb_salesman_id, dt_record, tb_product_id) {

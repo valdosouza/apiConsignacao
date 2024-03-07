@@ -1,5 +1,5 @@
 const OrderBonusController = require('../controller/orderBonus.controller.js');
-const OrderSaleController = require("../controller/orderSale.controller.js");
+const OrderSaleController = require("../order_sale/orderSale.controller.js");
 const OrderSaleCardController = require("../controller/orderSaleCard.controller.js");
 const entityHasStockList = require("../controller/entityHasStockList.controller.js");
 const FinancialController = require('../controller/financial.controller.js');
@@ -46,6 +46,14 @@ class OrderSaleEndPoint {
   static getList(req, res) {
 
     OrderSaleController.getList(req.body)
+      .then(data => {
+        res.send(data);
+      })
+  }
+
+  static sincronizeGetList(req, res) {
+    
+    OrderSaleController.sincronizeGetList(req.params.tb_institution_id, req.params.updated_at)
       .then(data => {
         res.send(data);
       })

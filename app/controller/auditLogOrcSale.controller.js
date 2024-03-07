@@ -1,7 +1,7 @@
 const AuditLog = require("./auditLog.controller.js");
 const db = require("../model/index.js");
 const Tb = db.auditlog;
-const OrderSaleController = require("./orderSale.controller.js");
+const OrderSaleController = require("../order_sale/orderSale.controller.js");
 const OrderConsignmentController = require("./orderConsignment.controller.js");
 const entityHasStockList = require("./entityHasStockList.controller.js");
 

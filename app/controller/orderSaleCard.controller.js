@@ -1,7 +1,7 @@
 const Base = require('./base.controller.js');
 const db = require("../model");
 const Tb = db.ordersalecard;
-const orderSale = require('./orderSale.controller.js');
+const orderSale = require('../order_sale/orderSale.controller.js');
 const orderPaid = require('./orderPaid.controller.js');
 
 class OrderSaleCardController extends Base {
@@ -69,6 +69,7 @@ class OrderSaleCardController extends Base {
                 bonus: Number(item.bonus),
                 sale: Number(item.sale),
                 unit_value: Number(item.unit_value),
+                subtotal : 0.0
               }
             )
           }

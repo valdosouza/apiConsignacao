@@ -75,7 +75,7 @@ routes.use("/orderstocktransfer", orderstocktransfer);
 const orderbonus = require("../routes/orderBonus.routes");
 routes.use("/orderbonus", orderbonus);
 
-const ordersale = require("../routes/orderSale.routes");
+const ordersale = require("../order_sale/orderSale.routes");
 routes.use("/ordersale", ordersale);
 
 const orderconsignment = require("../routes/orderConsignment.routes");

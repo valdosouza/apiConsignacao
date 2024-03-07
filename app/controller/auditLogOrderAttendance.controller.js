@@ -8,7 +8,7 @@ const StockStatement = require('./stockStatement.controller.js');
 const entityHasStockList = require("../controller/entityHasStockList.controller.js");
 const OrderBonusController = require('../controller/orderBonus.controller.js');
 const OrderStockTransferController = require('../controller/orderStockTransfer.controller.js');
-const OrderSaleController = require('../controller/orderSale.controller.js');
+const OrderSaleController = require('../order_sale/orderSale.controller.js');
 const OrderItemSaleController = require('../controller/orderItemSale.controller.js');
 const OrderAttendaceController = require('../controller/orderAttendance.controller.js');
 

@@ -2,7 +2,7 @@ const Base = require('./base.controller.js');
 const db = require("../model");
 const Tb = db.orderloadcard;
 const order = require('./order.controller.js');
-const OrderSaleController = require("../controller/orderSale.controller.js");
+const OrderSaleController = require("../order_sale/orderSale.controller.js");
 const OrderBonusController = require("../controller/orderBonus.controller.js");
 const StockBalanceControler = require('../controller/stockBalance.controller.js');
 
