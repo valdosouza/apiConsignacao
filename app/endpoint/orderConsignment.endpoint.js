@@ -89,7 +89,7 @@ class OrderConsignmentEndPoint {
         if (data.order.id > 0) {
           res.send(data);
         } else {
-          res.status(400).json({ error: 'Ordem não encontrada' });
+          res.status(400).json({order:{id:0}, error: 'Ordem não encontrada' });
 
         }
       })
@@ -101,7 +101,7 @@ class OrderConsignmentEndPoint {
         if (data.order.id > 0) {
           res.send(data);
         } else {
-          res.status(400).json({ error: 'Ordem não encontrada' });
+          res.status(400).json({order:{id:0}, error: 'Ordem não encontrada' });
 
         }
       })

@@ -43,7 +43,7 @@ class SalesRouteCustomerController extends Base {
     return promise;
   }
 
-  static getListOrderSequence(tb_institution_id, tb_sales_route_id,tb_region_id, sequence) {
+  static getListOrderSequence(tb_institution_id, tb_sales_route_id,tb_region_id,tb_customer_id, sequence) {
     const promise = new Promise((resolve, reject) => {
       Tb.sequelize.query(
         'select src.tb_institution_id, src.tb_sales_route_id, '+
@@ -55,10 +55,11 @@ class SalesRouteCustomerController extends Base {
         'where (src.tb_institution_id =? )  '+
         ' and (src.tb_sales_route_id =? ) '+
         ' and (ctm.tb_region_id = ?) '+   
-        ' and (sequence >= ?) '+
+        ' and (src.tb_customer_id <> ?) '+
+        ' and (sequence >= ?) '+        
         'order by sequence ',
         {
-          replacements: [tb_institution_id, tb_sales_route_id, tb_region_id, sequence],
+          replacements: [tb_institution_id, tb_sales_route_id, tb_region_id,tb_customer_id, sequence],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve(data);

@@ -105,8 +105,9 @@ class SalesRouteController extends Base {
         var dataRoute = await SalesRouteCustomerController.getListOrderSequence(body.tb_institution_id,
           body.tb_sales_route_id,
           body.tb_region_id,
+          body.tb_customer_id,
           body.sequence);
-        
+
         var dataSequence = {};
         dataSequence = {
           tb_institution_id: body.tb_institution_id,
@@ -127,6 +128,36 @@ class SalesRouteController extends Base {
               sequence: seqRoute,
             };
             await SalesRouteCustomerController.updateSequence(dataSequence);
+          }
+        } else {
+          //entra aqui quando foi seleciona um cliente para ficar depois do ultimo
+          body.sequence = 0
+          var dataRoute = await SalesRouteCustomerController.getListOrderSequence(body.tb_institution_id,
+            body.tb_sales_route_id,
+            body.tb_region_id,
+            body.tb_customer_id,
+            body.sequence);
+          if (dataRoute.length > 0) {
+            var seqRoute = body.sequence;
+            for (var item of dataRoute) {
+              seqRoute += 1;
+              dataSequence = {
+                tb_institution_id: item.tb_institution_id,
+                tb_sales_route_id: item.tb_sales_route_id,
+                tb_customer_id: item.tb_customer_id,
+                sequence: seqRoute,
+              };
+              await SalesRouteCustomerController.updateSequence(dataSequence);
+            }
+            seqRoute += 1;
+            dataSequence = {
+              tb_institution_id: body.tb_institution_id,
+              tb_sales_route_id: body.tb_sales_route_id,
+              tb_customer_id: body.tb_customer_id,
+              sequence: seqRoute,
+            };
+            await SalesRouteCustomerController.updateSequence(dataSequence);
+
           }
         }
         resolve("Sequência da rota atualizada!!");
@@ -182,8 +213,8 @@ class SalesRouteController extends Base {
         var dataRoute = await SalesRouteCustomerController.getListByRegion(body.tb_institution_id,
           body.tb_sales_route_id,
           body.tb_region_id);
-        var dataSequence = {};  
-        if (dataRoute.length > 0) {          
+        var dataSequence = {};
+        if (dataRoute.length > 0) {
           for (var item of dataRoute) {
             dataSequence = {
               tb_institution_id: item.tb_institution_id,
