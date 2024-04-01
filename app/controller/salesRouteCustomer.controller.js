@@ -57,6 +57,7 @@ class SalesRouteCustomerController extends Base {
         ' and (ctm.tb_region_id = ?) '+   
         ' and (src.tb_customer_id <> ?) '+
         ' and (sequence >= ?) '+        
+        ' and (sequence <> 0) '+     
         'order by sequence ',
         {
           replacements: [tb_institution_id, tb_sales_route_id, tb_region_id,tb_customer_id, sequence],
