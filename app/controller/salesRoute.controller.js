@@ -49,9 +49,10 @@ class SalesRouteController extends Base {
       Tb.sequelize.query(
         'select  * ' +
         'from tb_sales_route ' +
-        'where (tb_institution_id =? ) ',
+        'where (tb_institution_id =? ) '+
+        ' and (active = ?) ',
         {
-          replacements: [tb_institution_id],
+          replacements: [tb_institution_id,'S'],
           type: Tb.sequelize.QueryTypes.SELECT
         }).then(data => {
           resolve(data);
