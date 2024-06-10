@@ -367,12 +367,14 @@ class OrderConsignmentController extends Base {
         '        inner join tb_order ord ' +
         '        on (ord.id = orc.id)  ' +
         '            and (ord.tb_institution_id = orc.tb_institution_id)  ' +
+        '            and (ord.terminal = orc.terminal)  ' +
         '    WHERE orc.id = ( ' +
         'SELECT MAX(orca.id) ' +
         'FROM tb_order_consignment orca ' +
         '    inner join tb_order orda ' +
         '    on (orda.id = orca.id) ' +
         '        and (orda.tb_institution_id = orca.tb_institution_id) ' +
+        '        and (orda.terminal = orca.terminal) ' +
         'WHERE ( orca.tb_institution_id = orc.tb_institution_id ) ' +
         '    and ( orca.tb_customer_id = orc.tb_customer_id ) ' +
         '    and (orda.dt_record <= ? ) ' +

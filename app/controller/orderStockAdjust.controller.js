@@ -32,26 +32,27 @@ class OrderStockAdjustController extends Base {
 
   static async insertOrder(body) {
     const promise = new Promise(async (resolve, reject) => {
+      try {
+        if (body.order.number == 0)
+          body.order.number = await this.getNextNumber(body.order.tb_institution_id);
 
-      if (body.order.number == 0)
-        body.order.number = await this.getNextNumber(body.order.tb_institution_id);
+        const dataOrder = {
+          id: body.order.id,
+          tb_institution_id: body.order.tb_institution_id,
+          terminal: 0,
+          number: body.order.number,
+          tb_entity_id: body.order.tb_entity_id,
+          direction: body.order.direction
+        }
+        
+        Tb.create(dataOrder)
+          .then(() => {
+            resolve(body);
+          })
 
-      const dataOrder = {
-        id: body.order.id,
-        tb_institution_id: body.order.tb_institution_id,
-        terminal: 0,
-        number: body.order.number,
-        tb_entity_id: body.order.tb_entity_id,
-        direction: body.order.direction
+      } catch (error) {
+        reject("orderStockAdjust.insertOrder:" + error);
       }
-
-      Tb.create(dataOrder)
-        .then(() => {
-          resolve(body);
-        })
-        .catch(error => {
-          reject("orderStockAdjust.insertOrder:" + error);
-        });
     });
     return promise;
   }

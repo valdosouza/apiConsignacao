@@ -222,8 +222,7 @@ class SalesRouteController extends Base {
               tb_sales_route_id: item.tb_sales_route_id,
               tb_customer_id: item.tb_customer_id,
               sequence: item.default_seq,
-            };
-            console.log("Rota: " + item.tb_sales_route_id + " - Região: " + item.tb_region_id)
+            };            
             await SalesRouteCustomerController.updateSequence(dataSequence);
           }
         }
