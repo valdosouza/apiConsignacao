@@ -13,7 +13,6 @@ class AuthEndPoint {
 
     MailingController.findOne(req.body.email)
       .then(data => {
-        console
         if (!data) {
           const dataReturn = {
             "auth": false,
@@ -70,11 +69,14 @@ class AuthEndPoint {
   };
 
   static authorization = (req, res) => {
-
-    return res.status(200).send({
-      "message": "Valid Token",
-      "result": true
-    });
+    UserController.authorization()
+      .then(() => {
+        return res.status(200).send({
+          "message": "Valid Token",
+          "error": "",
+          "tokenExpired": false
+        });
+      });
 
   };
 

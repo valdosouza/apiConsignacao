@@ -83,5 +83,4 @@ const protectedRouter = withJWTAuthMiddleware(router, process.env.SECRET);
  */
 router.post("/get", cashier.get);
 
-
 module.exports = router;  
