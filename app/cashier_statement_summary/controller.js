@@ -129,6 +129,53 @@ class CashierController extends Base {
     return promise;
   }
 
+  static getLoad(tb_institution_id, tb_salesman_id, dataini, datafim) {
+    const promise = new Promise((resolve, reject) => {
+      try {
+        var auxSql =
+        '( select ord.tb_user_id, olc.tb_product_id, prd.description name_product, sum(sale) total_sale, sum(bonus) total_bonus, sum(adjust) total_adjust, sum(new_load) total_new_load '+
+        'from tb_order_load_card olc '+
+        '     inner join tb_order ord '+
+        '    on (olc.id =  ord.id) '+
+        '      and (olc.tb_institution_id =  ord.tb_institution_id) '+
+        '    inner join tb_product prd '+
+        '    on (prd.id = olc.tb_product_id) '+
+        '      and (prd.tb_institution_id =  olc.tb_institution_id)  '+
+        'where ord.tb_institution_id = ? ';
+        
+        if (tb_salesman_id == 0) {
+          auxSql += ' and (ord.tb_user_id <> ?) ';
+        } else {
+          auxSql += ' and (ord.tb_user_id = ?)  ';
+        };
+
+        auxSql +=
+          '  and (ord.dt_record between ? and ?) ' +
+          'group by 1,2,3 '+
+          'having ( sum(sale)>0 ) or ( sum(bonus)>0 ) or ( sum(adjust)>0 ) or ( sum(new_load)>0 ) ) as aux ';    
+
+        var sqltxt = 'select p.id, p.description name_product, COALESCE(total_sale,0) total_sale, COALESCE(total_bonus,0) total_bonus , COALESCE(total_adjust,0) total_adjust, COALESCE(total_new_load,0)  total_new_load '+
+                     'from tb_product p '+
+                     '  left outer join ( '  + auxSql + ') '+
+                     '  on (aux.tb_product_id = p.id ) '+
+                     'where (p.active  = ? ) ';
+
+        Tb.sequelize.query(
+          sqltxt,
+          {
+            replacements: [tb_institution_id, tb_salesman_id, dataini, datafim,'S'],
+            type: Tb.sequelize.QueryTypes.SELECT
+          }).then(data => {
+            resolve(data);
+          })
+
+      } catch (error) {
+        reject("CashierSummaryController.getLoadBonus: " + error);
+      }
+    });
+    return promise;
+  }
+
   static getFinancialReceived(tb_institution_id, tb_salesman_id, dataini, datafim) {
     const promise = new Promise((resolve, reject) => {
       var sqltxt =
@@ -285,6 +332,25 @@ class CashierController extends Base {
               productBonusList.push(productBonusItem);
             }
           }//fim dos bonus
+          //Inicia informação da carregamento
+          var dataOrderLoad = await this.getLoad(tb_institution_id, tb_salesman_id, date, date);
+          var productLoadList = [];
+          var productLoadItem = {};
+
+          if (dataOrderLoad.length > 0) {
+            for (var p of dataOrderLoad) {
+              productLoadItem = {
+                id : p.id,
+                description: p.name_product,
+                total_sale: parseInt(p.total_sale),
+                total_bonus: parseInt(p.total_bonus),
+                total_adjust: parseInt(p.total_adjust),
+                total_new_load: parseInt(p.total_new_load),
+              }              
+              productLoadList.push(productLoadItem);
+            }
+          }            
+          //Fim das informações de carregamento
           //Prepara o item 
           items.push({
             day: i,
@@ -295,11 +361,10 @@ class CashierController extends Base {
             total_received: financialReceived,
             sales_points: salesPoints,
             product_bonus_list: productBonusList,
+            product_load_list: productLoadList,
           });
         }
         resolve(items);
-
-
       } catch (error) {
         reject('CashierStatementSummary.get: ' + error);
       }

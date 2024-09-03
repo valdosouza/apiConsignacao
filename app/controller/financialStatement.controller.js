@@ -332,11 +332,16 @@ class FinancialStatementController extends Base {
           'select prd.description name_product, sum((ori.quantity * ori.unit_value)) subtotal, "Total de Vendas" kind, "green" color ' +
           'from tb_order ord ' +
           '  inner join tb_order_sale ors ' +
-          '  on (ord.id = ors.id) and (ord.tb_institution_id = ors.tb_institution_id)  ' +
+          '  on (ord.id = ors.id) '+
+          '    and (ord.tb_institution_id = ors.tb_institution_id)  ' +
+          '    and (ord.terminal = ors.terminal) ' +
           '  inner join tb_order_item ori ' +
-          '  on (ors.id = ori.tb_order_id) and (ord.tb_institution_id = ori.tb_institution_id)  ' +
+          '  on (ors.id = ori.tb_order_id) '+
+          '    and (ord.tb_institution_id = ori.tb_institution_id)  ' +
+          '    and (ord.terminal = ori.terminal)  ' +
           '  inner join tb_product prd ' +
-          '  on (prd.id = ori.tb_product_id)  and (ori.tb_institution_id = prd.tb_institution_id) ' +
+          '  on (prd.id = ori.tb_product_id)  '+
+          '     and (ori.tb_institution_id = prd.tb_institution_id) ' +
           'where (ord.tb_institution_id =? ) ' +
           ' and (ors.tb_salesman_id =?)';
 
@@ -456,6 +461,7 @@ class FinancialStatementController extends Base {
         '  inner join tb_order_attendance ora ' +
         '  on (ora.id = fnl.tb_order_id) ' +
         '  and (ora.tb_institution_id  = fnl.tb_institution_id) ' +
+        '  and (ora.terminal  = fnl.terminal) ' +
 
         '   inner join tb_customer ct ' +
         '   on (fnl.tb_entity_id = ct.id) ' +

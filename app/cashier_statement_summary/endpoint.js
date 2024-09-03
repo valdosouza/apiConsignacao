@@ -12,5 +12,6 @@ class CashierEndPoint {
     })
   }
 
+ 
 }  
 module.exports = CashierEndPoint; 
