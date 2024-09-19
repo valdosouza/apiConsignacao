@@ -315,7 +315,8 @@ class UserController extends Base {
         '  inner join tb_institution_has_user ihu  ' +
         '  on (ihu.tb_user_id = u.id)  ' +
         'where ( m.email=? ) ' +
-        ' and ( u.password=? ) ',
+        ' and ( u.password=? ) '+
+        ' and (ihu.active = "S")',
         {
           replacements: [email, password.toUpperCase()],
           type: TbUser.sequelize.QueryTypes.SELECT
@@ -434,7 +435,7 @@ class UserController extends Base {
         email: userEmail
       }
 
-      var token = jwt.sign({ payload }, process.env.SECRET, { expiresIn: "15d", algorithm: 'HS256' });
+      var token = jwt.sign({ payload }, process.env.SECRET, { expiresIn: "1d", algorithm: 'HS256' });
       const result = {
         "auth": true,
         "id": tbUserId,
