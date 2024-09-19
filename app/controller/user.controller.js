@@ -167,6 +167,7 @@ class UserController extends Base {
         const dataUser = {
           id: user.id,
           kind_device: user.kind_device,
+          active: user.active,
         };
         TbUser.update(dataUser, {
           where: { id: user.id }
@@ -263,7 +264,7 @@ class UserController extends Base {
     return promise;
   }
 
-  static getlist(tb_institution_id) {
+  static getlist(tb_institution_id,active) {
     const promise = new Promise((resolve, reject) => {
       TbUser.sequelize.query(
         'Select u.id, ' +
@@ -282,10 +283,10 @@ class UserController extends Base {
         '  on (ehm.tb_entity_id = et.id) ' +
         '  inner join tb_mailing ma ' +
         '  on (ehm.tb_mailing_id = ma.id) ' +
-        'where (u.active="S") ' +
-        ' and ( ihu.tb_institution_id =?) ',
+        'where ( ihu.tb_institution_id =?) ' +
+        ' and (u.active =?) ',
         {
-          replacements: [tb_institution_id],
+          replacements: [tb_institution_id,active],
           type: TbUser.sequelize.QueryTypes.SELECT
         }
       ).then(data => {

@@ -57,8 +57,8 @@ class UserEndPoint {
 
   static getlist = (req, res) => {
     const tb_institution_id = req.params.tb_institution_id;
-
-    UserController.getlist(tb_institution_id)
+    const active = req.params.active;
+    UserController.getlist(tb_institution_id,active)
       .then(data => {
         res.send(data);
       })

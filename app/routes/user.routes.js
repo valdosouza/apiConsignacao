@@ -153,7 +153,7 @@
 
 /**
  * @swagger
- * /user/getlist/{tb_institution_id}:
+ * /user/getlist/{tb_institution_id}/{active}:
  *   get:
  *     summary: Returns the list of all the users
  *     tags: [User]
@@ -175,7 +175,7 @@
  *                 $ref: '#/components/schemas/User'
  */
   //router.get("/getlist/:tb_institution_id", users.getlist);
-  protectedRouter.get("/getlist/:tb_institution_id", users.getlist);
+  protectedRouter.get("/getlist/:tb_institution_id/:active", users.getlist);
 
  /**
  * @swagger
