@@ -125,7 +125,12 @@ class OrderConsignmentCardController extends Base {
         'COALESCE(occ.devolution, 0) AS devolution, '+
         'COALESCE(occ.new_consignment, 0) AS new_consignment, '+
         'COALESCE(occ.qtty_consigned, 0) AS qtty_consigned, '+
-        'COALESCE(prc.price_tag,0) AS unit_value '+
+        'CASE '+
+        '   WHEN COALESCE(occ.qtty_consigned, 0) > 0 '+
+        '     THEN COALESCE(occ.unit_value, prc.price_tag) '+
+        '   ELSE '+
+        '     COALESCE(prc.price_tag, 0)  '+
+        ' END AS unit_value  '+
         'from tb_product pdt      '+
         '    inner join tb_price prc '+
         '    on (prc.tb_product_id = pdt.id) '+
